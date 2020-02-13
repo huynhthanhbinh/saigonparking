@@ -1,11 +1,16 @@
 package com.vtb.parkingmap.entity.parkinglot;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Version;
 
 import org.hibernate.annotations.SelectBeforeUpdate;
 
@@ -35,4 +40,24 @@ public final class ParkingLotUnitEntity {
     @Column(name = "ID", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "PARKING_LOT_ID", referencedColumnName = "ID", nullable = false)
+    private ParkingLotEntity parkingLotEntity;
+
+    @Column(name = "LOWER_BOUND_HOUR", nullable = false)
+    private Short lowerBoundHour;
+
+    @Column(name = "UPPER_BOUND_HOUR", nullable = false)
+    private Short upperBoundHour;
+
+    @Column(name = "UNIT_PRICE_PER_HOUR", nullable = false)
+    private Integer unitPricePerHour;
+
+    @Column(name = "LAST_UPDATED")
+    private Timestamp lastUpdated;
+
+    @Version
+    @Column(name = "VERSION")
+    private Long version;
 }
