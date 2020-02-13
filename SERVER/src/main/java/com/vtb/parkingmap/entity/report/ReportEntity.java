@@ -25,6 +25,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 /**
  *
@@ -39,33 +40,34 @@ import lombok.ToString;
 @SelectBeforeUpdate
 @Table(name = "REPORT")
 @Entity(name = "REPORT")
+@Accessors(chain = true)
 @Inheritance(strategy = InheritanceType.JOINED)
 public class ReportEntity {
 
     @Id
     @Column(name = "ID", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    protected Long id;
 
     @ManyToOne
     @JoinColumn(name = "REPORTER_ID", referencedColumnName = "CUSTOMER_ID", nullable = false)
-    private CustomerEntity customerEntity;
+    protected CustomerEntity customerEntity;
 
     @ManyToOne
     @JoinColumn(name = "REPORT_TYPE_ID", referencedColumnName = "ID", nullable = false)
-    private ReportTypeEntity reportTypeEntity;
+    protected ReportTypeEntity reportTypeEntity;
 
     @ColumnDefault("false")
     @Column(name = "IS_HANDLED", nullable = false)
-    private Boolean isHandled;
+    protected Boolean isHandled;
 
     @Column(name = "PHOTO_PATH")
-    private String photoPath;
+    protected String photoPath;
 
     @Column(name = "LAST_UPDATED")
-    private Timestamp lastUpdated;
+    protected Timestamp lastUpdated;
 
     @Version
     @Column(name = "VERSION")
-    private Long version;
+    protected Long version;
 }

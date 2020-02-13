@@ -1,5 +1,7 @@
 package com.vtb.parkingmap.entity.report;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -7,11 +9,14 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.SelectBeforeUpdate;
 
+import com.vtb.parkingmap.entity.user.CustomerEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 /**
  *
@@ -36,4 +41,51 @@ public final class WrongParkingReportEntity extends ReportEntity {
 
     @Column(name = "LONGITUDE", nullable = false)
     private Double longitude;
+
+    @Setter
+    @ToString
+    @NoArgsConstructor
+    @Accessors(chain = true)
+    public static final class Builder {
+        private Long id;
+        private CustomerEntity customerEntity;
+        private ReportTypeEntity reportTypeEntity;
+        private Boolean isHandled;
+        private String photoPath;
+        private Timestamp lastUpdated;
+        private Long version;
+
+        private String registrationPlate;
+        private Double latitude;
+        private Double longitude;
+
+        public final WrongParkingReportEntity build() {
+            return (WrongParkingReportEntity) new WrongParkingReportEntity(registrationPlate, latitude, longitude)
+                    .setId(id)
+                    .setCustomerEntity(customerEntity)
+                    .setReportTypeEntity(reportTypeEntity)
+                    .setIsHandled(isHandled)
+                    .setPhotoPath(photoPath)
+                    .setLastUpdated(lastUpdated)
+                    .setVersion(version);
+        }
+    }
+
+    public static Builder newBuilder() {
+        return new Builder();
+    }
+
+    public final Builder toBuilder() {
+        return new Builder()
+                .setId(id)
+                .setCustomerEntity(customerEntity)
+                .setReportTypeEntity(reportTypeEntity)
+                .setIsHandled(isHandled)
+                .setPhotoPath(photoPath)
+                .setLastUpdated(lastUpdated)
+                .setVersion(version)
+                .setRegistrationPlate(registrationPlate)
+                .setLatitude(latitude)
+                .setLongitude(longitude);
+    }
 }

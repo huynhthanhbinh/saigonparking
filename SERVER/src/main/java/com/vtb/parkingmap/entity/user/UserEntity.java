@@ -23,6 +23,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 /**
  *
@@ -37,35 +38,36 @@ import lombok.ToString;
 @SelectBeforeUpdate
 @Table(name = "USER")
 @Entity(name = "USER")
+@Accessors(chain = true)
 @Inheritance(strategy = InheritanceType.JOINED)
 public class UserEntity {
 
     @Id
     @Column(name = "ID", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    protected Long id;
 
     @ManyToOne
     @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID", nullable = false)
-    private UserRoleEntity userRoleEntity;
+    protected UserRoleEntity userRoleEntity;
 
     @Column(name = "USERNAME", nullable = false, unique = true)
-    private String username;
+    protected String username;
 
     @Column(name = "PASSWORD", nullable = false)
-    private String password;
+    protected String password;
 
     @Column(name = "EMAIL", nullable = false, unique = true)
-    private String email;
+    protected String email;
 
     @ColumnDefault("false")
     @Column(name = "IS_ACTIVATED", nullable = false)
-    private Boolean isActivated;
+    protected Boolean isActivated;
 
     @Column(name = "LAST_SIGN_IN")
-    private Timestamp lastSignIn;
+    protected Timestamp lastSignIn;
 
     @Version
     @Column(name = "VERSION")
-    private Long version;
+    protected Long version;
 }

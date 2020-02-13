@@ -1,5 +1,7 @@
 package com.vtb.parkingmap.entity.user;
 
+import java.sql.Timestamp;
+
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -15,6 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 /**
  *
@@ -34,4 +37,50 @@ public final class ParkingLotEmployeeEntity extends UserEntity {
     @OneToOne
     @JoinColumn(name = "PARKING_LOT_ID", referencedColumnName = "ID", nullable = false)
     private ParkingLotEntity parkingLotEntity;
+
+    @Setter
+    @ToString
+    @NoArgsConstructor
+    @Accessors(chain = true)
+    public static final class Builder {
+        private Long id;
+        private UserRoleEntity userRoleEntity;
+        private String username;
+        private String password;
+        private String email;
+        private Boolean isActivated;
+        private Timestamp lastSignIn;
+        private Long version;
+
+        private ParkingLotEntity parkingLotEntity;
+
+        public final ParkingLotEmployeeEntity build() {
+            return (ParkingLotEmployeeEntity) new ParkingLotEmployeeEntity(parkingLotEntity)
+                    .setId(id)
+                    .setUserRoleEntity(userRoleEntity)
+                    .setUsername(username)
+                    .setPassword(password)
+                    .setEmail(email)
+                    .setIsActivated(isActivated)
+                    .setLastSignIn(lastSignIn)
+                    .setVersion(version);
+        }
+    }
+
+    public static Builder newBuilder() {
+        return new Builder();
+    }
+
+    public final Builder toBuilder() {
+        return new Builder()
+                .setId(id)
+                .setUserRoleEntity(userRoleEntity)
+                .setUsername(username)
+                .setPassword(password)
+                .setEmail(email)
+                .setIsActivated(isActivated)
+                .setLastSignIn(lastSignIn)
+                .setVersion(version)
+                .setParkingLotEntity(parkingLotEntity);
+    }
 }
