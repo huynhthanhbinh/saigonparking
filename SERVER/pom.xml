@@ -23,6 +23,7 @@
     </properties>
 
     <dependencies>
+        <!-- API of PARKING-MAP project -->
         <dependency>
             <groupId>com.bht.parkingmap</groupId>
             <artifactId>api</artifactId>
@@ -86,13 +87,6 @@
             <version>${springframework.version}</version>
         </dependency>
 
-        <!-- Spring Data JPA using for JPA Repository-->
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-jpa</artifactId>
-            <version>${spring.data.jpa.version}</version>
-        </dependency>
-
         <!-- Hibernate Framework -->
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -135,6 +129,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>${springboot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
             <version>${springboot.version}</version>
         </dependency>
 

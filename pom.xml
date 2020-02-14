@@ -29,7 +29,6 @@
         <maven.antrun-plugin.version>1.8</maven.antrun-plugin.version>
 
         <springframework.version>5.1.8.RELEASE</springframework.version>
-        <spring.data.jpa.version>2.2.4.RELEASE</spring.data.jpa.version>
         <springboot.version>2.1.8.RELEASE</springboot.version>
         <mssql-jdbc.version>8.2.0.jre8</mssql-jdbc.version>
         <javax.version>4.0.1</javax.version>
@@ -52,7 +51,7 @@
     </properties>
 
     <dependencies>
-        <!-- junit -->
+        <!-- junit using for unit test -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -67,6 +66,7 @@
             <version>${log4j.version}</version>
         </dependency>
 
+        <!-- Extension of Log4J -->
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>apache-log4j-extras</artifactId>
