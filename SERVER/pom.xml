@@ -25,7 +25,7 @@
     <dependencies>
         <dependency>
             <groupId>com.bht.parkingmap</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>api</artifactId>
             <version>${revision}</version>
         </dependency>
     </dependencies>

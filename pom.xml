@@ -11,7 +11,7 @@
 
     <modules>
         <module>SERVER</module>
-        <module>COMMON</module>
+        <module>API</module>
     </modules>
 
     <name>PARKING-MAP</name>

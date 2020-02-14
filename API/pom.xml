@@ -10,11 +10,11 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.bht.parkingmap</groupId>
-    <artifactId>common</artifactId>
+    <artifactId>api</artifactId>
     <version>${revision}</version>
     <packaging>jar</packaging>
 
-    <name>COMMON</name>
+    <name>API</name>
 
     <build>
         <extensions>
