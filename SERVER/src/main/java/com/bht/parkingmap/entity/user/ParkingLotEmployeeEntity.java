@@ -1,6 +1,7 @@
 package com.bht.parkingmap.entity.user;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -82,5 +83,28 @@ public final class ParkingLotEmployeeEntity extends UserEntity {
                 .setLastSignIn(lastSignIn)
                 .setVersion(version)
                 .setParkingLotEntity(parkingLotEntity);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+
+        ParkingLotEmployeeEntity that = (ParkingLotEmployeeEntity) o;
+        return Objects.equals(parkingLotEntity, that.parkingLotEntity);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                super.hashCode(),
+                parkingLotEntity);
     }
 }

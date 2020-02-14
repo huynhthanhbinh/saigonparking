@@ -1,6 +1,7 @@
 package com.bht.parkingmap.entity.parkinglot;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -94,4 +95,50 @@ public final class ParkingLotEntity {
 
     @OneToMany(mappedBy = "parkingLotEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ParkingLotReportEntity> parkingLotReportEntitySet;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ParkingLotEntity that = (ParkingLotEntity) o;
+        return Objects.equals(id, that.id) &&
+                name.equals(that.name) &&
+                parkingLotTypeEntity.equals(that.parkingLotTypeEntity) &&
+                latitude.equals(that.latitude) &&
+                longitude.equals(that.longitude) &&
+                address.equals(that.address) &&
+                Objects.equals(phone, that.phone) &&
+                Objects.equals(isAvailable, that.isAvailable) &&
+                Objects.equals(version, that.version) &&
+                Objects.equals(parkingLotEmployeeEntity, that.parkingLotEmployeeEntity) &&
+                Objects.equals(parkingLotInformationEntity, that.parkingLotInformationEntity) &&
+                Objects.equals(parkingLotUnitEntitySet, that.parkingLotUnitEntitySet) &&
+                Objects.equals(parkingLotRatingEntitySet, that.parkingLotRatingEntitySet) &&
+                Objects.equals(parkingLotReportEntitySet, that.parkingLotReportEntitySet);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                id,
+                name,
+                parkingLotTypeEntity,
+                latitude,
+                longitude,
+                address,
+                phone,
+                isAvailable,
+                version,
+                parkingLotEmployeeEntity,
+                parkingLotInformationEntity,
+                parkingLotUnitEntitySet,
+                parkingLotRatingEntitySet,
+                parkingLotReportEntitySet);
+    }
 }

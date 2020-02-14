@@ -1,5 +1,6 @@
 package com.bht.parkingmap.entity.report;
 
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -54,4 +55,32 @@ public final class ReportTypeEntity {
 
     @OneToMany(mappedBy = "reportTypeEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ReportEntity> reportEntitySet;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ReportTypeEntity that = (ReportTypeEntity) o;
+        return Objects.equals(id, that.id) &&
+                type.equals(that.type) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(version, that.version) &&
+                Objects.equals(reportEntitySet, that.reportEntitySet);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                id,
+                type,
+                description,
+                version,
+                reportEntitySet);
+    }
 }

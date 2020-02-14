@@ -1,6 +1,7 @@
 package com.bht.parkingmap.entity.user;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -70,4 +71,35 @@ public class UserEntity {
     @Version
     @Column(name = "VERSION")
     protected Long version;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        UserEntity that = (UserEntity) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(userRoleEntity, that.userRoleEntity) &&
+                username.equals(that.username) &&
+                password.equals(that.password) &&
+                email.equals(that.email) &&
+                Objects.equals(isActivated, that.isActivated) &&
+                Objects.equals(version, that.version);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                id,
+                userRoleEntity,
+                username,
+                password,
+                email,
+                isActivated,
+                version);
+    }
 }

@@ -1,5 +1,6 @@
 package com.bht.parkingmap.entity.parkinglot;
 
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -51,4 +52,29 @@ public final class ParkingLotTypeEntity {
 
     @OneToMany(mappedBy = "parkingLotTypeEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ParkingLotEntity> parkingLotEntitySet;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ParkingLotTypeEntity that = (ParkingLotTypeEntity) o;
+        return Objects.equals(id, that.id) &&
+                type.equals(that.type) &&
+                Objects.equals(version, that.version) &&
+                Objects.equals(parkingLotEntitySet, that.parkingLotEntitySet);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                id,
+                type,
+                version,
+                parkingLotEntitySet);
+    }
 }

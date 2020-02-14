@@ -1,5 +1,6 @@
 package com.bht.parkingmap.entity.user;
 
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -51,4 +52,29 @@ public final class UserRoleEntity {
 
     @OneToMany(mappedBy = "userRoleEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<UserEntity> userEntitySet;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        UserRoleEntity that = (UserRoleEntity) o;
+        return Objects.equals(id, that.id) &&
+                role.equals(that.role) &&
+                Objects.equals(version, that.version) &&
+                Objects.equals(userEntitySet, that.userEntitySet);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                id,
+                role,
+                version,
+                userEntitySet);
+    }
 }

@@ -1,6 +1,7 @@
 package com.bht.parkingmap.entity.report;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -70,4 +71,33 @@ public class ReportEntity {
     @Version
     @Column(name = "VERSION")
     protected Long version;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ReportEntity that = (ReportEntity) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(customerEntity, that.customerEntity) &&
+                Objects.equals(reportTypeEntity, that.reportTypeEntity) &&
+                Objects.equals(isHandled, that.isHandled) &&
+                Objects.equals(photoPath, that.photoPath) &&
+                Objects.equals(version, that.version);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                id,
+                customerEntity,
+                reportTypeEntity,
+                isHandled,
+                photoPath,
+                version);
+    }
 }

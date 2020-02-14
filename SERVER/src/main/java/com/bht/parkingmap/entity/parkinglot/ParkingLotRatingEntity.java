@@ -1,6 +1,7 @@
 package com.bht.parkingmap.entity.parkinglot;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -63,4 +64,34 @@ public final class ParkingLotRatingEntity {
     @Version
     @Column(name = "VERSION")
     private Long version;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ParkingLotRatingEntity that = (ParkingLotRatingEntity) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(customerEntity, that.customerEntity) &&
+                Objects.equals(parkingLotEntity, that.parkingLotEntity) &&
+                rating.equals(that.rating) &&
+                Objects.equals(comment, that.comment) &&
+                Objects.equals(version, that.version);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                id,
+                customerEntity,
+                parkingLotEntity,
+                rating,
+                comment,
+                version);
+    }
 }

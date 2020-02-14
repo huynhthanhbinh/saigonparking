@@ -1,6 +1,7 @@
 package com.bht.parkingmap.entity.report;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -87,5 +88,33 @@ public final class WrongParkingReportEntity extends ReportEntity {
                 .setRegistrationPlate(registrationPlate)
                 .setLatitude(latitude)
                 .setLongitude(longitude);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+
+        WrongParkingReportEntity that = (WrongParkingReportEntity) o;
+
+        return registrationPlate.equals(that.registrationPlate) &&
+                latitude.equals(that.latitude) &&
+                longitude.equals(that.longitude);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                super.hashCode(),
+                registrationPlate,
+                latitude,
+                longitude);
     }
 }

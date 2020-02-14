@@ -1,6 +1,7 @@
 package com.bht.parkingmap.entity.user;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -117,5 +118,38 @@ public final class CustomerEntity extends UserEntity {
                 .setParkingLotRatingEntitySet(parkingLotRatingEntitySet)
                 .setParkingLotSuggestionEntitySet(parkingLotSuggestionEntitySet)
                 .setReportEntitySet(reportEntitySet);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+
+        CustomerEntity that = (CustomerEntity) o;
+        return firstName.equals(that.firstName) &&
+                lastName.equals(that.lastName) &&
+                phone.equals(that.phone) &&
+                Objects.equals(parkingLotRatingEntitySet, that.parkingLotRatingEntitySet) &&
+                Objects.equals(parkingLotSuggestionEntitySet, that.parkingLotSuggestionEntitySet) &&
+                Objects.equals(reportEntitySet, that.reportEntitySet);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                super.hashCode(),
+                firstName,
+                lastName,
+                phone,
+                parkingLotRatingEntitySet,
+                parkingLotSuggestionEntitySet,
+                reportEntitySet);
     }
 }
