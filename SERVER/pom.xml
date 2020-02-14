@@ -2,19 +2,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>parkingmap</artifactId>
-        <groupId>com.bht</groupId>
-        <version>${revision}</version>
-    </parent>
-
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>com.bht.parkingmap</groupId>
     <artifactId>server</artifactId>
     <version>${revision}</version>
     <packaging>jar</packaging>
 
     <name>SERVER</name>
+    <parent>
+        <artifactId>parkingmap</artifactId>
+        <groupId>com.bht</groupId>
+        <version>${revision}</version>
+    </parent>
 
     <properties>
         <mainClass>com.bht.parkingmap.Server</mainClass>
@@ -23,7 +23,6 @@
     </properties>
 
     <dependencies>
-        <!-- API of PARKING-MAP project -->
         <dependency>
             <groupId>com.bht.parkingmap</groupId>
             <artifactId>api</artifactId>
@@ -101,7 +100,6 @@
             <version>${mssql-jdbc.version}</version>
         </dependency>
 
-        <!-- Servlet API -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -141,6 +139,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
+            <version>${springboot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
             <version>${springboot.version}</version>
         </dependency>
 
@@ -205,6 +209,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${springboot.version}</version>
                 <configuration>
+                    <excludeDevtools>false</excludeDevtools>
                     <jvmArguments>
                         -Xms256m -Xmx2048m -XX:ReservedCodeCacheSize=256m -XX:+UseConcMarkSweepGC
                         -XX:SoftRefLRUPolicyMSPerMB=50 -XX:+HeapDumpOnOutOfMemoryError -XX:-OmitStackTraceInFastThrow
@@ -241,6 +246,11 @@
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
                             <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-configuration-processor</artifactId>
+                            <version>${springboot.version}</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
