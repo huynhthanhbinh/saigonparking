@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>parkingmap</artifactId>
-        <groupId>com.vtb</groupId>
+        <groupId>com.bht</groupId>
         <version>${revision}</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.vtb.parkingmap</groupId>
+    <groupId>com.bht.parkingmap</groupId>
     <artifactId>common</artifactId>
     <version>${revision}</version>
     <packaging>jar</packaging>
