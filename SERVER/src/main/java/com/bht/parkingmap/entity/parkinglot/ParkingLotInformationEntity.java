@@ -1,14 +1,14 @@
 package com.bht.parkingmap.entity.parkinglot;
 
-import java.sql.Time;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -43,15 +43,14 @@ public final class ParkingLotInformationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "PARKING_LOT_ID", referencedColumnName = "ID", nullable = false)
-    private ParkingLotEntity parkingLotEntity;
+    @Column(name = "NAME", nullable = false)
+    private String name;
 
-    @Column(name = "OPENING_HOUR", nullable = false)
-    private Time openingHour;
+    @Column(name = "ADDRESS", nullable = false)
+    private String address;
 
-    @Column(name = "CLOSING_HOUR", nullable = false)
-    private Time closingHour;
+    @Column(name = "PHONE")
+    private String phone;
 
     @ColumnDefault("0")
     @Column(name = "RATING_AVERAGE", nullable = false)
@@ -76,6 +75,9 @@ public final class ParkingLotInformationEntity {
     @Column(name = "VERSION")
     private Long version;
 
+    @OneToOne(mappedBy = "parkingLotInformationEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private ParkingLotEntity parkingLotEntity;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -88,29 +90,31 @@ public final class ParkingLotInformationEntity {
 
         ParkingLotInformationEntity that = (ParkingLotInformationEntity) o;
         return Objects.equals(id, that.id) &&
-                Objects.equals(parkingLotEntity, that.parkingLotEntity) &&
-                openingHour.equals(that.openingHour) &&
-                closingHour.equals(that.closingHour) &&
+                name.equals(that.name) &&
+                address.equals(that.address) &&
+                Objects.equals(phone, that.phone) &&
                 Objects.equals(ratingAverage, that.ratingAverage) &&
                 Objects.equals(nRating, that.nRating) &&
                 Objects.equals(availableSlot, that.availableSlot) &&
                 Objects.equals(totalSlot, that.totalSlot) &&
                 Objects.equals(photoPath, that.photoPath) &&
-                Objects.equals(version, that.version);
+                Objects.equals(version, that.version) &&
+                Objects.equals(parkingLotEntity, that.parkingLotEntity);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
                 id,
-                parkingLotEntity,
-                openingHour,
-                closingHour,
+                name,
+                address,
+                phone,
                 ratingAverage,
                 nRating,
                 availableSlot,
                 totalSlot,
                 photoPath,
-                version);
+                version,
+                parkingLotEntity);
     }
 }

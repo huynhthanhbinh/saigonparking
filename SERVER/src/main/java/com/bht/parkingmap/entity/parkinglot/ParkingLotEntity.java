@@ -1,5 +1,6 @@
 package com.bht.parkingmap.entity.parkinglot;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.Set;
@@ -51,12 +52,13 @@ public final class ParkingLotEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "NAME", nullable = false)
-    private String name;
-
     @ManyToOne
     @JoinColumn(name = "PARKING_LOT_TYPE_ID", referencedColumnName = "ID", nullable = false)
     private ParkingLotTypeEntity parkingLotTypeEntity;
+
+    @OneToOne
+    @JoinColumn(name = "PARKING_LOT_INFORMATION_ID", referencedColumnName = "ID", nullable = false, unique = true)
+    private ParkingLotInformationEntity parkingLotInformationEntity;
 
     @Column(name = "LATITUDE", nullable = false)
     private Double latitude;
@@ -64,11 +66,11 @@ public final class ParkingLotEntity {
     @Column(name = "LONGITUDE", nullable = false)
     private Double longitude;
 
-    @Column(name = "ADDRESS", nullable = false)
-    private String address;
+    @Column(name = "OPENING_HOUR", nullable = false)
+    private Time openingHour;
 
-    @Column(name = "PHONE")
-    private String phone;
+    @Column(name = "CLOSING_HOUR", nullable = false)
+    private Time closingHour;
 
     @ColumnDefault("true")
     @Column(name = "IS_AVAILABLE", nullable = false)
@@ -83,9 +85,6 @@ public final class ParkingLotEntity {
 
     @OneToOne(mappedBy = "parkingLotEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private ParkingLotEmployeeEntity parkingLotEmployeeEntity;
-
-    @OneToOne(mappedBy = "parkingLotEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private ParkingLotInformationEntity parkingLotInformationEntity;
 
     @OneToMany(mappedBy = "parkingLotEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<ParkingLotUnitEntity> parkingLotUnitEntitySet;
@@ -108,16 +107,15 @@ public final class ParkingLotEntity {
 
         ParkingLotEntity that = (ParkingLotEntity) o;
         return Objects.equals(id, that.id) &&
-                name.equals(that.name) &&
-                parkingLotTypeEntity.equals(that.parkingLotTypeEntity) &&
+                Objects.equals(parkingLotTypeEntity, that.parkingLotTypeEntity) &&
+                Objects.equals(parkingLotInformationEntity, that.parkingLotInformationEntity) &&
                 latitude.equals(that.latitude) &&
                 longitude.equals(that.longitude) &&
-                address.equals(that.address) &&
-                Objects.equals(phone, that.phone) &&
+                openingHour.equals(that.openingHour) &&
+                closingHour.equals(that.closingHour) &&
                 Objects.equals(isAvailable, that.isAvailable) &&
                 Objects.equals(version, that.version) &&
                 Objects.equals(parkingLotEmployeeEntity, that.parkingLotEmployeeEntity) &&
-                Objects.equals(parkingLotInformationEntity, that.parkingLotInformationEntity) &&
                 Objects.equals(parkingLotUnitEntitySet, that.parkingLotUnitEntitySet) &&
                 Objects.equals(parkingLotRatingEntitySet, that.parkingLotRatingEntitySet) &&
                 Objects.equals(parkingLotReportEntitySet, that.parkingLotReportEntitySet);
@@ -125,18 +123,16 @@ public final class ParkingLotEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(
-                id,
-                name,
+        return Objects.hash(id,
                 parkingLotTypeEntity,
+                parkingLotInformationEntity,
                 latitude,
                 longitude,
-                address,
-                phone,
+                openingHour,
+                closingHour,
                 isAvailable,
                 version,
                 parkingLotEmployeeEntity,
-                parkingLotInformationEntity,
                 parkingLotUnitEntitySet,
                 parkingLotRatingEntitySet,
                 parkingLotReportEntitySet);
