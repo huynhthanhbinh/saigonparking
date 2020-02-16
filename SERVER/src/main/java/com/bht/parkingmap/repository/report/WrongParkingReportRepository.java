@@ -1,8 +1,14 @@
 package com.bht.parkingmap.repository.report;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.bht.parkingmap.entity.report.WrongParkingReportEntity;
+
 /**
  *
  * @author bht
  */
-public interface WrongParkingReportRepository {
+@Repository
+public interface WrongParkingReportRepository extends JpaRepository<WrongParkingReportEntity, Long> {
 }

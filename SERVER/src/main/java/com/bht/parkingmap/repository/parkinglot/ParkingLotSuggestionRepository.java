@@ -1,8 +1,14 @@
 package com.bht.parkingmap.repository.parkinglot;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.bht.parkingmap.entity.parkinglot.ParkingLotSuggestionEntity;
+
 /**
  *
  * @author bht
  */
-public interface ParkingLotSuggestionRepository {
+@Repository
+public interface ParkingLotSuggestionRepository extends JpaRepository<ParkingLotSuggestionEntity, Long> {
 }
