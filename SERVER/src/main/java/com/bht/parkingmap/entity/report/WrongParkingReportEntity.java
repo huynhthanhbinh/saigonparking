@@ -29,18 +29,18 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
-@Table(name = "WRONG_PARKING_REPORT")
+@Table(name = "[WRONG_PARKING_REPORT]")
 @Entity(name = "WRONG_PARKING_REPORT")
-@PrimaryKeyJoinColumn(name = "WRONG_PARKING_REPORT_ID")
+@PrimaryKeyJoinColumn(name = "[WRONG_PARKING_REPORT_ID]")
 public final class WrongParkingReportEntity extends ReportEntity {
 
-    @Column(name = "REGISTRATION_PLATE", nullable = false)
+    @Column(name = "[REGISTRATION_PLATE]", nullable = false)
     private String registrationPlate;
 
-    @Column(name = "LATITUDE", nullable = false)
+    @Column(name = "[LATITUDE]", nullable = false)
     private Double latitude;
 
-    @Column(name = "LONGITUDE", nullable = false)
+    @Column(name = "[LONGITUDE]", nullable = false)
     private Double longitude;
 
     @Setter

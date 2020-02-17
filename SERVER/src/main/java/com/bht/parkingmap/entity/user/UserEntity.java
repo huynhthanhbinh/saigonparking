@@ -37,39 +37,39 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
-@Table(name = "USER")
+@Table(name = "[USER]")
 @Entity(name = "USER")
 @Accessors(chain = true)
 @Inheritance(strategy = InheritanceType.JOINED)
 public class UserEntity {
 
     @Id
-    @Column(name = "ID", nullable = false)
+    @Column(name = "[ID]", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
     @ManyToOne
-    @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID", nullable = false)
+    @JoinColumn(name = "[ROLE_ID]", referencedColumnName = "[ID]", nullable = false)
     protected UserRoleEntity userRoleEntity;
 
-    @Column(name = "USERNAME", nullable = false, unique = true)
+    @Column(name = "[USERNAME]", nullable = false, unique = true)
     protected String username;
 
-    @Column(name = "PASSWORD", nullable = false)
+    @Column(name = "[PASSWORD]", nullable = false)
     protected String password;
 
-    @Column(name = "EMAIL", nullable = false, unique = true)
+    @Column(name = "[EMAIL]", nullable = false, unique = true)
     protected String email;
 
     @ColumnDefault("false")
-    @Column(name = "IS_ACTIVATED", nullable = false)
+    @Column(name = "[IS_ACTIVATED]", nullable = false)
     protected Boolean isActivated;
 
-    @Column(name = "LAST_SIGN_IN")
+    @Column(name = "[LAST_SIGN_IN]")
     protected Timestamp lastSignIn;
 
     @Version
-    @Column(name = "VERSION")
+    @Column(name = "[VERSION]")
     protected Long version;
 
     @Override

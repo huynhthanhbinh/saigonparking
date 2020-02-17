@@ -34,45 +34,45 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
-@Table(name = "PARKING_LOT_INFORMATION")
+@Table(name = "[PARKING_LOT_INFORMATION]")
 @Entity(name = "PARKING_LOT_INFORMATION")
 public final class ParkingLotInformationEntity {
 
     @Id
-    @Column(name = "ID", nullable = false)
+    @Column(name = "[ID]", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "NAME", nullable = false)
+    @Column(name = "[NAME]", nullable = false)
     private String name;
 
-    @Column(name = "ADDRESS", nullable = false)
+    @Column(name = "[ADDRESS]", nullable = false)
     private String address;
 
-    @Column(name = "PHONE")
+    @Column(name = "[PHONE]")
     private String phone;
 
     @ColumnDefault("0")
-    @Column(name = "RATING_AVERAGE", nullable = false)
+    @Column(name = "[RATING_AVERAGE]", nullable = false)
     private Double ratingAverage;
 
     @ColumnDefault("0")
-    @Column(name = "NUMBER_OF_RATING", nullable = false)
+    @Column(name = "[NUMBER_OF_RATING]", nullable = false)
     private Short nRating;
 
     @ColumnDefault("0")
-    @Column(name = "AVAILABILITY", nullable = false)
+    @Column(name = "[AVAILABILITY]", nullable = false)
     private Short availableSlot;
 
     @ColumnDefault("0")
-    @Column(name = "CAPACITY", nullable = false)
+    @Column(name = "[CAPACITY]", nullable = false)
     private Short totalSlot;
 
-    @Column(name = "PHOTO_PATH")
+    @Column(name = "[PHOTO_PATH]")
     private String photoPath;
 
     @Version
-    @Column(name = "VERSION")
+    @Column(name = "[VERSION]")
     private Long version;
 
     @OneToOne(mappedBy = "parkingLotInformationEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

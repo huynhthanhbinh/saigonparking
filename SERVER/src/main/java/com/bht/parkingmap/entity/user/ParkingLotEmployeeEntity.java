@@ -30,13 +30,13 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
-@Table(name = "PARKING_LOT_EMPLOYEE")
+@Table(name = "[PARKING_LOT_EMPLOYEE]")
 @Entity(name = "PARKING_LOT_EMPLOYEE")
-@PrimaryKeyJoinColumn(name = "EMPLOYEE_ID")
+@PrimaryKeyJoinColumn(name = "[EMPLOYEE_ID]")
 public final class ParkingLotEmployeeEntity extends UserEntity {
 
     @OneToOne
-    @JoinColumn(name = "PARKING_LOT_ID", referencedColumnName = "ID", nullable = false)
+    @JoinColumn(name = "[PARKING_LOT_ID]", referencedColumnName = "[ID]", nullable = false)
     private ParkingLotEntity parkingLotEntity;
 
     @Setter

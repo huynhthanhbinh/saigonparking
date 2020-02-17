@@ -39,37 +39,37 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
-@Table(name = "REPORT")
+@Table(name = "[REPORT]")
 @Entity(name = "REPORT")
 @Accessors(chain = true)
 @Inheritance(strategy = InheritanceType.JOINED)
 public class ReportEntity {
 
     @Id
-    @Column(name = "ID", nullable = false)
+    @Column(name = "[ID]", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
     @ManyToOne
-    @JoinColumn(name = "REPORTER_ID", referencedColumnName = "CUSTOMER_ID", nullable = false)
+    @JoinColumn(name = "[REPORTER_ID]", referencedColumnName = "[CUSTOMER_ID]", nullable = false)
     protected CustomerEntity customerEntity;
 
     @ManyToOne
-    @JoinColumn(name = "REPORT_TYPE_ID", referencedColumnName = "ID", nullable = false)
+    @JoinColumn(name = "[REPORT_TYPE_ID]", referencedColumnName = "[ID]", nullable = false)
     protected ReportTypeEntity reportTypeEntity;
 
     @ColumnDefault("false")
-    @Column(name = "IS_HANDLED", nullable = false)
+    @Column(name = "[IS_HANDLED]", nullable = false)
     protected Boolean isHandled;
 
-    @Column(name = "PHOTO_PATH")
+    @Column(name = "[PHOTO_PATH]")
     protected String photoPath;
 
-    @Column(name = "LAST_UPDATED")
+    @Column(name = "[LAST_UPDATED]")
     protected Timestamp lastUpdated;
 
     @Version
-    @Column(name = "VERSION")
+    @Column(name = "[VERSION]")
     protected Long version;
 
     @Override

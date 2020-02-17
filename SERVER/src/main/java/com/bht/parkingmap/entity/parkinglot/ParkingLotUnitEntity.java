@@ -33,33 +33,33 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
-@Table(name = "PARKING_LOT_UNIT")
+@Table(name = "[PARKING_LOT_UNIT]")
 @Entity(name = "PARKING_LOT_UNIT")
 public final class ParkingLotUnitEntity {
 
     @Id
-    @Column(name = "ID", nullable = false)
+    @Column(name = "[ID]", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "PARKING_LOT_ID", referencedColumnName = "ID", nullable = false)
+    @JoinColumn(name = "[PARKING_LOT_ID]", referencedColumnName = "[ID]", nullable = false)
     private ParkingLotEntity parkingLotEntity;
 
-    @Column(name = "LOWER_BOUND_HOUR", nullable = false)
+    @Column(name = "[LOWER_BOUND_HOUR]", nullable = false)
     private Short lowerBoundHour;
 
-    @Column(name = "UPPER_BOUND_HOUR", nullable = false)
+    @Column(name = "[UPPER_BOUND_HOUR]", nullable = false)
     private Short upperBoundHour;
 
-    @Column(name = "UNIT_PRICE_PER_HOUR", nullable = false)
+    @Column(name = "[UNIT_PRICE_PER_HOUR]", nullable = false)
     private Integer unitPricePerHour;
 
-    @Column(name = "LAST_UPDATED")
+    @Column(name = "[LAST_UPDATED]")
     private Timestamp lastUpdated;
 
     @Version
-    @Column(name = "VERSION")
+    @Column(name = "[VERSION]")
     private Long version;
 
     @Override

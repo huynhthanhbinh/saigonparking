@@ -34,20 +34,20 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
-@Table(name = "PARKING_LOT_TYPE")
+@Table(name = "[PARKING_LOT_TYPE]")
 @Entity(name = "PARKING_LOT_TYPE")
 public final class ParkingLotTypeEntity {
 
     @Id
-    @Column(name = "ID", nullable = false)
+    @Column(name = "[ID]", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Short id;
 
-    @Column(name = "TYPE", nullable = false)
+    @Column(name = "[TYPE]", nullable = false)
     private String type;
 
     @Version
-    @Column(name = "VERSION")
+    @Column(name = "[VERSION]")
     private Long version;
 
     @OneToMany(mappedBy = "parkingLotTypeEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

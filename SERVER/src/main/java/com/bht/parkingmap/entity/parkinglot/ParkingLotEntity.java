@@ -43,44 +43,44 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
-@Table(name = "PARKING_LOT")
+@Table(name = "[PARKING_LOT]")
 @Entity(name = "PARKING_LOT")
 public final class ParkingLotEntity {
 
     @Id
-    @Column(name = "ID", nullable = false)
+    @Column(name = "[ID]", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "PARKING_LOT_TYPE_ID", referencedColumnName = "ID", nullable = false)
+    @JoinColumn(name = "[PARKING_LOT_TYPE_ID]", referencedColumnName = "[ID]", nullable = false)
     private ParkingLotTypeEntity parkingLotTypeEntity;
 
     @OneToOne
-    @JoinColumn(name = "PARKING_LOT_INFORMATION_ID", referencedColumnName = "ID", nullable = false, unique = true)
+    @JoinColumn(name = "[PARKING_LOT_INFORMATION_ID]", referencedColumnName = "[ID]", nullable = false, unique = true)
     private ParkingLotInformationEntity parkingLotInformationEntity;
 
-    @Column(name = "LATITUDE", nullable = false)
+    @Column(name = "[LATITUDE]", nullable = false)
     private Double latitude;
 
-    @Column(name = "LONGITUDE", nullable = false)
+    @Column(name = "[LONGITUDE]", nullable = false)
     private Double longitude;
 
-    @Column(name = "OPENING_HOUR", nullable = false)
+    @Column(name = "[OPENING_HOUR]", nullable = false)
     private Time openingHour;
 
-    @Column(name = "CLOSING_HOUR", nullable = false)
+    @Column(name = "[CLOSING_HOUR]", nullable = false)
     private Time closingHour;
 
     @ColumnDefault("true")
-    @Column(name = "IS_AVAILABLE", nullable = false)
+    @Column(name = "[IS_AVAILABLE]", nullable = false)
     private Boolean isAvailable;
 
-    @Column(name = "LAST_UPDATED")
+    @Column(name = "[LAST_UPDATED]")
     private Timestamp lastUpdated;
 
     @Version
-    @Column(name = "VERSION")
+    @Column(name = "[VERSION]")
     private Long version;
 
     @OneToOne(mappedBy = "parkingLotEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

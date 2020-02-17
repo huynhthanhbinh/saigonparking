@@ -35,21 +35,21 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
-@Table(name = "CUSTOMER")
+@Table(name = "[CUSTOMER]")
 @Entity(name = "CUSTOMER")
-@PrimaryKeyJoinColumn(name = "CUSTOMER_ID")
+@PrimaryKeyJoinColumn(name = "[CUSTOMER_ID]")
 public final class CustomerEntity extends UserEntity {
 
-    @Column(name = "FIRST_NAME", nullable = false)
+    @Column(name = "[FIRST_NAME]", nullable = false)
     private String firstName;
 
-    @Column(name = "LAST_NAME", nullable = false)
+    @Column(name = "[LAST_NAME]", nullable = false)
     private String lastName;
 
-    @Column(name = "PHONE", nullable = false)
+    @Column(name = "[PHONE]", nullable = false)
     private String phone;
 
-    @Column(name = "LAST_UPDATED")
+    @Column(name = "[LAST_UPDATED]")
     private Timestamp lastUpdated;
 
     @OneToMany(mappedBy = "customerEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

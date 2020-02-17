@@ -34,23 +34,23 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
-@Table(name = "REPORT_TYPE")
+@Table(name = "[REPORT_TYPE]")
 @Entity(name = "REPORT_TYPE")
 public final class ReportTypeEntity {
 
     @Id
-    @Column(name = "ID", nullable = false)
+    @Column(name = "[ID]", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Short id;
 
-    @Column(name = "TYPE", nullable = false)
+    @Column(name = "[TYPE]", nullable = false)
     private String type;
 
-    @Column(name = "DESCRIPTION")
+    @Column(name = "[DESCRIPTION]")
     private String description;
 
     @Version
-    @Column(name = "VERSION")
+    @Column(name = "[VERSION]")
     private Long version;
 
     @OneToMany(mappedBy = "reportTypeEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

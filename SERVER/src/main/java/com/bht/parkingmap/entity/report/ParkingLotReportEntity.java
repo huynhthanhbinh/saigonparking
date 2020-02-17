@@ -32,16 +32,16 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
-@Table(name = "PARKING_LOT_REPORT")
+@Table(name = "[PARKING_LOT_REPORT]")
 @Entity(name = "PARKING_LOT_REPORT")
-@PrimaryKeyJoinColumn(name = "PARKING_LOT_REPORT_ID")
+@PrimaryKeyJoinColumn(name = "[PARKING_LOT_REPORT_ID]")
 public final class ParkingLotReportEntity extends ReportEntity {
 
     @ManyToOne
-    @JoinColumn(name = "PARKING_LOT_ID", referencedColumnName = "ID", nullable = false)
+    @JoinColumn(name = "[PARKING_LOT_ID]", referencedColumnName = "[ID]", nullable = false)
     private ParkingLotEntity parkingLotEntity;
 
-    @Column(name = "VIOLATION", nullable = false)
+    @Column(name = "[VIOLATION]", nullable = false)
     private String violation;
 
     @Setter
