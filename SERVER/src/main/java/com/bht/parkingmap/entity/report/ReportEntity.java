@@ -51,7 +51,7 @@ public class ReportEntity {
     protected Long id;
 
     @ManyToOne
-    @JoinColumn(name = "[REPORTER_ID]", referencedColumnName = "[CUSTOMER_ID]", nullable = false)
+    @JoinColumn(name = "[REPORTER_ID]", referencedColumnName = "[ID]", nullable = false)
     protected CustomerEntity customerEntity;
 
     @ManyToOne

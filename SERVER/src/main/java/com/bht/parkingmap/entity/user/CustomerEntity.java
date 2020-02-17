@@ -37,7 +37,7 @@ import lombok.experimental.Accessors;
 @SelectBeforeUpdate
 @Table(name = "[CUSTOMER]")
 @Entity(name = "CUSTOMER")
-@PrimaryKeyJoinColumn(name = "[CUSTOMER_ID]")
+@PrimaryKeyJoinColumn(name = "[ID]")
 public final class CustomerEntity extends UserEntity {
 
     @Column(name = "[FIRST_NAME]", nullable = false)

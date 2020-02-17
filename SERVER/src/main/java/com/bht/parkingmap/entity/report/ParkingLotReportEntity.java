@@ -34,7 +34,7 @@ import lombok.experimental.Accessors;
 @SelectBeforeUpdate
 @Table(name = "[PARKING_LOT_REPORT]")
 @Entity(name = "PARKING_LOT_REPORT")
-@PrimaryKeyJoinColumn(name = "[PARKING_LOT_REPORT_ID]")
+@PrimaryKeyJoinColumn(name = "[ID]")
 public final class ParkingLotReportEntity extends ReportEntity {
 
     @ManyToOne

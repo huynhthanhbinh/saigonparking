@@ -56,10 +56,6 @@ public final class ParkingLotEntity {
     @JoinColumn(name = "[PARKING_LOT_TYPE_ID]", referencedColumnName = "[ID]", nullable = false)
     private ParkingLotTypeEntity parkingLotTypeEntity;
 
-    @OneToOne
-    @JoinColumn(name = "[PARKING_LOT_INFORMATION_ID]", referencedColumnName = "[ID]", nullable = false, unique = true)
-    private ParkingLotInformationEntity parkingLotInformationEntity;
-
     @Column(name = "[LATITUDE]", nullable = false)
     private Double latitude;
 
@@ -82,6 +78,9 @@ public final class ParkingLotEntity {
     @Version
     @Column(name = "[VERSION]")
     private Long version;
+
+    @OneToOne(mappedBy = "parkingLotEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private ParkingLotInformationEntity parkingLotInformationEntity;
 
     @OneToOne(mappedBy = "parkingLotEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private ParkingLotEmployeeEntity parkingLotEmployeeEntity;

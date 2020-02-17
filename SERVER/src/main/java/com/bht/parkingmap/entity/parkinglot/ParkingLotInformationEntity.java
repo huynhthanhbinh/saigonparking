@@ -2,13 +2,11 @@ package com.bht.parkingmap.entity.parkinglot;
 
 import java.util.Objects;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
@@ -40,7 +38,6 @@ public final class ParkingLotInformationEntity {
 
     @Id
     @Column(name = "[ID]", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "[NAME]", nullable = false)
@@ -75,7 +72,9 @@ public final class ParkingLotInformationEntity {
     @Column(name = "[VERSION]")
     private Long version;
 
-    @OneToOne(mappedBy = "parkingLotInformationEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @MapsId
+    @OneToOne
+    @JoinColumn(name = "[ID]", nullable = false, unique = true)
     private ParkingLotEntity parkingLotEntity;
 
     @Override

@@ -31,7 +31,7 @@ import lombok.experimental.Accessors;
 @SelectBeforeUpdate
 @Table(name = "[WRONG_PARKING_REPORT]")
 @Entity(name = "WRONG_PARKING_REPORT")
-@PrimaryKeyJoinColumn(name = "[WRONG_PARKING_REPORT_ID]")
+@PrimaryKeyJoinColumn(name = "[ID]")
 public final class WrongParkingReportEntity extends ReportEntity {
 
     @Column(name = "[REGISTRATION_PLATE]", nullable = false)

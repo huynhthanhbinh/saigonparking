@@ -45,7 +45,7 @@ public final class ParkingLotSuggestionEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "[CUSTOMER_ID]", referencedColumnName = "[CUSTOMER_ID]", nullable = false)
+    @JoinColumn(name = "[CUSTOMER_ID]", referencedColumnName = "[ID]", nullable = false)
     private CustomerEntity customerEntity;
 
     @Column(name = "[NAME]", nullable = false)

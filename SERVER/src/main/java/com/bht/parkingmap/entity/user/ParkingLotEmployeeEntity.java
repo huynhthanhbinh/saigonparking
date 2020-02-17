@@ -32,7 +32,7 @@ import lombok.experimental.Accessors;
 @SelectBeforeUpdate
 @Table(name = "[PARKING_LOT_EMPLOYEE]")
 @Entity(name = "PARKING_LOT_EMPLOYEE")
-@PrimaryKeyJoinColumn(name = "[EMPLOYEE_ID]")
+@PrimaryKeyJoinColumn(name = "[ID]")
 public final class ParkingLotEmployeeEntity extends UserEntity {
 
     @OneToOne
