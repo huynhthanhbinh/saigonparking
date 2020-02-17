@@ -1,9 +1,0 @@
-{
-  "properties": [
-    {
-      "name": "entity.package",
-      "type": "java.lang.String",
-      "description": "Description for entity.package."
-    }
-  ]
-}
