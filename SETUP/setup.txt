@@ -1,0 +1,100 @@
+Document's name:    Parking Map Project Setup Guide
+Author:             Huynh Thanh Binh
+Last updated:       Tue, Feb 18th, 2020
+
+========================================================================================================================
+All necessary setup files are provided in Parking Map Project's private Google Drive
+
+Step 01: Setup JAVA
+
+    1. Install Java 8 included JDK 1.8 + JRE 1.8 (using jdk-8u241-windows-x64.exe)
+    2. Add JAVA_HOME variable (path to JDK folder) to environment variables
+    3. Add %JAVA_HOME%\bin (path to JDK bin folder) to PATH in environment variables
+
+Step 02: Setup MAVEN
+
+    1. Unzip Maven setup file into Program File folder (using apache-maven-3.6.3-bin.zip)
+    2. Add M2_HOME variable (path to recent unzipped folder) to environment variables
+    3. Add %M2_HOME%\bin (path to MVN bin folder) to PATH in environment variables
+
+Step 03: Check if set up environment variables is success or not
+
+    1. Open terminal/command line
+    2. Tap java -version (if the command line show java's version -> setup java is success !)
+    3. Tap  mvn -version (if the command line show maven's version -> setup maven is success !)
+
+Step 04: Install IDE:
+
+    1. Install IntelliJ IDEA IDE (Ultimate version is recommended, using student's email to register)
+    2. Remove previous project setting (if exists)
+    2. Import current project setting into IntelliJ IDE (please using IntelliJ_Settings.jar provided)
+    3. Start IntelliJ IDEA IDE and start to install plugins as the following step
+
+Step 05: Install IDE must-have plugins: (please install all of these following plugins)
+
+    1. SonarLint
+    2. Grep Console
+    3. Save Actions
+    4. Spring Assistant
+    5. Jpa Support
+    6. Protobuf Support
+    7. MapStruct Support
+    8. Lombok
+
+Step 06: Setup Save Actions plugin:
+
+    1. Open File -> Settings -> Other Settings -> Save Actions
+    2. Please select all options as mentioned below
+        2.1.  Activate save actions on save
+        2.2.  Activate save actions on shortcut (Ctrl + Shift + S): please using this shortcut key on saving code
+        2.3.  Optimize imports
+        2.4.  Reformat file
+        2.5.  Add missing @Override annotations
+        2.6.  Add blocks to if/while/for statements
+        2.7.  Remove unnecessary this to fields and methods
+        2.8.  Remove final from private method
+        2.9.  Remove unnecessary final to local variable or parameter
+        2.10. Remove explicit generic type for diamond
+        2.11. Remove unused suppress warning annotations
+        2.12. Remove unnecessary semicolons
+    3. Click Apply to save these settings then click OK to close
+
+Step 07: Open project
+
+    1. Right click on parkingmap folder
+    2. Select "Open Folder as IntelliJ IDEA Project"
+    3. Project is now open
+    4. Wait for IDE to index project, install missing dependencies(libraries)
+    5. Select right version of Maven !!! (> 3.5)
+        5.1. Open File -> Settings
+        5.2. Tap "Maven" -> Maven Settings will be shown on the right side
+        5.3. Select Maven Home Directory (for eg. C:/Program Files/Apache/apache-maven-3.6.1)
+        5.4. Click Apply to save these settings then click OK to close
+    6. Project will be shown as modules (folder icon with small square blue marker)
+    7. There are now 3 modules in current project, included 1 parent, 2 children
+        7.0. You will see each module will have a unique .pom file (special file of Maven) 
+        7.1. Parent module: parkingmap  -> we will mention it as parkingmap's pom (or parent pom)
+        7.2. Children module:
+            7.2.1. SERVER -> we will mention it as SERVER's pom
+            7.2.2. API -> we will mention it as API's pom
+    8. If modules are not shown in the left panel or any pom has red-underline as errors, please do as followings steps:
+        8.1. Open the parent pom (parkingmap's pom) in the IDE
+        8.2. As the pom has been shown on the editor, please right-click on the editor
+        8.3. Select Maven -> Reimport
+        8.4. Modules will be shown and all red-underline in any pom file must be disappeared ! Otherwise, contact me !
+    9. Finish opening project for the 1st time ! Congrats !
+    
+Step 08: Understand project components / project structure
+
+    Inside project folder, you will see these folder:
+        1. API          : contains API module
+        2. BUILD        : contains built files: *.jar / *.war
+        3. DATABASE     : contains database scripts and diagram
+        4. REFERENCES   : contains all references as documents or photos
+        5. SERVER       : contains SERVER module
+        6. SETUP        : contains SETUP files, setup guide (this file)
+        7. Another git's file included:
+            7.1. .gitattributes : for using LFS (Git Large File Storage)
+            7.2. .gitignore     : for ignoring special files or folders
+            7.3. LICENSE        : Apache License of this project
+            7.4. README.md      : Introduction of this project
