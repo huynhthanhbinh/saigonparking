@@ -59,7 +59,7 @@ public class ReportEntity {
     protected ReportTypeEntity reportTypeEntity;
 
     @ColumnDefault("false")
-    @Column(name = "[IS_HANDLED]", nullable = false)
+    @Column(name = "[IS_HANDLED]")
     protected Boolean isHandled;
 
     @Column(name = "[PHOTO_PATH]")

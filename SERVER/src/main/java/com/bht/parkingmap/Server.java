@@ -26,7 +26,7 @@ import javassist.NotFoundException;
  *
  * @author bht
  */
-@SuppressWarnings({"squid:S1854", "squid:S1481"})
+@SuppressWarnings({"squid:S1854", "squid:S1481", "squid:S106"})
 @SpringBootApplication
 public class Server {
     public static void main(String[] args) throws NotFoundException {
@@ -66,5 +66,7 @@ public class Server {
                 .orElseThrow(() -> new NotFoundException("Not found customer entity"));
 
         System.out.println(customerEntity);
+
+        parkingLotRepository.findAll().forEach(parkingLotEntity -> System.out.println("\n" + parkingLotEntity));
     }
 }

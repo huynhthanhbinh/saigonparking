@@ -62,7 +62,7 @@ public class UserEntity {
     protected String email;
 
     @ColumnDefault("false")
-    @Column(name = "[IS_ACTIVATED]", nullable = false)
+    @Column(name = "[IS_ACTIVATED]")
     protected Boolean isActivated;
 
     @Column(name = "[LAST_SIGN_IN]")

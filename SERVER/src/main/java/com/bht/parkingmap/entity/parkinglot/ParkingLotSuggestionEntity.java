@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
 import com.bht.parkingmap.entity.user.CustomerEntity;
@@ -60,6 +61,10 @@ public final class ParkingLotSuggestionEntity {
     @Column(name = "[LONGITUDE]", nullable = false)
     private Double longitude;
 
+    @ColumnDefault("false")
+    @Column(name = "[IS_HANDLED]")
+    private Boolean isHandled;
+
     @Column(name = "[LAST_UPDATED]")
     private Timestamp lastUpdated;
 
@@ -83,6 +88,7 @@ public final class ParkingLotSuggestionEntity {
                 parkingLotAddress.equals(that.parkingLotAddress) &&
                 latitude.equals(that.latitude) &&
                 longitude.equals(that.longitude) &&
+                Objects.equals(isHandled, that.isHandled) &&
                 Objects.equals(version, that.version);
     }
 
@@ -95,6 +101,7 @@ public final class ParkingLotSuggestionEntity {
                 parkingLotAddress,
                 latitude,
                 longitude,
+                isHandled,
                 version);
     }
 }

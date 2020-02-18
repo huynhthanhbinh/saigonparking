@@ -69,7 +69,7 @@ public final class ParkingLotEntity {
     private Time closingHour;
 
     @ColumnDefault("true")
-    @Column(name = "[IS_AVAILABLE]", nullable = false)
+    @Column(name = "[IS_AVAILABLE]")
     private Boolean isAvailable;
 
     @Column(name = "[LAST_UPDATED]")
