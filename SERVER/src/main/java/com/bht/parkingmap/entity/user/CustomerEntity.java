@@ -31,7 +31,7 @@ import lombok.experimental.Accessors;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true, exclude = {"parkingLotRatingEntitySet", "parkingLotSuggestionEntitySet", "reportEntitySet"})
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
@@ -135,10 +135,7 @@ public final class CustomerEntity extends UserEntity {
         CustomerEntity that = (CustomerEntity) o;
         return firstName.equals(that.firstName) &&
                 lastName.equals(that.lastName) &&
-                phone.equals(that.phone) &&
-                Objects.equals(parkingLotRatingEntitySet, that.parkingLotRatingEntitySet) &&
-                Objects.equals(parkingLotSuggestionEntitySet, that.parkingLotSuggestionEntitySet) &&
-                Objects.equals(reportEntitySet, that.reportEntitySet);
+                phone.equals(that.phone);
     }
 
     @Override
@@ -147,9 +144,6 @@ public final class CustomerEntity extends UserEntity {
                 super.hashCode(),
                 firstName,
                 lastName,
-                phone,
-                parkingLotRatingEntitySet,
-                parkingLotSuggestionEntitySet,
-                reportEntitySet);
+                phone);
     }
 }

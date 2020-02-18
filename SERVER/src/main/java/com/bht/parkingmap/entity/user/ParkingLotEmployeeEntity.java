@@ -26,7 +26,7 @@ import lombok.experimental.Accessors;
  */
 @Getter
 @Setter
-@ToString
+@ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate

@@ -30,7 +30,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @Builder
-@ToString
+@ToString(exclude = "reportEntitySet")
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
@@ -70,8 +70,7 @@ public final class ReportTypeEntity {
         return Objects.equals(id, that.id) &&
                 type.equals(that.type) &&
                 Objects.equals(description, that.description) &&
-                Objects.equals(version, that.version) &&
-                Objects.equals(reportEntitySet, that.reportEntitySet);
+                Objects.equals(version, that.version);
     }
 
     @Override
@@ -80,7 +79,6 @@ public final class ReportTypeEntity {
                 id,
                 type,
                 description,
-                version,
-                reportEntitySet);
+                version);
     }
 }

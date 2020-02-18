@@ -30,7 +30,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @Builder
-@ToString
+@ToString(exclude = {"userEntitySet"})
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
@@ -65,8 +65,7 @@ public final class UserRoleEntity {
         UserRoleEntity that = (UserRoleEntity) o;
         return Objects.equals(id, that.id) &&
                 role.equals(that.role) &&
-                Objects.equals(version, that.version) &&
-                Objects.equals(userEntitySet, that.userEntitySet);
+                Objects.equals(version, that.version);
     }
 
     @Override
@@ -74,7 +73,6 @@ public final class UserRoleEntity {
         return Objects.hash(
                 id,
                 role,
-                version,
-                userEntitySet);
+                version);
     }
 }

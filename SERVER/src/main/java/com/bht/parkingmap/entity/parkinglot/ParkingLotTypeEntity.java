@@ -30,7 +30,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @Builder
-@ToString
+@ToString(exclude = "parkingLotEntitySet")
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
@@ -65,8 +65,7 @@ public final class ParkingLotTypeEntity {
         ParkingLotTypeEntity that = (ParkingLotTypeEntity) o;
         return Objects.equals(id, that.id) &&
                 type.equals(that.type) &&
-                Objects.equals(version, that.version) &&
-                Objects.equals(parkingLotEntitySet, that.parkingLotEntitySet);
+                Objects.equals(version, that.version);
     }
 
     @Override
@@ -74,7 +73,6 @@ public final class ParkingLotTypeEntity {
         return Objects.hash(
                 id,
                 type,
-                version,
-                parkingLotEntitySet);
+                version);
     }
 }

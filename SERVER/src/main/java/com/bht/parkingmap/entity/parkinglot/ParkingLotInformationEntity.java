@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
@@ -28,7 +29,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @Builder
-@ToString
+@ToString(exclude = "parkingLotEntity")
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
@@ -73,7 +74,7 @@ public final class ParkingLotInformationEntity {
     private Long version;
 
     @MapsId
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "[ID]", nullable = false, unique = true)
     private ParkingLotEntity parkingLotEntity;
 
@@ -97,8 +98,7 @@ public final class ParkingLotInformationEntity {
                 Objects.equals(availableSlot, that.availableSlot) &&
                 Objects.equals(totalSlot, that.totalSlot) &&
                 Objects.equals(photoPath, that.photoPath) &&
-                Objects.equals(version, that.version) &&
-                Objects.equals(parkingLotEntity, that.parkingLotEntity);
+                Objects.equals(version, that.version);
     }
 
     @Override
@@ -113,7 +113,6 @@ public final class ParkingLotInformationEntity {
                 availableSlot,
                 totalSlot,
                 photoPath,
-                version,
-                parkingLotEntity);
+                version);
     }
 }

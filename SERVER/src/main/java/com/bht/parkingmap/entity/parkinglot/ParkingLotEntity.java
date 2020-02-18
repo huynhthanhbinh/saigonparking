@@ -39,7 +39,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @Builder
-@ToString
+@ToString(exclude = {"parkingLotEmployeeEntity", "parkingLotUnitEntitySet", "parkingLotRatingEntitySet", "parkingLotReportEntitySet"})
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
@@ -79,7 +79,7 @@ public final class ParkingLotEntity {
     @Column(name = "[VERSION]")
     private Long version;
 
-    @OneToOne(mappedBy = "parkingLotEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "parkingLotEntity", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private ParkingLotInformationEntity parkingLotInformationEntity;
 
     @OneToOne(mappedBy = "parkingLotEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -113,16 +113,13 @@ public final class ParkingLotEntity {
                 openingHour.equals(that.openingHour) &&
                 closingHour.equals(that.closingHour) &&
                 Objects.equals(isAvailable, that.isAvailable) &&
-                Objects.equals(version, that.version) &&
-                Objects.equals(parkingLotEmployeeEntity, that.parkingLotEmployeeEntity) &&
-                Objects.equals(parkingLotUnitEntitySet, that.parkingLotUnitEntitySet) &&
-                Objects.equals(parkingLotRatingEntitySet, that.parkingLotRatingEntitySet) &&
-                Objects.equals(parkingLotReportEntitySet, that.parkingLotReportEntitySet);
+                Objects.equals(version, that.version);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id,
+        return Objects.hash(
+                id,
                 parkingLotTypeEntity,
                 parkingLotInformationEntity,
                 latitude,
@@ -130,10 +127,6 @@ public final class ParkingLotEntity {
                 openingHour,
                 closingHour,
                 isAvailable,
-                version,
-                parkingLotEmployeeEntity,
-                parkingLotUnitEntitySet,
-                parkingLotRatingEntitySet,
-                parkingLotReportEntitySet);
+                version);
     }
 }
