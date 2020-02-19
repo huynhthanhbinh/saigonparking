@@ -29,6 +29,7 @@ import lombok.experimental.Accessors;
  *
  * @author bht
  */
+@Entity
 @Getter
 @Setter
 @ToString(callSuper = true, exclude = {"parkingLotRatingEntitySet", "parkingLotSuggestionEntitySet", "reportEntitySet"})
@@ -36,7 +37,6 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @SelectBeforeUpdate
 @Table(name = "[CUSTOMER]")
-@Entity(name = "CUSTOMER")
 @PrimaryKeyJoinColumn(name = "[ID]")
 public final class CustomerEntity extends UserEntity {
 

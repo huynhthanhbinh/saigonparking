@@ -27,6 +27,7 @@ import lombok.ToString;
  *
  * @author bht
  */
+@Entity
 @Getter
 @Setter
 @Builder
@@ -35,7 +36,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @SelectBeforeUpdate
 @Table(name = "[USER_ROLE]")
-@Entity(name = "USER_ROLE")
 public final class UserRoleEntity {
 
     @Id
@@ -47,7 +47,6 @@ public final class UserRoleEntity {
     private String role;
 
     @Version
-    @Column(name = "[VERSION]")
     private Long version;
 
     @OneToMany(mappedBy = "userRoleEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

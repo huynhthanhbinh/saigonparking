@@ -32,6 +32,7 @@ import lombok.experimental.Accessors;
  *
  * @author bht
  */
+@Entity
 @Getter
 @Setter
 @Builder
@@ -40,7 +41,6 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @SelectBeforeUpdate
 @Table(name = "[REPORT]")
-@Entity(name = "REPORT")
 @Accessors(chain = true)
 @Inheritance(strategy = InheritanceType.JOINED)
 public class ReportEntity {
@@ -69,7 +69,6 @@ public class ReportEntity {
     protected Timestamp lastUpdated;
 
     @Version
-    @Column(name = "[VERSION]")
     protected Long version;
 
     @Override

@@ -36,6 +36,7 @@ import lombok.ToString;
  *
  * @author bht
  */
+@Entity
 @Getter
 @Setter
 @Builder
@@ -44,7 +45,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @SelectBeforeUpdate
 @Table(name = "[PARKING_LOT]")
-@Entity(name = "PARKING_LOT")
 public final class ParkingLotEntity {
 
     @Id
@@ -76,11 +76,7 @@ public final class ParkingLotEntity {
     private Timestamp lastUpdated;
 
     @Version
-    @Column(name = "[VERSION]")
     private Long version;
-
-    @OneToOne(mappedBy = "parkingLotEntity", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private ParkingLotInformationEntity parkingLotInformationEntity;
 
     @OneToOne(mappedBy = "parkingLotEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private ParkingLotEmployeeEntity parkingLotEmployeeEntity;
@@ -107,7 +103,6 @@ public final class ParkingLotEntity {
         ParkingLotEntity that = (ParkingLotEntity) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(parkingLotTypeEntity, that.parkingLotTypeEntity) &&
-                Objects.equals(parkingLotInformationEntity, that.parkingLotInformationEntity) &&
                 latitude.equals(that.latitude) &&
                 longitude.equals(that.longitude) &&
                 openingHour.equals(that.openingHour) &&
@@ -121,7 +116,6 @@ public final class ParkingLotEntity {
         return Objects.hash(
                 id,
                 parkingLotTypeEntity,
-                parkingLotInformationEntity,
                 latitude,
                 longitude,
                 openingHour,

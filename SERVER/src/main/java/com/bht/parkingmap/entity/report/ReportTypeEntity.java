@@ -27,6 +27,7 @@ import lombok.ToString;
  *
  * @author bht
  */
+@Entity
 @Getter
 @Setter
 @Builder
@@ -35,7 +36,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @SelectBeforeUpdate
 @Table(name = "[REPORT_TYPE]")
-@Entity(name = "REPORT_TYPE")
 public final class ReportTypeEntity {
 
     @Id
@@ -50,7 +50,6 @@ public final class ReportTypeEntity {
     private String description;
 
     @Version
-    @Column(name = "[VERSION]")
     private Long version;
 
     @OneToMany(mappedBy = "reportTypeEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

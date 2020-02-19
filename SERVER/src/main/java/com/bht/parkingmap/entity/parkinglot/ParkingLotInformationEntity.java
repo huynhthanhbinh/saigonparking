@@ -26,6 +26,7 @@ import lombok.ToString;
  *
  * @author bht
  */
+@Entity
 @Getter
 @Setter
 @Builder
@@ -34,7 +35,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @SelectBeforeUpdate
 @Table(name = "[PARKING_LOT_INFORMATION]")
-@Entity(name = "PARKING_LOT_INFORMATION")
 public final class ParkingLotInformationEntity {
 
     @Id
@@ -70,7 +70,6 @@ public final class ParkingLotInformationEntity {
     private String photoPath;
 
     @Version
-    @Column(name = "[VERSION]")
     private Long version;
 
     @MapsId

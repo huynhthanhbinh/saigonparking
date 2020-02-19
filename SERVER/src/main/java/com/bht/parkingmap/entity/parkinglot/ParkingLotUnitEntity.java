@@ -26,6 +26,7 @@ import lombok.ToString;
  *
  * @author bht
  */
+@Entity
 @Getter
 @Setter
 @Builder
@@ -34,7 +35,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @SelectBeforeUpdate
 @Table(name = "[PARKING_LOT_UNIT]")
-@Entity(name = "PARKING_LOT_UNIT")
 public final class ParkingLotUnitEntity {
 
     @Id
@@ -59,7 +59,6 @@ public final class ParkingLotUnitEntity {
     private Timestamp lastUpdated;
 
     @Version
-    @Column(name = "[VERSION]")
     private Long version;
 
     @Override

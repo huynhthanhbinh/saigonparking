@@ -23,6 +23,7 @@ import lombok.experimental.Accessors;
  *
  * @author bht
  */
+@Entity
 @Getter
 @Setter
 @ToString(callSuper = true)
@@ -30,7 +31,6 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @SelectBeforeUpdate
 @Table(name = "[WRONG_PARKING_REPORT]")
-@Entity(name = "WRONG_PARKING_REPORT")
 @PrimaryKeyJoinColumn(name = "[ID]")
 public final class WrongParkingReportEntity extends ReportEntity {
 
