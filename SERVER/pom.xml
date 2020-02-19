@@ -211,7 +211,7 @@
                 <configuration>
                     <excludeDevtools>false</excludeDevtools>
                     <jvmArguments>
-                        -Xms500m -Xmx4000m -XX:ReservedCodeCacheSize=500m -XX:+UseConcMarkSweepGC
+                        -Dfile.encoding=UTF-8 -Xms500m -Xmx4000m -XX:ReservedCodeCacheSize=500m -XX:+UseConcMarkSweepGC
                         -XX:SoftRefLRUPolicyMSPerMB=50 -XX:+HeapDumpOnOutOfMemoryError -XX:-OmitStackTraceInFastThrow
                     </jvmArguments>
                 </configuration>

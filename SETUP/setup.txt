@@ -1,6 +1,6 @@
 Document's name:    Parking Map Project Setup Guide
 Author:             Huynh Thanh Binh
-Last updated:       Tue, Feb 18th, 2020
+Last updated:       Thu, Feb 20th, 2020
 
 ========================================================================================================================
 All necessary setup files are provided in Parking Map Project's private Google Drive
@@ -98,3 +98,36 @@ Step 08: Understand project components / project structure
             7.2. .gitignore     : for ignoring special files or folders
             7.3. LICENSE        : Apache License of this project
             7.4. README.md      : Introduction of this project
+
+Step 09: Try to run server by already-built executable .jar file (this step requires Java already installed and set up)
+
+    0. If you did not have the project's database on your computer, please do the following steps: (SETUP DATABASE STEP)
+        0.1. Open SSMS (Microsoft SQL Server Management Studio)
+        0.2. Open DATABASE folder and execute all .sql files by order
+        0.3. 1st, execute 01_db_schema.sql
+        0.4. 2nd, execute 02_db_trigger.sql
+        0.5. 3rd, execute 03_db_data.sql
+        0.5. all project database has been set up successfully, see 04_db_diagram for more detail about relationships
+
+    (Please redo all of these steps below whenever you execute Server (server-spring-boot.jar) !!!!!!!!!!!!!!!!!!!!!!!!!)
+
+    1. Open BUILD folder - folder contains all built executable file such as .jar
+    2. Run Terminal (Command Prompt / Cmder) inside this folder
+    3. Change code page (for using Vietnamese) with this command: (my OS is Windows !)
+
+        $ chcp 65001
+
+    4. Tap the following command to start server:
+
+        $ cls && java -jar -Dfile.encoding=UTF-8 -Xms512m -Xmx3072m -XX:ReservedCodeCacheSize=512m -XX:OnOutOfMemoryError="shutdown -r" server-spring-boot.jar
+
+            4.0. chcp                                   : change code page
+            4.1. cls                                    : clear screen
+            4.2. &&                                     : concat command string
+            4.3. java -jar                              : syntax for execute .jar file
+            4.3. -Dfile.encoding=UTF-8                  : set encoding UTF-8
+            4.4. -Xms512m                               : heap size min
+            4.5. -Xmx3072m                              : heap size max
+            4.6. -XX:ReservedCodeCacheSize=512m         : for faster running
+            4.7. -XX:OnOutOfMemoryError="shutdown -r"   : when server is out of memory -> shutdown -> restart
+            4.8. server-spring-boot.jar                 : name of executable jar file (here is Server executable jar)
