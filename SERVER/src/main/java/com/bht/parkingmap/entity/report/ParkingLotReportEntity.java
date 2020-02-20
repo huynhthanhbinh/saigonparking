@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -37,7 +38,7 @@ import lombok.experimental.Accessors;
 @PrimaryKeyJoinColumn(name = "[ID]")
 public final class ParkingLotReportEntity extends ReportEntity {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "[PARKING_LOT_ID]", referencedColumnName = "[ID]", nullable = false)
     private ParkingLotEntity parkingLotEntity;
 

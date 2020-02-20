@@ -4,11 +4,14 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
 import com.bht.parkingmap.entity.parkinglot.ParkingLotEntity;
@@ -35,7 +38,8 @@ import lombok.experimental.Accessors;
 @PrimaryKeyJoinColumn(name = "[ID]")
 public final class ParkingLotEmployeeEntity extends UserEntity {
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    @LazyToOne(LazyToOneOption.NO_PROXY)
     @JoinColumn(name = "[PARKING_LOT_ID]", referencedColumnName = "[ID]", nullable = false)
     private ParkingLotEntity parkingLotEntity;
 

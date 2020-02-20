@@ -3,27 +3,19 @@ package com.bht.parkingmap.entity.parkinglot;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Objects;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SelectBeforeUpdate;
-
-import com.bht.parkingmap.entity.report.ParkingLotReportEntity;
-import com.bht.parkingmap.entity.user.ParkingLotEmployeeEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,7 +32,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @Builder
-@ToString(exclude = {"parkingLotEmployeeEntity", "parkingLotUnitEntitySet", "parkingLotRatingEntitySet", "parkingLotReportEntitySet"})
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
@@ -77,18 +69,6 @@ public final class ParkingLotEntity {
 
     @Version
     private Long version;
-
-    @OneToOne(mappedBy = "parkingLotEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private ParkingLotEmployeeEntity parkingLotEmployeeEntity;
-
-    @OneToMany(mappedBy = "parkingLotEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<ParkingLotUnitEntity> parkingLotUnitEntitySet;
-
-    @OneToMany(mappedBy = "parkingLotEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<ParkingLotRatingEntity> parkingLotRatingEntitySet;
-
-    @OneToMany(mappedBy = "parkingLotEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<ParkingLotReportEntity> parkingLotReportEntitySet;
 
     @Override
     public boolean equals(Object o) {

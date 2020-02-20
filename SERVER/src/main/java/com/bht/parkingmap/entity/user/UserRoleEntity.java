@@ -1,16 +1,12 @@
 package com.bht.parkingmap.entity.user;
 
 import java.util.Objects;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
@@ -31,7 +27,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @Builder
-@ToString(exclude = {"userEntitySet"})
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
@@ -48,9 +44,6 @@ public final class UserRoleEntity {
 
     @Version
     private Long version;
-
-    @OneToMany(mappedBy = "userRoleEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<UserEntity> userEntitySet;
 
     @Override
     public boolean equals(Object o) {

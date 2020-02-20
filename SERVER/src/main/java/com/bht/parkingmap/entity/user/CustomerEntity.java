@@ -2,21 +2,13 @@ package com.bht.parkingmap.entity.user;
 
 import java.sql.Timestamp;
 import java.util.Objects;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.SelectBeforeUpdate;
-
-import com.bht.parkingmap.entity.parkinglot.ParkingLotRatingEntity;
-import com.bht.parkingmap.entity.parkinglot.ParkingLotSuggestionEntity;
-import com.bht.parkingmap.entity.report.ReportEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,7 +24,7 @@ import lombok.experimental.Accessors;
 @Entity
 @Getter
 @Setter
-@ToString(callSuper = true, exclude = {"parkingLotRatingEntitySet", "parkingLotSuggestionEntitySet", "reportEntitySet"})
+@ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
@@ -52,15 +44,6 @@ public final class CustomerEntity extends UserEntity {
     @Column(name = "[LAST_UPDATED]")
     private Timestamp lastUpdated;
 
-    @OneToMany(mappedBy = "customerEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<ParkingLotRatingEntity> parkingLotRatingEntitySet;
-
-    @OneToMany(mappedBy = "customerEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<ParkingLotSuggestionEntity> parkingLotSuggestionEntitySet;
-
-    @OneToMany(mappedBy = "customerEntity", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<ReportEntity> reportEntitySet;
-
     @Setter
     @ToString
     @NoArgsConstructor
@@ -79,13 +62,9 @@ public final class CustomerEntity extends UserEntity {
         private String lastName;
         private String phone;
         private Timestamp lastUpdated;
-        private Set<ParkingLotRatingEntity> parkingLotRatingEntitySet;
-        private Set<ParkingLotSuggestionEntity> parkingLotSuggestionEntitySet;
-        private Set<ReportEntity> reportEntitySet;
 
         public final CustomerEntity build() {
-            return (CustomerEntity) new CustomerEntity(firstName, lastName, phone, lastUpdated,
-                    parkingLotRatingEntitySet, parkingLotSuggestionEntitySet, reportEntitySet)
+            return (CustomerEntity) new CustomerEntity(firstName, lastName, phone, lastUpdated)
                     .setId(id)
                     .setUserRoleEntity(userRoleEntity)
                     .setUsername(username)
@@ -114,10 +93,7 @@ public final class CustomerEntity extends UserEntity {
                 .setFirstName(firstName)
                 .setLastName(lastName)
                 .setPhone(phone)
-                .setLastUpdated(lastUpdated)
-                .setParkingLotRatingEntitySet(parkingLotRatingEntitySet)
-                .setParkingLotSuggestionEntitySet(parkingLotSuggestionEntitySet)
-                .setReportEntitySet(reportEntitySet);
+                .setLastUpdated(lastUpdated);
     }
 
     @Override
