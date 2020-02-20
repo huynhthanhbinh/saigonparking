@@ -106,9 +106,9 @@ Step 09: Try to run server by already-built executable .jar file (this step requ
         0.2. Open DATABASE folder and execute all .sql files by order
         0.3. 1st, execute 01_db_schema.sql
         0.4. 2nd, execute 02_db_trigger.sql
-        0.5. 3rd, execute 03_db_data.sql
-        0.5. all project database has been set up successfully, see 04_db_diagram for more detail about relationships
-
+        0.5. 3rd, execute 03_db_function.sql
+        0.6. 4th, execute 04_db_data.sql
+        0.7. all project database has been set up successfully, see 05_db_diagram for more detail about relationships
     (Please redo all of these steps below whenever you execute Server (server-spring-boot.jar) !!!!!!!!!!!!!!!!!!!!!!!!!)
 
     1. Open BUILD folder - folder contains all built executable file such as .jar
