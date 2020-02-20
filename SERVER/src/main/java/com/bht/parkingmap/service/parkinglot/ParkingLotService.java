@@ -14,4 +14,6 @@ public interface ParkingLotService {
     ParkingLotEntity getParkingLotById(Long id);
 
     List<ParkingLotEntity> getAllParkingLotCurrentlyWorkingInRegion(LatLng northWest, LatLng southEast);
+
+    List<ParkingLotEntity> getAllParkingLotCurrentlyWorkingInRegionOfRadius(LatLng coordinate, short radiusInKilometre);
 }

@@ -39,4 +39,12 @@ public class ParkingLotServiceImpl implements ParkingLotService {
                 southWest.getLatitude(),
                 southWest.getLongitude());
     }
+
+    @Override
+    public List<ParkingLotEntity> getAllParkingLotCurrentlyWorkingInRegionOfRadius(LatLng coordinate, short radiusInKilometre) {
+        return parkingLotRepository.getAllParkingLotCurrentlyWorkingInRegionOfRadius(
+                coordinate.getLatitude(),
+                coordinate.getLongitude(),
+                radiusInKilometre);
+    }
 }

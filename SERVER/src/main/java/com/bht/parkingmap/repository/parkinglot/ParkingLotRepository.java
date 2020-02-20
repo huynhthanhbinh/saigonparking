@@ -30,4 +30,16 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Lo
             double right,   // east limit
             double bottom,  // south limit
             double left);   // west limit
+
+
+    @Lock(LockModeType.OPTIMISTIC)
+    @Query("SELECT P " +
+            "FROM ParkingLotEntity P " +
+            "WHERE FUNCTION('dbo.GET_DISTANCE_IN_KILOMETRE', ?1, ?2, P.latitude, P.longitude) <= ?3 " +
+            "AND FUNCTION('CONVERT', TIME, FUNCTION('CURRENT_TIME')) BETWEEN P.openingHour AND P.closingHour " +
+            "AND P.isAvailable = TRUE")
+    List<ParkingLotEntity> getAllParkingLotCurrentlyWorkingInRegionOfRadius(
+            double latitude,            // target location's latitude
+            double longitude,           // target location's longitude
+            short radiusInKilometre);   // radius in kilometre to scan
 }

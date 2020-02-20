@@ -21,12 +21,20 @@ public class Server {
         ParkingLotService parkingLotService = SpringApplicationContext.getBean(ParkingLotService.class);
         ParkingLotInformationService parkingLotInformationService = SpringApplicationContext.getBean(ParkingLotInformationService.class);
 
-        System.out.println(parkingLotService.getParkingLotById(1L));
-        System.out.println(parkingLotInformationService.getParkingLotInformationById(1L));
-
         LatLng northEast = LatLng.newBuilder().setLatitude(10.895321394865642).setLongitude(106.78215131163597).build();
         LatLng southWest = LatLng.newBuilder().setLatitude(10.672923027175684).setLongitude(106.64089847356081).build();
+        LatLng centerPnt = LatLng.newBuilder().setLatitude(10.784122211291663).setLongitude(106.71152489259839).build();
+
+        System.out.println(parkingLotService.getParkingLotById(1L));
+        System.out.println("\n\n\n");
+
+        System.out.println(parkingLotInformationService.getParkingLotInformationById(1L));
+        System.out.println("\n\n\n");
 
         parkingLotService.getAllParkingLotCurrentlyWorkingInRegion(northEast, southWest).forEach(System.out::println);
+        System.out.println("\n\n\n");
+
+        parkingLotService.getAllParkingLotCurrentlyWorkingInRegionOfRadius(centerPnt, (short) 1).forEach(System.out::println);
+        System.out.println("\n\n\n");
     }
 }
