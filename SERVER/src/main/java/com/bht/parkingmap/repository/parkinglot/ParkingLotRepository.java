@@ -46,5 +46,5 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Lo
     List<Tuple> getAllParkingLotCurrentlyWorkingInRegionOfRadius(
             double latitude,            // target location's latitude
             double longitude,           // target location's longitude
-            short radiusInKilometre);   // radius in kilometre to scan
+            int radiusInKilometre);   // radius in kilometre to scan
 }

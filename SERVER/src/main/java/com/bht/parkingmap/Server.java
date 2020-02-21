@@ -26,7 +26,6 @@ public class Server {
 
         LatLng northEast = LatLng.newBuilder().setLatitude(10.895321394865642).setLongitude(106.78215131163597).build();
         LatLng southWest = LatLng.newBuilder().setLatitude(10.672923027175684).setLongitude(106.64089847356081).build();
-        LatLng centerPnt = LatLng.newBuilder().setLatitude(10.784122211291663).setLongitude(106.71152489259839).build();
 
         System.out.println(parkingLotService.getParkingLotById(1L));
         System.out.println("\n\n\n");
@@ -37,13 +36,8 @@ public class Server {
         parkingLotService.getAllParkingLotCurrentlyWorkingInRegion(northEast, southWest).forEach(System.out::println);
         System.out.println("\n\n\n");
 
-        parkingLotService.getAllParkingLotCurrentlyWorkingInRegionOfRadius(centerPnt, (short) 10)
-                .forEach(tuple -> {
-                    for (int i = 0; i < 9; i++) {
-                        System.out.print(tuple.get(i) + ", ");
-                    }
-                    System.out.println();
-                });
+        parkingLotService.getAllParkingLotCurrentlyWorkingInRegionOfRadius(10.784122211291663, 106.71152489259839, 2)
+                .forEach(System.out::println);
         log.info("Fin");
     }
 }
