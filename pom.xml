@@ -33,6 +33,7 @@
         <mssql-jdbc.version>8.2.0.jre8</mssql-jdbc.version>
         <javax.version>4.0.1</javax.version>
 
+        <google.api.version>1.30.8</google.api.version>
         <protobuf.version>3.11.3</protobuf.version>
         <grpc.version>1.25.0</grpc.version>
         <grpc-spring-boot-starter.version>3.5.1</grpc-spring-boot-starter.version>
@@ -66,7 +67,6 @@
             <version>${log4j.version}</version>
         </dependency>
 
-        <!-- Extension of Log4J -->
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>apache-log4j-extras</artifactId>
