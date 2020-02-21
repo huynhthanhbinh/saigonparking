@@ -11,7 +11,6 @@ import com.bht.parkingmap.entity.parkinglot.ParkingLotEntity;
 import com.bht.parkingmap.mapper.parkinglot.ParkingLotMapper;
 import com.bht.parkingmap.repository.parkinglot.ParkingLotRepository;
 import com.bht.parkingmap.service.parkinglot.ParkingLotService;
-import com.google.type.LatLng;
 
 /**
  *
@@ -31,22 +30,18 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     }
 
     @Override
-    public ParkingLotEntity getParkingLotById(Long id) {
+    public ParkingLotEntity getParkingLotById(long id) {
         return parkingLotRepository.getOne(id);
     }
 
     @Override
-    public List<ParkingLotEntity> getAllParkingLotCurrentlyWorkingInRegion(LatLng northEast, LatLng southWest) {
-        return parkingLotRepository.getAllParkingLotCurrentlyWorkingInRegion(
-                northEast.getLatitude(),
-                northEast.getLongitude(),
-                southWest.getLatitude(),
-                southWest.getLongitude());
+    public List<ParkingLotEntity> getAllParkingLotCurrentlyWorkingInRegion(double northEastLat, double northEastLng, double southWestLat, double southWestLng) {
+        return parkingLotRepository.getAllParkingLotCurrentlyWorkingInRegion(northEastLat, northEastLng, southWestLat, southWestLng);
     }
 
     @Override
     public List<ParkingLot> getAllParkingLotCurrentlyWorkingInRegionOfRadius(double latitude, double longitude, int radiusInKilometre) {
-        return parkingLotMapper.toParkingLotList(parkingLotRepository
+        return parkingLotMapper.toParkingLotListWithDistance(parkingLotRepository
                 .getAllParkingLotCurrentlyWorkingInRegionOfRadius(latitude, longitude, radiusInKilometre));
     }
 }

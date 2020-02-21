@@ -1,12 +1,14 @@
 package com.bht.parkingmap;
 
+import java.util.List;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.bht.parkingmap.api.parkinglot.ParkingLot;
 import com.bht.parkingmap.configuration.SpringApplicationContext;
-import com.bht.parkingmap.service.parkinglot.ParkingLotInformationService;
+import com.bht.parkingmap.mapper.parkinglot.ParkingLotMapper;
 import com.bht.parkingmap.service.parkinglot.ParkingLotService;
-import com.google.type.LatLng;
 
 import lombok.extern.log4j.Log4j;
 
@@ -21,23 +23,25 @@ public class Server {
     public static void main(String[] args) {
         SpringApplication.run(Server.class, args);
 
+        ParkingLotMapper parkingLotMapper = SpringApplicationContext.getBean(ParkingLotMapper.class);
         ParkingLotService parkingLotService = SpringApplicationContext.getBean(ParkingLotService.class);
-        ParkingLotInformationService parkingLotInformationService = SpringApplicationContext.getBean(ParkingLotInformationService.class);
 
-        LatLng northEast = LatLng.newBuilder().setLatitude(10.895321394865642).setLongitude(106.78215131163597).build();
-        LatLng southWest = LatLng.newBuilder().setLatitude(10.672923027175684).setLongitude(106.64089847356081).build();
+        log.info("Test parking-lot list");
+        List<ParkingLot> parkingLotList = parkingLotMapper.toParkingLotList(parkingLotService
+                .getAllParkingLotCurrentlyWorkingInRegion(
+                        10.895321394865642, 106.78215131163597,
+                        10.672923027175684, 106.64089847356081));
 
-        System.out.println(parkingLotService.getParkingLotById(1L));
+        log.info("Test finished ! Try to print out !");
+        parkingLotList.forEach(System.out::println);
+
         System.out.println("\n\n\n");
 
-        System.out.println(parkingLotInformationService.getParkingLotInformationById(1L));
-        System.out.println("\n\n\n");
+        log.info("Test parking-lot list with distance");
+        List<ParkingLot> parkingLotListWithDistance = parkingLotService
+                .getAllParkingLotCurrentlyWorkingInRegionOfRadius(10.784122211291663, 106.71152489259839, 2);
 
-        parkingLotService.getAllParkingLotCurrentlyWorkingInRegion(northEast, southWest).forEach(System.out::println);
-        System.out.println("\n\n\n");
-
-        parkingLotService.getAllParkingLotCurrentlyWorkingInRegionOfRadius(10.784122211291663, 106.71152489259839, 2)
-                .forEach(System.out::println);
-        log.info("Fin");
+        log.info("Test finished ! Try to print out !");
+        parkingLotListWithDistance.forEach(System.out::println);
     }
 }

@@ -9,20 +9,24 @@ import java.util.stream.Collectors;
 import javax.persistence.Tuple;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.NullValueMappingStrategy;
 import org.springframework.stereotype.Component;
 
 import com.bht.parkingmap.api.parkinglot.ParkingLot;
+import com.bht.parkingmap.entity.parkinglot.ParkingLotEntity;
 
 /**
  *
  * @author bht
  */
 @Component
-@Mapper(componentModel = "spring", nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
+@Mapper(componentModel = "spring",
+        nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
 public interface ParkingLotMapper {
 
-    static ParkingLot toParkingLot(Tuple parkingLotDistanceTuple) {
+    default ParkingLot toParkingLotWithDistance(Tuple parkingLotDistanceTuple) {
         return ParkingLot.newBuilder()
                 .setId(parkingLotDistanceTuple.get(0, BigInteger.class).longValue())
                 .setName(parkingLotDistanceTuple.get(1, String.class))
@@ -36,7 +40,24 @@ public interface ParkingLotMapper {
                 .build();
     }
 
-    default List<ParkingLot> toParkingLotList(List<Tuple> parkingLotDistanceTupleList) {
-        return parkingLotDistanceTupleList.stream().map(ParkingLotMapper::toParkingLot).collect(Collectors.toList());
+
+    default List<ParkingLot> toParkingLotListWithDistance(List<Tuple> parkingLotDistanceTupleList) {
+        return parkingLotDistanceTupleList.stream().map(this::toParkingLotWithDistance).collect(Collectors.toList());
+    }
+
+
+    @Named("toParkingLot")
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "parkingLotTypeEntity.id", target = "type")
+    @Mapping(source = "latitude", target = "latitude")
+    @Mapping(source = "longitude", target = "longitude")
+    @Mapping(source = "openingHour", target = "openingHour")
+    @Mapping(source = "closingHour", target = "closingHour")
+    @Mapping(source = "lastUpdated", target = "lastUpdated")
+    ParkingLot toParkingLot(ParkingLotEntity parkingLotEntity);
+
+
+    default List<ParkingLot> toParkingLotList(List<ParkingLotEntity> parkingLotEntityList) {
+        return parkingLotEntityList.stream().map(this::toParkingLot).collect(Collectors.toList());
     }
 }

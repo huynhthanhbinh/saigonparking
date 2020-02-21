@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.bht.parkingmap.api.parkinglot.ParkingLot;
 import com.bht.parkingmap.entity.parkinglot.ParkingLotEntity;
-import com.google.type.LatLng;
 
 /**
  *
@@ -12,9 +11,9 @@ import com.google.type.LatLng;
  */
 public interface ParkingLotService {
 
-    ParkingLotEntity getParkingLotById(Long id);
+    ParkingLotEntity getParkingLotById(long id);
 
-    List<ParkingLotEntity> getAllParkingLotCurrentlyWorkingInRegion(LatLng northWest, LatLng southEast);
+    List<ParkingLotEntity> getAllParkingLotCurrentlyWorkingInRegion(double northEastLat, double northEastLng, double southWestLat, double southWestLng);
 
     List<ParkingLot> getAllParkingLotCurrentlyWorkingInRegionOfRadius(double latitude, double longitude, int radiusInKilometre);
 }

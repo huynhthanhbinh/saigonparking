@@ -198,6 +198,7 @@
     </dependencies>
 
     <build>
+        <finalName>${artifactId}</finalName>
         <resources>
             <resource>
                 <directory>${resources.directory}</directory>
@@ -253,6 +254,10 @@
                             <version>${springboot.version}</version>
                         </path>
                     </annotationProcessorPaths>
+                    <compilerArgs>
+                        <compilerArg>-Amapstruct.unmappedSourcePolicy=IGNORE</compilerArg>
+                        <compilerArg>-Amapstruct.unmappedTargetPolicy=IGNORE</compilerArg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
