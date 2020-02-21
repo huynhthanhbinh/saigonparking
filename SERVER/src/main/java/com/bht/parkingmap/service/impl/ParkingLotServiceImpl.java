@@ -2,6 +2,8 @@ package com.bht.parkingmap.service.impl;
 
 import java.util.List;
 
+import javax.persistence.Tuple;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +43,7 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     }
 
     @Override
-    public List<ParkingLotEntity> getAllParkingLotCurrentlyWorkingInRegionOfRadius(LatLng coordinate, short radiusInKilometre) {
+    public List<Tuple> getAllParkingLotCurrentlyWorkingInRegionOfRadius(LatLng coordinate, short radiusInKilometre) {
         return parkingLotRepository.getAllParkingLotCurrentlyWorkingInRegionOfRadius(
                 coordinate.getLatitude(),
                 coordinate.getLongitude(),

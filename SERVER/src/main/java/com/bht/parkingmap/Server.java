@@ -8,10 +8,13 @@ import com.bht.parkingmap.service.parkinglot.ParkingLotInformationService;
 import com.bht.parkingmap.service.parkinglot.ParkingLotService;
 import com.google.type.LatLng;
 
+import lombok.extern.log4j.Log4j;
+
 /**
  *
  * @author bht
  */
+@Log4j
 @SuppressWarnings({"squid:S1854", "squid:S1481", "squid:S106", "squid:CommentedOutCodeLine"})
 @SpringBootApplication
 public class Server {
@@ -34,7 +37,13 @@ public class Server {
         parkingLotService.getAllParkingLotCurrentlyWorkingInRegion(northEast, southWest).forEach(System.out::println);
         System.out.println("\n\n\n");
 
-        parkingLotService.getAllParkingLotCurrentlyWorkingInRegionOfRadius(centerPnt, (short) 1).forEach(System.out::println);
-        System.out.println("\n\n\n");
+        parkingLotService.getAllParkingLotCurrentlyWorkingInRegionOfRadius(centerPnt, (short) 10)
+                .forEach(tuple -> {
+                    for (int i = 0; i < 9; i++) {
+                        System.out.print(tuple.get(i) + ", ");
+                    }
+                    System.out.println();
+                });
+        log.info("Fin");
     }
 }
