@@ -1,0 +1,8 @@
+package com.bht.parkingmap.util;
+
+/**
+ *
+ * @author bht
+ */
+public final class ImageUtil {
+}

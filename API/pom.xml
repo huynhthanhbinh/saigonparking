@@ -51,6 +51,13 @@
             <artifactId>google-api-client</artifactId>
             <version>${google.api.version}</version>
         </dependency>
+
+        <!-- Google Cloud Vision APIs -->
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud-vision</artifactId>
+            <version>${google.cloud.vision.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
