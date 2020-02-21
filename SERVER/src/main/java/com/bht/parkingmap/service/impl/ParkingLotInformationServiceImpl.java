@@ -24,7 +24,7 @@ public class ParkingLotInformationServiceImpl implements ParkingLotInformationSe
     }
 
     @Override
-    public ParkingLotInformationEntity getParkingLotInformationById(Long id) {
+    public ParkingLotInformationEntity getParkingLotInformationById(long id) {
         return parkingLotInformationRepository.getOne(id);
     }
 }

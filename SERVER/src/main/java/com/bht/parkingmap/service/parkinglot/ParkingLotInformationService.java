@@ -8,5 +8,5 @@ import com.bht.parkingmap.entity.parkinglot.ParkingLotInformationEntity;
  */
 public interface ParkingLotInformationService {
 
-    ParkingLotInformationEntity getParkingLotInformationById(Long id);
+    ParkingLotInformationEntity getParkingLotInformationById(long id);
 }
