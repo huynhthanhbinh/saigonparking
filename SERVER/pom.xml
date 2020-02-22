@@ -7,7 +7,7 @@
     <groupId>com.bht.parkingmap</groupId>
     <artifactId>server</artifactId>
     <version>${revision}</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <name>SERVER</name>
     <parent>
@@ -20,6 +20,7 @@
         <mainClass>com.bht.parkingmap.Server</mainClass>
         <source.directory>src/main/java</source.directory>
         <resources.directory>src/main/resources</resources.directory>
+        <external.gallery.directory>${project.basedir}/gallery</external.gallery.directory>
     </properties>
 
     <dependencies>
@@ -206,6 +207,14 @@
         </resources>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${maven.war-plugin.version}</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${springboot.version}</version>
@@ -215,6 +224,9 @@
                         -Dfile.encoding=UTF-8 -Xms500m -Xmx4000m -XX:ReservedCodeCacheSize=500m -XX:+UseConcMarkSweepGC
                         -XX:SoftRefLRUPolicyMSPerMB=50 -XX:+HeapDumpOnOutOfMemoryError -XX:-OmitStackTraceInFastThrow
                     </jvmArguments>
+                    <folders>
+                        <folder>${external.gallery.directory}</folder>
+                    </folders>
                 </configuration>
                 <executions>
                     <execution>

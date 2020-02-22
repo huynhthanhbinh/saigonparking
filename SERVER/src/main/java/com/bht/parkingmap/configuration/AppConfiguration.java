@@ -15,8 +15,11 @@ import com.bht.parkingmap.annotation.InheritedComponent;
 @EnableTransactionManagement
 @SuppressWarnings("squid:S1118")
 @EntityScan(basePackages = AppConfiguration.BASE_PACKAGE_ENTITY)
-@ComponentScan(basePackages = AppConfiguration.BASE_PACKAGE_SERVER, includeFilters = @ComponentScan.Filter(InheritedComponent.class))
+@ComponentScan(basePackages = AppConfiguration.BASE_PACKAGE_SERVER,
+        includeFilters = @ComponentScan.Filter(InheritedComponent.class))
 public class AppConfiguration {
+
     static final String BASE_PACKAGE_SERVER = "com.bht.parkingmap";         // base package of SERVER module, contains all
     static final String BASE_PACKAGE_ENTITY = "com.bht.parkingmap.entity";  // base package which contains entities definition
+    public static final String RESOURCE_DIR = System.getenv("PARKINGMAP_RESOURCES_DIR"); // config env variable first !!!
 }
