@@ -1,9 +1,19 @@
 Document's name:    Parking Map Project Setup Guide
 Author:             Huynh Thanh Binh
-Last updated:       Thu, Feb 20th, 2020
-
+Last updated:       Sun, Feb 23rd, 2020
 ========================================================================================================================
-All necessary setup files are provided in Parking Map Project's private Google Drive
+All necessary setup files are provided in Parking Map Project's private Google Drive. Please do NOT share anything outside
+
+Step 00: Download all necessary things: ( dependencies / libraries / tools / plugins / project )
+
+    1. Download all tools + setup + settings from Google Drive.
+
+                            username: saigonparkingmap
+                            password: 0506122076
+
+    2. Clone Parking Map project from private repository:
+
+                            https://github.com/huynhthanhbinh/parkingmap
 
 Step 01: Setup JAVA
 
@@ -17,20 +27,25 @@ Step 02: Setup MAVEN
     2. Add M2_HOME variable (path to recent unzipped folder) to environment variables
     3. Add %M2_HOME%\bin (path to MVN bin folder) to PATH in environment variables
 
-Step 03: Check if set up environment variables is success or not
+Step 03: Setup PARKING-MAP environment variables
+
+    1. Add PARKINGMAP_RESOURCES_DIR (path to RESOURCES folder) to SYSTEM Variables in Environment Variables
+    2. Restart your PC for system to apply new environment variables !!! (Must do before move to next step!)
+
+Step 04: Check if set up environment variables is success or not
 
     1. Open terminal/command line
     2. Tap java -version (if the command line show java's version -> setup java is success !)
     3. Tap  mvn -version (if the command line show maven's version -> setup maven is success !)
 
-Step 04: Install IDE:
+Step 05: Install IDE:
 
     1. Install IntelliJ IDEA IDE (Ultimate version is recommended, using student's email to register)
     2. Remove previous project setting (if exists)
     2. Import current project setting into IntelliJ IDE (please using IntelliJ_Settings.jar provided)
     3. Start IntelliJ IDEA IDE and start to install plugins as the following step
 
-Step 05: Install IDE must-have plugins: (please install all of these following plugins)
+Step 06: Install IDE must-have plugins: (please install all of these following plugins)
 
     1. SonarLint
     2. Grep Console
@@ -41,7 +56,7 @@ Step 05: Install IDE must-have plugins: (please install all of these following p
     7. MapStruct Support
     8. Lombok
 
-Step 06: Setup Save Actions plugin:
+Step 07: Setup Save Actions plugin:
 
     1. Open File -> Settings -> Other Settings -> Save Actions
     2. Please select all options as mentioned below
@@ -59,7 +74,7 @@ Step 06: Setup Save Actions plugin:
         2.12. Remove unnecessary semicolons
     3. Click Apply to save these settings then click OK to close
 
-Step 07: Open project
+Step 08: Open project
 
     1. Right click on parkingmap folder
     2. Select "Open Folder as IntelliJ IDEA Project"
@@ -84,22 +99,23 @@ Step 07: Open project
         8.4. Modules will be shown and all red-underline in any pom file must be disappeared ! Otherwise, contact me !
     9. Finish opening project for the 1st time ! Congrats !
     
-Step 08: Understand project components / project structure
+Step 09: Understand project components / project structure
 
     Inside project folder, you will see these folder:
         1. API          : contains API module
         2. BUILD        : contains built files: *.jar / *.war
         3. DATABASE     : contains database scripts and diagram
         4. REFERENCES   : contains all references as documents or photos
-        5. SERVER       : contains SERVER module
-        6. SETUP        : contains SETUP files, setup guide (this file)
-        7. Another git's file included:
+        5. RESOURCES    : contains all resources of server: images,...
+        6. SERVER       : contains SERVER module
+        7. SETUP        : contains SETUP files, setup guide (this file)
+        8. Another git's file included:
             7.1. .gitattributes : for using LFS (Git Large File Storage)
             7.2. .gitignore     : for ignoring special files or folders
             7.3. LICENSE        : Apache License of this project
             7.4. README.md      : Introduction of this project
 
-Step 09: Try to run server by already-built executable .jar file (this step requires Java already installed and set up)
+Step 10: Try to run server by already-built executable .jar file (this step requires Java already installed and set up)
 
     0. If you did not have the project's database on your computer, please do the following steps: (SETUP DATABASE STEP)
         0.1. Open SSMS (Microsoft SQL Server Management Studio)
@@ -108,7 +124,8 @@ Step 09: Try to run server by already-built executable .jar file (this step requ
         0.4. 2nd, execute 02_db_trigger.sql
         0.5. 3rd, execute 03_db_function.sql
         0.6. 4th, execute 04_db_data.sql
-        0.7. all project database has been set up successfully, see 06_db_diagram for more detail about relationships
+        0.7. do NOT need to execute 05_db_query.sql, it just contains some sample written queries
+        0.8. all project database has been set up successfully, see 06_db_diagram for more detail about relationships
     (Please redo all of these steps below whenever you execute Server (server-spring-boot.jar) !!!!!!!!!!!!!!!!!!!!!!!!!)
 
     1. Open BUILD folder - folder contains all built executable file such as .jar
