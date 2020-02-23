@@ -52,7 +52,7 @@ public final class WrongParkingReportEntity extends ReportEntity {
         private CustomerEntity customerEntity;
         private ReportTypeEntity reportTypeEntity;
         private Boolean isHandled;
-        private String photoPath;
+        private Boolean hasPhoto;
         private Timestamp lastUpdated;
         private Long version;
 
@@ -66,7 +66,7 @@ public final class WrongParkingReportEntity extends ReportEntity {
                     .setCustomerEntity(customerEntity)
                     .setReportTypeEntity(reportTypeEntity)
                     .setIsHandled(isHandled)
-                    .setPhotoPath(photoPath)
+                    .setHasPhoto(hasPhoto)
                     .setLastUpdated(lastUpdated)
                     .setVersion(version);
         }
@@ -82,7 +82,7 @@ public final class WrongParkingReportEntity extends ReportEntity {
                 .setCustomerEntity(customerEntity)
                 .setReportTypeEntity(reportTypeEntity)
                 .setIsHandled(isHandled)
-                .setPhotoPath(photoPath)
+                .setHasPhoto(hasPhoto)
                 .setLastUpdated(lastUpdated)
                 .setVersion(version)
                 .setRegistrationPlate(registrationPlate)

@@ -66,9 +66,6 @@ public final class ParkingLotInformationEntity {
     @Column(name = "[CAPACITY]", nullable = false)
     private Short totalSlot;
 
-    @Column(name = "[PHOTO_PATH]")
-    private String photoPath;
-
     @Version
     private Long version;
 
@@ -96,7 +93,6 @@ public final class ParkingLotInformationEntity {
                 Objects.equals(nRating, that.nRating) &&
                 Objects.equals(availableSlot, that.availableSlot) &&
                 Objects.equals(totalSlot, that.totalSlot) &&
-                Objects.equals(photoPath, that.photoPath) &&
                 Objects.equals(version, that.version);
     }
 
@@ -111,7 +107,6 @@ public final class ParkingLotInformationEntity {
                 nRating,
                 availableSlot,
                 totalSlot,
-                photoPath,
                 version);
     }
 }

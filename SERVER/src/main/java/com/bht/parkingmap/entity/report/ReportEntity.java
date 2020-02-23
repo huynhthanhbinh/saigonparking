@@ -62,8 +62,9 @@ public class ReportEntity {
     @Column(name = "[IS_HANDLED]")
     protected Boolean isHandled;
 
-    @Column(name = "[PHOTO_PATH]")
-    protected String photoPath;
+    @ColumnDefault("false")
+    @Column(name = "[HAS_PHOTO]")
+    protected Boolean hasPhoto;
 
     @Column(name = "[LAST_UPDATED]")
     protected Timestamp lastUpdated;
@@ -85,7 +86,7 @@ public class ReportEntity {
                 Objects.equals(customerEntity, that.customerEntity) &&
                 Objects.equals(reportTypeEntity, that.reportTypeEntity) &&
                 Objects.equals(isHandled, that.isHandled) &&
-                Objects.equals(photoPath, that.photoPath) &&
+                Objects.equals(hasPhoto, that.hasPhoto) &&
                 Objects.equals(version, that.version);
     }
 
@@ -96,7 +97,7 @@ public class ReportEntity {
                 customerEntity,
                 reportTypeEntity,
                 isHandled,
-                photoPath,
+                hasPhoto,
                 version);
     }
 }
