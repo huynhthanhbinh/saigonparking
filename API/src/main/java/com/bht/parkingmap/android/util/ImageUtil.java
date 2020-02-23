@@ -1,4 +1,4 @@
-package com.bht.parkingmap.util;
+package com.bht.parkingmap.android.util;
 
 import com.google.protobuf.ByteString;
 

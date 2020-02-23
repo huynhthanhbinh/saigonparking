@@ -20,5 +20,4 @@ message ParkingLotInformation {
 
 service ParkingLotInformationService {
     rpc getParkingLotInformationByParkingLotId (google.protobuf.Int64Value) returns (ParkingLotInformation);
-    rpc updateParkingLotInformation (ParkingLotInformation) returns (google.protobuf.BoolValue);
 }

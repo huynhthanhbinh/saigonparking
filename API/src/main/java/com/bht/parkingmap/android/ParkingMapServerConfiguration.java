@@ -1,4 +1,4 @@
-package com.bht.parkingmap;
+package com.bht.parkingmap.android;
 
 /**
  *

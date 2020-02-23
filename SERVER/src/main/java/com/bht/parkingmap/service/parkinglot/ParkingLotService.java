@@ -2,7 +2,8 @@ package com.bht.parkingmap.service.parkinglot;
 
 import java.util.List;
 
-import com.bht.parkingmap.api.parkinglot.ParkingLot;
+import javax.persistence.Tuple;
+
 import com.bht.parkingmap.entity.parkinglot.ParkingLotEntity;
 
 /**
@@ -15,5 +16,5 @@ public interface ParkingLotService {
 
     List<ParkingLotEntity> getAllParkingLotCurrentlyWorkingInRegion(double northEastLat, double northEastLng, double southWestLat, double southWestLng);
 
-    List<ParkingLot> getAllParkingLotCurrentlyWorkingInRegionOfRadius(double latitude, double longitude, int radiusInKilometre);
+    List<Tuple> getAllParkingLotCurrentlyWorkingInRegionOfRadius(double latitude, double longitude, int radiusInKilometre);
 }

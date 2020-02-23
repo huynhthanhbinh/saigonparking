@@ -2,13 +2,13 @@ package com.bht.parkingmap.service.impl;
 
 import java.util.List;
 
+import javax.persistence.Tuple;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bht.parkingmap.api.parkinglot.ParkingLot;
 import com.bht.parkingmap.entity.parkinglot.ParkingLotEntity;
-import com.bht.parkingmap.mapper.parkinglot.ParkingLotMapper;
 import com.bht.parkingmap.repository.parkinglot.ParkingLotRepository;
 import com.bht.parkingmap.service.parkinglot.ParkingLotService;
 
@@ -21,12 +21,10 @@ import com.bht.parkingmap.service.parkinglot.ParkingLotService;
 public class ParkingLotServiceImpl implements ParkingLotService {
 
     private final ParkingLotRepository parkingLotRepository;
-    private final ParkingLotMapper parkingLotMapper;
 
     @Autowired
-    public ParkingLotServiceImpl(ParkingLotRepository parkingLotRepository, ParkingLotMapper parkingLotMapper) {
+    public ParkingLotServiceImpl(ParkingLotRepository parkingLotRepository) {
         this.parkingLotRepository = parkingLotRepository;
-        this.parkingLotMapper = parkingLotMapper;
     }
 
     @Override
@@ -40,8 +38,7 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     }
 
     @Override
-    public List<ParkingLot> getAllParkingLotCurrentlyWorkingInRegionOfRadius(double latitude, double longitude, int radiusInKilometre) {
-        return parkingLotMapper.toParkingLotListWithDistance(parkingLotRepository
-                .getAllParkingLotCurrentlyWorkingInRegionOfRadius(latitude, longitude, radiusInKilometre));
+    public List<Tuple> getAllParkingLotCurrentlyWorkingInRegionOfRadius(double latitude, double longitude, int radiusInKilometre) {
+        return parkingLotRepository.getAllParkingLotCurrentlyWorkingInRegionOfRadius(latitude, longitude, radiusInKilometre);
     }
 }

@@ -76,27 +76,27 @@ Step 07: Setup Save Actions plugin:
 
 Step 08: Open project
 
-    1. Right click on parkingmap folder
-    2. Select "Open Folder as IntelliJ IDEA Project"
-    3. Project is now open
-    4. Wait for IDE to index project, install missing dependencies(libraries)
-    5. Select right version of Maven !!! (> 3.5)
-        5.1. Open File -> Settings
-        5.2. Tap "Maven" -> Maven Settings will be shown on the right side
-        5.3. Select Maven Home Directory (for eg. C:/Program Files/Apache/apache-maven-3.6.1)
-        5.4. Click Apply to save these settings then click OK to close
-    6. Project will be shown as modules (folder icon with small square blue marker)
-    7. There are now 3 modules in current project, included 1 parent, 2 children
-        7.0. You will see each module will have a unique .pom file (special file of Maven) 
-        7.1. Parent module: parkingmap  -> we will mention it as parkingmap's pom (or parent pom)
-        7.2. Children module:
-            7.2.1. SERVER -> we will mention it as SERVER's pom
-            7.2.2. API -> we will mention it as API's pom
-    8. If modules are not shown in the left panel or any pom has red-underline as errors, please do as followings steps:
-        8.1. Open the parent pom (parkingmap's pom) in the IDE
-        8.2. As the pom has been shown on the editor, please right-click on the editor
-        8.3. Select Maven -> Reimport
-        8.4. Modules will be shown and all red-underline in any pom file must be disappeared ! Otherwise, contact me !
+    1. Right click on parkingmap folder -> Select "Open Folder as IntelliJ IDEA Project"
+    2. Project is now open
+    3. Wait for IDE to index project, install missing dependencies(libraries)
+    4. Select right version of Maven !!! (> 3.5)
+        4.1. Open File -> Settings
+        4.2. Tap "Maven" -> Maven Settings will be shown on the right side
+        4.3. Select Maven Home Directory (for eg. C:/Program Files/Apache/apache-maven-3.6.1)
+        4.4. Click Apply to save these settings then click OK to close
+    5. Project will be shown as modules (folder icon with small square blue marker)
+    6. There are now 3 modules in current project, included 1 parent, 2 children
+        6.0. You will see each module will have a unique .pom file (special file of Maven)
+        6.1. Parent module: parkingmap  -> we will mention it as parkingmap's pom (or parent pom)
+        6.2. Children module:
+            6.2.1. SERVER -> we will mention it as SERVER's pom
+            6.2.2. API -> we will mention it as API's pom
+    7. If modules are not shown in the left panel or any pom has red-underline as errors, please do as followings steps:
+        7.1. Open the parent pom (parkingmap's pom) in the IDE
+        7.2. As the pom has been shown on the editor, please right-click on the editor
+        7.3. Select Maven -> Reimport
+        7.4. Modules will be shown and all red-underline in any pom file must be disappeared ! Otherwise, contact me !
+    8. PLEASE update password of your SQL server 'sa' account in SERVER/src/main/resources/application.properties
     9. Finish opening project for the 1st time ! Congrats !
     
 Step 09: Understand project components / project structure
@@ -110,31 +110,41 @@ Step 09: Understand project components / project structure
         6. SERVER       : contains SERVER module
         7. SETUP        : contains SETUP files, setup guide (this file)
         8. Another git's file included:
-            7.1. .gitattributes : for using LFS (Git Large File Storage)
-            7.2. .gitignore     : for ignoring special files or folders
-            7.3. LICENSE        : Apache License of this project
-            7.4. README.md      : Introduction of this project
+            8.1. .gitattributes : for using LFS (Git Large File Storage)
+            8.2. .gitignore     : for ignoring special files or folders
+            8.3. LICENSE        : Apache License of this project
+            8.4. README.md      : Introduction of this project
 
-Step 10: Try to run server by already-built executable .jar file (this step requires Java already installed and set up)
+Step 10: Try to run server (LOCAL) by package and run executable .jar file (server-spring-boot.jar)
+        (this step requires Java, Maven, IDE, project already installed and set up, see Step01 -> Step08)
 
     0. If you did not have the project's database on your computer, please do the following steps: (SETUP DATABASE STEP)
         0.1. Open SSMS (Microsoft SQL Server Management Studio)
-        0.2. Open DATABASE folder and execute all .sql files by order
-        0.3. 1st, execute 01_db_schema.sql
-        0.4. 2nd, execute 02_db_trigger.sql
-        0.5. 3rd, execute 03_db_function.sql
-        0.6. 4th, execute 04_db_data.sql
-        0.7. do NOT need to execute 05_db_query.sql, it just contains some sample written queries
-        0.8. all project database has been set up successfully, see 06_db_diagram for more detail about relationships
-    (Please redo all of these steps below whenever you execute Server (server-spring-boot.jar) !!!!!!!!!!!!!!!!!!!!!!!!!)
+        0.2. Create new database, named it 'PARKINGMAP'
+        0.3. Open DATABASE folder and execute all .sql files by order
+        0.4. 1st, execute 01_db_schema.sql
+        0.5. 2nd, execute 02_db_trigger.sql
+        0.6. 3rd, execute 03_db_function.sql
+        0.7. 4th, execute 04_db_data.sql
+        0.8. do NOT need to execute 05_db_query.sql, it just contains some sample written queries
+        0.9. all project database has been set up successfully, see 06_db_diagram for more detail about relationships
+    1. Register PARKING-MAP environment variables (see Step03), if you have NOT done it before
+    2. Update password of 'sa' account (see Step08 - 8), if you have NOT done it before
+    3. Package SERVER as standalone application (.jar file) by doing some steps below:
+        3.1. Change package type from 'war' to 'jar' inside SERVER/pom.xml and save ! ( <packaging>jar</packaging> )
+        3.2. Run TERMINAL (Command Prompt / Cmder) inside ROOT folder (folder parkingmap)
+        3.3. Clean all previous built class, by tapping the command: $ mvn clean
+        3.4. Compile new class and build executable .jar file, by tapping the command: $ mvn package
+        3.5. Close TERMINAL, move to BUILD folder to get the executable recently packaged .jar file!
 
-    1. Open BUILD folder - folder contains all built executable file such as .jar
-    2. Run Terminal (Command Prompt / Cmder) inside this folder
-    3. Change code page (for using Vietnamese) with this command: (my OS is Windows !)
+    !!!!!!!!!!!!! (Please do ALL of these steps below whenever you execute Server (server-spring-boot.jar) !!!!!!!!!!!!!)
+
+    4. Run Terminal (Command Prompt / Cmder) inside BUILD folder - folder contains all built executable file such as .jar
+    5. Change code page (for using Vietnamese) with this command: (my OS is Windows !)
 
         $ chcp 65001
 
-    4. Tap the following command to start server:
+    6. Tap the following command to start server:
 
         $ cls && java -jar -Dfile.encoding=UTF-8 -Xms512m -Xmx3072m -XX:ReservedCodeCacheSize=512m -XX:OnOutOfMemoryError="shutdown -r" server-spring-boot.jar
 
