@@ -6,12 +6,12 @@ import org.apache.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.bht.parkingmap.api.parkinglot.ParkingLot;
-import com.bht.parkingmap.api.parkinglot.ParkingLotInformation;
-import com.bht.parkingmap.api.parkinglot.ParkingLotList;
-import com.bht.parkingmap.api.parkinglot.ParkingLotScanningByRadius;
-import com.bht.parkingmap.api.parkinglot.ParkingLotScanningInRegion;
-import com.bht.parkingmap.api.parkinglot.ParkingLotServiceGrpc;
+import com.bht.parkingmap.api.proto.parkinglot.ParkingLot;
+import com.bht.parkingmap.api.proto.parkinglot.ParkingLotInformation;
+import com.bht.parkingmap.api.proto.parkinglot.ParkingLotList;
+import com.bht.parkingmap.api.proto.parkinglot.ParkingLotScanningByRadius;
+import com.bht.parkingmap.api.proto.parkinglot.ParkingLotScanningInRegion;
+import com.bht.parkingmap.api.proto.parkinglot.ParkingLotServiceGrpc;
 import com.bht.parkingmap.mapper.ParkingLotMapper;
 import com.bht.parkingmap.service.ParkingLotService;
 import com.bht.parkingmap.util.LoggingUtil;

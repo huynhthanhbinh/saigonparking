@@ -12,8 +12,8 @@ import org.mapstruct.Named;
 import org.mapstruct.NullValueMappingStrategy;
 import org.springframework.stereotype.Component;
 
-import com.bht.parkingmap.api.parkinglot.ParkingLot;
-import com.bht.parkingmap.api.parkinglot.ParkingLotInformation;
+import com.bht.parkingmap.api.proto.parkinglot.ParkingLot;
+import com.bht.parkingmap.api.proto.parkinglot.ParkingLotInformation;
 import com.bht.parkingmap.entity.parkinglot.ParkingLotEntity;
 import com.bht.parkingmap.entity.parkinglot.ParkingLotInformationEntity;
 
@@ -33,10 +33,7 @@ public interface ParkingLotMapper {
     @Mapping(target = "type", expression = "java(enumMapper.toParkingLotType(parkingLotDistanceTuple.get(2, Byte.class).intValue()))")
     @Mapping(target = "latitude", expression = "java(parkingLotDistanceTuple.get(3, Double.class))")
     @Mapping(target = "longitude", expression = "java(parkingLotDistanceTuple.get(4, Double.class))")
-    @Mapping(target = "openingHour", expression = "java(customizedMapper.toTimeString(parkingLotDistanceTuple.get(5, java.sql.Time.class)))")
-    @Mapping(target = "closingHour", expression = "java(customizedMapper.toTimeString(parkingLotDistanceTuple.get(6, java.sql.Time.class)))")
-    @Mapping(target = "lastUpdated", expression = "java(customizedMapper.toTimestampString(parkingLotDistanceTuple.get(7, java.sql.Timestamp.class)))")
-    @Mapping(target = "distance", expression = "java(parkingLotDistanceTuple.get(8, Double.class))")
+    @Mapping(target = "distance", expression = "java(parkingLotDistanceTuple.get(5, Double.class))")
     ParkingLot toParkingLotWithDistance(Tuple parkingLotDistanceTuple);
 
 

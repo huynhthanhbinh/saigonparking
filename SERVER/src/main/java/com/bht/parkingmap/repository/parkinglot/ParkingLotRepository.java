@@ -32,7 +32,7 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Lo
 
     @SuppressWarnings("SqlResolve")
     @Query(value = "SELECT TOP 10 " +
-            "P.ID, PLI.NAME, P.PARKING_LOT_TYPE_ID, P.LATITUDE, P.LONGITUDE, P.OPENING_HOUR, P.CLOSING_HOUR, P.LAST_UPDATED, DISTANCE " +
+            "P.ID, PLI.NAME, P.PARKING_LOT_TYPE_ID, P.LATITUDE, P.LONGITUDE, DISTANCE " +
             "FROM PARKING_LOT P " +
             "         INNER JOIN ( " +
             "    SELECT ID, NAME " +

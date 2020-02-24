@@ -9,9 +9,9 @@ import org.mapstruct.Named;
 import org.mapstruct.NullValueMappingStrategy;
 import org.springframework.stereotype.Component;
 
-import com.bht.parkingmap.api.parkinglot.ParkingLotType;
-import com.bht.parkingmap.api.report.ReportType;
-import com.bht.parkingmap.api.user.UserRole;
+import com.bht.parkingmap.api.proto.parkinglot.ParkingLotType;
+import com.bht.parkingmap.api.proto.report.ReportType;
+import com.bht.parkingmap.api.proto.user.UserRole;
 import com.bht.parkingmap.base.BaseBean;
 
 import javassist.NotFoundException;

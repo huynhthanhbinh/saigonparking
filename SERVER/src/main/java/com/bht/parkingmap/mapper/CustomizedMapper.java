@@ -33,7 +33,7 @@ public interface CustomizedMapper {
 
     @Named("toEncodedParkingLotImage")
     default ByteString toEncodedParkingLotImage(Integer parkingLotId) throws IOException {
-        return com.bht.parkingmap.android.util.ImageUtil.encodeImage(ImageUtil.getImage(
+        return com.bht.parkingmap.api.util.ImageUtil.encodeImage(ImageUtil.getImage(
                 "plot/plot" + parkingLotId, ImageUtil.ImageExtension.JPG));
     }
 }
