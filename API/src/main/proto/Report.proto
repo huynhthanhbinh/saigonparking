@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package com.bht.parkingmap.api.report;
+//option java_generic_services = true;
+option java_multiple_files = true;
+
+import "google/protobuf/wrappers.proto";
+import "Actor.proto";
+
+enum ReportType {
+    WRONG_PARKING_REPORT = 0;
+    PARKING_LOT_REPORT = 1;
+}
+
+message Report {
+    int64 id = 1;
+    ReportType type = 2;
+    user.Customer customer = 3;
+    bool isHandled = 4;
+    bytes imageData = 5;
+    string lastUpdated = 6;
+}
+
+message ParkingLotReport {
+    Report reportInfo = 1;
+    int64 parkingLotId = 2;
+    string content = 3;
+}
+
+message WrongParkingReport {
+    Report reportInfo = 1;
+    string registrationPlate = 2;
+    double latitude = 3;
+    double longitude = 4;
+}
+
+service ReportService {
+    rpc getReportById (google.protobuf.Int64Value) returns (Report);
+    rpc getParkingLotReportById (google.protobuf.Int64Value) returns (ParkingLotReport);
+    rpc getWrongParkingReportById (google.protobuf.Int64Value) returns (WrongParkingReport);
+}

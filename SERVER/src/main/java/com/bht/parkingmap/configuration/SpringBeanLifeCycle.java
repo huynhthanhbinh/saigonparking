@@ -20,12 +20,14 @@ public final class SpringBeanLifeCycle implements BaseBean, DestructionAwareBean
 
     @Override
     public void initialize() {
+        BaseBean.super.initialize();
         LoggingUtil.log(Level.INFO, "SPRING", "BeanCreation", "springBeanLifeCycle");
     }
 
 
     @Override
     public void destroy() {
+        BaseBean.super.destroy();
         LoggingUtil.log(Level.INFO, "SPRING", "BeanDestruction", "springBeanLifeCycle");
     }
 

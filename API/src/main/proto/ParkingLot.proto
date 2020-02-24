@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+package com.bht.parkingmap.api.parkinglot;
+//option java_generic_services = true;
+option java_multiple_files = true;
+
+import "google/protobuf/wrappers.proto";
+import "Actor.proto";
+
+enum ParkingLotType {
+    BUILDING = 0;
+    PRIVATE = 1;
+    STREET = 2;
+}
+
+message ParkingLot {
+    int64 id = 1;
+    string name = 2;
+    ParkingLotType type = 3;
+    double latitude = 4;
+    double longitude = 5;
+    string openingHour = 6;
+    string closingHour = 7;
+    string lastUpdated = 8;
+    double distance = 9;
+}
+
+message ParkingLotInformation {
+    ParkingLot parkingLot = 1;
+    string name = 2;
+    string address = 3;
+    string phone = 4;
+    double ratingAverage = 5;
+    int32 numberOfRating = 6;
+    int32 availableSlot = 7;
+    int32 totalSlot = 8;
+    bytes imageData = 9;
+}
+
+message ParkingLotUnit {
+    int64 id = 1;
+    int64 parkingLotId = 2;
+    int32 lowerBoundHour = 3;
+    int32 upperBoundHour = 4;
+    int32 unitPrice = 5;
+}
+
+message ParkingLotRating {
+    int64 id = 1;
+    int64 parkingLotId = 2;
+    user.Customer customer = 3;
+    int32 rating = 4;
+    string comment = 5;
+    string lastUpdated = 6;
+}
+
+message ParkingLotSuggestion {
+    int64 id = 1;
+    user.Customer customer = 2;
+    string parkingLotName = 3;
+    string address = 4;
+    double latitude = 5;
+    double longitude = 6;
+    bool isHandled = 7;
+    string lastUpdated = 8;
+}
+
+message ParkingLotScanningByRadius {
+    double latitude = 1;
+    double longitude = 2;
+    int32 radiusToScan = 3;
+}
+
+message ParkingLotScanningInRegion {
+    double northEastLat = 1;
+    double northEastLng = 2;
+    double southWestLat = 3;
+    double southWestLng = 4;
+}
+
+message ParkingLotList {
+    repeated ParkingLot parkingLot = 1;
+}
+
+service ParkingLotService {
+    rpc getAllParkingLotCurrentlyWorkingByRadius (ParkingLotScanningByRadius) returns (ParkingLotList);
+    rpc getAllParkingLotCurrentlyWorkingInRegion (ParkingLotScanningInRegion) returns (ParkingLotList);
+    rpc getParkingLotInformationByParkingLotId (google.protobuf.Int64Value) returns (ParkingLotInformation);
+}

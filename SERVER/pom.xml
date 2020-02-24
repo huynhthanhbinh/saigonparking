@@ -7,7 +7,7 @@
     <groupId>com.bht.parkingmap</groupId>
     <artifactId>server</artifactId>
     <version>${revision}</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <name>SERVER</name>
     <parent>

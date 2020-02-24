@@ -17,7 +17,6 @@
     <name>API</name>
 
     <dependencies>
-        <!-- Google Protocol Buffer -->
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
@@ -62,6 +61,22 @@
                 <version>${springboot.version}</version>
                 <configuration>
                     <layout>NONE</layout>
+                    <excludeGroupIds>
+                        io.grpc,
+                        io.netty,
+                        io.perfmark,
+                        io.opencensus,
+                        org.codehaus.mojo,
+                        org.checkerframework,
+                        com.google.j2objc,
+                        com.google.guava,
+                        com.google.android,
+                        com.google.api.grpc,
+                        com.google.protobuf,
+                        com.google.code.gson,
+                        com.google.errorprone,
+                        com.google.code.findbugs,
+                    </excludeGroupIds>
                 </configuration>
                 <executions>
                     <execution>
@@ -81,9 +96,14 @@
                 <artifactId>protobuf-maven-plugin</artifactId>
                 <version>${protobuf-maven-plugin.version}</version>
                 <configuration>
-                    <protocArtifact>com.google.protobuf:protoc:3.5.1-1:exe:${os.detected.classifier}</protocArtifact>
                     <pluginId>grpc-java</pluginId>
-                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:1.16.1:exe:${os.detected.classifier}</pluginArtifact>
+                    <protocArtifact>
+                        com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}
+                    </protocArtifact>
+                    <pluginArtifact>
+                        io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}
+                    </pluginArtifact>
+                    <attachProtoSources>false</attachProtoSources>
                 </configuration>
                 <executions>
                     <execution>

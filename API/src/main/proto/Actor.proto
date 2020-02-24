@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package com.bht.parkingmap.api.user;
+//option java_generic_services = true;
+option java_multiple_files = true;
+option java_outer_classname = "ParkingMapUser";
+
+import "google/protobuf/wrappers.proto";
+
+enum UserRole {
+    CUSTOMER = 0;
+    PARKING_LOT_EMPLOYEE = 1;
+    GOVERNMENT_EMPLOYEE = 2;
+    ADMIN = 3;
+}
+
+message User {
+    int64 id = 1;
+    UserRole role = 2;
+    string username = 3;
+    string password = 4;
+    string email = 5;
+    string lastSignIn = 6;
+}
+
+message Customer {
+    User userInfo = 1;
+    string firstName = 2;
+    string lastName = 3;
+    string phone = 4;
+    string lastUpdated = 5;
+}
+
+message ParkingLotEmployee {
+    User userInfo = 1;
+    int64 parkingLotId = 2;
+}
+
+message LoginRequest {
+    string username = 1;
+    string password = 2;
+    UserRole userRole = 3;
+}
+
+enum LoginResponseType {
+    SUCCESS = 0;
+    INCORRECT = 1;
+    NON_EXIST = 2;
+}
+
+message LoginResponse {
+    LoginResponseType response = 1;
+}
+
+service UserService {
+    rpc validateLogin (LoginRequest) returns (LoginResponse);
+    rpc getUserById (google.protobuf.Int64Value) returns (User);
+    rpc getCustomerById (google.protobuf.Int64Value) returns (Customer);
+    rpc getParkingLotEmployeeById (google.protobuf.Int64Value) returns (ParkingLotEmployee);
+}
