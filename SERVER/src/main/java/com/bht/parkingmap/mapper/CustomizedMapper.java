@@ -19,20 +19,29 @@ import com.google.protobuf.ByteString;
  */
 @Component
 @Mapper(componentModel = "spring", nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
-public interface CustomizedMapper {
+public abstract class CustomizedMapper {
+
+    static final String DEFAULT_STRING_VALUE = "";
+    static final Short DEFAULT_SHORT_VALUE = 0;
+    static final Integer DEFAULT_INT_VALUE = 0;
+    static final Long DEFAULT_LONG_VALUE = 0L;
+    static final Double DEFAULT_DOUBLE_VALUE = 0.0;
+    static final ByteString DEFAULT_BYTE_STRING_VALUE = ByteString.EMPTY;
 
     @Named("toTimeString")
-    default String toTimeString(Time time) {
+    String toTimeString(Time time) {
         return time.toString();
     }
 
+
     @Named("toTimestampString")
-    default String toTimestampString(Timestamp timestamp) {
+    String toTimestampString(Timestamp timestamp) {
         return new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss").format(timestamp);
     }
 
+
     @Named("toEncodedParkingLotImage")
-    default ByteString toEncodedParkingLotImage(Integer parkingLotId) throws IOException {
+    ByteString toEncodedParkingLotImage(Integer parkingLotId) throws IOException {
         return com.bht.parkingmap.api.util.ImageUtil.encodeImage(ImageUtil.getImage(
                 "plot/plot" + parkingLotId, ImageUtil.ImageExtension.JPG));
     }

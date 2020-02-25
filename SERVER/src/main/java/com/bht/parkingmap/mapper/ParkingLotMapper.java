@@ -44,13 +44,13 @@ public interface ParkingLotMapper {
 
 
     @Named("toParkingLot")
-    @Mapping(target = "id", source = "id")
+    @Mapping(target = "id", source = "id", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
     @Mapping(target = "type", source = "parkingLotTypeEntity.id", qualifiedByName = "toParkingLotType")
-    @Mapping(target = "latitude", source = "latitude")
-    @Mapping(target = "longitude", source = "longitude")
-    @Mapping(target = "openingHour", source = "openingHour", qualifiedByName = "toTimeString")
-    @Mapping(target = "closingHour", source = "closingHour", qualifiedByName = "toTimeString")
-    @Mapping(target = "lastUpdated", source = "lastUpdated", qualifiedByName = "toTimestampString")
+    @Mapping(target = "latitude", source = "latitude", defaultExpression = "java(customizedMapper.DEFAULT_DOUBLE_VALUE)")
+    @Mapping(target = "longitude", source = "longitude", defaultExpression = "java(customizedMapper.DEFAULT_DOUBLE_VALUE)")
+    @Mapping(target = "openingHour", source = "openingHour", qualifiedByName = "toTimeString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    @Mapping(target = "closingHour", source = "closingHour", qualifiedByName = "toTimeString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    @Mapping(target = "lastUpdated", source = "lastUpdated", qualifiedByName = "toTimestampString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     ParkingLot toParkingLot(ParkingLotEntity parkingLotEntity);
 
 
@@ -62,13 +62,13 @@ public interface ParkingLotMapper {
 
     @Named("toParkingLotInformation")
     @Mapping(target = "parkingLot", source = "parkingLotEntity", qualifiedByName = "toParkingLot")
-    @Mapping(target = "name", source = "name")
-    @Mapping(target = "address", source = "address")
-    @Mapping(target = "phone", source = "phone")
-    @Mapping(target = "ratingAverage", source = "ratingAverage")
-    @Mapping(target = "numberOfRating", source = "NRating")
-    @Mapping(target = "availableSlot", source = "availableSlot")
-    @Mapping(target = "totalSlot", source = "totalSlot")
-    @Mapping(target = "imageData", source = "id", qualifiedByName = "toEncodedParkingLotImage")
+    @Mapping(target = "name", source = "name", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    @Mapping(target = "address", source = "address", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    @Mapping(target = "phone", source = "phone", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    @Mapping(target = "ratingAverage", source = "ratingAverage", defaultExpression = "java(customizedMapper.DEFAULT_DOUBLE_VALUE)")
+    @Mapping(target = "numberOfRating", source = "NRating", defaultExpression = "java(customizedMapper.DEFAULT_SHORT_VALUE)")
+    @Mapping(target = "availableSlot", source = "availableSlot", defaultExpression = "java(customizedMapper.DEFAULT_SHORT_VALUE)")
+    @Mapping(target = "totalSlot", source = "totalSlot", defaultExpression = "java(customizedMapper.DEFAULT_SHORT_VALUE)")
+    @Mapping(target = "imageData", source = "id", qualifiedByName = "toEncodedParkingLotImage", defaultExpression = "java(customizedMapper.DEFAULT_BYTE_STRING_VALUE)")
     ParkingLotInformation toParkingLotInformation(ParkingLotInformationEntity parkingLotInformationEntity) throws IOException;
 }
