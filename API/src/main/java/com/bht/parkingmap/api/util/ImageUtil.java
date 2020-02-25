@@ -1,7 +1,5 @@
 package com.bht.parkingmap.api.util;
 
-import java.util.Arrays;
-
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Internal;
 
@@ -43,6 +41,6 @@ public final class ImageUtil {
      * to check if the imageData received is empty or not
      */
     public static boolean isDecodedImageEmpty(byte[] imageData) {
-        return Arrays.equals(imageData, Internal.EMPTY_BYTE_ARRAY);
+        return imageData.length == 0;
     }
 }
