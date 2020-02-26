@@ -1,5 +1,7 @@
 package com.bht.parkingmap.service.impl;
 
+import java.sql.Timestamp;
+
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +39,6 @@ public class UserServiceImpl implements UserService {
         this.parkingLotEmployeeRepository = parkingLotEmployeeRepository;
     }
 
-    private void updateLastSignIn(@NotNull Long userId) {
-        userRepository.updateLastSignIn(userId);
-    }
-
     @Override
     public LoginResponseType validateLogin(@NotNull String username, @NotNull String password, @NotNull Short userRoleId) {
         UserEntity userEntity = userRepository.getUserByUsername(username);
@@ -48,7 +46,8 @@ public class UserServiceImpl implements UserService {
             if (userRoleId.equals(userEntity.getUserRoleEntity().getId())) {
                 if (Boolean.TRUE.equals(userEntity.getIsActivated())) {
                     if (password.equals(userEntity.getPassword())) {
-                        updateLastSignIn(userEntity.getId());
+                        userEntity.setLastSignIn(new Timestamp(System.currentTimeMillis()));
+                        userRepository.save(userEntity);
                         return LoginResponseType.SUCCESS;
                     }
                     return LoginResponseType.INCORRECT;
