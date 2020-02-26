@@ -10,6 +10,9 @@ import org.mapstruct.Named;
 import org.mapstruct.NullValueMappingStrategy;
 import org.springframework.stereotype.Component;
 
+import com.bht.parkingmap.api.proto.parkinglot.ParkingLotType;
+import com.bht.parkingmap.api.proto.report.ReportType;
+import com.bht.parkingmap.api.proto.user.UserRole;
 import com.bht.parkingmap.util.ImageUtil;
 import com.google.protobuf.ByteString;
 
@@ -27,6 +30,10 @@ public abstract class CustomizedMapper {
     static final Long DEFAULT_LONG_VALUE = 0L;
     static final Double DEFAULT_DOUBLE_VALUE = 0.0;
     static final ByteString DEFAULT_BYTE_STRING_VALUE = ByteString.EMPTY;
+
+    static final UserRole DEFAULT_USER_ROLE = UserRole.UNRECOGNIZED;
+    static final ParkingLotType DEFAULT_PARKING_LOT_TYPE = ParkingLotType.UNRECOGNIZED;
+    static final ReportType DEFAULT_REPORT_TYPE = ReportType.UNRECOGNIZED;
 
     @Named("toTimeString")
     String toTimeString(Time time) {

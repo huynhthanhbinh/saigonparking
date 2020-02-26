@@ -1,9 +1,5 @@
 package com.bht.parkingmap.mapper;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 import org.mapstruct.NullValueMappingStrategy;
@@ -13,8 +9,8 @@ import com.bht.parkingmap.api.proto.parkinglot.ParkingLotType;
 import com.bht.parkingmap.api.proto.report.ReportType;
 import com.bht.parkingmap.api.proto.user.UserRole;
 import com.bht.parkingmap.base.BaseBean;
-
-import javassist.NotFoundException;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 /**
  *
@@ -24,9 +20,9 @@ import javassist.NotFoundException;
 @Mapper(componentModel = "spring", nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
 public abstract class EnumMapper implements BaseBean {
 
-    private Map<Integer, UserRole> userRoleMap;
-    private Map<Integer, ParkingLotType> parkingLotTypeMap;
-    private Map<Integer, ReportType> reportTypeMap;
+    private static final BiMap<Integer, UserRole> USER_ROLE_MAP = HashBiMap.create(5);
+    private static final BiMap<Integer, ParkingLotType> PARKING_LOT_TYPE_MAP = HashBiMap.create(4);
+    private static final BiMap<Integer, ReportType> REPORT_TYPE_MAP = HashBiMap.create(3);
 
     @Override
     public void initialize() {
@@ -37,60 +33,52 @@ public abstract class EnumMapper implements BaseBean {
 
     @Named("toUserRole")
     UserRole toUserRole(Integer userRoleId) {
-        return userRoleMap.get(userRoleId);
+        return USER_ROLE_MAP.get(userRoleId);
     }
 
     @Named("toUserRoleId")
-    Integer toUserRoleId(UserRole userRole) throws NotFoundException {
-        return getFirstKeyOfValue(userRoleMap, userRole);
+    public Integer toUserRoleId(UserRole userRole) {
+        return USER_ROLE_MAP.inverse().get(userRole);
     }
 
     @Named("toParkingLotType")
     ParkingLotType toParkingLotType(Integer parkingLotTypeId) {
-        return parkingLotTypeMap.get(parkingLotTypeId);
+        return PARKING_LOT_TYPE_MAP.get(parkingLotTypeId);
     }
 
     @Named("toParkingLotId")
-    Integer toParkingLotTypeId(ParkingLotType parkingLotType) throws NotFoundException {
-        return getFirstKeyOfValue(parkingLotTypeMap, parkingLotType);
+    public Integer toParkingLotTypeId(ParkingLotType parkingLotType) {
+        return PARKING_LOT_TYPE_MAP.inverse().get(parkingLotType);
     }
 
     @Named("toReportType")
     ReportType toReportType(Integer reportTypeId) {
-        return reportTypeMap.get(reportTypeId);
+        return REPORT_TYPE_MAP.get(reportTypeId);
     }
 
     @Named("toReportTypeId")
-    Integer toReportTypeId(ReportType reportType) throws NotFoundException {
-        return getFirstKeyOfValue(reportTypeMap, reportType);
-    }
-
-    private <T, E> T getFirstKeyOfValue(Map<T, E> entrySet, E value) throws NotFoundException {
-        return entrySet.entrySet().stream()
-                .filter(entry -> Objects.equals(entry.getValue(), value))
-                .map(Map.Entry::getKey)
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException("Not found compatible key !!!"));
+    public Integer toReportTypeId(ReportType reportType) {
+        return REPORT_TYPE_MAP.inverse().get(reportType);
     }
 
     private void initUserRoleMap() {
-        userRoleMap = new HashMap<>();
-        userRoleMap.put(1, UserRole.ADMIN);
-        userRoleMap.put(2, UserRole.CUSTOMER);
-        userRoleMap.put(3, UserRole.PARKING_LOT_EMPLOYEE);
-        userRoleMap.put(4, UserRole.GOVERNMENT_EMPLOYEE);
+        USER_ROLE_MAP.put(0, UserRole.UNRECOGNIZED);
+        USER_ROLE_MAP.put(1, UserRole.ADMIN);
+        USER_ROLE_MAP.put(2, UserRole.CUSTOMER);
+        USER_ROLE_MAP.put(3, UserRole.PARKING_LOT_EMPLOYEE);
+        USER_ROLE_MAP.put(4, UserRole.GOVERNMENT_EMPLOYEE);
     }
 
     private void initParkingLotTypeMap() {
-        parkingLotTypeMap = new HashMap<>();
-        parkingLotTypeMap.put(1, ParkingLotType.PRIVATE);
-        parkingLotTypeMap.put(2, ParkingLotType.BUILDING);
-        parkingLotTypeMap.put(3, ParkingLotType.STREET);
+        PARKING_LOT_TYPE_MAP.put(0, ParkingLotType.UNRECOGNIZED);
+        PARKING_LOT_TYPE_MAP.put(1, ParkingLotType.PRIVATE);
+        PARKING_LOT_TYPE_MAP.put(2, ParkingLotType.BUILDING);
+        PARKING_LOT_TYPE_MAP.put(3, ParkingLotType.STREET);
     }
 
     private void initReportTypeMap() {
-        reportTypeMap = new HashMap<>();
-        reportTypeMap.put(1, ReportType.PARKING_LOT_REPORT);
-        reportTypeMap.put(2, ReportType.WRONG_PARKING_REPORT);
+        REPORT_TYPE_MAP.put(0, ReportType.UNRECOGNIZED);
+        REPORT_TYPE_MAP.put(1, ReportType.PARKING_LOT_REPORT);
+        REPORT_TYPE_MAP.put(2, ReportType.WRONG_PARKING_REPORT);
     }
 }
