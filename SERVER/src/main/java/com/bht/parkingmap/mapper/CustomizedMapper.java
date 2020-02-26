@@ -11,7 +11,9 @@ import org.mapstruct.NullValueMappingStrategy;
 import org.springframework.stereotype.Component;
 
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotType;
+import com.bht.parkingmap.api.proto.report.Report;
 import com.bht.parkingmap.api.proto.report.ReportType;
+import com.bht.parkingmap.api.proto.user.User;
 import com.bht.parkingmap.api.proto.user.UserRole;
 import com.bht.parkingmap.util.ImageUtil;
 import com.google.protobuf.ByteString;
@@ -29,23 +31,26 @@ public abstract class CustomizedMapper {
     static final Integer DEFAULT_INT_VALUE = 0;
     static final Long DEFAULT_LONG_VALUE = 0L;
     static final Double DEFAULT_DOUBLE_VALUE = 0.0;
+    static final Boolean DEFAULT_BOOL_VALUE = Boolean.FALSE;
     static final ByteString DEFAULT_BYTE_STRING_VALUE = ByteString.EMPTY;
 
     static final UserRole DEFAULT_USER_ROLE = UserRole.UNRECOGNIZED;
     static final ParkingLotType DEFAULT_PARKING_LOT_TYPE = ParkingLotType.UNRECOGNIZED;
     static final ReportType DEFAULT_REPORT_TYPE = ReportType.UNRECOGNIZED;
 
+    static final User DEFAULT_USER = User.getDefaultInstance();
+    static final Report DEFAULT_REPORT = Report.getDefaultInstance();
+
+
     @Named("toTimeString")
     String toTimeString(Time time) {
         return time.toString();
     }
 
-
     @Named("toTimestampString")
     String toTimestampString(Timestamp timestamp) {
         return new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss").format(timestamp);
     }
-
 
     @Named("toEncodedParkingLotImage")
     ByteString toEncodedParkingLotImage(Integer parkingLotId) throws IOException {
