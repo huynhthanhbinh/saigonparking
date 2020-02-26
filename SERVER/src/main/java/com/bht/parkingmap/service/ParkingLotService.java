@@ -3,6 +3,7 @@ package com.bht.parkingmap.service;
 import java.util.List;
 
 import javax.persistence.Tuple;
+import javax.validation.constraints.NotNull;
 
 import com.bht.parkingmap.entity.parkinglot.ParkingLotEntity;
 import com.bht.parkingmap.entity.parkinglot.ParkingLotInformationEntity;
@@ -13,11 +14,16 @@ import com.bht.parkingmap.entity.parkinglot.ParkingLotInformationEntity;
  */
 public interface ParkingLotService {
 
-    ParkingLotEntity getParkingLotById(long id);
+    ParkingLotEntity getParkingLotById(@NotNull Long id);
 
-    ParkingLotInformationEntity getParkingLotInformationByParkingLotId(long id);
+    ParkingLotInformationEntity getParkingLotInformationByParkingLotId(@NotNull Long id);
 
-    List<ParkingLotEntity> getAllParkingLotCurrentlyWorkingInRegion(double northEastLat, double northEastLng, double southWestLat, double southWestLng);
+    List<ParkingLotEntity> getAllParkingLotCurrentlyWorkingInRegion(@NotNull Double northEastLat,
+                                                                    @NotNull Double northEastLng,
+                                                                    @NotNull Double southWestLat,
+                                                                    @NotNull Double southWestLng);
 
-    List<Tuple> getAllParkingLotCurrentlyWorkingByRadius(double latitude, double longitude, int radiusInKilometre);
+    List<Tuple> getAllParkingLotCurrentlyWorkingByRadius(@NotNull Double latitude,
+                                                         @NotNull Double longitude,
+                                                         @NotNull Integer radiusInKilometre);
 }

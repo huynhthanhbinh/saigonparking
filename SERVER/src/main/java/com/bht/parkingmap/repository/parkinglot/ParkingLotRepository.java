@@ -3,6 +3,7 @@ package com.bht.parkingmap.repository.parkinglot;
 import java.util.List;
 
 import javax.persistence.Tuple;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,10 +25,10 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Lo
             "AND FUNCTION('CONVERT', TIME, FUNCTION('CURRENT_TIME')) BETWEEN P.openingHour AND P.closingHour " +
             "AND P.isAvailable = TRUE")
     List<ParkingLotEntity> getAllParkingLotCurrentlyWorkingInRegion(
-            double top,     // north limit
-            double right,   // east limit
-            double bottom,  // south limit
-            double left);   // west limit
+            @NotNull Double top,     // north limit
+            @NotNull Double right,   // east limit
+            @NotNull Double bottom,  // south limit
+            @NotNull Double left);   // west limit
 
 
     @SuppressWarnings("SqlResolve")
@@ -44,7 +45,7 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Lo
             "                        AND CONVERT(TIME, GETDATE()) BETWEEN P.OPENING_HOUR AND P.CLOSING_HOUR " +
             "ORDER BY DISTANCE", nativeQuery = true)
     List<Tuple> getAllParkingLotCurrentlyWorkingInRegionOfRadius(
-            double latitude,            // target location's latitude
-            double longitude,           // target location's longitude
-            int radiusInKilometre);   // radius in kilometre to scan
+            @NotNull Double latitude,            // target location's latitude
+            @NotNull Double longitude,           // target location's longitude
+            @NotNull Integer radiusInKilometre);   // radius in kilometre to scan
 }

@@ -18,18 +18,16 @@ import com.bht.parkingmap.util.LoggingUtil;
 import com.google.protobuf.Int64Value;
 
 import io.grpc.stub.StreamObserver;
-import lombok.extern.log4j.Log4j;
 
 /**
  *
  * @author bht
  */
-@Log4j
 @GRpcService
 public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceGrpc.ParkingLotServiceImplBase {
 
-    private final ParkingLotMapper parkingLotMapper;
     private final ParkingLotService parkingLotService;
+    private final ParkingLotMapper parkingLotMapper;
 
 
     @Autowired
