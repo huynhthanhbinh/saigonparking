@@ -34,7 +34,7 @@ public interface UserMapper {
 
 
     @Named("toCustomer")
-    @Mapping(target = "userInfo", source = "customerEntity", qualifiedByName = "toUser")
+    @Mapping(target = "userInfo", source = "customerEntity", qualifiedByName = "toUser", defaultExpression = "java(customizedMapper.DEFAULT_USER)")
     @Mapping(target = "firstName", source = "firstName", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "lastName", source = "lastName", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "phone", source = "phone", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
@@ -42,8 +42,18 @@ public interface UserMapper {
     Customer toCustomer(CustomerEntity customerEntity);
 
 
+    @Named("toCustomerWithoutUserInfo")
+    @Mapping(target = "userInfo", expression = "java(customizedMapper.DEFAULT_USER)")
+    // Ignore userInfo by assign empty user
+    @Mapping(target = "firstName", source = "firstName", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    @Mapping(target = "lastName", source = "lastName", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    @Mapping(target = "phone", source = "phone", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    @Mapping(target = "lastUpdated", source = "lastUpdated", qualifiedByName = "toTimestampString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    Customer toCustomerWithoutUserInfo(CustomerEntity customerEntity);
+
+
     @Named("toParkingLotEmployee")
-    @Mapping(target = "userInfo", source = "parkingLotEmployeeEntity", qualifiedByName = "toUser")
+    @Mapping(target = "userInfo", source = "parkingLotEmployeeEntity", qualifiedByName = "toUser", defaultExpression = "java(customizedMapper.DEFAULT_USER)")
     @Mapping(target = "parkingLotId", source = "parkingLotEntity.id", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
     ParkingLotEmployee toParkingLotEmployee(ParkingLotEmployeeEntity parkingLotEmployeeEntity);
 }

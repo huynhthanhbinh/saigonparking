@@ -61,7 +61,7 @@ public interface ParkingLotMapper {
 
 
     @Named("toParkingLotInformation")
-    @Mapping(target = "parkingLot", source = "parkingLotEntity", qualifiedByName = "toParkingLot")
+    @Mapping(target = "parkingLot", source = "parkingLotEntity", qualifiedByName = "toParkingLot", defaultExpression = "java(customizedMapper.DEFAULT_PARKING_LOT)")
     @Mapping(target = "name", source = "name", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "address", source = "address", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "phone", source = "phone", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
