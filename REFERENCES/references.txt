@@ -1,0 +1,10 @@
+Document's name:    Parking Map Project References
+Author:             Huynh Thanh Binh
+Last updated:       Thu, Feb 27th, 2020
+========================================================================================================================
+01. gRPC error handling:
+        https://grpc.io/docs/guides/error/
+02. gRPC authentication:
+        https://grpc.io/docs/guides/auth/
+03. gRPC spring boot starter:
+        https://github.com/LogNet/grpc-spring-boot-starter
