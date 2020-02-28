@@ -6,7 +6,6 @@ import org.mapstruct.NullValueMappingStrategy;
 import org.springframework.stereotype.Component;
 
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotType;
-import com.bht.parkingmap.api.proto.report.ReportType;
 import com.bht.parkingmap.api.proto.user.UserRole;
 import com.bht.parkingmap.base.BaseBean;
 import com.google.common.collect.BiMap;
@@ -22,13 +21,12 @@ public abstract class EnumMapper implements BaseBean {
 
     private static final BiMap<Integer, UserRole> USER_ROLE_MAP = HashBiMap.create(5);
     private static final BiMap<Integer, ParkingLotType> PARKING_LOT_TYPE_MAP = HashBiMap.create(4);
-    private static final BiMap<Integer, ReportType> REPORT_TYPE_MAP = HashBiMap.create(3);
+
 
     @Override
     public void initialize() {
         initUserRoleMap();
         initParkingLotTypeMap();
-        initReportTypeMap();
     }
 
     @Named("toUserRole")
@@ -51,16 +49,6 @@ public abstract class EnumMapper implements BaseBean {
         return PARKING_LOT_TYPE_MAP.inverse().get(parkingLotType);
     }
 
-    @Named("toReportType")
-    ReportType toReportType(Integer reportTypeId) {
-        return REPORT_TYPE_MAP.get(reportTypeId);
-    }
-
-    @Named("toReportTypeId")
-    public Integer toReportTypeId(ReportType reportType) {
-        return REPORT_TYPE_MAP.inverse().get(reportType);
-    }
-
     private void initUserRoleMap() {
         USER_ROLE_MAP.put(0, UserRole.UNRECOGNIZED);
         USER_ROLE_MAP.put(1, UserRole.ADMIN);
@@ -74,11 +62,5 @@ public abstract class EnumMapper implements BaseBean {
         PARKING_LOT_TYPE_MAP.put(1, ParkingLotType.PRIVATE);
         PARKING_LOT_TYPE_MAP.put(2, ParkingLotType.BUILDING);
         PARKING_LOT_TYPE_MAP.put(3, ParkingLotType.STREET);
-    }
-
-    private void initReportTypeMap() {
-        REPORT_TYPE_MAP.put(0, ReportType.UNRECOGNIZED);
-        REPORT_TYPE_MAP.put(1, ReportType.PARKING_LOT_REPORT);
-        REPORT_TYPE_MAP.put(2, ReportType.WRONG_PARKING_REPORT);
     }
 }

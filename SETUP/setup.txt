@@ -115,7 +115,7 @@ Step 09: Understand project components / project structure
             8.3. LICENSE        : Apache License of this project
             8.4. README.md      : Introduction of this project
 
-Step 10: Try to run server (LOCAL) by package and run executable .jar file (server-spring-boot.jar)
+Step 10: Try to run server (LOCAL) by package and run executable .jar file (server-parking-map.jar)
         (this step requires Java, Maven, IDE, project already installed and set up, see Step01 -> Step08)
 
     0. If you did not have the project's database on your computer, please do the following steps: (SETUP DATABASE STEP)
@@ -137,7 +137,7 @@ Step 10: Try to run server (LOCAL) by package and run executable .jar file (serv
         3.4. Compile new class and build executable .jar file, by tapping the command: $ mvn package
         3.5. Close TERMINAL, move to BUILD folder to get the executable recently packaged .jar file!
 
-    !!!!!!!!!!!!! (Please do ALL of these steps below whenever you execute Server (server-spring-boot.jar) !!!!!!!!!!!!!)
+    !!!!!!!!!!!!! (Please do ALL of these steps below whenever you execute Server (server-parking-map.jar) !!!!!!!!!!!!!)
 
     4. Run Terminal (Command Prompt / Cmder) inside BUILD folder - folder contains all built executable file such as .jar
     5. Change code page (for using Vietnamese) with this command: (my OS is Windows !)
@@ -146,7 +146,7 @@ Step 10: Try to run server (LOCAL) by package and run executable .jar file (serv
 
     6. Tap the following command to start server:
 
-        $ cls && java -jar -Dfile.encoding=UTF-8 -Xms512m -Xmx3072m -XX:ReservedCodeCacheSize=512m -XX:OnOutOfMemoryError="shutdown -r" server-spring-boot.jar
+        $ cls && java -jar -Dfile.encoding=UTF-8 -Xms512m -Xmx3072m -XX:ReservedCodeCacheSize=512m -XX:OnOutOfMemoryError="shutdown -r" server-parking-map.jar
 
             4.0. chcp                                   : change code page
             4.1. cls                                    : clear screen
