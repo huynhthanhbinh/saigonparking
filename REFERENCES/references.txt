@@ -8,3 +8,5 @@ Last updated:       Thu, Feb 27th, 2020
         https://grpc.io/docs/guides/auth/
 03. gRPC spring boot starter:
         https://github.com/LogNet/grpc-spring-boot-starter
+04. spring + rabbitmq + protobuf
+        https://acupple.github.io/2016/12/26/spring-rabbitmq-protobuf/
