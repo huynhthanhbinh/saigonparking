@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "dbserver.host",
+      "type": "java.lang.String",
+      "description": "Host of PARKINGMAP DBSERVER"
+    },
+    {
+      "name": "dbserver.port.http",
+      "type": "java.lang.String",
+      "description": "Port HTTP of PARKINGMAP DBSERVER"
+    },
+    {
+      "name": "dbserver.port.grpc",
+      "type": "java.lang.String",
+      "description": "Port GRPC of PARKINGMAP SERVER"
+    }
+  ]
+}
