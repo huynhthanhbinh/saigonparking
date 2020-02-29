@@ -3,6 +3,7 @@ package com.bht.parkingmap.configuration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.bht.parkingmap.annotation.InheritedComponent;
@@ -14,6 +15,7 @@ import com.bht.parkingmap.annotation.InheritedComponent;
 @Configuration
 @EnableTransactionManagement
 @SuppressWarnings("squid:S1118")
+@Import(MessageQueueConfiguration.class)
 @EntityScan(basePackages = AppConfiguration.BASE_PACKAGE_ENTITY)
 @ComponentScan(basePackages = AppConfiguration.BASE_PACKAGE_SERVER,
         includeFilters = @ComponentScan.Filter(InheritedComponent.class))
