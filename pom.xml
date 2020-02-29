@@ -4,15 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.bht</groupId>
-    <artifactId>parkingmap</artifactId>
+    <groupId>com.bht.parkingmap</groupId>
+    <artifactId>core</artifactId>
     <packaging>pom</packaging>
     <version>${revision}</version>
 
-    <name>PARKING-MAP</name>
+    <name>PARKINGMAP</name>
     <modules>
-        <module>SERVER</module>
         <module>API</module>
+        <module>WEBSERVER</module>
+        <module>DBSERVER</module>
     </modules>
 
     <properties>

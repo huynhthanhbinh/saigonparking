@@ -2,19 +2,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>parkingmap</artifactId>
-        <groupId>com.bht</groupId>
-        <version>${revision}</version>
-    </parent>
-
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.bht.parkingmap</groupId>
+
     <artifactId>api</artifactId>
     <version>${revision}</version>
     <packaging>jar</packaging>
 
     <name>API</name>
+    <parent>
+        <artifactId>core</artifactId>
+        <groupId>com.bht.parkingmap</groupId>
+        <version>${revision}</version>
+    </parent>
 
     <dependencies>
         <dependency>
