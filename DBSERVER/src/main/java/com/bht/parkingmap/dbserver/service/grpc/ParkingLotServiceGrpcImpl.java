@@ -11,7 +11,7 @@ import com.bht.parkingmap.api.proto.parkinglot.ParkingLotInformation;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotList;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotScanningByRadius;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotScanningInRegion;
-import com.bht.parkingmap.api.proto.parkinglot.ParkingLotServiceGrpc;
+import com.bht.parkingmap.api.proto.parkinglot.ParkingLotServiceGrpc.ParkingLotServiceImplBase;
 import com.bht.parkingmap.dbserver.mapper.ParkingLotMapper;
 import com.bht.parkingmap.dbserver.service.ParkingLotService;
 import com.bht.parkingmap.dbserver.util.LoggingUtil;
@@ -24,7 +24,7 @@ import io.grpc.stub.StreamObserver;
  * @author bht
  */
 @GRpcService
-public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceGrpc.ParkingLotServiceImplBase {
+public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
 
     private final ParkingLotService parkingLotService;
     private final ParkingLotMapper parkingLotMapper;

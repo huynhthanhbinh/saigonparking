@@ -1,19 +1,34 @@
 {
   "properties": [
     {
-      "name": "dbserver.host",
+      "name": "dbserver.connection.host",
       "type": "java.lang.String",
-      "description": "Host of PARKINGMAP DBSERVER"
+      "description": "Host of PARKINGMAP DBSERVER."
     },
     {
-      "name": "dbserver.port.http",
-      "type": "java.lang.String",
-      "description": "Port HTTP of PARKINGMAP DBSERVER"
+      "name": "dbserver.connection.port.http",
+      "type": "java.lang.Integer",
+      "description": "Port HTTP of PARKINGMAP DBSERVER."
     },
     {
-      "name": "dbserver.port.grpc",
-      "type": "java.lang.String",
-      "description": "Port GRPC of PARKINGMAP SERVER"
+      "name": "dbserver.connection.port.grpc",
+      "type": "java.lang.Integer",
+      "description": "Port GRPC of PARKINGMAP DBSERVER."
+    },
+    {
+      "name": "dbserver.connection.idle-timeout",
+      "type": "java.lang.Integer",
+      "description": "Connection timeout in milliseconds to PARKINGMAP DBSERVER."
+    },
+    {
+      "name": "dbserver.connection.max-inbound-message-size",
+      "type": "java.lang.Integer",
+      "description": "Connection max inbound message size in megabytes to PARKINGMAP DBSERVER."
+    },
+    {
+      "name": "dbserver.connection.max-inbound-metadata-size",
+      "type": "java.lang.Integer",
+      "description": "Connection max inbound metadata size in megabytes to PARKINGMAP DBSERVER."
     }
   ]
 }

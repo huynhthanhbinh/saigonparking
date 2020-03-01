@@ -9,7 +9,7 @@ import com.bht.parkingmap.api.proto.user.LoginRequest;
 import com.bht.parkingmap.api.proto.user.LoginResponse;
 import com.bht.parkingmap.api.proto.user.ParkingLotEmployee;
 import com.bht.parkingmap.api.proto.user.User;
-import com.bht.parkingmap.api.proto.user.UserServiceGrpc;
+import com.bht.parkingmap.api.proto.user.UserServiceGrpc.UserServiceImplBase;
 import com.bht.parkingmap.dbserver.mapper.EnumMapper;
 import com.bht.parkingmap.dbserver.mapper.UserMapper;
 import com.bht.parkingmap.dbserver.service.UserService;
@@ -23,7 +23,7 @@ import io.grpc.stub.StreamObserver;
  * @author bht
  */
 @GRpcService
-public class UserServiceGrpcImpl extends UserServiceGrpc.UserServiceImplBase {
+public class UserServiceGrpcImpl extends UserServiceImplBase {
 
     private final UserService userService;
     private final UserMapper userMapper;

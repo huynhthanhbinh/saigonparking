@@ -1,5 +1,7 @@
 package com.bht.parkingmap.webserver.service.grpc;
 
+import static com.bht.parkingmap.api.proto.parkinglot.ParkingLotServiceGrpc.ParkingLotServiceImplBase;
+
 import java.util.List;
 
 import org.apache.log4j.Level;
@@ -11,7 +13,7 @@ import com.bht.parkingmap.api.proto.parkinglot.ParkingLotInformation;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotList;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotScanningByRadius;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotScanningInRegion;
-import com.bht.parkingmap.api.proto.parkinglot.ParkingLotServiceGrpc;
+import com.bht.parkingmap.api.proto.parkinglot.ParkingLotServiceGrpc.ParkingLotServiceBlockingStub;
 import com.bht.parkingmap.webserver.util.LoggingUtil;
 import com.google.protobuf.Int64Value;
 
@@ -22,12 +24,12 @@ import io.grpc.stub.StreamObserver;
  * @author bht
  */
 @GRpcService
-public class ParkingLotServiceGrpcImpl extends ParkingLotServiceGrpc.ParkingLotServiceImplBase {
+public class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
 
-    private final ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
+    private final ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
 
     @Autowired
-    public ParkingLotServiceGrpcImpl(ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub) {
+    public ParkingLotServiceGrpcImpl(ParkingLotServiceBlockingStub parkingLotServiceBlockingStub) {
         this.parkingLotServiceBlockingStub = parkingLotServiceBlockingStub;
     }
 

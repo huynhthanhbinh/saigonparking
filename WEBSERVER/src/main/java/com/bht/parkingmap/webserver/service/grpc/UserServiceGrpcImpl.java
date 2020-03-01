@@ -1,5 +1,7 @@
 package com.bht.parkingmap.webserver.service.grpc;
 
+import static com.bht.parkingmap.api.proto.user.UserServiceGrpc.UserServiceImplBase;
+
 import org.apache.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,7 @@ import com.bht.parkingmap.api.proto.user.LoginRequest;
 import com.bht.parkingmap.api.proto.user.LoginResponse;
 import com.bht.parkingmap.api.proto.user.ParkingLotEmployee;
 import com.bht.parkingmap.api.proto.user.User;
-import com.bht.parkingmap.api.proto.user.UserServiceGrpc;
+import com.bht.parkingmap.api.proto.user.UserServiceGrpc.UserServiceBlockingStub;
 import com.bht.parkingmap.webserver.util.LoggingUtil;
 import com.google.protobuf.Int64Value;
 
@@ -20,12 +22,12 @@ import io.grpc.stub.StreamObserver;
  * @author bht
  */
 @GRpcService
-public class UserServiceGrpcImpl extends UserServiceGrpc.UserServiceImplBase {
+public class UserServiceGrpcImpl extends UserServiceImplBase {
 
-    private final UserServiceGrpc.UserServiceBlockingStub userServiceBlockingStub;
+    private final UserServiceBlockingStub userServiceBlockingStub;
 
     @Autowired
-    public UserServiceGrpcImpl(UserServiceGrpc.UserServiceBlockingStub userServiceBlockingStub) {
+    public UserServiceGrpcImpl(UserServiceBlockingStub userServiceBlockingStub) {
         this.userServiceBlockingStub = userServiceBlockingStub;
     }
 
