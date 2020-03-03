@@ -12,6 +12,7 @@
     <name>PARKINGMAP</name>
     <modules>
         <module>API</module>
+        <module>EMULATOR</module>
         <module>WEBSERVER</module>
         <module>DBSERVER</module>
     </modules>
