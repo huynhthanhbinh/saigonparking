@@ -69,13 +69,7 @@ message ParkingLotScanningByRadius {
     double latitude = 1;
     double longitude = 2;
     int32 radiusToScan = 3;
-}
-
-message ParkingLotScanningInRegion {
-    double northEastLat = 1;
-    double northEastLng = 2;
-    double southWestLat = 3;
-    double southWestLng = 4;
+    int32 nResult = 4;
 }
 
 message ParkingLotList {
@@ -83,7 +77,7 @@ message ParkingLotList {
 }
 
 service ParkingLotService {
-    rpc getAllParkingLotCurrentlyWorkingByRadius (ParkingLotScanningByRadius) returns (ParkingLotList);
-    rpc getAllParkingLotCurrentlyWorkingInRegion (ParkingLotScanningInRegion) returns (ParkingLotList);
     rpc getParkingLotInformationByParkingLotId (google.protobuf.Int64Value) returns (ParkingLotInformation);
+    rpc getTopParkingLotInRegionOrderByDistanceWithName (ParkingLotScanningByRadius) returns (ParkingLotList);
+    rpc getTopParkingLotInRegionOrderByDistanceWithoutName (ParkingLotScanningByRadius) returns (ParkingLotList);
 }

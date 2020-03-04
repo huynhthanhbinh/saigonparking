@@ -18,34 +18,33 @@ import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotEntity;
 @Repository
 public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Long> {
 
-    @Query("SELECT P " +
-            "FROM ParkingLotEntity P " +
-            "WHERE P.latitude BETWEEN ?3 AND ?1 " +
-            "AND P.longitude BETWEEN ?4 AND ?2 " +
-            "AND FUNCTION('CONVERT', TIME, FUNCTION('CURRENT_TIME')) BETWEEN P.openingHour AND P.closingHour " +
-            "AND P.isAvailable = TRUE")
-    List<ParkingLotEntity> getAllParkingLotCurrentlyWorkingInRegion(
-            @NotNull Double top,     // north limit
-            @NotNull Double right,   // east limit
-            @NotNull Double bottom,  // south limit
-            @NotNull Double left);   // west limit
-
-
-    @SuppressWarnings("SqlResolve")
-    @Query(value = "SELECT TOP 10 " +
-            "P.ID, PLI.NAME, P.PARKING_LOT_TYPE_ID, P.LATITUDE, P.LONGITUDE, DISTANCE " +
+    @SuppressWarnings({"SqlResolve", "SpringDataRepositoryMethodReturnTypeInspection"})
+    @Query(value = "SELECT P.ID, P.PARKING_LOT_TYPE_ID, P.LATITUDE, P.LONGITUDE " +
             "FROM PARKING_LOT P " +
-            "         INNER JOIN ( " +
-            "    SELECT ID, NAME " +
-            "    FROM PARKING_LOT_INFORMATION) AS PLI ON PLI.ID = P.ID " +
-            "         INNER JOIN ( " +
-            "    SELECT PL.ID, dbo.GET_DISTANCE_IN_KILOMETRE(?1, ?2, PL.LATITUDE, PL.LONGITUDE) AS DISTANCE " +
-            "    FROM PARKING_LOT PL) AS PL " +
-            "                    ON P.ID = PL.ID AND DISTANCE <= ?3 AND IS_AVAILABLE = 1 " +
-            "                        AND CONVERT(TIME, GETDATE()) BETWEEN P.OPENING_HOUR AND P.CLOSING_HOUR " +
-            "ORDER BY DISTANCE", nativeQuery = true)
-    List<Tuple> getAllParkingLotCurrentlyWorkingInRegionOfRadius(
-            @NotNull Double latitude,            // target location's latitude
-            @NotNull Double longitude,           // target location's longitude
-            @NotNull Integer radiusInKilometre);   // radius in kilometre to scan
+            "WHERE 1 = dbo.IS_VALUE_IN_BOUND(P.LATITUDE, ?1, dbo.CALCULATE_DELTA_LAT_IN_DEGREE(?1, ?2, ?3)) " +
+            "AND 1 = dbo.IS_VALUE_IN_BOUND(P.LONGITUDE, ?2, dbo.CALCULATE_DELTA_LNG_IN_DEGREE(?1, ?2, ?3)) " +
+            "AND 1 = P.IS_AVAILABLE " +
+            "AND CONVERT(TIME, GETDATE()) BETWEEN P.OPENING_HOUR AND P.CLOSING_HOUR " +
+            "ORDER BY dbo.GET_DISTANCE_IN_KILOMETRE(?1, ?2, P.LATITUDE, P.LONGITUDE) " +
+            "OFFSET 0 ROWS FETCH NEXT ?4 ROWS ONLY", nativeQuery = true)
+    List<Tuple> getTopParkingLotInRegionOrderByDistanceWithoutName(
+            @NotNull Double lat,
+            @NotNull Double lng,
+            @NotNull Integer radius,
+            @NotNull Integer nResult);
+
+    @SuppressWarnings({"SqlResolve", "SpringDataRepositoryMethodReturnTypeInspection"})
+    @Query(value = "SELECT P.ID, PLI.NAME, P.PARKING_LOT_TYPE_ID, P.LATITUDE, P.LONGITUDE " +
+            "FROM PARKING_LOT P INNER JOIN (SELECT ID, NAME FROM PARKING_LOT_INFORMATION) AS PLI ON PLI.ID = P.ID " +
+            "AND 1 = dbo.IS_VALUE_IN_BOUND(P.LATITUDE, ?1, dbo.CALCULATE_DELTA_LAT_IN_DEGREE(?1, ?2, ?3)) " +
+            "AND 1 = dbo.IS_VALUE_IN_BOUND(P.LONGITUDE, ?2, dbo.CALCULATE_DELTA_LNG_IN_DEGREE(?1, ?2, ?3)) " +
+            "AND 1 = P.IS_AVAILABLE " +
+            "AND CONVERT(TIME, GETDATE()) BETWEEN P.OPENING_HOUR AND P.CLOSING_HOUR " +
+            "ORDER BY dbo.GET_DISTANCE_IN_KILOMETRE(?1, ?2, P.LATITUDE, P.LONGITUDE) " +
+            "OFFSET 0 ROWS FETCH NEXT ?4 ROWS ONLY", nativeQuery = true)
+    List<Tuple> getTopParkingLotInRegionOrderByDistanceWithName(
+            @NotNull Double latitude,
+            @NotNull Double longitude,
+            @NotNull Integer radius,
+            @NotNull Integer nResult);
 }

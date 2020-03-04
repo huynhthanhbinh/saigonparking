@@ -27,19 +27,32 @@ import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotInformationEntity
         uses = {EnumMapper.class, CustomizedMapper.class})
 public interface ParkingLotMapper {
 
-    @Named("toParkingLotWithDistance")
-    @Mapping(target = "id", expression = "java(parkingLotDistanceTuple.get(0, java.math.BigInteger.class).longValue())")
-    @Mapping(target = "name", expression = "java(parkingLotDistanceTuple.get(1, String.class))")
-    @Mapping(target = "type", expression = "java(enumMapper.toParkingLotType(parkingLotDistanceTuple.get(2, Byte.class).intValue()))")
-    @Mapping(target = "latitude", expression = "java(parkingLotDistanceTuple.get(3, Double.class))")
-    @Mapping(target = "longitude", expression = "java(parkingLotDistanceTuple.get(4, Double.class))")
-    @Mapping(target = "distance", expression = "java(parkingLotDistanceTuple.get(5, Double.class))")
-    ParkingLot toParkingLotWithDistance(Tuple parkingLotDistanceTuple);
+    @Named("toParkingLotWithoutName")
+    @Mapping(target = "id", expression = "java(parkingLotWithoutNameTuple.get(0, java.math.BigInteger.class).longValue())")
+    @Mapping(target = "type", expression = "java(enumMapper.toParkingLotType(parkingLotWithoutNameTuple.get(1, Byte.class).intValue()))")
+    @Mapping(target = "latitude", expression = "java(parkingLotWithoutNameTuple.get(2, Double.class))")
+    @Mapping(target = "longitude", expression = "java(parkingLotWithoutNameTuple.get(3, Double.class))")
+    ParkingLot toParkingLotWithoutName(Tuple parkingLotWithoutNameTuple);
 
 
-    @Named("toParkingLotListWithDistance")
-    default List<ParkingLot> toParkingLotListWithDistance(List<Tuple> parkingLotDistanceTupleList) {
-        return parkingLotDistanceTupleList.stream().map(this::toParkingLotWithDistance).collect(Collectors.toList());
+    @Named("toParkingLotWithoutNameList")
+    default List<ParkingLot> toParkingLotWithoutNameList(List<Tuple> parkingLotWithNameTupleList) {
+        return parkingLotWithNameTupleList.stream().map(this::toParkingLotWithoutName).collect(Collectors.toList());
+    }
+
+
+    @Named("toParkingLotWithName")
+    @Mapping(target = "id", expression = "java(parkingLotWithNameTuple.get(0, java.math.BigInteger.class).longValue())")
+    @Mapping(target = "name", expression = "java(parkingLotWithNameTuple.get(1, String.class))")
+    @Mapping(target = "type", expression = "java(enumMapper.toParkingLotType(parkingLotWithNameTuple.get(2, Byte.class).intValue()))")
+    @Mapping(target = "latitude", expression = "java(parkingLotWithNameTuple.get(3, Double.class))")
+    @Mapping(target = "longitude", expression = "java(parkingLotWithNameTuple.get(4, Double.class))")
+    ParkingLot toParkingLotWithName(Tuple parkingLotWithNameTuple);
+
+
+    @Named("toParkingLotWithNameList")
+    default List<ParkingLot> toParkingLotWithNameList(List<Tuple> parkingLotWithNameTupleList) {
+        return parkingLotWithNameTupleList.stream().map(this::toParkingLotWithName).collect(Collectors.toList());
     }
 
 

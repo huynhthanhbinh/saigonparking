@@ -18,12 +18,13 @@ public interface ParkingLotService {
 
     ParkingLotInformationEntity getParkingLotInformationByParkingLotId(@NotNull Long id);
 
-    List<ParkingLotEntity> getAllParkingLotCurrentlyWorkingInRegion(@NotNull Double northEastLat,
-                                                                    @NotNull Double northEastLng,
-                                                                    @NotNull Double southWestLat,
-                                                                    @NotNull Double southWestLng);
+    List<Tuple> getTopParkingLotInRegionOrderByDistanceWithoutName(@NotNull Double lat,
+                                                                   @NotNull Double lng,
+                                                                   @NotNull Integer radius,
+                                                                   @NotNull Integer nResult);
 
-    List<Tuple> getAllParkingLotCurrentlyWorkingByRadius(@NotNull Double latitude,
-                                                         @NotNull Double longitude,
-                                                         @NotNull Integer radiusInKilometre);
+    List<Tuple> getTopParkingLotInRegionOrderByDistanceWithName(@NotNull Double lat,
+                                                                @NotNull Double lng,
+                                                                @NotNull Integer radius,
+                                                                @NotNull Integer nResult);
 }

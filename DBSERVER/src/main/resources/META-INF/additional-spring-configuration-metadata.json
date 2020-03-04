@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "database.host",
+      "type": "java.lang.String",
+      "description": "Host of database server."
+    },
+    {
+      "name": "database.port",
+      "type": "java.lang.Integer",
+      "description": "Port of database server."
+    },
+    {
+      "name": "database.name",
+      "type": "java.lang.String",
+      "description": "Name of database."
+    }
+  ]
+}

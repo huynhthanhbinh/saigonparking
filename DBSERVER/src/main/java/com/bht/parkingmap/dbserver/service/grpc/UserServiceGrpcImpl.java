@@ -53,8 +53,8 @@ public class UserServiceGrpcImpl extends UserServiceImplBase {
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("validateLogin(%s, %s, %s)",
-                            request.getUsername(), request.getPassword(), request.getUserRole()));
+                    String.format("validateLogin(%s, %s, %s): %s",
+                            request.getUsername(), request.getPassword(), request.getUserRole(), loginResponse));
 
 
         } catch (Exception exception) {

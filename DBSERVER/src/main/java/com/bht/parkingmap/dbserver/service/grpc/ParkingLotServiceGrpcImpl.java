@@ -10,7 +10,6 @@ import com.bht.parkingmap.api.proto.parkinglot.ParkingLot;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotInformation;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotList;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotScanningByRadius;
-import com.bht.parkingmap.api.proto.parkinglot.ParkingLotScanningInRegion;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotServiceGrpc.ParkingLotServiceImplBase;
 import com.bht.parkingmap.dbserver.mapper.ParkingLotMapper;
 import com.bht.parkingmap.dbserver.service.ParkingLotService;
@@ -38,22 +37,22 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
         this.parkingLotMapper = parkingLotMapper;
     }
 
-
     @Override
-    public void getAllParkingLotCurrentlyWorkingByRadius(ParkingLotScanningByRadius request, StreamObserver<ParkingLotList> responseObserver) {
+    public void getTopParkingLotInRegionOrderByDistanceWithName(ParkingLotScanningByRadius request, StreamObserver<ParkingLotList> responseObserver) {
         try {
-            List<ParkingLot> parkingLotList = parkingLotMapper.toParkingLotListWithDistance(
-                    parkingLotService.getAllParkingLotCurrentlyWorkingByRadius(
+            List<ParkingLot> parkingLotList = parkingLotMapper.toParkingLotWithNameList(
+                    parkingLotService.getTopParkingLotInRegionOrderByDistanceWithName(
                             request.getLatitude(),
                             request.getLongitude(),
-                            request.getRadiusToScan()));
+                            request.getRadiusToScan(),
+                            request.getNResult()));
 
             responseObserver.onNext(ParkingLotList.newBuilder().addAllParkingLot(parkingLotList).build());
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("getAllParkingLotCurrentlyWorkingByRadius(%f, %f, %d)",
-                            request.getLatitude(), request.getLongitude(), request.getRadiusToScan()));
+                    String.format("getTopParkingLotInRegionOrderByDistanceWithName(%f, %f, %d, %d)",
+                            request.getLatitude(), request.getLongitude(), request.getRadiusToScan(), request.getNResult()));
 
         } catch (Exception exception) {
 
@@ -62,28 +61,27 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                    String.format("getAllParkingLotCurrentlyWorkingByRadius(%f, %f, %d)",
-                            request.getLatitude(), request.getLongitude(), request.getRadiusToScan()));
+                    String.format("getTopParkingLotInRegionOrderByDistanceWithName(%f, %f, %d, %d)",
+                            request.getLatitude(), request.getLongitude(), request.getRadiusToScan(), request.getNResult()));
         }
     }
-
 
     @Override
-    public void getAllParkingLotCurrentlyWorkingInRegion(ParkingLotScanningInRegion request, StreamObserver<ParkingLotList> responseObserver) {
+    public void getTopParkingLotInRegionOrderByDistanceWithoutName(ParkingLotScanningByRadius request, StreamObserver<ParkingLotList> responseObserver) {
         try {
-            List<ParkingLot> parkingLotList = parkingLotMapper.toParkingLotList(
-                    parkingLotService.getAllParkingLotCurrentlyWorkingInRegion(
-                            request.getNorthEastLat(),
-                            request.getNorthEastLng(),
-                            request.getSouthWestLat(),
-                            request.getSouthWestLng()));
+            List<ParkingLot> parkingLotList = parkingLotMapper.toParkingLotWithoutNameList(
+                    parkingLotService.getTopParkingLotInRegionOrderByDistanceWithoutName(
+                            request.getLatitude(),
+                            request.getLongitude(),
+                            request.getRadiusToScan(),
+                            request.getNResult()));
 
             responseObserver.onNext(ParkingLotList.newBuilder().addAllParkingLot(parkingLotList).build());
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("getAllParkingLotCurrentlyWorkingInRegion(%f, %f, %f, %f)",
-                            request.getNorthEastLat(), request.getNorthEastLng(), request.getSouthWestLat(), request.getSouthWestLng()));
+                    String.format("getTopParkingLotInRegionOrderByDistanceWithoutName(%f, %f, %d, %d)",
+                            request.getLatitude(), request.getLongitude(), request.getRadiusToScan(), request.getNResult()));
 
         } catch (Exception exception) {
 
@@ -92,11 +90,10 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                    String.format("getAllParkingLotCurrentlyWorkingInRegion(%f, %f, %f, %f)",
-                            request.getNorthEastLat(), request.getNorthEastLng(), request.getSouthWestLat(), request.getSouthWestLng()));
+                    String.format("getTopParkingLotInRegionOrderByDistanceWithoutName(%f, %f, %d, %d)",
+                            request.getLatitude(), request.getLongitude(), request.getRadiusToScan(), request.getNResult()));
         }
     }
-
 
     @Override
     public void getParkingLotInformationByParkingLotId(Int64Value request, StreamObserver<ParkingLotInformation> responseObserver) {

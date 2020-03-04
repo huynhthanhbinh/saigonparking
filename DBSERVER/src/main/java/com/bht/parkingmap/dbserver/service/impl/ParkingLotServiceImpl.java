@@ -45,12 +45,12 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     }
 
     @Override
-    public List<ParkingLotEntity> getAllParkingLotCurrentlyWorkingInRegion(@NotNull Double northEastLat, @NotNull Double northEastLng, @NotNull Double southWestLat, @NotNull Double southWestLng) {
-        return parkingLotRepository.getAllParkingLotCurrentlyWorkingInRegion(northEastLat, northEastLng, southWestLat, southWestLng);
+    public List<Tuple> getTopParkingLotInRegionOrderByDistanceWithoutName(@NotNull Double lat, @NotNull Double lng, @NotNull Integer radius, @NotNull Integer nResult) {
+        return parkingLotRepository.getTopParkingLotInRegionOrderByDistanceWithoutName(lat, lng, radius, nResult);
     }
 
     @Override
-    public List<Tuple> getAllParkingLotCurrentlyWorkingByRadius(@NotNull Double latitude, @NotNull Double longitude, @NotNull Integer radiusInKilometre) {
-        return parkingLotRepository.getAllParkingLotCurrentlyWorkingInRegionOfRadius(latitude, longitude, radiusInKilometre);
+    public List<Tuple> getTopParkingLotInRegionOrderByDistanceWithName(@NotNull Double lat, @NotNull Double lng, @NotNull Integer radius, @NotNull Integer nResult) {
+        return parkingLotRepository.getTopParkingLotInRegionOrderByDistanceWithName(lat, lng, radius, nResult);
     }
 }
