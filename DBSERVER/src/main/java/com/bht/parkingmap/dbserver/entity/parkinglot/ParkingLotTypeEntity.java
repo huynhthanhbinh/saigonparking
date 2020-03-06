@@ -4,20 +4,18 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Version;
 
 import org.hibernate.annotations.SelectBeforeUpdate;
 
+import com.bht.parkingmap.dbserver.base.BaseEntity;
+
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 /**
  *
@@ -26,24 +24,16 @@ import lombok.ToString;
 @Entity
 @Getter
 @Setter
-@Builder
-@ToString
+@SuperBuilder
+@ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
 @Table(name = "[PARKING_LOT_TYPE]")
-public final class ParkingLotTypeEntity {
-
-    @Id
-    @Column(name = "[ID]", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Short id;
+public final class ParkingLotTypeEntity extends BaseEntity {
 
     @Column(name = "[TYPE]", nullable = false)
     private String type;
-
-    @Version
-    private Long version;
 
     @Override
     public boolean equals(Object o) {
@@ -53,18 +43,18 @@ public final class ParkingLotTypeEntity {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
+        if (!super.equals(o)) {
+            return false;
+        }
 
         ParkingLotTypeEntity that = (ParkingLotTypeEntity) o;
-        return Objects.equals(id, that.id) &&
-                type.equals(that.type) &&
-                Objects.equals(version, that.version);
+
+        return type.equals(that.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(
-                id,
-                type,
-                version);
+        return Objects.hash(super.hashCode(),
+                type);
     }
 }

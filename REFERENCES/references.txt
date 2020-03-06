@@ -26,3 +26,9 @@ Last updated:       Thu, March 06th, 2020
 
 08. Compare gRPC-gateway vs gRPC-Web:
         https://medium.com/zalopay-engineering/grpc-gateway-vs-grpc-web-vn-4d85868a80e2
+
+09. How to inherit properties from a base class entity using @MappedSuperclass with JPA and Hibernate
+        https://vladmihalcea.com/how-to-inherit-properties-from-a-base-class-entity-using-mappedsuperclass-with-jpa-and-hibernate/
+
+10. Lombok @Builder with Inheritance: @SuperBuilder
+        https://www.baeldung.com/lombok-builder-inheritance

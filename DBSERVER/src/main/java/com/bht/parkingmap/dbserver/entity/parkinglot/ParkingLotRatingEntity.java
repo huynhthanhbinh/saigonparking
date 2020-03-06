@@ -6,24 +6,21 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Version;
 
 import org.hibernate.annotations.SelectBeforeUpdate;
 
+import com.bht.parkingmap.dbserver.base.BaseEntity;
 import com.bht.parkingmap.dbserver.entity.user.CustomerEntity;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 /**
  *
@@ -32,18 +29,13 @@ import lombok.ToString;
 @Entity
 @Getter
 @Setter
-@Builder
-@ToString
+@SuperBuilder
+@ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
 @Table(name = "[PARKING_LOT_RATING]")
-public final class ParkingLotRatingEntity {
-
-    @Id
-    @Column(name = "[ID]", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public final class ParkingLotRatingEntity extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "[CUSTOMER_ID]", referencedColumnName = "[ID]", nullable = false)
@@ -62,36 +54,32 @@ public final class ParkingLotRatingEntity {
     @Column(name = "[LAST_UPDATED]")
     private Timestamp lastUpdated;
 
-    @Version
-    private Long version;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-
         if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
             return false;
         }
 
         ParkingLotRatingEntity that = (ParkingLotRatingEntity) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(customerEntity, that.customerEntity) &&
-                Objects.equals(parkingLotEntity, that.parkingLotEntity) &&
+
+        return customerEntity.equals(that.customerEntity) &&
+                parkingLotEntity.equals(that.parkingLotEntity) &&
                 rating.equals(that.rating) &&
-                Objects.equals(comment, that.comment) &&
-                Objects.equals(version, that.version);
+                Objects.equals(comment, that.comment);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(
-                id,
+        return Objects.hash(super.hashCode(),
                 customerEntity,
                 parkingLotEntity,
                 rating,
-                comment,
-                version);
+                comment);
     }
 }

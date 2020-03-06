@@ -6,22 +6,20 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Version;
 
 import org.hibernate.annotations.SelectBeforeUpdate;
 
+import com.bht.parkingmap.dbserver.base.BaseEntity;
+
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 /**
  *
@@ -30,18 +28,13 @@ import lombok.ToString;
 @Entity
 @Getter
 @Setter
-@Builder
-@ToString
+@SuperBuilder
+@ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
 @Table(name = "[PARKING_LOT_UNIT]")
-public final class ParkingLotUnitEntity {
-
-    @Id
-    @Column(name = "[ID]", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public final class ParkingLotUnitEntity extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "[PARKING_LOT_ID]", referencedColumnName = "[ID]", nullable = false)
@@ -59,9 +52,6 @@ public final class ParkingLotUnitEntity {
     @Column(name = "[LAST_UPDATED]")
     private Timestamp lastUpdated;
 
-    @Version
-    private Long version;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -70,24 +60,24 @@ public final class ParkingLotUnitEntity {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
+        if (!super.equals(o)) {
+            return false;
+        }
 
         ParkingLotUnitEntity that = (ParkingLotUnitEntity) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(parkingLotEntity, that.parkingLotEntity) &&
+
+        return parkingLotEntity.equals(that.parkingLotEntity) &&
                 lowerBoundHour.equals(that.lowerBoundHour) &&
                 upperBoundHour.equals(that.upperBoundHour) &&
-                unitPricePerHour.equals(that.unitPricePerHour) &&
-                Objects.equals(version, that.version);
+                unitPricePerHour.equals(that.unitPricePerHour);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(
-                id,
+        return Objects.hash(super.hashCode(),
                 parkingLotEntity,
                 lowerBoundHour,
                 upperBoundHour,
-                unitPricePerHour,
-                version);
+                unitPricePerHour);
     }
 }
