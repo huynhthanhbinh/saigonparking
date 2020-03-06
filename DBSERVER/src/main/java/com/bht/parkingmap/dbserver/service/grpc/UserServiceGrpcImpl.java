@@ -46,7 +46,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
                     .validateLogin(
                             request.getUsername(),
                             request.getPassword(),
-                            enumMapper.toUserRoleId(request.getUserRole()).shortValue()))
+                            enumMapper.toUserRoleId(request.getUserRole())))
                     .build();
 
             responseObserver.onNext(loginResponse);

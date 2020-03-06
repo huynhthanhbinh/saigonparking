@@ -15,7 +15,7 @@ public interface UserService {
 
     LoginResponseType validateLogin(@NotNull String username,
                                     @NotNull String password,
-                                    @NotNull Short userRoleId);
+                                    @NotNull Long userRoleId);
 
     UserEntity getUserById(@NotNull Long id);
 

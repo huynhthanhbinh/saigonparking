@@ -21,6 +21,7 @@ message User {
     string password = 4;
     string email = 5;
     string lastSignIn = 6;
+    int64 version = 7;
 }
 
 message Customer {

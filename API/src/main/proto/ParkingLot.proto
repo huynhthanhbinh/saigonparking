@@ -22,7 +22,7 @@ message ParkingLot {
     string openingHour = 6;
     string closingHour = 7;
     string lastUpdated = 8;
-    double distance = 9;
+    int64 version = 9;
 }
 
 message ParkingLotInformation {
@@ -35,6 +35,7 @@ message ParkingLotInformation {
     int32 availableSlot = 7;
     int32 totalSlot = 8;
     bytes imageData = 9;
+    int64 version = 10;
 }
 
 message ParkingLotUnit {
@@ -43,6 +44,7 @@ message ParkingLotUnit {
     int32 lowerBoundHour = 3;
     int32 upperBoundHour = 4;
     int32 unitPrice = 5;
+    int64 version = 6;
 }
 
 message ParkingLotRating {
@@ -52,6 +54,7 @@ message ParkingLotRating {
     int32 rating = 4;
     string comment = 5;
     string lastUpdated = 6;
+    int64 version = 7;
 }
 
 message ParkingLotSuggestion {
@@ -63,6 +66,7 @@ message ParkingLotSuggestion {
     double longitude = 6;
     bool isHandled = 7;
     string lastUpdated = 8;
+    int64 version = 9;
 }
 
 message ParkingLotScanningByRadius {
