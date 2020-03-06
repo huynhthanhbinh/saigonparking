@@ -5,6 +5,7 @@ import static com.bht.parkingmap.api.proto.parkinglot.ParkingLotServiceGrpc.Park
 import org.apache.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotInformation;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotList;
@@ -19,6 +20,7 @@ import io.grpc.stub.StreamObserver;
  *
  * @author bht
  */
+@Transactional
 @GRpcService
 public class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
 

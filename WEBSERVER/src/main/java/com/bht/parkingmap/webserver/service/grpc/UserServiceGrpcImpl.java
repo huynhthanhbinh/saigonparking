@@ -5,6 +5,7 @@ import static com.bht.parkingmap.api.proto.user.UserServiceGrpc.UserServiceImplB
 import org.apache.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.bht.parkingmap.api.proto.user.Customer;
 import com.bht.parkingmap.api.proto.user.LoginRequest;
@@ -21,6 +22,7 @@ import io.grpc.stub.StreamObserver;
  *
  * @author bht
  */
+@Transactional
 @GRpcService
 public class UserServiceGrpcImpl extends UserServiceImplBase {
 
@@ -40,8 +42,8 @@ public class UserServiceGrpcImpl extends UserServiceImplBase {
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("validateLogin(%s, %s, %s)",
-                            request.getUsername(), request.getPassword(), request.getUserRole()));
+                    String.format("validateLogin(%s, %s, %s): %s",
+                            request.getUsername(), request.getPassword(), request.getUserRole(), loginResponse));
 
 
         } catch (Exception exception) {

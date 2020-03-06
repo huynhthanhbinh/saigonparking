@@ -23,7 +23,7 @@ import io.grpc.stub.StreamObserver;
  * @author bht
  */
 @GRpcService
-public class UserServiceGrpcImpl extends UserServiceImplBase {
+public final class UserServiceGrpcImpl extends UserServiceImplBase {
 
     private final UserService userService;
     private final UserMapper userMapper;
