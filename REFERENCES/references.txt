@@ -1,6 +1,6 @@
 Document's name:    Parking Map Project References
 Author:             Huynh Thanh Binh
-Last updated:       Thu, Feb 27th, 2020
+Last updated:       Thu, March 06th, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -12,8 +12,17 @@ Last updated:       Thu, Feb 27th, 2020
 03. gRPC spring boot starter:
         https://github.com/LogNet/grpc-spring-boot-starter
 
-04. spring + rabbitmq + protobuf
+04. spring + rabbitmq + protobuf:
         https://acupple.github.io/2016/12/26/spring-rabbitmq-protobuf/
 
-05. limit query result set to top N rows only
+05. limit query result set to top N rows only:
         https://vladmihalcea.com/sql-query-limit-top-n-rows/
+
+06. MicroServices With AngularJS, Spring Boot, and Kafka:
+        https://dzone.com/articles/developing-async-microservices-architecture-using
+
+07. Envoy and gRPC-Web: a fresh new alternative to REST:
+        https://blog.envoyproxy.io/envoy-and-grpc-web-a-fresh-new-alternative-to-rest-6504ce7eb880
+
+08. Compare gRPC-gateway vs gRPC-Web:
+        https://medium.com/zalopay-engineering/grpc-gateway-vs-grpc-web-vn-4d85868a80e2
