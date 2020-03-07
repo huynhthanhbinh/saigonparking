@@ -4,7 +4,6 @@ import static com.bht.parkingmap.api.proto.parkinglot.ParkingLotServiceGrpc.Park
 
 import org.apache.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotInformation;
@@ -15,22 +14,26 @@ import com.bht.parkingmap.webserver.util.LoggingUtil;
 import com.google.protobuf.Int64Value;
 
 import io.grpc.stub.StreamObserver;
+import lombok.AllArgsConstructor;
 
 /**
+ *
+ * this class implements all services of ParkingLotStub
+ *
+ * for clean code purpose,
+ * using {@code @AllArgsConstructor} for Service class
+ * it will {@code @Autowired} all attributes declared inside
+ * hide {@code @Autowired} as much as possible in code
+ * remember to mark all attributes as {@code private final}
  *
  * @author bht
  */
 @Transactional
 @GRpcService
+@AllArgsConstructor
 public class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
 
     private final ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
-
-    @Autowired
-    public ParkingLotServiceGrpcImpl(ParkingLotServiceBlockingStub parkingLotServiceBlockingStub) {
-        this.parkingLotServiceBlockingStub = parkingLotServiceBlockingStub;
-    }
-
 
     @Override
     public void getTopParkingLotInRegionOrderByDistanceWithName(ParkingLotScanningByRadius request, StreamObserver<ParkingLotList> responseObserver) {

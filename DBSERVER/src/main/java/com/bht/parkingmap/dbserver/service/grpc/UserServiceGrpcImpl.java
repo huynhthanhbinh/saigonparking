@@ -2,7 +2,6 @@ package com.bht.parkingmap.dbserver.service.grpc;
 
 import org.apache.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bht.parkingmap.api.proto.user.Customer;
 import com.bht.parkingmap.api.proto.user.LoginRequest;
@@ -17,27 +16,27 @@ import com.bht.parkingmap.dbserver.util.LoggingUtil;
 import com.google.protobuf.Int64Value;
 
 import io.grpc.stub.StreamObserver;
+import lombok.AllArgsConstructor;
 
 /**
+ *
+ * this class implements all services of UserStub
+ *
+ * for clean code purpose,
+ * using {@code @AllArgsConstructor} for Service class
+ * it will {@code @Autowired} all attributes declared inside
+ * hide {@code @Autowired} as much as possible in code
+ * remember to mark all attributes as {@code private final}
  *
  * @author bht
  */
 @GRpcService
+@AllArgsConstructor
 public final class UserServiceGrpcImpl extends UserServiceImplBase {
 
     private final UserService userService;
     private final UserMapper userMapper;
     private final EnumMapper enumMapper;
-
-    @Autowired
-    public UserServiceGrpcImpl(UserService userService,
-                               UserMapper userMapper,
-                               EnumMapper enumMapper) {
-
-        this.userMapper = userMapper;
-        this.userService = userService;
-        this.enumMapper = enumMapper;
-    }
 
     @Override
     public void validateLogin(LoginRequest request, StreamObserver<LoginResponse> responseObserver) {

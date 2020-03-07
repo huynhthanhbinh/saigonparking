@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.Tuple;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,24 +14,27 @@ import com.bht.parkingmap.dbserver.repository.parkinglot.ParkingLotInformationRe
 import com.bht.parkingmap.dbserver.repository.parkinglot.ParkingLotRepository;
 import com.bht.parkingmap.dbserver.service.ParkingLotService;
 
+import lombok.AllArgsConstructor;
+
 /**
+ *
+ * this class implements all services relevant to ParkingLot
+ *
+ * for clean code purpose,
+ * using {@code @AllArgsConstructor} for Service class
+ * it will {@code @Autowired} all attributes declared inside
+ * hide {@code @Autowired} as much as possible in code
+ * remember to mark all attributes as {@code private final}
  *
  * @author bht
  */
 @Service
 @Transactional
+@AllArgsConstructor
 public class ParkingLotServiceImpl implements ParkingLotService {
 
     private final ParkingLotRepository parkingLotRepository;
     private final ParkingLotInformationRepository parkingLotInformationRepository;
-
-    @Autowired
-    public ParkingLotServiceImpl(ParkingLotRepository parkingLotRepository,
-                                 ParkingLotInformationRepository parkingLotInformationRepository) {
-
-        this.parkingLotRepository = parkingLotRepository;
-        this.parkingLotInformationRepository = parkingLotInformationRepository;
-    }
 
     @Override
     public ParkingLotEntity getParkingLotById(@NotNull Long id) {
