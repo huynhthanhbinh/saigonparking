@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
+import com.bht.parkingmap.dbserver.annotation.TimeFlowValidation;
 import com.bht.parkingmap.dbserver.base.BaseEntity;
 
 import lombok.AllArgsConstructor;
@@ -34,6 +35,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
+@TimeFlowValidation
 @Table(name = "[PARKING_LOT]")
 public final class ParkingLotEntity extends BaseEntity {
 
