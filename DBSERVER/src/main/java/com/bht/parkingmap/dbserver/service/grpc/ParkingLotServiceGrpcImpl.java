@@ -5,9 +5,9 @@ import java.util.List;
 import org.apache.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 
-import com.bht.parkingmap.api.proto.parkinglot.ParkingLot;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotInformation;
-import com.bht.parkingmap.api.proto.parkinglot.ParkingLotList;
+import com.bht.parkingmap.api.proto.parkinglot.ParkingLotResult;
+import com.bht.parkingmap.api.proto.parkinglot.ParkingLotResultList;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotScanningByRadius;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotServiceGrpc.ParkingLotServiceImplBase;
 import com.bht.parkingmap.dbserver.mapper.ParkingLotMapper;
@@ -38,16 +38,16 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
     private final ParkingLotMapper parkingLotMapper;
 
     @Override
-    public void getTopParkingLotInRegionOrderByDistanceWithName(ParkingLotScanningByRadius request, StreamObserver<ParkingLotList> responseObserver) {
+    public void getTopParkingLotInRegionOrderByDistanceWithName(ParkingLotScanningByRadius request, StreamObserver<ParkingLotResultList> responseObserver) {
         try {
-            List<ParkingLot> parkingLotList = parkingLotMapper.toParkingLotWithNameList(
+            List<ParkingLotResult> parkingLotResultList = parkingLotMapper.toParkingLotResultListWithName(
                     parkingLotService.getTopParkingLotInRegionOrderByDistanceWithName(
                             request.getLatitude(),
                             request.getLongitude(),
                             request.getRadiusToScan(),
                             request.getNResult()));
 
-            responseObserver.onNext(ParkingLotList.newBuilder().addAllParkingLot(parkingLotList).build());
+            responseObserver.onNext(ParkingLotResultList.newBuilder().addAllParkingLotResult(parkingLotResultList).build());
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",
@@ -67,16 +67,16 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
     }
 
     @Override
-    public void getTopParkingLotInRegionOrderByDistanceWithoutName(ParkingLotScanningByRadius request, StreamObserver<ParkingLotList> responseObserver) {
+    public void getTopParkingLotInRegionOrderByDistanceWithoutName(ParkingLotScanningByRadius request, StreamObserver<ParkingLotResultList> responseObserver) {
         try {
-            List<ParkingLot> parkingLotList = parkingLotMapper.toParkingLotWithoutNameList(
+            List<ParkingLotResult> parkingLotResultList = parkingLotMapper.toParkingLotResultListWithoutName(
                     parkingLotService.getTopParkingLotInRegionOrderByDistanceWithoutName(
                             request.getLatitude(),
                             request.getLongitude(),
                             request.getRadiusToScan(),
                             request.getNResult()));
 
-            responseObserver.onNext(ParkingLotList.newBuilder().addAllParkingLot(parkingLotList).build());
+            responseObserver.onNext(ParkingLotResultList.newBuilder().addAllParkingLotResult(parkingLotResultList).build());
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",

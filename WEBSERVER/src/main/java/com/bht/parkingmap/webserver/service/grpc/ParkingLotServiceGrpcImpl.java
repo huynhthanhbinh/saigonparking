@@ -7,7 +7,7 @@ import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotInformation;
-import com.bht.parkingmap.api.proto.parkinglot.ParkingLotList;
+import com.bht.parkingmap.api.proto.parkinglot.ParkingLotResultList;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotScanningByRadius;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotServiceGrpc.ParkingLotServiceBlockingStub;
 import com.bht.parkingmap.webserver.util.LoggingUtil;
@@ -36,12 +36,12 @@ public class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
     private final ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
 
     @Override
-    public void getTopParkingLotInRegionOrderByDistanceWithName(ParkingLotScanningByRadius request, StreamObserver<ParkingLotList> responseObserver) {
+    public void getTopParkingLotInRegionOrderByDistanceWithName(ParkingLotScanningByRadius request, StreamObserver<ParkingLotResultList> responseObserver) {
         try {
-            ParkingLotList parkingLotList = parkingLotServiceBlockingStub
+            ParkingLotResultList parkingLotResultList = parkingLotServiceBlockingStub
                     .getTopParkingLotInRegionOrderByDistanceWithName(request);
 
-            responseObserver.onNext(parkingLotList);
+            responseObserver.onNext(parkingLotResultList);
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",
@@ -61,12 +61,12 @@ public class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
     }
 
     @Override
-    public void getTopParkingLotInRegionOrderByDistanceWithoutName(ParkingLotScanningByRadius request, StreamObserver<ParkingLotList> responseObserver) {
+    public void getTopParkingLotInRegionOrderByDistanceWithoutName(ParkingLotScanningByRadius request, StreamObserver<ParkingLotResultList> responseObserver) {
         try {
-            ParkingLotList parkingLotList = parkingLotServiceBlockingStub
+            ParkingLotResultList parkingLotResultList = parkingLotServiceBlockingStub
                     .getTopParkingLotInRegionOrderByDistanceWithoutName(request);
 
-            responseObserver.onNext(parkingLotList);
+            responseObserver.onNext(parkingLotResultList);
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",

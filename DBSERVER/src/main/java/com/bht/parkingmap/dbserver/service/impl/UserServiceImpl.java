@@ -11,6 +11,7 @@ import com.bht.parkingmap.api.proto.user.LoginResponseType;
 import com.bht.parkingmap.dbserver.entity.user.CustomerEntity;
 import com.bht.parkingmap.dbserver.entity.user.ParkingLotEmployeeEntity;
 import com.bht.parkingmap.dbserver.entity.user.UserEntity;
+import com.bht.parkingmap.dbserver.entity.user.UserRoleEntity;
 import com.bht.parkingmap.dbserver.repository.user.CustomerRepository;
 import com.bht.parkingmap.dbserver.repository.user.ParkingLotEmployeeRepository;
 import com.bht.parkingmap.dbserver.repository.user.UserRepository;
@@ -40,10 +41,10 @@ public class UserServiceImpl implements UserService {
     private final ParkingLotEmployeeRepository parkingLotEmployeeRepository;
 
     @Override
-    public LoginResponseType validateLogin(@NotNull String username, @NotNull String password, @NotNull Long userRoleId) {
+    public LoginResponseType validateLogin(@NotNull String username, @NotNull String password, @NotNull UserRoleEntity userRoleEntity) {
         UserEntity userEntity = userRepository.getUserByUsername(username);
         if (userEntity != null) {
-            if (userRoleId.equals(userEntity.getUserRoleEntity().getId())) {
+            if (userRoleEntity.equals(userEntity.getUserRoleEntity())) {
                 if (Boolean.TRUE.equals(userEntity.getIsActivated())) {
                     if (password.equals(userEntity.getPassword())) {
                         userEntity.setLastSignIn(new Timestamp(System.currentTimeMillis()));
