@@ -1,7 +1,6 @@
 package com.bht.parkingmap.dbserver.entity.parkinglot;
 
 import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -13,6 +12,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
+import com.bht.parkingmap.dbserver.annotation.CapacityValidation;
 import com.bht.parkingmap.dbserver.annotation.TimeFlowValidation;
 import com.bht.parkingmap.dbserver.base.BaseEntity;
 
@@ -36,6 +36,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SelectBeforeUpdate
 @TimeFlowValidation
+@CapacityValidation
 @Table(name = "[PARKING_LOT]")
 public final class ParkingLotEntity extends BaseEntity {
 
@@ -55,12 +56,17 @@ public final class ParkingLotEntity extends BaseEntity {
     @Column(name = "[CLOSING_HOUR]", nullable = false)
     private Time closingHour;
 
+    @ColumnDefault("0")
+    @Column(name = "[AVAILABILITY]")
+    private Short availableSlot;
+
+    @ColumnDefault("0")
+    @Column(name = "[CAPACITY]")
+    private Short totalSlot;
+
     @ColumnDefault("true")
     @Column(name = "[IS_AVAILABLE]")
     private Boolean isAvailable;
-
-    @Column(name = "[LAST_UPDATED]")
-    private Timestamp lastUpdated;
 
 
     @Override
@@ -77,11 +83,13 @@ public final class ParkingLotEntity extends BaseEntity {
 
         ParkingLotEntity that = (ParkingLotEntity) o;
 
-        return Objects.equals(parkingLotTypeEntity, that.parkingLotTypeEntity) &&
+        return parkingLotTypeEntity.equals(that.parkingLotTypeEntity) &&
                 latitude.equals(that.latitude) &&
                 longitude.equals(that.longitude) &&
                 openingHour.equals(that.openingHour) &&
                 closingHour.equals(that.closingHour) &&
+                Objects.equals(availableSlot, that.availableSlot) &&
+                Objects.equals(totalSlot, that.totalSlot) &&
                 Objects.equals(isAvailable, that.isAvailable);
     }
 
@@ -93,6 +101,8 @@ public final class ParkingLotEntity extends BaseEntity {
                 longitude,
                 openingHour,
                 closingHour,
+                availableSlot,
+                totalSlot,
                 isAvailable);
     }
 }

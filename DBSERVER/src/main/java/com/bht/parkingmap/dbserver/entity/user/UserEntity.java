@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
 import com.bht.parkingmap.dbserver.base.BaseEntity;
@@ -31,6 +33,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @SuperBuilder
+@NaturalIdCache
 @ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -43,6 +46,7 @@ public class UserEntity extends BaseEntity {
     @JoinColumn(name = "[ROLE_ID]", referencedColumnName = "[ID]", nullable = false)
     protected UserRoleEntity userRoleEntity;
 
+    @NaturalId
     @Column(name = "[USERNAME]", nullable = false, unique = true)
     protected String username;
 

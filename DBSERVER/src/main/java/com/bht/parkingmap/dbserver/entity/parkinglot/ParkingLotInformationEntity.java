@@ -13,7 +13,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
-import com.bht.parkingmap.dbserver.annotation.CapacityValidation;
 import com.bht.parkingmap.dbserver.base.BaseEntity;
 
 import lombok.AllArgsConstructor;
@@ -35,7 +34,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
-@CapacityValidation
 @Table(name = "[PARKING_LOT_INFORMATION]")
 public final class ParkingLotInformationEntity extends BaseEntity {
 
@@ -55,14 +53,6 @@ public final class ParkingLotInformationEntity extends BaseEntity {
     @ColumnDefault("0")
     @Column(name = "[NUMBER_OF_RATING]")
     private Short nRating;
-
-    @ColumnDefault("0")
-    @Column(name = "[AVAILABILITY]")
-    private Short availableSlot;
-
-    @ColumnDefault("0")
-    @Column(name = "[CAPACITY]")
-    private Short totalSlot;
 
     @MapsId
     @OneToOne(fetch = FetchType.LAZY)
@@ -88,8 +78,6 @@ public final class ParkingLotInformationEntity extends BaseEntity {
                 Objects.equals(phone, that.phone) &&
                 Objects.equals(ratingAverage, that.ratingAverage) &&
                 Objects.equals(nRating, that.nRating) &&
-                Objects.equals(availableSlot, that.availableSlot) &&
-                Objects.equals(totalSlot, that.totalSlot) &&
                 Objects.equals(parkingLotEntity, that.parkingLotEntity);
     }
 
@@ -101,8 +89,6 @@ public final class ParkingLotInformationEntity extends BaseEntity {
                 phone,
                 ratingAverage,
                 nRating,
-                availableSlot,
-                totalSlot,
                 parkingLotEntity);
     }
 }
