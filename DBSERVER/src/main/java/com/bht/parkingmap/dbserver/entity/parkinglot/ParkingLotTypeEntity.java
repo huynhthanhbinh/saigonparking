@@ -1,9 +1,12 @@
 package com.bht.parkingmap.dbserver.entity.parkinglot;
 
 import java.util.Objects;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.SelectBeforeUpdate;
@@ -34,6 +37,11 @@ public final class ParkingLotTypeEntity extends BaseEntity {
 
     @Column(name = "[TYPE]", nullable = false)
     private String type;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "parkingLotTypeEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ParkingLotEntity> parkingLotEntitySet;
+
 
     @Override
     public boolean equals(Object o) {

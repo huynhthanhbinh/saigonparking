@@ -1,9 +1,12 @@
 package com.bht.parkingmap.dbserver.entity.user;
 
 import java.util.Objects;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.SelectBeforeUpdate;
@@ -34,6 +37,11 @@ public final class UserRoleEntity extends BaseEntity {
 
     @Column(name = "[ROLE]", nullable = false)
     private String role;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "userRoleEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserEntity> userEntitySet;
+
 
     @Override
     public boolean equals(Object o) {

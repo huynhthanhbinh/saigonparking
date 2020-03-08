@@ -2,13 +2,19 @@ package com.bht.parkingmap.dbserver.entity.user;
 
 import java.sql.Timestamp;
 import java.util.Objects;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.SelectBeforeUpdate;
+
+import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotRatingEntity;
+import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotSuggestionEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,6 +50,15 @@ public final class CustomerEntity extends UserEntity {
 
     @Column(name = "[LAST_UPDATED]")
     private Timestamp lastUpdated;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "customerEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ParkingLotSuggestionEntity> parkingLotSuggestionEntitySet;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "customerEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ParkingLotRatingEntity> parkingLotRatingEntitySet;
+
 
     @Override
     public boolean equals(Object o) {

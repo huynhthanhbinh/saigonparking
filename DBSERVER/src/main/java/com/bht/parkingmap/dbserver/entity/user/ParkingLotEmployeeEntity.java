@@ -2,15 +2,13 @@ package com.bht.parkingmap.dbserver.entity.user;
 
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.LazyToOne;
-import org.hibernate.annotations.LazyToOneOption;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
 import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotEntity;
@@ -38,10 +36,10 @@ import lombok.experimental.SuperBuilder;
 @PrimaryKeyJoinColumn(name = "[ID]")
 public final class ParkingLotEmployeeEntity extends UserEntity {
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @LazyToOne(LazyToOneOption.NO_PROXY)
+    @OneToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "[PARKING_LOT_ID]", referencedColumnName = "[ID]", nullable = false)
     private ParkingLotEntity parkingLotEntity;
+
 
     @Override
     public boolean equals(Object o) {

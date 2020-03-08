@@ -55,9 +55,11 @@ public final class ParkingLotInformationEntity extends BaseEntity {
     private Short nRating;
 
     @MapsId
+    @ToString.Exclude
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "[ID]", unique = true)
     private ParkingLotEntity parkingLotEntity;
+
 
     @Override
     public boolean equals(Object o) {
