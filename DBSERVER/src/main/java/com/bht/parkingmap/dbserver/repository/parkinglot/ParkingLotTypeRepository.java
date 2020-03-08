@@ -10,5 +10,5 @@ import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotTypeEntity;
  * @author bht
  */
 @Repository
-public interface ParkingLotTypeRepository extends JpaRepository<ParkingLotTypeEntity, Short> {
+public interface ParkingLotTypeRepository extends JpaRepository<ParkingLotTypeEntity, Long> {
 }

@@ -10,5 +10,5 @@ import com.bht.parkingmap.dbserver.entity.user.UserRoleEntity;
  * @author bht
  */
 @Repository
-public interface UserRoleRepository extends JpaRepository<UserRoleEntity, Short> {
+public interface UserRoleRepository extends JpaRepository<UserRoleEntity, Long> {
 }
