@@ -18,6 +18,20 @@ import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotEntity;
 @Repository
 public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Long> {
 
+    /**
+     *
+     * self-implement getById method
+     * in order to prevent N+1 problem
+     */
+    @Query("SELECT PL " +
+            "FROM ParkingLotEntity PL " +
+            "JOIN FETCH PL.parkingLotTypeEntity PLT " +
+            "JOIN FETCH  PL.parkingLotInformationEntity PLI " +
+            "JOIN FETCH PL.parkingLotEmployeeEntity PLE " +
+            "JOIN FETCH PLE.userRoleEntity USR " +
+            "WHERE PL.id = ?1")
+    ParkingLotEntity getById(Long id);
+
     @SuppressWarnings({"SqlResolve", "SpringDataRepositoryMethodReturnTypeInspection"})
     @Query(value = "SELECT P.ID, P.PARKING_LOT_TYPE_ID, P.LATITUDE, P.LONGITUDE, P.AVAILABILITY, P.CAPACITY " +
             "FROM PARKING_LOT P " +

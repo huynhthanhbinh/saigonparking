@@ -77,6 +77,7 @@ public final class ParkingLotEntity extends BaseEntity {
     @OneToOne(mappedBy = "parkingLotEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, optional = false)
     private ParkingLotInformationEntity parkingLotInformationEntity;
 
+    @ToString.Exclude
     @OneToOne(mappedBy = "parkingLotEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, optional = false)
     private ParkingLotEmployeeEntity parkingLotEmployeeEntity;
 

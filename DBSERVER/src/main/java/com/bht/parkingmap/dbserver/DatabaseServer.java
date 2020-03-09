@@ -31,7 +31,7 @@ public class DatabaseServer extends SpringBootServletInitializer {
         return builder.sources(DatabaseServer.class);
     }
 
-    @SuppressWarnings({"unused", "java:S1854", "java:S1481"})
+    @SuppressWarnings({"unused", "java:S1854", "java:S1481", "java:S106"})
     public static void main(String[] args) {
         SpringApplication.run(DatabaseServer.class, args);
 
@@ -48,7 +48,7 @@ public class DatabaseServer extends SpringBootServletInitializer {
         UserRoleRepository userRoleRepository = SpringApplicationContext.getBean(UserRoleRepository.class);
 
         System.out.println(parkingLotTypeRepository.getOne(1L));
-        System.out.println(parkingLotRepository.getOne(1L));
-        System.out.println(parkingLotInformationRepository.getOne(1L));
+        System.out.println(parkingLotRepository.getById(1L));
+        System.out.println(parkingLotInformationRepository.getById(1L));
     }
 }
