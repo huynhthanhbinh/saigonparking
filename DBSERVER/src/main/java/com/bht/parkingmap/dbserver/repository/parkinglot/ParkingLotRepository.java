@@ -30,7 +30,7 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Lo
             "JOIN FETCH PL.parkingLotEmployeeEntity PLE " +
             "JOIN FETCH PLE.userRoleEntity USR " +
             "WHERE PL.id = ?1")
-    ParkingLotEntity getById(Long id);
+    ParkingLotEntity getById(@NotNull Long id);
 
     @SuppressWarnings({"SqlResolve", "SpringDataRepositoryMethodReturnTypeInspection"})
     @Query(value = "SELECT P.ID, P.PARKING_LOT_TYPE_ID, P.LATITUDE, P.LONGITUDE, P.AVAILABILITY, P.CAPACITY " +

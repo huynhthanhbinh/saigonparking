@@ -50,5 +50,7 @@ public class DatabaseServer extends SpringBootServletInitializer {
         System.out.println(parkingLotTypeRepository.getOne(1L));
         System.out.println(parkingLotRepository.getById(1L));
         System.out.println(parkingLotInformationRepository.getById(1L));
+        System.out.println(userRepository.getByUsername("htbinh"));
+        System.out.println(userRepository.getById(1L));
     }
 }

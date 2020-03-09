@@ -1,5 +1,7 @@
 package com.bht.parkingmap.dbserver.repository.parkinglot;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -25,5 +27,5 @@ public interface ParkingLotInformationRepository extends JpaRepository<ParkingLo
             "JOIN FETCH PL.parkingLotEmployeeEntity PLE " +
             "JOIN FETCH PLE.userRoleEntity USR " +
             "WHERE PLI.id = ?1")
-    ParkingLotInformationEntity getById(Long id);
+    ParkingLotInformationEntity getById(@NotNull Long id);
 }

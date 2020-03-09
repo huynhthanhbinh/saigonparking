@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public LoginResponseType validateLogin(@NotNull String username, @NotNull String password, @NotNull UserRoleEntity userRoleEntity) {
-        UserEntity userEntity = userRepository.getUserByUsername(username);
+        UserEntity userEntity = userRepository.getByUsername(username);
         if (userEntity != null) {
             if (userRoleEntity.equals(userEntity.getUserRoleEntity())) {
                 if (Boolean.TRUE.equals(userEntity.getIsActivated())) {
