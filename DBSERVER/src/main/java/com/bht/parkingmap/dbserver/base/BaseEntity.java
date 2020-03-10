@@ -57,14 +57,12 @@ public abstract class BaseEntity {
 
         BaseEntity that = (BaseEntity) o;
 
-        return Objects.equals(id, that.id) &&
-                Objects.equals(version, that.version);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
-                id,
-                version);
+                id);
     }
 }
