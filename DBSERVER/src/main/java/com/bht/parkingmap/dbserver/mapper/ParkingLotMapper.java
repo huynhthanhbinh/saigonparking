@@ -63,6 +63,7 @@ public interface ParkingLotMapper {
 
     @Named("toParkingLot")
     @Mapping(target = "id", source = "id", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
+    @Mapping(target = "information", source = "parkingLotInformationEntity", qualifiedByName = "toParkingLotInformation", defaultExpression = "java(customizedMapper.DEFAULT_PARKING_LOT_INFORMATION)")
     @Mapping(target = "type", source = "parkingLotTypeEntity.id", qualifiedByName = "toParkingLotType", defaultExpression = "java(customizedMapper.DEFAULT_PARKING_LOT_TYPE)")
     @Mapping(target = "latitude", source = "latitude", defaultExpression = "java(customizedMapper.DEFAULT_DOUBLE_VALUE)")
     @Mapping(target = "longitude", source = "longitude", defaultExpression = "java(customizedMapper.DEFAULT_DOUBLE_VALUE)")
@@ -81,7 +82,6 @@ public interface ParkingLotMapper {
 
 
     @Named("toParkingLotInformation")
-    @Mapping(target = "parkingLot", source = "parkingLotEntity", qualifiedByName = "toParkingLot", defaultExpression = "java(customizedMapper.DEFAULT_PARKING_LOT)")
     @Mapping(target = "name", source = "name", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "address", source = "address", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "phone", source = "phone", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")

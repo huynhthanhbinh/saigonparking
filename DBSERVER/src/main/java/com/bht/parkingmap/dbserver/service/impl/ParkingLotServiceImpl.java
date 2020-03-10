@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotEntity;
-import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotInformationEntity;
 import com.bht.parkingmap.dbserver.repository.parkinglot.ParkingLotInformationRepository;
 import com.bht.parkingmap.dbserver.repository.parkinglot.ParkingLotRepository;
 import com.bht.parkingmap.dbserver.service.ParkingLotService;
@@ -38,12 +37,7 @@ public class ParkingLotServiceImpl implements ParkingLotService {
 
     @Override
     public ParkingLotEntity getParkingLotById(@NotNull Long id) {
-        return parkingLotRepository.getOne(id);
-    }
-
-    @Override
-    public ParkingLotInformationEntity getParkingLotInformationByParkingLotId(@NotNull Long id) {
-        return parkingLotInformationRepository.getOne(id);
+        return parkingLotRepository.getById(id);
     }
 
     @Override

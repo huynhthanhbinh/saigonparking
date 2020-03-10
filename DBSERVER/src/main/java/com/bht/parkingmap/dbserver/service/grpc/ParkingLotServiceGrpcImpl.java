@@ -5,11 +5,11 @@ import java.util.List;
 import org.apache.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 
-import com.bht.parkingmap.api.proto.parkinglot.ParkingLotInformation;
+import com.bht.parkingmap.api.proto.parkinglot.ParkingLot;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotResult;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotResultList;
-import com.bht.parkingmap.api.proto.parkinglot.ParkingLotScanningByRadius;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotServiceGrpc.ParkingLotServiceImplBase;
+import com.bht.parkingmap.api.proto.parkinglot.ScanningByRadiusRequest;
 import com.bht.parkingmap.dbserver.mapper.ParkingLotMapper;
 import com.bht.parkingmap.dbserver.service.ParkingLotService;
 import com.bht.parkingmap.dbserver.util.LoggingUtil;
@@ -38,7 +38,30 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
     private final ParkingLotMapper parkingLotMapper;
 
     @Override
-    public void getTopParkingLotInRegionOrderByDistanceWithName(ParkingLotScanningByRadius request, StreamObserver<ParkingLotResultList> responseObserver) {
+    public void getParkingLotById(Int64Value request, StreamObserver<ParkingLot> responseObserver) {
+        try {
+            ParkingLot parkingLot = parkingLotMapper.toParkingLot(
+                    parkingLotService.getParkingLotById(request.getValue()));
+
+            responseObserver.onNext(parkingLot);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getParkingLotInformationByParkingLotId(%d)", request.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getParkingLotInformationByParkingLotId(%d)", request.getValue()));
+        }
+    }
+
+    @Override
+    public void getTopParkingLotInRegionOrderByDistanceWithName(ScanningByRadiusRequest request, StreamObserver<ParkingLotResultList> responseObserver) {
         try {
             List<ParkingLotResult> parkingLotResultList = parkingLotMapper.toParkingLotResultListWithName(
                     parkingLotService.getTopParkingLotInRegionOrderByDistanceWithName(
@@ -67,7 +90,7 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
     }
 
     @Override
-    public void getTopParkingLotInRegionOrderByDistanceWithoutName(ParkingLotScanningByRadius request, StreamObserver<ParkingLotResultList> responseObserver) {
+    public void getTopParkingLotInRegionOrderByDistanceWithoutName(ScanningByRadiusRequest request, StreamObserver<ParkingLotResultList> responseObserver) {
         try {
             List<ParkingLotResult> parkingLotResultList = parkingLotMapper.toParkingLotResultListWithoutName(
                     parkingLotService.getTopParkingLotInRegionOrderByDistanceWithoutName(
@@ -92,29 +115,6 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("getTopParkingLotInRegionOrderByDistanceWithoutName(%f, %f, %d, %d)",
                             request.getLatitude(), request.getLongitude(), request.getRadiusToScan(), request.getNResult()));
-        }
-    }
-
-    @Override
-    public void getParkingLotInformationByParkingLotId(Int64Value request, StreamObserver<ParkingLotInformation> responseObserver) {
-        try {
-            ParkingLotInformation parkingLotInformation = parkingLotMapper.toParkingLotInformation(
-                    parkingLotService.getParkingLotInformationByParkingLotId(request.getValue()));
-
-            responseObserver.onNext(parkingLotInformation);
-            responseObserver.onCompleted();
-
-            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("getParkingLotInformationByParkingLotId(%d)", request.getValue()));
-
-        } catch (Exception exception) {
-
-            responseObserver.onError(exception);
-            responseObserver.onCompleted();
-
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
-            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                    String.format("getParkingLotInformationByParkingLotId(%d)", request.getValue()));
         }
     }
 }

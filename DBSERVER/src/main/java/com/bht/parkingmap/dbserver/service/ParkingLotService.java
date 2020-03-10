@@ -6,7 +6,6 @@ import javax.persistence.Tuple;
 import javax.validation.constraints.NotNull;
 
 import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotEntity;
-import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotInformationEntity;
 
 /**
  *
@@ -15,8 +14,6 @@ import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotInformationEntity
 public interface ParkingLotService {
 
     ParkingLotEntity getParkingLotById(@NotNull Long id);
-
-    ParkingLotInformationEntity getParkingLotInformationByParkingLotId(@NotNull Long id);
 
     List<Tuple> getTopParkingLotInRegionOrderByDistanceWithoutName(@NotNull Double lat,
                                                                    @NotNull Double lng,

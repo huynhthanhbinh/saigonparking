@@ -24,6 +24,16 @@ message ParkingLotResult {
     double distance = 8;
 }
 
+message ParkingLotInformation {
+    string name = 1;
+    string address = 2;
+    string phone = 3;
+    double ratingAverage = 4;
+    int32 numberOfRating = 5;
+    bytes imageData = 6;
+    int64 version = 7;
+}
+
 message ParkingLot {
     int64 id = 1;
     ParkingLotType type = 2;
@@ -34,17 +44,7 @@ message ParkingLot {
     int32 availableSlot = 7;
     int32 totalSlot = 8;
     int64 version = 9;
-}
-
-message ParkingLotInformation {
-    ParkingLot parkingLot = 1;
-    string name = 2;
-    string address = 3;
-    string phone = 4;
-    double ratingAverage = 5;
-    int32 numberOfRating = 6;
-    bytes imageData = 7;
-    int64 version = 8;
+    ParkingLotInformation information = 10;
 }
 
 message ParkingLotUnit {
@@ -78,7 +78,7 @@ message ParkingLotSuggestion {
     int64 version = 9;
 }
 
-message ParkingLotScanningByRadius {
+message ScanningByRadiusRequest {
     double latitude = 1;
     double longitude = 2;
     int32 radiusToScan = 3;
@@ -90,7 +90,7 @@ message ParkingLotResultList {
 }
 
 service ParkingLotService {
-    rpc getParkingLotInformationByParkingLotId (google.protobuf.Int64Value) returns (ParkingLotInformation);
-    rpc getTopParkingLotInRegionOrderByDistanceWithName (ParkingLotScanningByRadius) returns (ParkingLotResultList);
-    rpc getTopParkingLotInRegionOrderByDistanceWithoutName (ParkingLotScanningByRadius) returns (ParkingLotResultList);
+    rpc getParkingLotById (google.protobuf.Int64Value) returns (ParkingLot);
+    rpc getTopParkingLotInRegionOrderByDistanceWithName (ScanningByRadiusRequest) returns (ParkingLotResultList);
+    rpc getTopParkingLotInRegionOrderByDistanceWithoutName (ScanningByRadiusRequest) returns (ParkingLotResultList);
 }

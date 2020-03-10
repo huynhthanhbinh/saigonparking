@@ -41,5 +41,6 @@
     <orderEntry type="library" name="Maven: com.google.api.grpc:proto-google-common-protos:1.17.0" level="project" />
     <orderEntry type="library" name="Maven: io.grpc:grpc-protobuf-lite:1.27.2" level="project" />
     <orderEntry type="library" name="Maven: io.grpc:grpc-stub:1.27.2" level="project" />
+    <orderEntry type="library" name="Bundled Protobuf Distribution" level="application" />
   </component>
 </module>

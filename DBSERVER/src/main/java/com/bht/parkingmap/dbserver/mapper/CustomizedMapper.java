@@ -10,7 +10,7 @@ import org.mapstruct.Named;
 import org.mapstruct.NullValueMappingStrategy;
 import org.springframework.stereotype.Component;
 
-import com.bht.parkingmap.api.proto.parkinglot.ParkingLot;
+import com.bht.parkingmap.api.proto.parkinglot.ParkingLotInformation;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotType;
 import com.bht.parkingmap.api.proto.user.Customer;
 import com.bht.parkingmap.api.proto.user.User;
@@ -39,7 +39,7 @@ public abstract class CustomizedMapper {
 
     static final User DEFAULT_USER = User.getDefaultInstance();
     static final Customer DEFAULT_CUSTOMER = Customer.getDefaultInstance();
-    static final ParkingLot DEFAULT_PARKING_LOT = ParkingLot.getDefaultInstance();
+    static final ParkingLotInformation DEFAULT_PARKING_LOT_INFORMATION = ParkingLotInformation.getDefaultInstance();
 
 
     @Named("toTimeString")
