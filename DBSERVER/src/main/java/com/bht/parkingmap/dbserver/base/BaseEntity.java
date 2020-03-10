@@ -1,7 +1,5 @@
 package com.bht.parkingmap.dbserver.base;
 
-import java.util.Objects;
-
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -9,6 +7,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,12 +26,17 @@ import lombok.experimental.SuperBuilder;
  * into each child entity, which is annotated with <code>@Entity</code>
  * Also remember to call super on toString(), equals(), hashCode() on each child
  *
+ * All mutual fields will be compare as equals() and hashCode(), except id and version
+ * because id and version is managed by Hibernate,
+ * furthermore id is generated value !!!!!!!!!!!!
+ *
  * @author bht
  */
 @Getter
 @Setter
 @ToString
 @SuperBuilder
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
@@ -41,28 +45,10 @@ public abstract class BaseEntity {
     @Id
     @GeneratedValue
     @Column(name = "[ID]")
+    @EqualsAndHashCode.Exclude
     protected Long id;
 
     @Version
+    @EqualsAndHashCode.Exclude
     protected Long version;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        BaseEntity that = (BaseEntity) o;
-
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(
-                id);
-    }
 }

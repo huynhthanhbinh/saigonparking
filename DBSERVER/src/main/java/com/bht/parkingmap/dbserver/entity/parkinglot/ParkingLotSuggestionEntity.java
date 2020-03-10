@@ -1,7 +1,6 @@
 package com.bht.parkingmap.dbserver.entity.parkinglot;
 
 import java.sql.Timestamp;
-import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +15,7 @@ import com.bht.parkingmap.dbserver.base.BaseEntity;
 import com.bht.parkingmap.dbserver.entity.user.CustomerEntity;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,13 +31,14 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
 @Table(name = "[PARKING_LOT_SUGGESTION]")
 public final class ParkingLotSuggestionEntity extends BaseEntity {
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "[CUSTOMER_ID]", referencedColumnName = "[ID]", nullable = false)
     private CustomerEntity customerEntity;
 
@@ -57,39 +58,7 @@ public final class ParkingLotSuggestionEntity extends BaseEntity {
     @Column(name = "[IS_HANDLED]")
     private Boolean isHandled;
 
+    @EqualsAndHashCode.Exclude
     @Column(name = "[LAST_UPDATED]")
     private Timestamp lastUpdated;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        if (!super.equals(o)) {
-            return false;
-        }
-
-        ParkingLotSuggestionEntity that = (ParkingLotSuggestionEntity) o;
-
-        return customerEntity.equals(that.customerEntity) &&
-                parkingLotName.equals(that.parkingLotName) &&
-                parkingLotAddress.equals(that.parkingLotAddress) &&
-                latitude.equals(that.latitude) &&
-                longitude.equals(that.longitude) &&
-                Objects.equals(isHandled, that.isHandled);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(),
-                customerEntity,
-                parkingLotName,
-                parkingLotAddress,
-                latitude,
-                longitude,
-                isHandled);
-    }
 }

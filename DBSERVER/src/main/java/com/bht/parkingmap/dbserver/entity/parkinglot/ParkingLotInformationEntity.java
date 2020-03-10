@@ -1,10 +1,7 @@
 package com.bht.parkingmap.dbserver.entity.parkinglot;
 
-import java.util.Objects;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
@@ -16,6 +13,7 @@ import org.hibernate.annotations.SelectBeforeUpdate;
 import com.bht.parkingmap.dbserver.base.BaseEntity;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,6 +29,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
@@ -47,50 +46,17 @@ public final class ParkingLotInformationEntity extends BaseEntity {
     private String phone;
 
     @ColumnDefault("0")
-    @Column(name = "[RATING_AVERAGE]")
+    @Column(name = "[RATING_AVERAGE]", insertable = false, updatable = false)
     private Double ratingAverage;
 
     @ColumnDefault("0")
-    @Column(name = "[NUMBER_OF_RATING]")
+    @Column(name = "[NUMBER_OF_RATING]", insertable = false, updatable = false)
     private Short nRating;
 
     @MapsId
     @ToString.Exclude
-    @OneToOne(fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @OneToOne(optional = false)
     @JoinColumn(name = "[ID]", unique = true)
     private ParkingLotEntity parkingLotEntity;
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        if (!super.equals(o)) {
-            return false;
-        }
-
-        ParkingLotInformationEntity that = (ParkingLotInformationEntity) o;
-
-        return name.equals(that.name) &&
-                address.equals(that.address) &&
-                Objects.equals(phone, that.phone) &&
-                Objects.equals(ratingAverage, that.ratingAverage) &&
-                Objects.equals(nRating, that.nRating) &&
-                Objects.equals(parkingLotEntity, that.parkingLotEntity);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(),
-                name,
-                address,
-                phone,
-                ratingAverage,
-                nRating,
-                parkingLotEntity);
-    }
 }

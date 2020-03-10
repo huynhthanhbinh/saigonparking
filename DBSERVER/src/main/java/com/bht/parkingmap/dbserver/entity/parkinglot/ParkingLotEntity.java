@@ -1,13 +1,11 @@
 package com.bht.parkingmap.dbserver.entity.parkinglot;
 
 import java.sql.Time;
-import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -23,6 +21,7 @@ import com.bht.parkingmap.dbserver.base.BaseEntity;
 import com.bht.parkingmap.dbserver.entity.user.ParkingLotEmployeeEntity;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -38,6 +37,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
@@ -46,8 +46,8 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "[PARKING_LOT]")
 public final class ParkingLotEntity extends BaseEntity {
 
-    @ManyToOne
-    @JoinColumn(name = "[PARKING_LOT_TYPE_ID]", referencedColumnName = "[ID]", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "[PARKING_LOT_TYPE_ID]", referencedColumnName = "[ID]", nullable = false, updatable = false)
     private ParkingLotTypeEntity parkingLotTypeEntity;
 
     @Column(name = "[LATITUDE]", nullable = false)
@@ -74,56 +74,21 @@ public final class ParkingLotEntity extends BaseEntity {
     @Column(name = "[IS_AVAILABLE]")
     private Boolean isAvailable;
 
-    @OneToOne(mappedBy = "parkingLotEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, optional = false)
+    @OneToOne(mappedBy = "parkingLotEntity", cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
     private ParkingLotInformationEntity parkingLotInformationEntity;
 
     @ToString.Exclude
-    @OneToOne(mappedBy = "parkingLotEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, optional = false)
+    @EqualsAndHashCode.Exclude
+    @OneToOne(mappedBy = "parkingLotEntity", cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
     private ParkingLotEmployeeEntity parkingLotEmployeeEntity;
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "parkingLotEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ParkingLotUnitEntity> parkingLotUnitEntitySet;
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "parkingLotEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ParkingLotRatingEntity> parkingLotRatingEntitySet;
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        if (!super.equals(o)) {
-            return false;
-        }
-
-        ParkingLotEntity that = (ParkingLotEntity) o;
-
-        return parkingLotTypeEntity.equals(that.parkingLotTypeEntity) &&
-                latitude.equals(that.latitude) &&
-                longitude.equals(that.longitude) &&
-                openingHour.equals(that.openingHour) &&
-                closingHour.equals(that.closingHour) &&
-                Objects.equals(availableSlot, that.availableSlot) &&
-                Objects.equals(totalSlot, that.totalSlot) &&
-                Objects.equals(isAvailable, that.isAvailable);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(),
-                parkingLotTypeEntity,
-                latitude,
-                longitude,
-                openingHour,
-                closingHour,
-                availableSlot,
-                totalSlot,
-                isAvailable);
-    }
 }

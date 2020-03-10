@@ -1,7 +1,6 @@
 package com.bht.parkingmap.dbserver.entity.user;
 
 import java.sql.Timestamp;
-import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -17,6 +16,7 @@ import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotRatingEntity;
 import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotSuggestionEntity;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,6 +32,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
@@ -48,42 +49,17 @@ public final class CustomerEntity extends UserEntity {
     @Column(name = "[PHONE]", nullable = false)
     private String phone;
 
+    @EqualsAndHashCode.Exclude
     @Column(name = "[LAST_UPDATED]")
     private Timestamp lastUpdated;
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "customerEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ParkingLotSuggestionEntity> parkingLotSuggestionEntitySet;
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "customerEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ParkingLotRatingEntity> parkingLotRatingEntitySet;
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        if (!super.equals(o)) {
-            return false;
-        }
-
-        CustomerEntity that = (CustomerEntity) o;
-
-        return firstName.equals(that.firstName) &&
-                lastName.equals(that.lastName) &&
-                phone.equals(that.phone);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(),
-                firstName,
-                lastName,
-                phone);
-    }
 }

@@ -1,6 +1,5 @@
 package com.bht.parkingmap.dbserver.entity.parkinglot;
 
-import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,6 +13,7 @@ import org.hibernate.annotations.SelectBeforeUpdate;
 import com.bht.parkingmap.dbserver.base.BaseEntity;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,40 +29,18 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 @ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
 @Table(name = "[PARKING_LOT_TYPE]")
 public final class ParkingLotTypeEntity extends BaseEntity {
 
-    @Column(name = "[TYPE]", nullable = false)
+    @Column(name = "[TYPE]", nullable = false, unique = true, updatable = false)
     private String type;
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "parkingLotTypeEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ParkingLotEntity> parkingLotEntitySet;
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        if (!super.equals(o)) {
-            return false;
-        }
-
-        ParkingLotTypeEntity that = (ParkingLotTypeEntity) o;
-
-        return type.equals(that.type);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(),
-                type);
-    }
 }
