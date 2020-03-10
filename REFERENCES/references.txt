@@ -38,3 +38,6 @@ Last updated:       Tue, March 10th, 2020
 
 12. Hibernate: Should I include the 'version' field to hashcode() and equals() methods
         https://stackoverflow.com/questions/7373545/hibernate-should-i-include-the-version-field-to-hashcode-and-equals-metho
+
+13. Apache Kafka Tutorial – Door to Gain Expertise in Kafka
+        https://data-flair.training/blogs/apache-kafka-tutorial/
