@@ -1,6 +1,6 @@
 Document's name:    Parking Map Project References
 Author:             Huynh Thanh Binh
-Last updated:       Thu, March 06th, 2020
+Last updated:       Tue, March 10th, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -32,3 +32,9 @@ Last updated:       Thu, March 06th, 2020
 
 10. Lombok @Builder with Inheritance: @SuperBuilder
         https://www.baeldung.com/lombok-builder-inheritance
+
+11. How to implement Equals and HashCode for JPA entities
+        https://vladmihalcea.com/hibernate-facts-equals-and-hashcode/
+
+12. Hibernate: Should I include the 'version' field to hashcode() and equals() methods
+        https://stackoverflow.com/questions/7373545/hibernate-should-i-include-the-version-field-to-hashcode-and-equals-metho
