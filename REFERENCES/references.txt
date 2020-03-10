@@ -1,6 +1,6 @@
 Document's name:    Parking Map Project References
 Author:             Huynh Thanh Binh
-Last updated:       Tue, March 10th, 2020
+Last updated:       Wed, March 11th, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -39,5 +39,8 @@ Last updated:       Tue, March 10th, 2020
 12. Hibernate: Should I include the 'version' field to hashcode() and equals() methods
         https://stackoverflow.com/questions/7373545/hibernate-should-i-include-the-version-field-to-hashcode-and-equals-metho
 
-13. Apache Kafka Tutorial – Door to Gain Expertise in Kafka
+13. Hibernate tutorial + best practice
+        https://vladmihalcea.com/tutorials/hibernate/
+
+14. Apache Kafka Tutorial – Door to Gain Expertise in Kafka
         https://data-flair.training/blogs/apache-kafka-tutorial/
