@@ -30,11 +30,11 @@ public interface ParkingLotMapper {
 
     @Named("toParkingLotResultWithoutName")
     @Mapping(target = "id", expression = "java(parkingLotWithoutNameTuple.get(0, java.math.BigInteger.class).longValue())")
-    @Mapping(target = "type", expression = "java(enumMapper.toParkingLotType(parkingLotWithoutNameTuple.get(1, Long.class)))")
+    @Mapping(target = "type", expression = "java(enumMapper.toParkingLotType(parkingLotWithoutNameTuple.get(1, java.math.BigInteger.class).longValue()))")
     @Mapping(target = "latitude", expression = "java(parkingLotWithoutNameTuple.get(2, Double.class))")
     @Mapping(target = "longitude", expression = "java(parkingLotWithoutNameTuple.get(3, Double.class))")
-    @Mapping(target = "availableSlot", expression = "java(parkingLotWithoutNameTuple.get(4, Integer.class))")
-    @Mapping(target = "totalSlot", expression = "java(parkingLotWithoutNameTuple.get(5, Integer.class))")
+    @Mapping(target = "availableSlot", expression = "java(parkingLotWithoutNameTuple.get(4, Short.class))")
+    @Mapping(target = "totalSlot", expression = "java(parkingLotWithoutNameTuple.get(5, Short.class))")
     ParkingLotResult toParkingLotResultWithoutName(Tuple parkingLotWithoutNameTuple);
 
 
@@ -47,11 +47,11 @@ public interface ParkingLotMapper {
     @Named("toParkingLotResultWithName")
     @Mapping(target = "id", expression = "java(parkingLotWithNameTuple.get(0, java.math.BigInteger.class).longValue())")
     @Mapping(target = "name", expression = "java(parkingLotWithNameTuple.get(1, String.class))")
-    @Mapping(target = "type", expression = "java(enumMapper.toParkingLotType(parkingLotWithNameTuple.get(2, Long.class)))")
+    @Mapping(target = "type", expression = "java(enumMapper.toParkingLotType(parkingLotWithNameTuple.get(2, java.math.BigInteger.class).longValue()))")
     @Mapping(target = "latitude", expression = "java(parkingLotWithNameTuple.get(3, Double.class))")
     @Mapping(target = "longitude", expression = "java(parkingLotWithNameTuple.get(4, Double.class))")
-    @Mapping(target = "availableSlot", expression = "java(parkingLotWithNameTuple.get(5, Integer.class))")
-    @Mapping(target = "totalSlot", expression = "java(parkingLotWithNameTuple.get(6, Integer.class))")
+    @Mapping(target = "availableSlot", expression = "java(parkingLotWithNameTuple.get(5, Short.class))")
+    @Mapping(target = "totalSlot", expression = "java(parkingLotWithNameTuple.get(6, Short.class))")
     ParkingLotResult toParkingLotResultWithName(Tuple parkingLotWithNameTuple);
 
 
