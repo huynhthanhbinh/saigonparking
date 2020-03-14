@@ -2,3 +2,4 @@
 */sonarlint/*
 */target/
 *.log
+*.iml
