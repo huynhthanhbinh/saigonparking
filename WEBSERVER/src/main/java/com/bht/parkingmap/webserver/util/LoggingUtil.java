@@ -1,14 +1,14 @@
 package com.bht.parkingmap.webserver.util;
 
-import org.apache.log4j.Level;
+import org.apache.logging.log4j.Level;
 
-import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 
 /**
  *
  * @author bht
  */
-@Log4j
+@Log4j2
 public final class LoggingUtil {
 
     private LoggingUtil() {

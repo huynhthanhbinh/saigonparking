@@ -2,7 +2,7 @@ package com.bht.parkingmap.webserver.service.grpc;
 
 import static com.bht.parkingmap.api.proto.user.UserServiceGrpc.UserServiceImplBase;
 
-import org.apache.log4j.Level;
+import org.apache.logging.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.transaction.annotation.Transactional;
 

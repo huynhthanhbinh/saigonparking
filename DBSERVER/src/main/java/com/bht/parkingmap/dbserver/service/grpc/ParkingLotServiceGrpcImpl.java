@@ -2,7 +2,7 @@ package com.bht.parkingmap.dbserver.service.grpc;
 
 import java.util.List;
 
-import org.apache.log4j.Level;
+import org.apache.logging.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLot;

@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import javax.imageio.ImageIO;
 import javax.validation.constraints.NotNull;
 
-import org.apache.log4j.Level;
+import org.apache.logging.log4j.Level;
 
 import com.bht.parkingmap.dbserver.configuration.AppConfiguration;
 

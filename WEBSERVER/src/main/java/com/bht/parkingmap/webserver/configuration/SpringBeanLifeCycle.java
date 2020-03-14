@@ -2,7 +2,7 @@ package com.bht.parkingmap.webserver.configuration;
 
 import java.lang.reflect.Proxy;
 
-import org.apache.log4j.Level;
+import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
