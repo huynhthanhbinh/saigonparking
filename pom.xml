@@ -17,6 +17,47 @@
         <module>DBSERVER</module>
     </modules>
 
+    <url>https://github.com/huynhthanhbinh/parkingmap</url>
+    <description>
+        Parking Map Project is aim to help people to find nearby parking-lot by current or target location.
+        This project is our group's final project at Ho Chi Minh University of Science, focus on Ho Chi Minh City only.
+    </description>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>bvt</id>
+            <name>Vu Tuong Bach</name>
+            <email>1653005@student.hcmus.edu.vn</email>
+        </developer>
+        <developer>
+            <id>bht</id>
+            <name>Huynh Thanh Binh</name>
+            <email>1653006@student.hcmus.edu.vn</email>
+        </developer>
+        <developer>
+            <id>dpv</id>
+            <name>Pham Viet Minh Dao</name>
+            <email>1653012@student.hcmus.edu.vn</email>
+        </developer>
+        <developer>
+            <id>hvu</id>
+            <name>Vu Hai</name>
+            <email>1653020@student.hcmus.edu.vn</email>
+        </developer>
+        <developer>
+            <id>tdd</id>
+            <name>Dang Duc Tai</name>
+            <email>1653076@student.hcmus.edu.vn</email>
+        </developer>
+    </developers>
+
     <properties>
         <revision>1.0</revision> <!-- version of project -->
         <java.version>1.8</java.version> <!-- version of java (jdk) -->
