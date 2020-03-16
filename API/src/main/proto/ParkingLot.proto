@@ -42,10 +42,12 @@ message ParkingLot {
     string openingHour = 5;
     string closingHour = 6;
     //bool isAvailable = 7;
-    int64 version = 7;
-    int64 userId = 8;
-    int64 parkingLotLimitId = 9;
-    ParkingLotInformation information = 10;
+    int32 availableSlot = 7;
+    int32 totalSlot = 8;
+    int64 version = 9;
+    int64 userId = 10;
+    int64 parkingLotLimitId = 11;
+    ParkingLotInformation information = 12;
 }
 
 message ParkingLotUnit {
