@@ -78,6 +78,10 @@ message ParkingLotSuggestion {
     int64 version = 9;
 }
 
+message ParkingLotIdList {
+    repeated int64 parkingLotId = 1;
+}
+
 message ScanningByRadiusRequest {
     double latitude = 1;
     double longitude = 2;
@@ -90,6 +94,7 @@ message ParkingLotResultList {
 }
 
 service ParkingLotService {
+    rpc checkUnavailability (ParkingLotIdList) returns (ParkingLotIdList);
     rpc getParkingLotById (google.protobuf.Int64Value) returns (ParkingLot);
     rpc getTopParkingLotInRegionOrderByDistanceWithName (ScanningByRadiusRequest) returns (ParkingLotResultList);
     rpc getTopParkingLotInRegionOrderByDistanceWithoutName (ScanningByRadiusRequest) returns (ParkingLotResultList);

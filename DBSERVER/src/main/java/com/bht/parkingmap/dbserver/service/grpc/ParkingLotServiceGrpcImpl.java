@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLot;
+import com.bht.parkingmap.api.proto.parkinglot.ParkingLotIdList;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotResult;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotResultList;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotServiceGrpc.ParkingLotServiceImplBase;
@@ -57,6 +58,30 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("getParkingLotInformationByParkingLotId(%d)", request.getValue()));
+        }
+    }
+
+    @Override
+    public void checkUnavailability(ParkingLotIdList request, StreamObserver<ParkingLotIdList> responseObserver) {
+        try {
+            ParkingLotIdList parkingLotIdList = ParkingLotIdList.newBuilder()
+                    .addAllParkingLotId(parkingLotService.checkUnavailability(request.getParkingLotIdList()))
+                    .build();
+
+            responseObserver.onNext(parkingLotIdList);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("checkUnavailability of %d parking-lot", request.getParkingLotIdCount()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("checkUnavailability of %d parking-lot", request.getParkingLotIdCount()));
         }
     }
 

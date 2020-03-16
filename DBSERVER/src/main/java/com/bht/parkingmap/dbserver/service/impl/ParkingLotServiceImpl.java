@@ -3,6 +3,7 @@ package com.bht.parkingmap.dbserver.service.impl;
 import java.util.List;
 
 import javax.persistence.Tuple;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Service;
@@ -38,6 +39,11 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     @Override
     public ParkingLotEntity getParkingLotById(@NotNull Long id) {
         return parkingLotRepository.getById(id);
+    }
+
+    @Override
+    public List<Long> checkUnavailability(@NotEmpty List<Long> parkingLotIdList) {
+        return parkingLotRepository.checkUnavailability(parkingLotIdList);
     }
 
     @Override

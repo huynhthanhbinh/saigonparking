@@ -3,6 +3,7 @@ package com.bht.parkingmap.dbserver.repository.parkinglot;
 import java.util.List;
 
 import javax.persistence.Tuple;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,6 +32,11 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Lo
             "JOIN FETCH PLE.userRoleEntity USR " +
             "WHERE PL.id = ?1")
     ParkingLotEntity getById(@NotNull Long id);
+
+    @Query("SELECT P.id " +
+            "FROM ParkingLotEntity P " +
+            "WHERE P.id IN ?1 AND P.isAvailable = 0")
+    List<Long> checkUnavailability(@NotEmpty List<Long> parkingLotIdList);
 
     @SuppressWarnings({"SqlResolve", "SpringDataRepositoryMethodReturnTypeInspection"})
     @Query(value = "SELECT P.ID, P.PARKING_LOT_TYPE_ID, P.LATITUDE, P.LONGITUDE, P.AVAILABILITY, P.CAPACITY " +
