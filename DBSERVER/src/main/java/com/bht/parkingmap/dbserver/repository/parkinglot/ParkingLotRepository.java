@@ -27,7 +27,8 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Lo
     @Query("SELECT PL " +
             "FROM ParkingLotEntity PL " +
             "JOIN FETCH PL.parkingLotTypeEntity PLT " +
-            "JOIN FETCH  PL.parkingLotInformationEntity PLI " +
+            "JOIN FETCH PL.parkingLotLimitEntity PLL " +
+            "JOIN FETCH PL.parkingLotInformationEntity PLI " +
             "JOIN FETCH PL.parkingLotEmployeeEntity PLE " +
             "JOIN FETCH PLE.userRoleEntity USR " +
             "WHERE PL.id = ?1")
@@ -39,9 +40,10 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Lo
     List<Long> checkUnavailability(@NotEmpty List<Long> parkingLotIdList);
 
     @SuppressWarnings({"SqlResolve", "SpringDataRepositoryMethodReturnTypeInspection"})
-    @Query(value = "SELECT P.ID, P.PARKING_LOT_TYPE_ID, P.LATITUDE, P.LONGITUDE, P.AVAILABILITY, P.CAPACITY " +
+    @Query(value = "SELECT P.ID, P.PARKING_LOT_TYPE_ID, P.LATITUDE, P.LONGITUDE, PLL.AVAILABILITY, PLL.CAPACITY " +
             "FROM PARKING_LOT P " +
-            "WHERE 1 = dbo.IS_VALUE_IN_BOUND(P.LATITUDE, ?1, dbo.CALCULATE_DELTA_LAT_IN_DEGREE(?1, ?2, ?3)) " +
+            "INNER JOIN (SELECT ID, CAPACITY, AVAILABILITY FROM PARKING_LOT_LIMIT) AS PLL ON PLL.ID = P.ID " +
+            "AND 1 = dbo.IS_VALUE_IN_BOUND(P.LATITUDE, ?1, dbo.CALCULATE_DELTA_LAT_IN_DEGREE(?1, ?2, ?3)) " +
             "AND 1 = dbo.IS_VALUE_IN_BOUND(P.LONGITUDE, ?2, dbo.CALCULATE_DELTA_LNG_IN_DEGREE(?1, ?2, ?3)) " +
             "AND 1 = P.IS_AVAILABLE " +
             "AND CONVERT(TIME, GETDATE()) BETWEEN P.OPENING_HOUR AND P.CLOSING_HOUR " +
@@ -54,8 +56,10 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Lo
             @NotNull Integer nResult);
 
     @SuppressWarnings({"SqlResolve", "SpringDataRepositoryMethodReturnTypeInspection"})
-    @Query(value = "SELECT P.ID, PLI.NAME, P.PARKING_LOT_TYPE_ID, P.LATITUDE, P.LONGITUDE, P.AVAILABILITY, P.CAPACITY " +
-            "FROM PARKING_LOT P INNER JOIN (SELECT ID, NAME FROM PARKING_LOT_INFORMATION) AS PLI ON PLI.ID = P.ID " +
+    @Query(value = "SELECT P.ID, PLI.NAME, P.PARKING_LOT_TYPE_ID, P.LATITUDE, P.LONGITUDE, PLL.AVAILABILITY, PLL.CAPACITY " +
+            "FROM PARKING_LOT P " +
+            "INNER JOIN (SELECT ID, NAME FROM PARKING_LOT_INFORMATION) AS PLI ON PLI.ID = P.ID " +
+            "INNER JOIN (SELECT ID, CAPACITY, AVAILABILITY FROM PARKING_LOT_LIMIT) AS PLL ON PLL.ID = P.ID " +
             "AND 1 = dbo.IS_VALUE_IN_BOUND(P.LATITUDE, ?1, dbo.CALCULATE_DELTA_LAT_IN_DEGREE(?1, ?2, ?3)) " +
             "AND 1 = dbo.IS_VALUE_IN_BOUND(P.LONGITUDE, ?2, dbo.CALCULATE_DELTA_LNG_IN_DEGREE(?1, ?2, ?3)) " +
             "AND 1 = P.IS_AVAILABLE " +

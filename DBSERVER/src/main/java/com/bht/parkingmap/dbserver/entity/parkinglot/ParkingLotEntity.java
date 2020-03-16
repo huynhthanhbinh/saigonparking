@@ -62,17 +62,12 @@ public final class ParkingLotEntity extends BaseEntity {
     @Column(name = "[CLOSING_HOUR]", nullable = false)
     private Time closingHour;
 
-    @ColumnDefault("0")
-    @Column(name = "[AVAILABILITY]")
-    private Short availableSlot;
-
-    @ColumnDefault("0")
-    @Column(name = "[CAPACITY]")
-    private Short totalSlot;
-
     @ColumnDefault("true")
     @Column(name = "[IS_AVAILABLE]")
     private Boolean isAvailable;
+
+    @OneToOne(mappedBy = "parkingLotEntity", cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
+    private ParkingLotLimitEntity parkingLotLimitEntity;
 
     @OneToOne(mappedBy = "parkingLotEntity", cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
     private ParkingLotInformationEntity parkingLotInformationEntity;
