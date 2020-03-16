@@ -10,6 +10,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
+import com.bht.parkingmap.dbserver.annotation.CapacityValidation;
 import com.bht.parkingmap.dbserver.base.BaseEntity;
 
 import lombok.AllArgsConstructor;
@@ -33,6 +34,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
+@CapacityValidation
 @Table(name = "[PARKING_LOT_LIMIT]")
 public final class ParkingLotLimitEntity extends BaseEntity {
 

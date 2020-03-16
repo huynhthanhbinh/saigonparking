@@ -69,8 +69,8 @@ public interface ParkingLotMapper {
     @Mapping(target = "longitude", source = "longitude", defaultExpression = "java(customizedMapper.DEFAULT_DOUBLE_VALUE)")
     @Mapping(target = "openingHour", source = "openingHour", qualifiedByName = "toTimeString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "closingHour", source = "closingHour", qualifiedByName = "toTimeString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
-    @Mapping(target = "availableSlot", source = "availableSlot", defaultExpression = "java(customizedMapper.DEFAULT_SHORT_VALUE)")
-    @Mapping(target = "totalSlot", source = "totalSlot", defaultExpression = "java(customizedMapper.DEFAULT_SHORT_VALUE)")
+    @Mapping(target = "userId", source = "parkingLotEmployeeEntity.id", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
+    @Mapping(target = "parkingLotLimitId", source = "parkingLotLimitEntity.id", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
     @Mapping(target = "version", source = "version", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
     ParkingLot toParkingLot(ParkingLotEntity parkingLotEntity);
 

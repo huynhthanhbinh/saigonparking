@@ -15,7 +15,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
-import com.bht.parkingmap.dbserver.annotation.CapacityValidation;
 import com.bht.parkingmap.dbserver.annotation.TimeFlowValidation;
 import com.bht.parkingmap.dbserver.base.BaseEntity;
 import com.bht.parkingmap.dbserver.entity.user.ParkingLotEmployeeEntity;
@@ -42,7 +41,6 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SelectBeforeUpdate
 @TimeFlowValidation
-@CapacityValidation
 @Table(name = "[PARKING_LOT]")
 public final class ParkingLotEntity extends BaseEntity {
 
