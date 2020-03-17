@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotEntity;
+import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotLimitEntity;
 import com.bht.parkingmap.dbserver.repository.parkinglot.ParkingLotInformationRepository;
+import com.bht.parkingmap.dbserver.repository.parkinglot.ParkingLotLimitRepository;
 import com.bht.parkingmap.dbserver.repository.parkinglot.ParkingLotRepository;
 import com.bht.parkingmap.dbserver.service.ParkingLotService;
 
@@ -34,11 +36,22 @@ import lombok.AllArgsConstructor;
 public class ParkingLotServiceImpl implements ParkingLotService {
 
     private final ParkingLotRepository parkingLotRepository;
+    private final ParkingLotLimitRepository parkingLotLimitRepository;
     private final ParkingLotInformationRepository parkingLotInformationRepository;
 
     @Override
     public ParkingLotEntity getParkingLotById(@NotNull Long id) {
         return parkingLotRepository.getById(id);
+    }
+
+    @Override
+    public ParkingLotLimitEntity getParkingLotLimitById(@NotNull Long id) {
+        return parkingLotLimitRepository.getById(id);
+    }
+
+    @Override
+    public Boolean checkAvailability(@NotNull Long parkingLotId) {
+        return parkingLotRepository.checkAvailability(parkingLotId);
     }
 
     @Override

@@ -89,11 +89,18 @@ message ScanningByRadiusRequest {
     int32 nResult = 4;
 }
 
+message ParkingLotLimit {
+    int32 availableSlot = 1;
+    int32 totalSlot = 2;
+}
+
 message ParkingLotResultList {
     repeated ParkingLotResult parkingLotResult = 1;
 }
 
 service ParkingLotService {
+    rpc checkLimit (google.protobuf.Int64Value) returns (ParkingLotLimit);
+    rpc checkAvailability (google.protobuf.Int64Value) returns (google.protobuf.BoolValue);
     rpc checkUnavailability (ParkingLotIdList) returns (ParkingLotIdList);
     rpc getParkingLotById (google.protobuf.Int64Value) returns (ParkingLot);
     rpc getTopParkingLotInRegionOrderByDistanceWithName (ScanningByRadiusRequest) returns (ParkingLotResultList);

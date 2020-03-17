@@ -7,6 +7,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotEntity;
+import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotLimitEntity;
 
 /**
  *
@@ -15,6 +16,10 @@ import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotEntity;
 public interface ParkingLotService {
 
     ParkingLotEntity getParkingLotById(@NotNull Long id);
+
+    ParkingLotLimitEntity getParkingLotLimitById(@NotNull Long id);
+
+    Boolean checkAvailability(@NotNull Long parkingLotId);
 
     List<Long> checkUnavailability(@NotEmpty List<Long> parkingLotIdList);
 

@@ -8,10 +8,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLot;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotIdList;
+import com.bht.parkingmap.api.proto.parkinglot.ParkingLotLimit;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotResultList;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotServiceGrpc.ParkingLotServiceBlockingStub;
 import com.bht.parkingmap.api.proto.parkinglot.ScanningByRadiusRequest;
 import com.bht.parkingmap.webserver.util.LoggingUtil;
+import com.google.protobuf.BoolValue;
 import com.google.protobuf.Int64Value;
 
 import io.grpc.stub.StreamObserver;
@@ -56,6 +58,53 @@ public class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("getParkingLotById(%d)", request.getValue()));
+        }
+    }
+
+    @Override
+    public void checkLimit(Int64Value request, StreamObserver<ParkingLotLimit> responseObserver) {
+        try {
+            ParkingLotLimit parkingLotLimit = parkingLotServiceBlockingStub
+                    .checkLimit(request);
+
+            responseObserver.onNext(parkingLotLimit);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("checkLimit(%d): %d/%d",
+                            request.getValue(), parkingLotLimit.getAvailableSlot(), parkingLotLimit.getTotalSlot()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("checkLimit(%d)", request.getValue()));
+        }
+    }
+
+    @Override
+    public void checkAvailability(Int64Value request, StreamObserver<BoolValue> responseObserver) {
+        try {
+            BoolValue boolValue = parkingLotServiceBlockingStub
+                    .checkAvailability(request);
+
+            responseObserver.onNext(boolValue);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("checkAvailability(%d): %s", request.getValue(), boolValue.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("checkAvailability(%d)", request.getValue()));
         }
     }
 

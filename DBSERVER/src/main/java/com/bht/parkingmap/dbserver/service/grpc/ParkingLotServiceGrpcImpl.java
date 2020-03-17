@@ -7,13 +7,16 @@ import org.lognet.springboot.grpc.GRpcService;
 
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLot;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotIdList;
+import com.bht.parkingmap.api.proto.parkinglot.ParkingLotLimit;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotResult;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotResultList;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotServiceGrpc.ParkingLotServiceImplBase;
 import com.bht.parkingmap.api.proto.parkinglot.ScanningByRadiusRequest;
+import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotLimitEntity;
 import com.bht.parkingmap.dbserver.mapper.ParkingLotMapper;
 import com.bht.parkingmap.dbserver.service.ParkingLotService;
 import com.bht.parkingmap.dbserver.util.LoggingUtil;
+import com.google.protobuf.BoolValue;
 import com.google.protobuf.Int64Value;
 
 import io.grpc.stub.StreamObserver;
@@ -58,6 +61,57 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("getParkingLotInformationByParkingLotId(%d)", request.getValue()));
+        }
+    }
+
+    @Override
+    public void checkLimit(Int64Value request, StreamObserver<ParkingLotLimit> responseObserver) {
+        try {
+            ParkingLotLimitEntity parkingLotLimitEntity = parkingLotService.getParkingLotLimitById(request.getValue());
+            ParkingLotLimit parkingLotLimit = ParkingLotLimit.newBuilder()
+                    .setAvailableSlot(parkingLotLimitEntity.getAvailableSlot())
+                    .setTotalSlot(parkingLotLimitEntity.getTotalSlot())
+                    .build();
+
+            responseObserver.onNext(parkingLotLimit);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("checkLimit(%d): %d/%d",
+                            request.getValue(), parkingLotLimitEntity.getAvailableSlot(), parkingLotLimitEntity.getTotalSlot()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("checkLimit(%d)", request.getValue()));
+        }
+    }
+
+    @Override
+    public void checkAvailability(Int64Value request, StreamObserver<BoolValue> responseObserver) {
+        try {
+            BoolValue boolValue = BoolValue.newBuilder()
+                    .setValue(parkingLotService.checkAvailability(request.getValue()))
+                    .build();
+
+            responseObserver.onNext(boolValue);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("checkAvailability(%d): %s", request.getValue(), boolValue.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("checkAvailability(%d)", request.getValue()));
         }
     }
 

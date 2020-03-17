@@ -34,10 +34,20 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Lo
             "WHERE PL.id = ?1")
     ParkingLotEntity getById(@NotNull Long id);
 
+
+    @Query("SELECT FUNCTION('dbo.CHECK_AVAILABILITY', P.id) " +
+            "FROM ParkingLotEntity P " +
+            "WHERE P.id = ?1")
+    Boolean checkAvailability(@NotNull Long parkingLotId);
+
+
     @Query("SELECT P.id " +
             "FROM ParkingLotEntity P " +
-            "WHERE P.id IN ?1 AND P.isAvailable = 0")
+            "WHERE P.id IN ?1 " +
+            "AND (P.isAvailable = 0 OR " +
+            "FUNCTION('CONVERT', TIME, FUNCTION('CURRENT_TIME')) NOT BETWEEN P.openingHour AND P.closingHour)")
     List<Long> checkUnavailability(@NotEmpty List<Long> parkingLotIdList);
+
 
     @SuppressWarnings({"SqlResolve", "SpringDataRepositoryMethodReturnTypeInspection"})
     @Query(value = "SELECT P.ID, P.PARKING_LOT_TYPE_ID, P.LATITUDE, P.LONGITUDE, PLL.AVAILABILITY, PLL.CAPACITY " +
@@ -54,6 +64,7 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Lo
             @NotNull Double lng,
             @NotNull Integer radius,
             @NotNull Integer nResult);
+
 
     @SuppressWarnings({"SqlResolve", "SpringDataRepositoryMethodReturnTypeInspection"})
     @Query(value = "SELECT P.ID, PLI.NAME, P.PARKING_LOT_TYPE_ID, P.LATITUDE, P.LONGITUDE, PLL.AVAILABILITY, PLL.CAPACITY " +
