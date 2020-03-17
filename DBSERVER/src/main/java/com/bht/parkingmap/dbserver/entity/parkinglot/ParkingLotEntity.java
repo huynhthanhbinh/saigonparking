@@ -72,7 +72,7 @@ public final class ParkingLotEntity extends BaseEntity {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToOne(mappedBy = "parkingLotEntity", cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
+    @OneToOne(mappedBy = "parkingLotEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private ParkingLotEmployeeEntity parkingLotEmployeeEntity;
 
     @ToString.Exclude
