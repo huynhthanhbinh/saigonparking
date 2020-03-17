@@ -44,3 +44,6 @@ Last updated:       Wed, March 11th, 2020
 
 14. Apache Kafka Tutorial – Door to Gain Expertise in Kafka
         https://data-flair.training/blogs/apache-kafka-tutorial/
+
+15. The best way to use SQL functions in JPQL or Criteria API queries with JPA and Hibernate
+        https://vladmihalcea.com/hibernate-sql-function-jpql-criteria-api-query/
