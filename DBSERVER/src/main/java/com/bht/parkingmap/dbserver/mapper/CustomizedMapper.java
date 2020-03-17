@@ -3,7 +3,8 @@ package com.bht.parkingmap.dbserver.mapper;
 import java.io.IOException;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
+
+import javax.validation.constraints.NotNull;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
@@ -43,17 +44,27 @@ public abstract class CustomizedMapper {
 
 
     @Named("toTimeString")
-    String toTimeString(Time time) {
+    String toTimeString(@NotNull Time time) {
         return time.toString();
     }
 
+    @Named("toTime")
+    Time toTime(@NotNull String timeString) {
+        return Time.valueOf(timeString);
+    }
+
     @Named("toTimestampString")
-    String toTimestampString(Timestamp timestamp) {
-        return new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss").format(timestamp);
+    String toTimestampString(@NotNull Timestamp timestamp) {
+        return timestamp.toString();
+    }
+
+    @Named("toTimestamp")
+    Timestamp toTimestamp(@NotNull String timestampString) {
+        return Timestamp.valueOf(timestampString);
     }
 
     @Named("toEncodedParkingLotImage")
-    ByteString toEncodedParkingLotImage(Integer parkingLotId) throws IOException {
+    ByteString toEncodedParkingLotImage(@NotNull Integer parkingLotId) throws IOException {
         return com.bht.parkingmap.api.util.ImageUtil.encodeImage(ImageUtil.getImage(
                 "plot/plot" + parkingLotId, ImageUtil.ImageExtension.JPG));
     }

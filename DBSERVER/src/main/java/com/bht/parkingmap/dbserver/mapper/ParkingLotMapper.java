@@ -5,11 +5,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.persistence.Tuple;
+import javax.validation.constraints.NotNull;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.NullValueMappingStrategy;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLot;
@@ -18,15 +21,22 @@ import com.bht.parkingmap.api.proto.parkinglot.ParkingLotResult;
 import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotEntity;
 import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotInformationEntity;
 
+import lombok.Setter;
+
 /**
  *
  * @author bht
  */
 @Component
+@DependsOn("parkingLotMapperExt")
 @SuppressWarnings("UnmappedTargetProperties")
+@Setter(onMethod = @__(@Autowired))
 @Mapper(componentModel = "spring", nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT,
         uses = {EnumMapper.class, CustomizedMapper.class})
-public interface ParkingLotMapper {
+public abstract class ParkingLotMapper {
+
+    private ParkingLotMapperExt parkingLotMapperExt;
+
 
     @Named("toParkingLotResultWithoutName")
     @Mapping(target = "id", expression = "java(parkingLotWithoutNameTuple.get(0, java.math.BigInteger.class).longValue())")
@@ -35,13 +45,7 @@ public interface ParkingLotMapper {
     @Mapping(target = "longitude", expression = "java(parkingLotWithoutNameTuple.get(3, Double.class))")
     @Mapping(target = "availableSlot", expression = "java(parkingLotWithoutNameTuple.get(4, Short.class))")
     @Mapping(target = "totalSlot", expression = "java(parkingLotWithoutNameTuple.get(5, Short.class))")
-    ParkingLotResult toParkingLotResultWithoutName(Tuple parkingLotWithoutNameTuple);
-
-
-    @Named("toParkingLotResultListWithoutName")
-    default List<ParkingLotResult> toParkingLotResultListWithoutName(List<Tuple> parkingLotWithNameTupleList) {
-        return parkingLotWithNameTupleList.stream().map(this::toParkingLotResultWithoutName).collect(Collectors.toList());
-    }
+    abstract ParkingLotResult toParkingLotResultWithoutName(@NotNull Tuple parkingLotWithoutNameTuple);
 
 
     @Named("toParkingLotResultWithName")
@@ -52,35 +56,7 @@ public interface ParkingLotMapper {
     @Mapping(target = "longitude", expression = "java(parkingLotWithNameTuple.get(4, Double.class))")
     @Mapping(target = "availableSlot", expression = "java(parkingLotWithNameTuple.get(5, Short.class))")
     @Mapping(target = "totalSlot", expression = "java(parkingLotWithNameTuple.get(6, Short.class))")
-    ParkingLotResult toParkingLotResultWithName(Tuple parkingLotWithNameTuple);
-
-
-    @Named("toParkingLotResultListWithName")
-    default List<ParkingLotResult> toParkingLotResultListWithName(List<Tuple> parkingLotWithNameTupleList) {
-        return parkingLotWithNameTupleList.stream().map(this::toParkingLotResultWithName).collect(Collectors.toList());
-    }
-
-
-    @Named("toParkingLot")
-    @Mapping(target = "id", source = "id", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
-    @Mapping(target = "information", source = "parkingLotInformationEntity", qualifiedByName = "toParkingLotInformation", defaultExpression = "java(customizedMapper.DEFAULT_PARKING_LOT_INFORMATION)")
-    @Mapping(target = "type", source = "parkingLotTypeEntity.id", qualifiedByName = "toParkingLotType", defaultExpression = "java(customizedMapper.DEFAULT_PARKING_LOT_TYPE)")
-    @Mapping(target = "latitude", source = "latitude", defaultExpression = "java(customizedMapper.DEFAULT_DOUBLE_VALUE)")
-    @Mapping(target = "longitude", source = "longitude", defaultExpression = "java(customizedMapper.DEFAULT_DOUBLE_VALUE)")
-    @Mapping(target = "openingHour", source = "openingHour", qualifiedByName = "toTimeString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
-    @Mapping(target = "closingHour", source = "closingHour", qualifiedByName = "toTimeString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
-    @Mapping(target = "userId", source = "parkingLotEmployeeEntity.id", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
-    @Mapping(target = "parkingLotLimitId", source = "parkingLotLimitEntity.id", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
-    @Mapping(target = "availableSlot", source = "parkingLotLimitEntity.availableSlot", defaultExpression = "java(customizedMapper.DEFAULT_SHORT_VALUE)")
-    @Mapping(target = "totalSlot", source = "parkingLotLimitEntity.totalSlot", defaultExpression = "java(customizedMapper.DEFAULT_SHORT_VALUE)")
-    @Mapping(target = "version", source = "version", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
-    ParkingLot toParkingLot(ParkingLotEntity parkingLotEntity);
-
-
-    @Named("toParkingLotList")
-    default List<ParkingLot> toParkingLotList(List<ParkingLotEntity> parkingLotEntityList) {
-        return parkingLotEntityList.stream().map(this::toParkingLot).collect(Collectors.toList());
-    }
+    abstract ParkingLotResult toParkingLotResultWithName(@NotNull Tuple parkingLotWithNameTuple);
 
 
     @Named("toParkingLotInformation")
@@ -91,5 +67,43 @@ public interface ParkingLotMapper {
     @Mapping(target = "numberOfRating", source = "NRating", defaultExpression = "java(customizedMapper.DEFAULT_SHORT_VALUE)")
     @Mapping(target = "imageData", source = "id", qualifiedByName = "toEncodedParkingLotImage", defaultExpression = "java(customizedMapper.DEFAULT_BYTE_STRING_VALUE)")
     @Mapping(target = "version", source = "version", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
-    ParkingLotInformation toParkingLotInformation(ParkingLotInformationEntity parkingLotInformationEntity) throws IOException;
+    abstract ParkingLotInformation toParkingLotInformation(@NotNull ParkingLotInformationEntity parkingLotInformationEntity) throws IOException;
+
+
+    @Named("toParkingLot")
+    @Mapping(target = "id", source = "id", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
+    @Mapping(target = "information", source = "parkingLotInformationEntity", qualifiedByName = "toParkingLotInformation", defaultExpression = "java(customizedMapper.DEFAULT_PARKING_LOT_INFORMATION)")
+    @Mapping(target = "type", source = "parkingLotTypeEntity.id", qualifiedByName = "toParkingLotType", defaultExpression = "java(customizedMapper.DEFAULT_PARKING_LOT_TYPE)")
+    @Mapping(target = "latitude", source = "latitude", defaultExpression = "java(customizedMapper.DEFAULT_DOUBLE_VALUE)")
+    @Mapping(target = "longitude", source = "longitude", defaultExpression = "java(customizedMapper.DEFAULT_DOUBLE_VALUE)")
+    @Mapping(target = "openingHour", source = "openingHour", qualifiedByName = "toTimeString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    @Mapping(target = "closingHour", source = "closingHour", qualifiedByName = "toTimeString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    @Mapping(target = "availableSlot", source = "parkingLotLimitEntity.availableSlot", defaultExpression = "java(customizedMapper.DEFAULT_SHORT_VALUE)")
+    @Mapping(target = "totalSlot", source = "parkingLotLimitEntity.totalSlot", defaultExpression = "java(customizedMapper.DEFAULT_SHORT_VALUE)")
+    @Mapping(target = "version", source = "version", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
+    public abstract ParkingLot toParkingLot(@NotNull ParkingLotEntity parkingLotEntity);
+
+
+    @Named("toParkingLotEntity")
+    public final ParkingLotEntity toParkingLotEntity(@NotNull ParkingLot parkingLot) {
+        return parkingLotMapperExt.toParkingLotEntity(parkingLot);
+    }
+
+
+    @Named("toParkingLotResultListWithoutName")
+    public final List<ParkingLotResult> toParkingLotResultListWithoutName(@NotNull List<Tuple> parkingLotWithoutNameTupleList) {
+        return parkingLotWithoutNameTupleList.stream().map(this::toParkingLotResultWithoutName).collect(Collectors.toList());
+    }
+
+
+    @Named("toParkingLotResultListWithName")
+    public final List<ParkingLotResult> toParkingLotResultListWithName(@NotNull List<Tuple> parkingLotWithNameTupleList) {
+        return parkingLotWithNameTupleList.stream().map(this::toParkingLotResultWithName).collect(Collectors.toList());
+    }
+
+
+    @Named("toParkingLotList")
+    public final List<ParkingLot> toParkingLotList(@NotNull List<ParkingLotEntity> parkingLotEntityList) {
+        return parkingLotEntityList.stream().map(this::toParkingLot).collect(Collectors.toList());
+    }
 }

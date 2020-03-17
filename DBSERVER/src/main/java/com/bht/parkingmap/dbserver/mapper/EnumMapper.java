@@ -41,7 +41,7 @@ import lombok.Setter;
  * @author bht
  */
 @Component
-@Setter(onMethod = @__(@Autowired), onParam = @__(@NotNull))
+@Setter(onMethod = @__(@Autowired))
 @Mapper(componentModel = "spring", nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
 public abstract class EnumMapper implements BaseBean {
 
@@ -63,32 +63,32 @@ public abstract class EnumMapper implements BaseBean {
     }
 
     @Named("toUserRoleFromId")
-    UserRole toUserRole(Long userRoleId) {
+    UserRole toUserRole(@NotNull Long userRoleId) {
         return USER_ROLE_MAP.get(userRoleId);
     }
 
     @Named("toUserRole")
-    UserRole toUserRole(UserRoleEntity userRoleEntity) {
+    UserRole toUserRole(@NotNull UserRoleEntity userRoleEntity) {
         return USER_ROLE_BI_MAP.get(userRoleEntity);
     }
 
     @Named("toUserRoleEntity")
-    public UserRoleEntity toUserRoleEntity(UserRole userRole) {
+    public UserRoleEntity toUserRoleEntity(@NotNull UserRole userRole) {
         return USER_ROLE_BI_MAP.inverse().get(userRole);
     }
 
     @Named("toParkingLotTypeFromId")
-    ParkingLotType toParkingLotType(Long parkingLotTypeId) {
+    ParkingLotType toParkingLotType(@NotNull Long parkingLotTypeId) {
         return PARKING_LOT_TYPE_MAP.get(parkingLotTypeId);
     }
 
     @Named("toParkingLotType")
-    ParkingLotType toParkingLotType(ParkingLotTypeEntity parkingLotTypeEntity) {
+    ParkingLotType toParkingLotType(@NotNull ParkingLotTypeEntity parkingLotTypeEntity) {
         return PARKING_LOT_TYPE_BI_MAP.get(parkingLotTypeEntity);
     }
 
     @Named("toParkingLotTypeEntity")
-    public ParkingLotTypeEntity toParkingLotTypeEntity(ParkingLotType parkingLotType) {
+    public ParkingLotTypeEntity toParkingLotTypeEntity(@NotNull ParkingLotType parkingLotType) {
         return PARKING_LOT_TYPE_BI_MAP.inverse().get(parkingLotType);
     }
 
