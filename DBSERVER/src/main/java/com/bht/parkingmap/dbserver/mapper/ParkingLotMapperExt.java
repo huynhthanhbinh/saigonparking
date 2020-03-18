@@ -67,8 +67,8 @@ final class ParkingLotMapperExt {
         }
 
         parkingLotInformationEntity.setName(parkingLotInformation.getName());
-        parkingLotInformationEntity.setPhone(parkingLotInformation.getPhone());
         parkingLotInformationEntity.setAddress(parkingLotInformation.getAddress());
+        parkingLotInformationEntity.setPhone(parkingLotInformation.getPhone().isEmpty() ? null : parkingLotInformation.getPhone());
 
         parkingLotEntity.setLatitude(parkingLot.getLatitude());
         parkingLotEntity.setLongitude(parkingLot.getLongitude());
