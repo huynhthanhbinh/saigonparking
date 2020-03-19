@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 import org.mapstruct.NullValueMappingStrategy;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotInformation;
@@ -16,8 +17,10 @@ import com.bht.parkingmap.api.proto.parkinglot.ParkingLotType;
 import com.bht.parkingmap.api.proto.user.Customer;
 import com.bht.parkingmap.api.proto.user.User;
 import com.bht.parkingmap.api.proto.user.UserRole;
-import com.bht.parkingmap.dbserver.util.ImageUtil;
+import com.bht.parkingmap.dbserver.service.extra.ImageService;
 import com.google.protobuf.ByteString;
+
+import lombok.Setter;
 
 /**
  *
@@ -33,8 +36,11 @@ import com.google.protobuf.ByteString;
  * @author bht
  */
 @Component
+@Setter(onMethod = @__(@Autowired))
 @Mapper(componentModel = "spring", nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
 abstract class CustomizedMapper {
+
+    private ImageService imageService;
 
     static final String DEFAULT_STRING_VALUE = "";
     static final Short DEFAULT_SHORT_VALUE = 0;
@@ -74,7 +80,7 @@ abstract class CustomizedMapper {
 
     @Named("toEncodedParkingLotImage")
     ByteString toEncodedParkingLotImage(@NotNull Integer parkingLotId) throws IOException {
-        return com.bht.parkingmap.api.util.ImageUtil.encodeImage(ImageUtil.getImage(
-                "plot/plot" + parkingLotId, ImageUtil.ImageExtension.JPG));
+        return com.bht.parkingmap.api.util.ImageUtil.encodeImage(imageService.getImage(
+                "plot" + parkingLotId, ImageService.ImageExtension.JPG));
     }
 }

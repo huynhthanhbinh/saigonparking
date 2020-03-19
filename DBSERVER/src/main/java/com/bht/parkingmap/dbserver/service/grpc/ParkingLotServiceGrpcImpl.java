@@ -15,7 +15,7 @@ import com.bht.parkingmap.api.proto.parkinglot.ParkingLotServiceGrpc.ParkingLotS
 import com.bht.parkingmap.api.proto.parkinglot.ScanningByRadiusRequest;
 import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotLimitEntity;
 import com.bht.parkingmap.dbserver.mapper.ParkingLotMapper;
-import com.bht.parkingmap.dbserver.service.ParkingLotService;
+import com.bht.parkingmap.dbserver.service.main.ParkingLotService;
 import com.bht.parkingmap.dbserver.util.LoggingUtil;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.Int64Value;

@@ -12,7 +12,7 @@ import com.bht.parkingmap.api.proto.user.User;
 import com.bht.parkingmap.api.proto.user.UserServiceGrpc.UserServiceImplBase;
 import com.bht.parkingmap.dbserver.mapper.EnumMapper;
 import com.bht.parkingmap.dbserver.mapper.UserMapper;
-import com.bht.parkingmap.dbserver.service.UserService;
+import com.bht.parkingmap.dbserver.service.main.UserService;
 import com.bht.parkingmap.dbserver.util.LoggingUtil;
 import com.google.protobuf.Int64Value;
 
