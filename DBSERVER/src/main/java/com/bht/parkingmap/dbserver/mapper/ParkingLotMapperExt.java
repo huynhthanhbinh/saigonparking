@@ -16,8 +16,13 @@ import com.bht.parkingmap.dbserver.repository.parkinglot.ParkingLotRepository;
 import lombok.AllArgsConstructor;
 
 /**
+ *
  * Parking Lot Mapper Extension
  * this class implement override methods of ParkingLotMapper
+ *
+ * Note that Ext class in declared as final non-public
+ * in order to hide this class from outside of mapper package
+ * It is expected to be seen only by mapper class, here is ParkingLotMapper
  *
  * for using repository inside Component class,
  * we need to {@code @Autowired} it by Spring Dependency Injection

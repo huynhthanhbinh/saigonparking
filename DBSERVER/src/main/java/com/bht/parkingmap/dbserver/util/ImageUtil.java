@@ -14,6 +14,18 @@ import org.apache.logging.log4j.Level;
 import com.bht.parkingmap.dbserver.configuration.AppConfiguration;
 
 /**
+ * This is util class for processing images purpose
+ * such as get/save/delete images,
+ * for using only in Parking Map Project here
+ *
+ * Currently using image store on machine only
+ * In the future using cloud storage such as Amazon S3
+ * to minimize role of server, minimize server storage
+ *
+ * Just use server to process only, not for storing, for example:
+ * + communicate with RDBMS in Amazon RDS, via SSMS
+ * + storing image, document in Amazon S3, via REST
+ * + web-front end will interact with web-server on upper layer
  *
  * @author bht
  */

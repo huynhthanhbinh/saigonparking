@@ -7,6 +7,12 @@ import org.springframework.stereotype.Component;
 
 /**
  *
+ * This class is used for testing purpose only
+ * or used for getting spring bean dynamically
+ * via calling method getBean()
+ * with 1 param only is bean class,
+ * eg. {@code getBean(ParkingLotService.class)}
+ *
  * @author bht
  */
 @Component

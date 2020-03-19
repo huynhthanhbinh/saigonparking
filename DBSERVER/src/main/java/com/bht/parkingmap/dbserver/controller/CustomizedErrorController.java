@@ -6,6 +6,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  *
+ * Customized Error Controller
+ * for web output via HTTP port
+ *
+ * Current Parking-map-service open 2 different ports:
+ * 1st one is HTTP port --> communicate server via web
+ * 2nd one is gRPC port --> communicate server via RPC
+ *
  * @author bht
  */
 @Controller

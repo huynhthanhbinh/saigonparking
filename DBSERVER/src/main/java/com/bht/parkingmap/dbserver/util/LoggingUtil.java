@@ -5,6 +5,24 @@ import org.apache.logging.log4j.Level;
 import lombok.extern.log4j.Log4j2;
 
 /**
+ * This is util class for logging purpose
+ * Logging methods here have been customized
+ * for using only in Parking Map Project here
+ *
+ * Current project using logging framework of Apache
+ * That is Log4J - logging for java, which 'til now has 2 versions
+ * Log4J  --> Log4J version 1.x
+ * Log4J2 --> Log4J version 2.x, which consider to be the fastest java logging framework
+ *
+ * Log4J can be config through properties file:
+ * log4j.properties / log4j,xml ,...   --> for version 1.x
+ * log4j2.properties / log4j2.xml ,... --> for version 2.x
+ *
+ * Parking-map service is now logging on 2 side
+ * Console logging + File logging (rolling)
+ *
+ * See the project's logging configurations
+ * on classpath folder, file log4j2.properties.
  *
  * @author bht
  */

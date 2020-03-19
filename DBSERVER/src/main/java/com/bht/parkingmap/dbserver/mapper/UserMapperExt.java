@@ -6,8 +6,13 @@ import org.springframework.stereotype.Component;
 import lombok.AllArgsConstructor;
 
 /**
+ *
  * User Mapper Extension
  * this class implement override methods of UserMapper
+ *
+ * Note that Ext class in declared as final non-public
+ * in order to hide this class from outside of mapper package
+ * It is expected to be seen only by mapper class, here is UserMapper
  *
  * for using repository inside Component class,
  * we need to {@code @Autowired} it by Spring Dependency Injection

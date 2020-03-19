@@ -21,21 +21,21 @@ public final class SpringBeanLifeCycle implements BaseBean, DestructionAwareBean
     @Override
     public void initialize() {
         BaseBean.super.initialize();
-        LoggingUtil.log(Level.INFO, "SPRING", "BeanCreation", "springBeanLifeCycle");
+        LoggingUtil.log(Level.DEBUG, "SPRING", "BeanCreation", "springBeanLifeCycle");
     }
 
 
     @Override
     public void destroy() {
         BaseBean.super.destroy();
-        LoggingUtil.log(Level.INFO, "SPRING", "BeanDestruction", "springBeanLifeCycle");
+        LoggingUtil.log(Level.DEBUG, "SPRING", "BeanDestruction", "springBeanLifeCycle");
     }
 
 
     @Override
     public Object postProcessBeforeInitialization(@NonNull Object bean, @NonNull String beanName) {
         if (!(bean instanceof Proxy) && bean.getClass().getPackage().getName().startsWith(AppConfiguration.BASE_PACKAGE_SERVER)) {
-            LoggingUtil.log(Level.INFO, "SPRING", "BeanCreation", beanName);
+            LoggingUtil.log(Level.DEBUG, "SPRING", "BeanCreation", beanName);
         }
         return DestructionAwareBeanPostProcessor.super.postProcessBeforeInitialization(bean, beanName);
     }
@@ -44,7 +44,7 @@ public final class SpringBeanLifeCycle implements BaseBean, DestructionAwareBean
     @Override
     public void postProcessBeforeDestruction(@NonNull Object bean, @NonNull String beanName) {
         if (!(bean instanceof Proxy) && bean.getClass().getPackage().getName().startsWith(AppConfiguration.BASE_PACKAGE_SERVER)) {
-            LoggingUtil.log(Level.INFO, "SPRING", "BeanDestruction", beanName);
+            LoggingUtil.log(Level.DEBUG, "SPRING", "BeanDestruction", beanName);
         }
     }
 }

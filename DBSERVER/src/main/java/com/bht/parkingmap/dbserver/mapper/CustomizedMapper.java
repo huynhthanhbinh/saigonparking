@@ -21,11 +21,20 @@ import com.google.protobuf.ByteString;
 
 /**
  *
+ * Mapper for the others & default object of each type
+ *
+ * Note that customized class and all of
+ * its attributes, its methods are declared as non-public
+ * in order to hide this class and its methods, its attributes
+ * from outside of mapper package
+ *
+ * It is expected to be seen only by mapper class
+ *
  * @author bht
  */
 @Component
 @Mapper(componentModel = "spring", nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
-public abstract class CustomizedMapper {
+abstract class CustomizedMapper {
 
     static final String DEFAULT_STRING_VALUE = "";
     static final Short DEFAULT_SHORT_VALUE = 0;

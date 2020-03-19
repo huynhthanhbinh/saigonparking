@@ -21,6 +21,10 @@ import lombok.Setter;
 
 /**
  *
+ * Mapper class for user entities and its families
+ * Mapper is used for mapping objects from different layers
+ * For example here is: map Entity obj to DTO obj and vice versa
+ *
  * @author bht
  */
 @Component

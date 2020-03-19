@@ -24,6 +24,7 @@ import com.google.common.collect.HashBiMap;
 import lombok.Setter;
 
 /**
+ *
  * this class is self-customized mapper for all enums, include:
  *      + UserRole:       3 role --> ADMIN, CUSTOMER, PARKING_LOT_EMPLOYEE
  *      + ParkingLotType: 3 type --> PRIVATE, BUILDING, STREET
