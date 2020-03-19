@@ -15,7 +15,7 @@ import com.bht.parkingmap.dbserver.annotation.InheritedComponent;
 @Configuration
 @EnableTransactionManagement
 @SuppressWarnings("squid:S1118")
-@Import(MessageQueueConfiguration.class)
+@Import(AwsConfiguration.class)
 @EntityScan(basePackages = AppConfiguration.BASE_PACKAGE_ENTITY)
 @ComponentScan(basePackages = AppConfiguration.BASE_PACKAGE_SERVER,
         includeFilters = @ComponentScan.Filter(InheritedComponent.class))

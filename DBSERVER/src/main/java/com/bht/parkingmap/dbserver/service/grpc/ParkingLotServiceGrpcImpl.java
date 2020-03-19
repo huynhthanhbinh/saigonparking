@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.logging.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLot;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotIdList;
@@ -35,7 +36,7 @@ import lombok.AllArgsConstructor;
  * @author bht
  */
 @GRpcService
-@AllArgsConstructor
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
 
     private final ParkingLotService parkingLotService;

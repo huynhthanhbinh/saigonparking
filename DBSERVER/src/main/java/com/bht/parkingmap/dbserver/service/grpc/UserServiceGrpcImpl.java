@@ -2,6 +2,7 @@ package com.bht.parkingmap.dbserver.service.grpc;
 
 import org.apache.logging.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bht.parkingmap.api.proto.user.Customer;
 import com.bht.parkingmap.api.proto.user.LoginRequest;
@@ -31,7 +32,7 @@ import lombok.AllArgsConstructor;
  * @author bht
  */
 @GRpcService
-@AllArgsConstructor
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public final class UserServiceGrpcImpl extends UserServiceImplBase {
 
     private final UserService userService;

@@ -47,3 +47,6 @@ Last updated:       Wed, March 11th, 2020
 
 15. The best way to use SQL functions in JPQL or Criteria API queries with JPA and Hibernate
         https://vladmihalcea.com/hibernate-sql-function-jpql-criteria-api-query/
+
+16. File Upload Download Delete with Spring boot and Amazon S3
+        https://medium.com/@ChamithKodikara/file-upload-download-with-spring-boot-and-amazon-s3-24c94b85c600

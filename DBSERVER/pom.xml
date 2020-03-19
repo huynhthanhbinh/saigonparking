@@ -160,6 +160,11 @@
             <version>${springboot.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>${aws.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

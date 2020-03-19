@@ -1,0 +1,96 @@
+package com.bht.parkingmap.dbserver.service.impl;
+
+import java.io.File;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.apache.logging.log4j.Level;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.S3Object;
+import com.bht.parkingmap.dbserver.service.S3Service;
+import com.bht.parkingmap.dbserver.util.LoggingUtil;
+
+import lombok.AllArgsConstructor;
+
+/**
+ *
+ * this class implements all services relevant to amazon S3
+ * S3 is a cloud storage approach for web-services, provided by amazon
+ *
+ * for clean code purpose,
+ * using {@code @AllArgsConstructor} for Service class
+ * it will {@code @Autowired} all attributes declared inside
+ * hide {@code @Autowired} as much as possible in code
+ * remember to mark all attributes as {@code private final}
+ *
+ * @author bht
+ */
+@Service
+@Transactional
+@AllArgsConstructor(onConstructor = @__(@Autowired))
+public class S3ServiceImpl implements S3Service {
+
+    private final AmazonS3 amazonS3Client;
+
+    @Qualifier("bucketName")
+    private final String bucketName;
+
+    @Override
+    public S3Object getFile(@NotEmpty String fileName) {
+        S3Object file = null;
+        try {
+            file = amazonS3Client.getObject(bucketName, fileName);
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getS3File(\"%s\")", fileName));
+
+        } catch (AmazonServiceException exception) {
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getS3File(\"%s\")", fileName));
+        }
+        return file;
+    }
+
+
+    @Override
+    public void saveFile(@NotEmpty String fileName, @NotNull File file) {
+        try {
+            amazonS3Client.putObject(bucketName, fileName, file);
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("saveS3File(\"%s\")", fileName));
+
+        } catch (AmazonServiceException exception) {
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("saveS3File(\"%s\")", fileName));
+        }
+    }
+
+
+    @Override
+    public void deleteFile(@NotEmpty String fileName) {
+        try {
+            amazonS3Client.deleteObject(bucketName, fileName);
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("deleteS3File(\"%s\")", fileName));
+
+        } catch (AmazonServiceException exception) {
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("deleteS3File(\"%s\")", fileName));
+        }
+    }
+}

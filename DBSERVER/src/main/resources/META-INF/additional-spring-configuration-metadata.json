@@ -29,6 +29,26 @@
       "name": "database.pass",
       "type": "java.lang.String",
       "description": "Password in DBMS to connect database server."
+    },
+    {
+      "name": "aws.access.key.id",
+      "type": "java.lang.String",
+      "description": "Access key id of aws."
+    },
+    {
+      "name": "aws.access.key.secret",
+      "type": "java.lang.String",
+      "description": "Access key secret of aws."
+    },
+    {
+      "name": "aws.region",
+      "type": "java.lang.String",
+      "description": "Region of aws."
+    },
+    {
+      "name": "aws.bucket",
+      "type": "java.lang.String",
+      "description": "Bucket of amazon S3."
     }
   ]
 }
