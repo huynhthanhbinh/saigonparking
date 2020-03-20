@@ -7,13 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.bht.parkingmap.dbserver.entity.user.UserEntity;
+import com.bht.parkingmap.dbserver.repository.custom.UserRepositoryCustom;
 
 /**
  *
  * @author bht
  */
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
+public interface UserRepository extends JpaRepository<UserEntity, Long>, UserRepositoryCustom {
 
     /**
      *
@@ -25,7 +26,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             "JOIN FETCH U.userRoleEntity UR " +
             "WHERE U.id = ?1")
     UserEntity getById(@NotNull Long id);
-
 
     /**
      *

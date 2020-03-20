@@ -11,13 +11,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotEntity;
+import com.bht.parkingmap.dbserver.repository.custom.ParkingLotRepositoryCustom;
 
 /**
  *
  * @author bht
  */
 @Repository
-public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Long> {
+public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Long>, ParkingLotRepositoryCustom {
 
     /**
      *

@@ -53,3 +53,9 @@ Last updated:       Sat, March 21st, 2020
 
 17. 10 Common Hibernate Mistakes That Cripple Your Performance
         https://thoughts-on-java.org/common-hibernate-mistakes-cripple-performance/
+
+18. Where does the @Transactional annotation belong? Service layer or Repository layer ?
+        https://stackoverflow.com/questions/1079114/where-does-the-transactional-annotation-belong
+
+19. Add Custom Functionality to a Spring Data Repository
+        https://dzone.com/articles/add-custom-functionality-to-a-spring-data-reposito
