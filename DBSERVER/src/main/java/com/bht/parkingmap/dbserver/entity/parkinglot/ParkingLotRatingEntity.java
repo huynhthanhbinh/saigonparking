@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.SelectBeforeUpdate;
+import org.hibernate.validator.constraints.Range;
 
 import com.bht.parkingmap.dbserver.base.BaseEntity;
 import com.bht.parkingmap.dbserver.entity.user.CustomerEntity;
@@ -45,6 +46,7 @@ public final class ParkingLotRatingEntity extends BaseEntity {
     @JoinColumn(name = "[PARKING_LOT_ID]", referencedColumnName = "[ID]", nullable = false)
     private ParkingLotEntity parkingLotEntity;
 
+    @Range(min = 1, max = 5)
     @Column(name = "[RATING]", nullable = false)
     private Short rating;
 

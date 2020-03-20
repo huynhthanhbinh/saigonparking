@@ -1,6 +1,6 @@
 Document's name:    Parking Map Project References
 Author:             Huynh Thanh Binh
-Last updated:       Wed, March 11th, 2020
+Last updated:       Sat, March 21st, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -50,3 +50,6 @@ Last updated:       Wed, March 11th, 2020
 
 16. File Upload Download Delete with Spring boot and Amazon S3
         https://medium.com/@ChamithKodikara/file-upload-download-with-spring-boot-and-amazon-s3-24c94b85c600
+
+17. 10 Common Hibernate Mistakes That Cripple Your Performance
+        https://thoughts-on-java.org/common-hibernate-mistakes-cripple-performance/

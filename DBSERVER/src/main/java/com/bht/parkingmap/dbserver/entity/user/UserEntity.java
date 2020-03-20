@@ -15,6 +15,7 @@ import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
+import com.bht.parkingmap.dbserver.annotation.EmailValidation;
 import com.bht.parkingmap.dbserver.base.BaseEntity;
 
 import lombok.AllArgsConstructor;
@@ -54,6 +55,7 @@ public class UserEntity extends BaseEntity {
     @Column(name = "[PASSWORD]", nullable = false)
     protected String password;
 
+    @EmailValidation
     @Column(name = "[EMAIL]", nullable = false, unique = true)
     protected String email;
 
