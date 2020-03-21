@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import com.bht.parkingmap.api.proto.user.Customer;
 import com.bht.parkingmap.api.proto.user.ParkingLotEmployee;
 import com.bht.parkingmap.api.proto.user.User;
+import com.bht.parkingmap.dbserver.configuration.AppConfiguration;
 import com.bht.parkingmap.dbserver.entity.user.CustomerEntity;
 import com.bht.parkingmap.dbserver.entity.user.ParkingLotEmployeeEntity;
 import com.bht.parkingmap.dbserver.entity.user.UserEntity;
@@ -31,7 +32,9 @@ import lombok.Setter;
 @DependsOn("userMapperExt")
 @SuppressWarnings("UnmappedTargetProperties")
 @Setter(onMethod = @__(@Autowired))
-@Mapper(componentModel = "spring", nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT,
+@Mapper(componentModel = "spring",
+        implementationPackage = AppConfiguration.BASE_PACKAGE_SERVER + ".mapper.impl",
+        nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT,
         uses = {EnumMapper.class, CustomizedMapper.class})
 public abstract class UserMapper {
 
@@ -59,7 +62,7 @@ public abstract class UserMapper {
 
 
     @Named("toCustomerWithoutUserInfo")
-    @Mapping(target = "userInfo", expression = "java(customizedMapper.DEFAULT_USER)")
+    @Mapping(target = "userInfo", ignore = true)
     @Mapping(target = "firstName", source = "firstName", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "lastName", source = "lastName", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "phone", source = "phone", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")

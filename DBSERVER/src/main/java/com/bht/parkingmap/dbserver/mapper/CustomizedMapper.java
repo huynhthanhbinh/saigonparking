@@ -17,6 +17,7 @@ import com.bht.parkingmap.api.proto.parkinglot.ParkingLotType;
 import com.bht.parkingmap.api.proto.user.Customer;
 import com.bht.parkingmap.api.proto.user.User;
 import com.bht.parkingmap.api.proto.user.UserRole;
+import com.bht.parkingmap.dbserver.configuration.AppConfiguration;
 import com.bht.parkingmap.dbserver.service.extra.ImageService;
 import com.google.protobuf.ByteString;
 
@@ -37,49 +38,50 @@ import lombok.Setter;
  */
 @Component
 @Setter(onMethod = @__(@Autowired))
-@Mapper(componentModel = "spring", nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
-abstract class CustomizedMapper {
+@Mapper(componentModel = "spring",
+        implementationPackage = AppConfiguration.BASE_PACKAGE_SERVER + ".mapper.impl",
+        nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
+public abstract class CustomizedMapper {
 
     private ImageService imageService;
 
-    static final String DEFAULT_STRING_VALUE = "";
-    static final Short DEFAULT_SHORT_VALUE = 0;
-    static final Integer DEFAULT_INT_VALUE = 0;
-    static final Long DEFAULT_LONG_VALUE = 0L;
-    static final Double DEFAULT_DOUBLE_VALUE = 0.0;
-    static final Boolean DEFAULT_BOOL_VALUE = Boolean.FALSE;
-    static final ByteString DEFAULT_BYTE_STRING_VALUE = ByteString.EMPTY;
+    public static final String DEFAULT_STRING_VALUE = "";
+    public static final Short DEFAULT_SHORT_VALUE = 0;
+    public static final Integer DEFAULT_INT_VALUE = 0;
+    public static final Long DEFAULT_LONG_VALUE = 0L;
+    public static final Double DEFAULT_DOUBLE_VALUE = 0.0;
+    public static final Boolean DEFAULT_BOOL_VALUE = Boolean.FALSE;
+    public static final ByteString DEFAULT_BYTE_STRING_VALUE = ByteString.EMPTY;
 
-    static final UserRole DEFAULT_USER_ROLE = UserRole.UNRECOGNIZED;
-    static final ParkingLotType DEFAULT_PARKING_LOT_TYPE = ParkingLotType.UNRECOGNIZED;
+    public static final UserRole DEFAULT_USER_ROLE = UserRole.UNRECOGNIZED;
+    public static final ParkingLotType DEFAULT_PARKING_LOT_TYPE = ParkingLotType.UNRECOGNIZED;
 
-    static final User DEFAULT_USER = User.getDefaultInstance();
-    static final Customer DEFAULT_CUSTOMER = Customer.getDefaultInstance();
-    static final ParkingLotInformation DEFAULT_PARKING_LOT_INFORMATION = ParkingLotInformation.getDefaultInstance();
-
+    public static final User DEFAULT_USER = User.getDefaultInstance();
+    public static final Customer DEFAULT_CUSTOMER = Customer.getDefaultInstance();
+    public static final ParkingLotInformation DEFAULT_PARKING_LOT_INFORMATION = ParkingLotInformation.getDefaultInstance();
 
     @Named("toTimeString")
-    String toTimeString(@NotNull Time time) {
+    public String toTimeString(@NotNull Time time) {
         return time.toString();
     }
 
     @Named("toTime")
-    Time toTime(@NotNull String timeString) {
+    public Time toTime(@NotNull String timeString) {
         return Time.valueOf(timeString);
     }
 
     @Named("toTimestampString")
-    String toTimestampString(@NotNull Timestamp timestamp) {
+    public String toTimestampString(@NotNull Timestamp timestamp) {
         return timestamp.toString();
     }
 
     @Named("toTimestamp")
-    Timestamp toTimestamp(@NotNull String timestampString) {
+    public Timestamp toTimestamp(@NotNull String timestampString) {
         return Timestamp.valueOf(timestampString);
     }
 
     @Named("toEncodedParkingLotImage")
-    ByteString toEncodedParkingLotImage(@NotNull Integer parkingLotId) throws IOException {
+    public ByteString toEncodedParkingLotImage(@NotNull Integer parkingLotId) throws IOException {
         return com.bht.parkingmap.api.util.ImageUtil.encodeImage(imageService.getImage(
                 "plot" + parkingLotId, ImageService.ImageExtension.JPG));
     }

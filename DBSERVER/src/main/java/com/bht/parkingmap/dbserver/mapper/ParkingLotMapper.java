@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLot;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotInformation;
 import com.bht.parkingmap.api.proto.parkinglot.ParkingLotResult;
+import com.bht.parkingmap.dbserver.configuration.AppConfiguration;
 import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotEntity;
 import com.bht.parkingmap.dbserver.entity.parkinglot.ParkingLotInformationEntity;
 
@@ -35,7 +36,9 @@ import lombok.Setter;
 @DependsOn("parkingLotMapperExt")
 @SuppressWarnings("UnmappedTargetProperties")
 @Setter(onMethod = @__(@Autowired))
-@Mapper(componentModel = "spring", nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT,
+@Mapper(componentModel = "spring",
+        implementationPackage = AppConfiguration.BASE_PACKAGE_SERVER + ".mapper.impl",
+        nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT,
         uses = {EnumMapper.class, CustomizedMapper.class})
 public abstract class ParkingLotMapper {
 
@@ -49,7 +52,7 @@ public abstract class ParkingLotMapper {
     @Mapping(target = "longitude", expression = "java(parkingLotWithoutNameTuple.get(3, Double.class))")
     @Mapping(target = "availableSlot", expression = "java(parkingLotWithoutNameTuple.get(4, Short.class))")
     @Mapping(target = "totalSlot", expression = "java(parkingLotWithoutNameTuple.get(5, Short.class))")
-    abstract ParkingLotResult toParkingLotResultWithoutName(@NotNull Tuple parkingLotWithoutNameTuple);
+    public abstract ParkingLotResult toParkingLotResultWithoutName(@NotNull Tuple parkingLotWithoutNameTuple);
 
 
     @Named("toParkingLotResultWithName")
@@ -60,7 +63,7 @@ public abstract class ParkingLotMapper {
     @Mapping(target = "longitude", expression = "java(parkingLotWithNameTuple.get(4, Double.class))")
     @Mapping(target = "availableSlot", expression = "java(parkingLotWithNameTuple.get(5, Short.class))")
     @Mapping(target = "totalSlot", expression = "java(parkingLotWithNameTuple.get(6, Short.class))")
-    abstract ParkingLotResult toParkingLotResultWithName(@NotNull Tuple parkingLotWithNameTuple);
+    public abstract ParkingLotResult toParkingLotResultWithName(@NotNull Tuple parkingLotWithNameTuple);
 
 
     @Named("toParkingLotInformation")
@@ -71,7 +74,7 @@ public abstract class ParkingLotMapper {
     @Mapping(target = "numberOfRating", source = "NRating", defaultExpression = "java(customizedMapper.DEFAULT_SHORT_VALUE)")
     @Mapping(target = "imageData", source = "id", qualifiedByName = "toEncodedParkingLotImage", defaultExpression = "java(customizedMapper.DEFAULT_BYTE_STRING_VALUE)")
     @Mapping(target = "version", source = "version", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
-    abstract ParkingLotInformation toParkingLotInformation(@NotNull ParkingLotInformationEntity parkingLotInformationEntity) throws IOException;
+    public abstract ParkingLotInformation toParkingLotInformation(@NotNull ParkingLotInformationEntity parkingLotInformationEntity) throws IOException;
 
 
     @Named("toParkingLot")
