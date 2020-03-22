@@ -1,6 +1,6 @@
 Document's name:    Parking Map Project References
 Author:             Huynh Thanh Binh
-Last updated:       Sat, March 21st, 2020
+Last updated:       Mon, March 23rd, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -68,3 +68,18 @@ Last updated:       Sat, March 21st, 2020
 
 22. JPA Cannot resolve column/table IntelliJ IDEA
         https://stackoverflow.com/questions/29155350/jpa-cannot-resolve-column-intellij
+
+23. Hibernate N+1 query issue when fetching @OneToOne associations with JPA Criteria and @LazyToOne
+        https://discourse.hibernate.org/t/hibernate-n-1-query-issue-when-fetching-onetoone-associations-with-jpa-criteria-and-lazytoone/2037
+
+24. The best way to map a @OneToOne relationship with JPA and Hibernate
+        https://vladmihalcea.com/the-best-way-to-map-a-onetoone-relationship-with-jpa-and-hibernate/
+
+25. How to select rows with no matching entry in another table ?
+        https://stackoverflow.com/questions/4076098/how-to-select-rows-with-no-matching-entry-in-another-table
+
+26. Difference between LEFT JOIN and LEFT JOIN FETCH in Hibernate? --> prevent from N+1 too --> "FETCH" means load immediately !
+        https://stackoverflow.com/questions/6838574/difference-between-left-join-and-left-join-fetch-in-hibernate
+
+27. Spring Data JPA - Reference Documentation
+        https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#reference

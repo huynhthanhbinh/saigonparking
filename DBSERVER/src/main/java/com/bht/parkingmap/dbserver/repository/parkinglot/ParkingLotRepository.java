@@ -36,6 +36,22 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Lo
     ParkingLotEntity getById(@NotNull Long id);
 
 
+    /**
+     *
+     * get all parking lot entity
+     * which has not been referenced
+     * by any of parking lot employee
+     */
+    @Query("SELECT PL " +
+            "FROM ParkingLotEntity PL " +
+            "JOIN FETCH PL.parkingLotTypeEntity PLT " +
+            "JOIN FETCH PL.parkingLotLimitEntity PLL " +
+            "JOIN FETCH PL.parkingLotInformationEntity PLI " +
+            "LEFT JOIN FETCH PL.parkingLotEmployeeEntity PLE " +
+            "WHERE PLE.parkingLotEntity.id IS NULL ")
+    List<ParkingLotEntity> getAllIndependent();
+
+
     @Query("SELECT FUNCTION('dbo.CHECK_AVAILABILITY', P.id) " +
             "FROM ParkingLotEntity P " +
             "WHERE P.id = ?1")
@@ -50,7 +66,7 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Lo
     List<Long> checkUnavailability(@NotEmpty List<Long> parkingLotIdList);
 
 
-    @SuppressWarnings({"SqlResolve", "SpringDataRepositoryMethodReturnTypeInspection"})
+    @SuppressWarnings({"SpringDataRepositoryMethodReturnTypeInspection"})
     @Query(value = "SELECT P.ID, P.PARKING_LOT_TYPE_ID, P.LATITUDE, P.LONGITUDE, PLL.AVAILABILITY, PLL.CAPACITY " +
             "FROM PARKING_LOT P " +
             "INNER JOIN (SELECT ID, CAPACITY, AVAILABILITY FROM PARKING_LOT_LIMIT) AS PLL ON PLL.ID = P.ID " +
@@ -67,7 +83,7 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Lo
             @NotNull Integer nResult);
 
 
-    @SuppressWarnings({"SqlResolve", "SpringDataRepositoryMethodReturnTypeInspection"})
+    @SuppressWarnings({"SpringDataRepositoryMethodReturnTypeInspection"})
     @Query(value = "SELECT P.ID, PLI.NAME, P.PARKING_LOT_TYPE_ID, P.LATITUDE, P.LONGITUDE, PLL.AVAILABILITY, PLL.CAPACITY " +
             "FROM PARKING_LOT P " +
             "INNER JOIN (SELECT ID, NAME FROM PARKING_LOT_INFORMATION) AS PLI ON PLI.ID = P.ID " +

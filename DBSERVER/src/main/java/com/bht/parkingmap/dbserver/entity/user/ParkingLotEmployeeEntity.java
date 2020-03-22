@@ -36,7 +36,7 @@ import lombok.experimental.SuperBuilder;
 @PrimaryKeyJoinColumn(name = "[ID]")
 public final class ParkingLotEmployeeEntity extends UserEntity {
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "[PARKING_LOT_ID]", referencedColumnName = "[ID]")
+    @OneToOne(cascade = CascadeType.ALL, optional = false)
+    @JoinColumn(name = "[PARKING_LOT_ID]", referencedColumnName = "[ID]", nullable = false)
     private ParkingLotEntity parkingLotEntity;
 }

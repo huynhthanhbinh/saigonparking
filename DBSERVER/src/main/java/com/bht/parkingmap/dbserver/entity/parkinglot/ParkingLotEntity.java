@@ -13,6 +13,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
 import com.bht.parkingmap.dbserver.annotation.TimeFlowValidation;
@@ -72,7 +74,8 @@ public final class ParkingLotEntity extends BaseEntity {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToOne(mappedBy = "parkingLotEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @LazyToOne(LazyToOneOption.NO_PROXY)
+    @OneToOne(mappedBy = "parkingLotEntity", cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
     private ParkingLotEmployeeEntity parkingLotEmployeeEntity;
 
     @ToString.Exclude
