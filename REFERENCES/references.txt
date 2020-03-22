@@ -59,3 +59,12 @@ Last updated:       Sat, March 21st, 2020
 
 19. Add Custom Functionality to a Spring Data Repository
         https://dzone.com/articles/add-custom-functionality-to-a-spring-data-reposito
+
+20. The best way to map a projection query to a DTO (Data Transfer Object) with JPA and Hibernate
+        https://vladmihalcea.com/the-best-way-to-map-a-projection-query-to-a-dto-with-jpa-and-hibernate/
+
+21. IntelliJ IDEA highlights @Entity class names with “Cannot resolve symbol” in JPQL
+        https://stackoverflow.com/questions/12420996/intellij-idea-highlights-entity-class-names-with-cannot-resolve-symbol-in-jpq
+
+22. JPA Cannot resolve column/table IntelliJ IDEA
+        https://stackoverflow.com/questions/29155350/jpa-cannot-resolve-column-intellij
