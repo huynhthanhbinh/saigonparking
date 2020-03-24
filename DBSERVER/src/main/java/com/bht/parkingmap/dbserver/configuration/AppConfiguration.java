@@ -1,8 +1,10 @@
 package com.bht.parkingmap.dbserver.configuration;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.bht.parkingmap.dbserver.annotation.InheritedComponent;
@@ -20,4 +22,9 @@ import com.bht.parkingmap.dbserver.annotation.InheritedComponent;
 public class AppConfiguration {
 
     public static final String BASE_PACKAGE_SERVER = "com.bht.parkingmap.dbserver"; // base package of DBSERVER module
+
+    @Bean
+    public ProtobufHttpMessageConverter protobufHttpMessageConverter() {
+        return new ProtobufHttpMessageConverter();
+    }
 }

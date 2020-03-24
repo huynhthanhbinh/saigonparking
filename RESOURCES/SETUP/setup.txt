@@ -1,0 +1,170 @@
+Document's name:    Parking Map Project Setup Guide
+Author:             Huynh Thanh Binh
+Last updated:       Wed, March 11th, 2020
+========================================================================================================================
+All necessary setup files are provided in Parking Map Project's private Google Drive. Please do NOT share anything outside
+
+Step 00: Download all necessary things: ( dependencies / libraries / tools / plugins / project )
+
+    1. Download all tools + setup + settings from Google Drive.
+
+                            username: saigonparkingmap
+                            password: 0506122076
+
+    2. Clone Parking Map project from private repository:
+
+                            https://github.com/huynhthanhbinh/parkingmap
+
+Step 01: Setup JAVA
+
+    1. Install Java 8 included JDK 1.8 + JRE 1.8 (using jdk-8u241-windows-x64.exe)
+    2. Add JAVA_HOME variable (path to JDK folder) to environment variables
+    3. Add %JAVA_HOME%\bin (path to JDK bin folder) to PATH in environment variables
+
+Step 02: Setup MAVEN
+
+    1. Unzip Maven setup file into Program File folder (using apache-maven-3.6.3-bin.zip)
+    2. Add M2_HOME variable (path to recent unzipped folder) to environment variables
+    3. Add %M2_HOME%\bin (path to MVN bin folder) to PATH in environment variables
+
+Step 03: Setup PARKING-MAP environment variables
+
+    1. Add PARKINGMAP_RESOURCES_DIR (path to RESOURCES folder) to SYSTEM Variables in Environment Variables
+    2. Restart your PC for system to apply new environment variables !!! (Must do before move to next step!)
+
+Step 04: Check if set up environment variables is success or not
+
+    1. Open terminal/command line
+    2. Tap java -version (if the command line show java's version -> setup java is success !)
+    3. Tap  mvn -version (if the command line show maven's version -> setup maven is success !)
+
+Step 05: Install IDE:
+
+    1. Install IntelliJ IDEA IDE (Ultimate version is recommended, using student's email to register)
+    2. Remove previous project setting (if exists)
+    2. Import current project setting into IntelliJ IDE (please using IntelliJ_Settings.jar provided)
+    3. Start IntelliJ IDEA IDE and start to install plugins as the following step
+
+Step 06: Install IDE must-have plugins: (please install all of these following plugins)
+
+    1. SonarLint
+    2. Grep Console
+    3. Save Actions
+    4. Spring Assistant
+    5. Jpa Support
+    6. Protobuf Support
+    7. MapStruct Support
+    8. Lombok
+
+Step 07: Setup Save Actions plugin:
+
+    1. Open File -> Settings -> Other Settings -> Save Actions
+    2. Please select all options as mentioned below
+        2.1.  Activate save actions on save
+        2.2.  Activate save actions on shortcut (Ctrl + Shift + S): please using this shortcut key on saving code
+        2.3.  Optimize imports
+        2.4.  Reformat file
+        2.5.  Add missing @Override annotations
+        2.6.  Add blocks to if/while/for statements
+        2.7.  Remove unnecessary this to fields and methods
+        2.8.  Remove final from private method
+        2.9.  Remove unnecessary final to local variable or parameter
+        2.10. Remove explicit generic type for diamond
+        2.11. Remove unused suppress warning annotations
+        2.12. Remove unnecessary semicolons
+    3. Click Apply to save these settings then click OK to close
+
+Step 08: Open project
+
+    0. Right click on parkingmap folder -> Select "Open Folder as IntelliJ IDEA Project"
+    1. Project is now open
+    2. Wait for IDE to index project, install missing dependencies(libraries)
+    3. Select right version of Maven !!! (> 3.5)
+        3.1. Open File -> Settings
+        3.2. Tap "Maven" -> Maven Settings will be shown on the right side
+        3.3. Select Maven Home Directory (for eg. C:/Program Files/Apache/apache-maven-3.6.1)
+        3.4. Click Apply to save these settings then click OK to close
+    4. Project will be shown as modules (folder icon with small square blue marker)
+    5. There are now 5 modules in current project, included 1 parent, 4 children
+        5.0. You will see each module will have a unique .pom file (special file of Maven)
+        5.1. Parent module: parkingmap  -> we will mention it as parkingmap's pom (or parent pom)
+        5.2. Children module:
+            5.2.1. DBSERVER -> we will mention it as DBSERVER's pom
+            5.2.2. WEBSERVER -> we will mention it as WEBSERVER's pom
+            5.2.3. EMULATOR -> we will mention it as EMULATOR's pom
+            5.2.2. API -> we will mention it as API's pom
+    6. If modules are not shown in the left panel or any pom has red-underline as errors, please do as followings steps:
+        6.1. Open the parent pom (parkingmap's pom) in the IDE
+        6.2. As the pom has been shown on the editor, please right-click on the editor
+        6.3. Select Maven -> Reimport
+        6.4. Modules will be shown and all red-underline in any pom file must be disappeared ! Otherwise, contact me !
+    7. PLEASE update password of your SQL server 'sa' account in SERVER/src/main/resources/application.properties
+    8. Finish opening project for the 1st time ! Congrats !
+    9. If IntelliJ IDE throw error on building or project file structure missing .iml file on any module, please do:
+        9.1. Run terminal in ROOT folder (parkingmap folder)
+        9.2. $ mvn idea:idea (for generating IntelliJ IDEA project files)
+        9.3. $ mvn clean (for cleaning all previous built source)
+        9.4. $ mvn package (for rebuilt & package project as new)
+    
+Step 09: Understand project components / project structure
+
+    Inside project folder, you will see these folder:
+        1. API                  : contains API module
+        2. EMULATOR             : contains EMULATOR module
+        3. WEBSERVER            : contains WEBSERVER module
+        4. DBSERVER             : contains DBSERVER module
+        5. BUILD                : contains built files: *.jar / *.war
+        6. DATABASE             : contains database scripts and diagram
+        7. REFERENCES           : contains all references as documents or photos
+        8. RESOURCES            : contains all resources of server: images,...
+        9. SETUP                : contains SETUP files, setup guide (this file)
+        0. Another git's file included:
+            0.1. .gitattributes : for using LFS (Git Large File Storage)
+            0.2. .gitignore     : for ignoring special files or folders
+            0.3. LICENSE        : Apache License of this project
+            0.4. README.md      : Introduction of this project
+
+Step 10: Try to run server (LOCAL) by package and run executable .jar file (server-parking-map.jar)
+        (this step requires Java, Maven, IDE, project already installed and set up, see Step01 -> Step08)
+
+    0. If you did not have the project's database on your computer, please do the following steps: (SETUP DATABASE STEP)
+        0.1. Open SSMS (Microsoft SQL Server Management Studio)
+        0.2. Create new database, named it 'PARKINGMAP'
+        0.3. Open DATABASE folder and execute all .sql files by order
+            0.3.1. 1st, execute 01_db_schema.sql
+            0.3.2. 2nd, execute 02_db_constraint_default.sql
+            0.3.3. 3rd, execute 03_db_constraint_check.sql
+            0.3.4. 4th, execute 04_db_trigger.sql
+            0.3.5. 5th, execute 05_db_function.sql
+            0.3.6. 6th, execute 06_db_data.sql
+            0.3.7. do NOT need to execute 07_db_query.sql, it just contains some sample written queries
+            0.3.8. all project database has been set up successfully, see 08_db_diagram for more detail about relationships
+    1. Register PARKING-MAP environment variables (see Step03), if you have NOT done it before
+    2. Update password of 'sa' account (see Step08 - 8), if you have NOT done it before
+    3. Package SERVER as standalone application (.jar file) by doing some steps below:
+        3.1. Change package type from 'war' to 'jar' inside SERVER/pom.xml and save ! ( <packaging>jar</packaging> )
+        3.2. Run TERMINAL (Command Prompt / Cmder) inside ROOT folder (folder parkingmap)
+        3.3. Clean all previous built class, by tapping the command: $ mvn clean
+        3.4. Compile new class and build executable .jar file, by tapping the command: $ mvn package
+        3.5. Close TERMINAL, move to BUILD folder to get the executable recently packaged .jar file!
+
+    !!!!!!!!!!!!! (Please do ALL of these steps below whenever you execute each Server (*server-parking-map.jar) !!!!!!!!!!!!!)
+    4. Run Terminal (Command Prompt / Cmder) inside BUILD folder - folder contains all built executable file such as .jar
+    5. Change code page (for using Vietnamese) then start all server one by one:
+        5.0. Order of server starting: (wait for 30 seconds for each turn)
+            5.0.1. 1st: start dbserver
+            5.0.2. 2nd: start webserver
+        5.1. Starting each server by running the following command: (remember to change name *.jar -> change * to jar's file name)
+
+        $ chcp 65001 && cls && java -jar -Dfile.encoding=UTF-8 -Xms512m -Xmx3072m -XX:ReservedCodeCacheSize=512m -XX:OnOutOfMemoryError="shutdown -r" dbserver-parking-map.jar
+
+            0. chcp                                   : change code page
+            1. cls                                    : clear screen
+            2. &&                                     : concat command string
+            3. java -jar                              : syntax for execute .jar file
+            4. -Dfile.encoding=UTF-8                  : set encoding UTF-8
+            5. -Xms512m                               : heap size min
+            6. -Xmx3072m                              : heap size max
+            7. -XX:ReservedCodeCacheSize=512m         : for faster running
+            8. -XX:OnOutOfMemoryError="shutdown -r"   : when server is out of memory -> shutdown -> restart
+            9. server-spring-boot.jar                 : name of executable jar file (here is Server executable jar)
