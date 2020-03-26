@@ -12,8 +12,6 @@
     <name>PARKINGMAP</name>
     <modules>
         <module>API</module>
-        <module>EMULATOR</module>
-        <module>WEBSERVER</module>
         <module>DBSERVER</module>
     </modules>
 
@@ -22,6 +20,7 @@
         Parking Map Project is aim to help people to find nearby parking-lot by current or target location.
         This project is our group's final project at Ho Chi Minh University of Science, focus on Ho Chi Minh City only.
     </description>
+
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -59,19 +58,24 @@
     </developers>
 
     <properties>
-        <revision>1.0</revision> <!-- version of project -->
+        <revision>v1.0</revision> <!-- version of project -->
         <java.version>1.8</java.version> <!-- version of java (jdk) -->
 
+        <project.docker.hub-id>saigonparkingmap</project.docker.hub-id>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.release.classifier>parking-map</project.release.classifier>
-        <project.release.directory>BUILD</project.release.directory>
 
         <maven.test.skip>true</maven.test.skip>
         <maven.compiler.version>3.8.1</maven.compiler.version>
         <maven.compiler.source>${java.version}</maven.compiler.source> <!-- jdk 1.8 (java8) -->
         <maven.compiler.target>${java.version}</maven.compiler.target> <!-- jdk 1.8 (java8) -->
-        <maven.war-plugin.version>3.2.3</maven.war-plugin.version>
-        <maven.antrun-plugin.version>1.8</maven.antrun-plugin.version>
+
+        <maven.plugin.os.version>1.6.2</maven.plugin.os.version>
+        <maven.plugin.war.version>3.2.3</maven.plugin.war.version>
+        <maven.plugin.antrun.version>1.8</maven.plugin.antrun.version>
+        <maven.plugin.docker.version>1.2.2</maven.plugin.docker.version>
+        <maven.plugin.protobuf.version>0.6.1</maven.plugin.protobuf.version>
+        <maven.plugin.resources.version>3.1.0</maven.plugin.resources.version>
 
         <javax.version>4.0.1</javax.version>
         <hibernate.version>5.4.10.Final</hibernate.version>
@@ -79,20 +83,28 @@
         <springboot.version>2.2.5.RELEASE</springboot.version>
         <springframework.version>5.2.4.RELEASE</springframework.version>
 
+        <aws.version>1.11.747</aws.version>
         <grpc.version>1.27.2</grpc.version>
         <protobuf.version>3.11.4</protobuf.version>
-        <os-maven-plugin.version>1.6.2</os-maven-plugin.version>
-        <protobuf-maven-plugin.version>0.6.1</protobuf-maven-plugin.version>
         <grpc-spring-boot-starter.version>3.5.2</grpc-spring-boot-starter.version>
 
-        <aws.version>1.11.747</aws.version>
+        <junit.version>4.12</junit.version>
         <log4j.version>2.13.1</log4j.version>
         <lombok.version>1.18.12</lombok.version>
         <mapstruct.version>1.3.1.Final</mapstruct.version>
-
-        <junit.version>4.12</junit.version>
-        <jacpfx.version>2.1</jacpfx.version>
-        <jfoenix.version>8.0.8</jfoenix.version>
-        <controlsfx.version>8.40.15</controlsfx.version>
     </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>${maven.plugin.docker.version}</version>
+                <configuration>
+                    <baseImage>openjdk:8-jdk-alpine</baseImage>
+                    <imageName>${project.docker.hub-id}/${project.artifactId}</imageName>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

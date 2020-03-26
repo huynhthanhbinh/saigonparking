@@ -1,0 +1,25 @@
+Document's name:    Parking Map Project Frequently-Use Commands
+Author:             Huynh Thanh Binh
+Last updated:       Thu, March 26th, 2020
+========================================================================================================================
+
+$ Ctrl + C --> terminate session
+
+$ mvn clean
+$ mvn compile
+$ mvn package
+$ mvn docker:build
+
+$ docker login
+$ docker logout
+
+$ docker images
+$ docker images -f dangling=true
+$ docker rmi -f <image1_id> <image2_id> ... <imageN_id>
+
+$ docker-compose -f <docker-compose.yml_path> ps
+$ docker-compose -f <docker-compose.yml_path> rm
+$ docker-compose -f <docker-compose.yml_path> up
+
+$ docker push <hub_id>/<repo_name>:<repo_tag>
+$ docker pull <hub_id>/<repo_name>:<repo_tag>

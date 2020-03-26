@@ -1,0 +1,85 @@
+Document's name:    Parking Map Project References
+Author:             Huynh Thanh Binh
+Last updated:       Mon, March 23rd, 2020
+========================================================================================================================
+
+01. gRPC error handling:
+        https://grpc.io/docs/guides/error/
+
+02. gRPC authentication:
+        https://grpc.io/docs/guides/auth/
+
+03. gRPC spring boot starter:
+        https://github.com/LogNet/grpc-spring-boot-starter
+
+04. spring + rabbitmq + protobuf:
+        https://acupple.github.io/2016/12/26/spring-rabbitmq-protobuf/
+
+05. limit query result set to top N rows only:
+        https://vladmihalcea.com/sql-query-limit-top-n-rows/
+
+06. MicroServices With AngularJS, Spring Boot, and Kafka:
+        https://dzone.com/articles/developing-async-microservices-architecture-using
+
+07. Envoy and gRPC-Web: a fresh new alternative to REST:
+        https://blog.envoyproxy.io/envoy-and-grpc-web-a-fresh-new-alternative-to-rest-6504ce7eb880
+
+08. Compare gRPC-gateway vs gRPC-Web:
+        https://medium.com/zalopay-engineering/grpc-gateway-vs-grpc-web-vn-4d85868a80e2
+
+09. How to inherit properties from a base class entity using @MappedSuperclass with JPA and Hibernate
+        https://vladmihalcea.com/how-to-inherit-properties-from-a-base-class-entity-using-mappedsuperclass-with-jpa-and-hibernate/
+
+10. Lombok @Builder with Inheritance: @SuperBuilder
+        https://www.baeldung.com/lombok-builder-inheritance
+
+11. How to implement Equals and HashCode for JPA entities
+        https://vladmihalcea.com/hibernate-facts-equals-and-hashcode/
+
+12. Hibernate: Should I include the 'version' field to hashcode() and equals() methods
+        https://stackoverflow.com/questions/7373545/hibernate-should-i-include-the-version-field-to-hashcode-and-equals-metho
+
+13. Hibernate tutorial + best practice
+        https://vladmihalcea.com/tutorials/hibernate/
+
+14. Apache Kafka Tutorial – Door to Gain Expertise in Kafka
+        https://data-flair.training/blogs/apache-kafka-tutorial/
+
+15. The best way to use SQL functions in JPQL or Criteria API queries with JPA and Hibernate
+        https://vladmihalcea.com/hibernate-sql-function-jpql-criteria-api-query/
+
+16. File Upload Download Delete with Spring boot and Amazon S3
+        https://medium.com/@ChamithKodikara/file-upload-download-with-spring-boot-and-amazon-s3-24c94b85c600
+
+17. 10 Common Hibernate Mistakes That Cripple Your Performance
+        https://thoughts-on-java.org/common-hibernate-mistakes-cripple-performance/
+
+18. Where does the @Transactional annotation belong? Service layer or Repository layer ?
+        https://stackoverflow.com/questions/1079114/where-does-the-transactional-annotation-belong
+
+19. Add Custom Functionality to a Spring Data Repository
+        https://dzone.com/articles/add-custom-functionality-to-a-spring-data-reposito
+
+20. The best way to map a projection query to a DTO (Data Transfer Object) with JPA and Hibernate
+        https://vladmihalcea.com/the-best-way-to-map-a-projection-query-to-a-dto-with-jpa-and-hibernate/
+
+21. IntelliJ IDEA highlights @Entity class names with “Cannot resolve symbol” in JPQL
+        https://stackoverflow.com/questions/12420996/intellij-idea-highlights-entity-class-names-with-cannot-resolve-symbol-in-jpq
+
+22. JPA Cannot resolve column/table IntelliJ IDEA
+        https://stackoverflow.com/questions/29155350/jpa-cannot-resolve-column-intellij
+
+23. Hibernate N+1 query issue when fetching @OneToOne associations with JPA Criteria and @LazyToOne
+        https://discourse.hibernate.org/t/hibernate-n-1-query-issue-when-fetching-onetoone-associations-with-jpa-criteria-and-lazytoone/2037
+
+24. The best way to map a @OneToOne relationship with JPA and Hibernate
+        https://vladmihalcea.com/the-best-way-to-map-a-onetoone-relationship-with-jpa-and-hibernate/
+
+25. How to select rows with no matching entry in another table ?
+        https://stackoverflow.com/questions/4076098/how-to-select-rows-with-no-matching-entry-in-another-table
+
+26. Difference between LEFT JOIN and LEFT JOIN FETCH in Hibernate? --> prevent from N+1 too --> "FETCH" means load immediately !
+        https://stackoverflow.com/questions/6838574/difference-between-left-join-and-left-join-fetch-in-hibernate
+
+27. Spring Data JPA - Reference Documentation
+        https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#reference

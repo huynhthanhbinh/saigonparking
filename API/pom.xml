@@ -15,28 +15,32 @@
         <version>${revision}</version>
     </parent>
 
+    <properties>
+        <proto.path>${basedir}/src/main/proto</proto.path>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
             <version>${protobuf.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
-
-        <!-- grpc-netty -->
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-netty</artifactId>
             <version>${grpc.version}</version>
         </dependency>
-
-        <!-- grpc-protobuf -->
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-protobuf</artifactId>
             <version>${grpc.version}</version>
         </dependency>
-
-        <!-- grpc-stub -->
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-stub</artifactId>
@@ -50,59 +54,24 @@
             <extension>
                 <groupId>kr.motd.maven</groupId>
                 <artifactId>os-maven-plugin</artifactId>
-                <version>${os-maven-plugin.version}</version>
+                <version>${maven.plugin.os.version}</version>
             </extension>
         </extensions>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${springboot.version}</version>
-                <configuration>
-                    <layout>NONE</layout>
-                    <excludeGroupIds>
-                        io.grpc,
-                        io.netty,
-                        io.perfmark,
-                        io.opencensus,
-                        org.codehaus.mojo,
-                        org.checkerframework,
-                        com.google.j2objc,
-                        com.google.guava,
-                        com.google.android,
-                        com.google.api.grpc,
-                        com.google.protobuf,
-                        com.google.code.gson,
-                        com.google.errorprone,
-                        com.google.code.findbugs,
-                    </excludeGroupIds>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                        <configuration>
-                            <finalName>${project.artifactId}</finalName>
-                            <classifier>${project.release.classifier}</classifier>
-                            <outputDirectory>${project.parent.basedir}/${project.release.directory}</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.xolstice.maven.plugins</groupId>
                 <artifactId>protobuf-maven-plugin</artifactId>
-                <version>${protobuf-maven-plugin.version}</version>
+                <version>${maven.plugin.protobuf.version}</version>
                 <configuration>
                     <pluginId>grpc-java</pluginId>
+                    <protoSourceRoot>${proto.path}</protoSourceRoot>
+                    <attachProtoSources>false</attachProtoSources>
                     <protocArtifact>
                         com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}
                     </protocArtifact>
                     <pluginArtifact>
                         io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}
                     </pluginArtifact>
-                    <attachProtoSources>false</attachProtoSources>
                 </configuration>
                 <executions>
                     <execution>
