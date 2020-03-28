@@ -11,8 +11,8 @@
 
     <name>PARKINGMAP</name>
     <modules>
-        <module>API</module>
-        <module>DBSERVER</module>
+        <module>api</module>
+        <module>appserver</module>
     </modules>
 
     <url>https://github.com/huynhthanhbinh/parkingmap</url>

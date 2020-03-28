@@ -1,0 +1,8 @@
+Document's name:    Parking Map Project Experienced Problems
+Author:             Huynh Thanh Binh
+Last updated:       Fri, March 27th, 2020
+========================================================================================================================
++ N+1 ORM query issue
++ Data integrity constraint when moving from monolithic to micro-services architecture
++ Don't know where is log files in Docker containers
++ Docker access container directory: permission denied

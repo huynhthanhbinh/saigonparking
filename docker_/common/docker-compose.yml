@@ -1,0 +1,7 @@
+version: '2.0'
+services:
+    dbserver:
+        image: saigonparkingmap/dbserver:v1.0
+        ports:
+            - "9090:9090"
+            - "9999:9999"
