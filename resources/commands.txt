@@ -8,11 +8,10 @@ $ Ctrl + C --> terminate session
 $ mvn clean
 $ mvn compile
 $ mvn package
+$ mvn install
 
 $ mvn idea:idea
-
 $ mvn docker:build
-$ mvn clean package docker:build
 
 $ docker login
 $ docker logout
