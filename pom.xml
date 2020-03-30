@@ -102,8 +102,7 @@
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>${maven.plugin.docker.version}</version>
                 <configuration>
-                    <baseImage>openjdk:8-jdk-alpine</baseImage>
-                    <imageName>${project.docker.hub-id}/${project.artifactId}</imageName>
+                    <skipDockerBuild>true</skipDockerBuild>
                 </configuration>
             </plugin>
         </plugins>
