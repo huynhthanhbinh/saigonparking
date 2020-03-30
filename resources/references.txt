@@ -83,3 +83,9 @@ Last updated:       Mon, March 23rd, 2020
 
 27. Spring Data JPA - Reference Documentation
         https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#reference
+
+28. Giới thiệu và cài đặt Kong làm API Gateway cho hệ thống Microservices
+        https://techtalk.vn/gioi-thieu-va-cai-dat-kong-lam-api-gateway-cho-he-thong-microservices.html
+
+29. How to Manage your gRPC Services with Kong
+        https://konghq.com/blog/manage-grpc-services-kong/
