@@ -15,3 +15,6 @@ ______               _     _                  ___  ___                        __
 <h6>3. 1653012 - Pham Viet Minh Dao - 1653012@student.hcmus.edu.vn</h6>
 <h6>4. 1653020 - Vu Hai - 1653020@student.hcmus.edu.vn</h6>
 <h6>5. 1653076 - Dang Duc Tai - 1653076@student.hcmus.edu.vn</h6>
+<br/>
+
+![](resources/references/00_ParkingMap_Architecture.png)
