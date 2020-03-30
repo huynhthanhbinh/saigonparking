@@ -17,8 +17,11 @@ $ docker login
 $ docker logout
 
 $ docker ps
+$ docker ps -a
 $ docker container inspect <container_id>
 $ docker stop <container_id>
+
+$ docker exec -it <container_id> /bin/sh
 $ docker exec -it <container_id> ls
 $ docker exec -it <container_id> <path>
 $ docker exec -it <container_id> <command>

@@ -1,41 +1,80 @@
 version: '3'
 networks:
-    kong-net:
-        driver: bridge
+  kong-net:
+    driver: bridge
+
+
 services:
-    gateway:
-        image: kong:2.0.2
-        networks:
-            - kong-net
-        volumes:
-            - ./../kong:/var/lib/docker/volumes/kong-vol/_data
-        environment:
-            KONG_SSL:                       "off"
-            KONG_DATABASE:                  "off"
-            KONG_DECLARATIVE_CONFIG:        /var/lib/docker/volumes/kong-vol/_data/kong.yml
-            #KONG_SSL_CERT:                  /
-            #KONG_SSL_CERT_KEY:              /
-            KONG_PROXY_LISTEN:              0.0.0.0:8000, 0.0.0.0:8443 ssl, 0.0.0.0:9080 http2, 0.0.0.0:9081 http2 ssl
-            KONG_ADMIN_LISTEN:              127.0.0.1:8001, 127.0.0.1:8444 ssl
-        ports:
-            - "8000:8000"
-            - "8443:8443"
-            - "8001:8001"
-            - "8444:8444"
-            - "9080:9080"
-            - "9081:9081"
-        healthcheck:
-            test: ["CMD", "kong", "health"]
-            interval: 5s
-            timeout: 2s
-            retries: 15
-        restart: on-failure
-    appserver:
-        image: saigonparkingmap/appserver:v1.0
-        networks:
-            - kong-net
-        ports:
-            - "9090:9090"
-            - "9999:9999"
-        depends_on:
-            - gateway
+  
+  kong-database:
+    image: postgres:9.6
+    networks:
+      - kong-net
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=kong
+      - POSTGRES_USER=kong
+      - POSTGRES_PASSWORD=kong
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "kong"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+  
+  
+  kong-migration:
+    image: kong:2.0.2
+    networks:
+      - kong-net
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
+      KONG_PG_PASSWORD: kong
+    links:
+      - kong-database
+    depends_on:
+      - kong-database
+    command: "kong migrations bootstrap"
+    restart: on-failure
+  
+  
+  gateway:
+    image: kong:2.0.2
+    networks:
+      - kong-net
+    environment:
+      #KONG_SSL_CERT:            /
+      #KONG_SSL_CERT_KEY:        /
+      KONG_DATABASE:     postgres
+      KONG_PG_HOST:      kong-database
+      KONG_PG_PASSWORD:  kong
+      KONG_PROXY_LISTEN: 0.0.0.0:8000, 0.0.0.0:8443 ssl, 0.0.0.0:9080 http2, 0.0.0.0:9081 http2 ssl
+    ports:
+      - "8000:8000"
+      - "8443:8443"
+      - "9080:9080"
+      - "9081:9081"
+      - "127.0.0.1:8001:8001"
+      - "127.0.0.1:8444:8444"
+    depends_on:
+      - kong-database
+      - kong-migration
+    healthcheck:
+      test: ["CMD", "kong", "health"]
+      interval: 5s
+      timeout: 2s
+      retries: 15
+    restart: on-failure
+  
+  
+  appserver:
+    image: saigonparkingmap/appserver:v1.0
+    networks:
+      - kong-net
+    ports:
+      - "9090:9090"
+      - "9999:9999"
+    depends_on:
+      - gateway
