@@ -8,7 +8,7 @@ curl -XPOST localhost:8001/services \
   --data port=9999 \
   --data connect_timeout=30000 \
   --data write_timeout=30000 \
-  --data read_timeout=30000 \
+  --data read_timeout=30000
   #--client_certificate=
 
 # route parking lot service
