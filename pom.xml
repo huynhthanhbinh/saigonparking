@@ -13,7 +13,6 @@
     <modules>
         <module>api</module>
         <module>appserver</module>
-        <module>webserver</module>
     </modules>
 
     <url>https://github.com/huynhthanhbinh/parkingmap</url>

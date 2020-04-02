@@ -3,7 +3,6 @@ networks:
   kong-net:
     driver: bridge
 
-
 services:
   
   kong-database:
@@ -18,10 +17,10 @@ services:
       - POSTGRES_PASSWORD=kong
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "kong"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-    restart: always
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    restart: on-failure
   
   
   kong-migration:
@@ -29,9 +28,11 @@ services:
     networks:
       - kong-net
     environment:
-      KONG_DATABASE: postgres
-      KONG_PG_HOST: kong-database
-      KONG_PG_PASSWORD: kong
+      KONG_DATABASE:     postgres
+      KONG_PG_HOST:      kong-database
+      KONG_PG_DATABASE:  kong
+      KONG_PG_USER:      kong
+      KONG_PG_PASSWORD:  kong
     links:
       - kong-database
     depends_on:
@@ -45,10 +46,13 @@ services:
     networks:
       - kong-net
     environment:
+      KONG_LOG_LEVEL:    info
       #KONG_SSL_CERT:            /
       #KONG_SSL_CERT_KEY:        /
       KONG_DATABASE:     postgres
       KONG_PG_HOST:      kong-database
+      KONG_PG_DATABASE:  kong
+      KONG_PG_USER:      kong
       KONG_PG_PASSWORD:  kong
       KONG_PROXY_LISTEN: 0.0.0.0:8000, 0.0.0.0:8443 ssl, 0.0.0.0:9080 http2, 0.0.0.0:9081 http2 ssl
     ports:

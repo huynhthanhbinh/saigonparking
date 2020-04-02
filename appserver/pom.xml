@@ -20,6 +20,7 @@
         <docker.directory>src/main/docker</docker.directory>
         <resources.directory>src/main/resources</resources.directory>
 
+        <basePackage>com.bht.parkingmap.appserver</basePackage>
         <start-class>com.bht.parkingmap.appserver.AppServer</start-class>
         <project.package.name>${project.build.finalName}-${project.release.classifier}.jar</project.package.name>
     </properties>
@@ -175,6 +176,7 @@
         <resources>
             <resource>
                 <directory>${resources.directory}</directory>
+                <filtering>true</filtering>
             </resource>
         </resources>
         <plugins>
