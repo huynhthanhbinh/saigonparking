@@ -1,0 +1,34 @@
+{
+  "properties": [
+    {
+      "name": "gateway.connection.host",
+      "type": "java.lang.String",
+      "description": "Host of PARKINGMAP gateway."
+    },
+    {
+      "name": "gateway.connection.port.http",
+      "type": "java.lang.Integer",
+      "description": "Port HTTP of PARKINGMAP gateway."
+    },
+    {
+      "name": "gateway.connection.port.grpc",
+      "type": "java.lang.Integer",
+      "description": "Port GRPC of PARKINGMAP gateway."
+    },
+    {
+      "name": "gateway.connection.idle-timeout",
+      "type": "java.lang.Integer",
+      "description": "Connection timeout in milliseconds to PARKINGMAP gateway."
+    },
+    {
+      "name": "gateway.connection.max-inbound-message-size",
+      "type": "java.lang.Integer",
+      "description": "Connection max inbound message size in megabytes to PARKINGMAP gateway."
+    },
+    {
+      "name": "gateway.connection.max-inbound-metadata-size",
+      "type": "java.lang.Integer",
+      "description": "Connection max inbound metadata size in megabytes to PARKINGMAP gateway."
+    }
+  ]
+}
