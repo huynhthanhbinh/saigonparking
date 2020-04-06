@@ -26,7 +26,8 @@ public class Emulator extends SpringBootServletInitializer {
     public static void main(String[] args) {
         SpringApplication.run(Emulator.class, args);
 
-        System.out.println("\n\n\n" + SpringApplicationContext.getBean(ParkingLotServiceGrpc.ParkingLotServiceBlockingStub.class)
-                .getParkingLotById(Int64Value.of(218)) + "\n\n\n");
+        System.out.println(SpringApplicationContext
+                .getBean(ParkingLotServiceGrpc.ParkingLotServiceBlockingStub.class)
+                .getParkingLotById(Int64Value.of(1)).getInformation());
     }
 }

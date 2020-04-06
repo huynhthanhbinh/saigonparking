@@ -78,11 +78,12 @@
         <maven.plugin.protobuf.version>0.6.1</maven.plugin.protobuf.version>
         <maven.plugin.resources.version>3.1.0</maven.plugin.resources.version>
 
+        <springboot.version>2.2.5.RELEASE</springboot.version>
+        <springframework.version>5.2.4.RELEASE</springframework.version>
+
         <javax.version>4.0.1</javax.version>
         <hibernate.version>5.4.10.Final</hibernate.version>
         <mssql-jdbc.version>8.2.0.jre8</mssql-jdbc.version>
-        <springboot.version>2.2.5.RELEASE</springboot.version>
-        <springframework.version>5.2.4.RELEASE</springframework.version>
 
         <aws.version>1.11.747</aws.version>
         <grpc.version>1.27.2</grpc.version>

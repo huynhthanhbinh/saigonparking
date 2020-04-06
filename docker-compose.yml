@@ -4,6 +4,16 @@ networks:
     driver: bridge
 
 services:
+  webserver:
+    image: saigonparkingmap/webserver:v1.0
+    networks:
+      - kong-net
+    environment:
+      TZ: Asia/Bangkok
+    ports:
+      - "80:8080"
+      - "443:8443"
+  
   
   kong-database:
     image: postgres:9.6
