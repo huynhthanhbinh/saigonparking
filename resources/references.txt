@@ -1,6 +1,6 @@
 Document's name:    Parking Map Project References
 Author:             Huynh Thanh Binh
-Last updated:       Mon, March 23rd, 2020
+Last updated:       Tue, April 7th, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -89,3 +89,12 @@ Last updated:       Mon, March 23rd, 2020
 
 29. How to Manage your gRPC Services with Kong
         https://konghq.com/blog/manage-grpc-services-kong/
+
+30. DB Less Kong tutorial
+        https://medium.com/@matias_azucas/db-less-kong-tutorial-8cbf8f70b266
+
+31. Linux github desktop
+        https://github.com/shiftkey/desktop/releases --> download .deb file
+
+32. Google Cloud DNS- Accessing a VM instance using Domain Name
+        http://www.bytesofgigabytes.com/googlecloud/google-cloud-vm-instance-dns/

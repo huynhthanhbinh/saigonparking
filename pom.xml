@@ -11,6 +11,7 @@
 
     <name>PARKINGMAP</name>
     <modules>
+        <module>gateway</module>
         <module>api</module>
         <module>appserver</module>
         <module>emulator</module>

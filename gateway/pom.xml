@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>gateway</artifactId>
+    <version>${revision}</version>
+    <packaging>jar</packaging>
+
+    <name>GATEWAY</name>
+    <parent>
+        <artifactId>core</artifactId>
+        <groupId>com.bht.parkingmap</groupId>
+        <version>${revision}</version>
+    </parent>
+
+    <properties>
+        <docker.directory>src/main/docker</docker.directory>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven.plugin.resources.version}</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <resources>
+                                <resource>
+                                    <directory>${docker.directory}</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                            <outputDirectory>${project.build.directory}/docker</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>${maven.plugin.docker.version}</version>
+                <configuration>
+                    <skipDockerBuild>false</skipDockerBuild>
+                    <imageName>${project.docker.hub-id}/${project.artifactId}:${project.version}</imageName>
+                    <dockerHost>http://localhost:2375</dockerHost>
+                    <dockerDirectory>${project.build.directory}/docker</dockerDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

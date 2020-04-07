@@ -1,4 +1,5 @@
 #!/bin/sh
+# service host: dockerhost
 
 # register parking lot service
 curl -XPOST localhost:8001/services \
@@ -6,10 +7,9 @@ curl -XPOST localhost:8001/services \
   --data protocol=grpc \
   --data host=appserver \
   --data port=9999 \
-  --data connect_timeout=30000 \
-  --data write_timeout=30000 \
-  --data read_timeout=30000
-  #--client_certificate=
+  --data connect_timeout=10000 \
+  --data write_timeout=10000 \
+  --data read_timeout=10000
 
 # route parking lot service
 curl -XPOST localhost:8001/services/parkinglot/routes \
