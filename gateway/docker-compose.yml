@@ -4,7 +4,6 @@ networks:
     driver: bridge
 
 services:
-  
   webserver:
     image: saigonparkingmap/webserver:v1.0.1
     networks:
@@ -70,6 +69,7 @@ services:
       KONG_PG_USER:       kong
       KONG_PG_PASSWORD:   kong
       KONG_PROXY_LISTEN:  0.0.0.0:8000, 0.0.0.0:8443 ssl, 0.0.0.0:9080 http2, 0.0.0.0:9081 http2 ssl
+      KONG_ADMIN_LISTEN:  0.0.0.0:8001, 0.0.0.0:8444 ssl
     ports:
       - "8000:8000"
       - "8443:8443"
