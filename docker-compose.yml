@@ -4,8 +4,9 @@ networks:
     driver: bridge
 
 services:
+  
   webserver:
-    image: saigonparkingmap/webserver:v1.0
+    image: saigonparkingmap/webserver:v1.0.1
     networks:
       - kong-net
     environment:
@@ -13,7 +14,6 @@ services:
     ports:
       - "80:8080"
       - "443:8443"
-  
   
   kong-database:
     image: postgres:9.6
@@ -34,7 +34,6 @@ services:
       retries: 3
     restart: on-failure
   
-  
   kong-migration:
     image: kong:2.0.2
     networks:
@@ -53,16 +52,17 @@ services:
     command: "kong migrations bootstrap"
     restart: on-failure
   
-  
   gateway:
     image: kong:2.0.2
     networks:
       - kong-net
+    volumes:
+      - "./certificate:/usr/local/kong/certificate"
     environment:
       TZ:                 Asia/Bangkok
       KONG_LOG_LEVEL:     info
-      #KONG_SSL_CERT:      /
-      #KONG_SSL_CERT_KEY:  /
+      KONG_SSL_CERT:      /usr/local/kong/certificate/saigonparking_server.crt
+      KONG_SSL_CERT_KEY:  /usr/local/kong/certificate/saigonparking_key.pem
       KONG_DATABASE:      postgres
       KONG_PG_HOST:       kong-database
       KONG_PG_DATABASE:   kong
@@ -86,9 +86,8 @@ services:
       retries: 15
     restart: on-failure
   
-  
   appserver:
-    image: saigonparkingmap/appserver:v1.0
+    image: saigonparkingmap/appserver:v1.0.1
     networks:
       - kong-net
     environment:

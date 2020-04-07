@@ -1,7 +1,10 @@
 Document's name:    Parking Map Project Frequently-Use Commands
 Author:             Huynh Thanh Binh
-Last updated:       Sun, March 29th, 2020
+Last updated:       Tue, April 7th, 2020
 ========================================================================================================================
+
+$ git repack -a -d --depth=250 --window=250
+$ git push origin --force --all
 
 $ Ctrl + C --> terminate session
 

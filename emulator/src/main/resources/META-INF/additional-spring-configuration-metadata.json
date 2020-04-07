@@ -29,6 +29,11 @@
       "name": "gateway.connection.max-inbound-metadata-size",
       "type": "java.lang.Integer",
       "description": "Connection max inbound metadata size in megabytes to PARKINGMAP gateway."
+    },
+    {
+      "name": "gateway.connection.certificate-path",
+      "type": "java.lang.String",
+      "description": "Path to SSL certificate of PARKINGMAP gateway."
     }
   ]
 }
