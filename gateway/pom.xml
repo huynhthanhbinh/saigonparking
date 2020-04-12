@@ -27,7 +27,7 @@
                 <version>${maven.plugin.resources.version}</version>
                 <executions>
                     <execution>
-                        <id>copy-resources</id>
+                        <id>copy-docker-resources</id>
                         <phase>validate</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -40,6 +40,21 @@
                                 </resource>
                             </resources>
                             <outputDirectory>${project.build.directory}/docker</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-proto-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/../api/src/main/proto</directory>
+                                </resource>
+                            </resources>
+                            <outputDirectory>${project.build.directory}/docker/proto</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
