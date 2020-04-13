@@ -3,8 +3,8 @@ KONG_ADMIN_HOST=localhost
 KONG_ADMIN_PORT=8001
 CONNECT_TIMEOUT=10000
 
-function registerService () {
-    printf "\n\nRegister %s service\n" $1
+registerService () {
+    printf "\nRegister %s service\n" $1
     curl -XPOST ${KONG_ADMIN_HOST}:${KONG_ADMIN_PORT}/services \
       --data name=$1 \
       --data protocol=grpc \
@@ -13,14 +13,16 @@ function registerService () {
       --data connect_timeout=$4 \
       --data write_timeout=$4 \
       --data read_timeout=$4
+    printf "\n"
 }
 
-function registerServiceRoutes () {
-    printf "\n\nRegister %s service routes\n" $1
+registerServiceRoutes () {
+    printf "\nRegister %s service routes\n" $1
     curl -XPOST ${KONG_ADMIN_HOST}:${KONG_ADMIN_PORT}/services/$1/routes \
       --data protocols=grpc \
       --data name=catch-all-$1-services \
       --data paths=$2
+    printf "\n"
 }
 
 SERVICE_NAME=user
