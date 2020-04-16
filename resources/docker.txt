@@ -1,0 +1,17 @@
+Enable TCP port 2375 for external connection to Docker - Ubuntu
+See this issue.
+Docker best practise to Control and configure Docker with systemd.
+
+Create daemon.json file in /etc/docker:
+    {"hosts": ["tcp://0.0.0.0:2375", "unix:///var/run/docker.sock"]}
+
+Add /etc/systemd/system/docker.service.d/override.conf
+    [Service]
+    ExecStart=
+    ExecStart=/usr/bin/dockerd
+
+Reload the systemd daemon:
+$ systemctl daemon-reload
+
+Restart docker:
+$ systemctl restart docker.service
