@@ -1,16 +1,16 @@
 version: '3'
 networks:
-  saigonparkingmap:
+  saigonparking-service:
     driver: bridge
 
 services:
-  
+
   appserver:
-    image: saigonparkingmap/appserver:v1.0.1
+    image: ${DOCKER_HUB_ID}/appserver:${APP_SERVER_VERSION}
     networks:
-      - saigonparkingmap
+      - saigonparking-service
     environment:
-      TZ: Asia/Bangkok
+      TZ: ${TIMEZONE}
     ports:
-      - "9090:9090"
-      - "9999:9999"
+      - "${APP_SERVER_HTTP_PORT}:${APP_SERVER_HTTP_PORT}"
+      - "${APP_SERVER_GRPC_PORT}:${APP_SERVER_GRPC_PORT}"

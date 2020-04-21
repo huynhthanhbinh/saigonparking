@@ -1,87 +1,87 @@
 version: '3'
 networks:
-  kong-net:
+  saigonparking-gateway:
     driver: bridge
 
 services:
   webserver:
-    image: saigonparkingmap/webserver:v1.0.1
+    image: ${DOCKER_HUB_ID}/webserver:${WEB_SERVER_VERSION}
     networks:
-      - kong-net
+      - saigonparking-gateway
     environment:
-      TZ: Asia/Bangkok
+      TZ: ${TIMEZONE}
     ports:
-      - "80:8080"
-      - "443:8443"
-  
-  
-  kong-database:
-    image: postgres:9.6
+      - "80:${WEB_SERVER_HTTP_DOCKER_PORT}"
+      - "443:${WEB_SERVER_HTTP_SSL_DOCKER_PORT}"
+
+
+  gateway-database:
+    image: postgres:${POSTGRES_VERSION}
     networks:
-      - kong-net
+      - saigonparking-gateway
     ports:
-      - "5432:5432"
+      - "${POSTGRES_LOCAL_PORT}:5432"
     environment:
-      TZ:                 Asia/Bangkok
-      PGTZ:               Asia/Bangkok
-      POSTGRES_DB:        kong
-      POSTGRES_USER:      kong
-      POSTGRES_PASSWORD:  kong
+      TZ:                 ${TIMEZONE}
+      PGTZ:               ${TIMEZONE}
+      POSTGRES_DB:        ${KONG_PG_DATABASE}
+      POSTGRES_USER:      ${KONG_PG_USER}
+      POSTGRES_PASSWORD:  ${KONG_PG_PASSWORD}
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "kong"]
       interval: 30s
       timeout: 30s
       retries: 3
     restart: on-failure
-  
-  
-  kong-migration:
-    image: kong:2.0.2
+
+
+  gateway-migration:
+    image: kong:${KONG_VERSION}
     networks:
-      - kong-net
+      - saigonparking-gateway
     environment:
-      TZ:                 Asia/Bangkok
-      KONG_DATABASE:      postgres
-      KONG_PG_HOST:       kong-database
-      KONG_PG_DATABASE:   kong
-      KONG_PG_USER:       kong
-      KONG_PG_PASSWORD:   kong
+      TZ:                 ${TIMEZONE}
+      KONG_DATABASE:      ${KONG_DATABASE}
+      KONG_PG_HOST:       gateway-database
+      KONG_PG_DATABASE:   ${KONG_PG_DATABASE}
+      KONG_PG_USER:       ${KONG_PG_USER}
+      KONG_PG_PASSWORD:   ${KONG_PG_PASSWORD}
     links:
-      - kong-database
+      - gateway-database
     depends_on:
-      - kong-database
+      - gateway-database
     command: "kong migrations bootstrap"
     restart: on-failure
-  
-  
+
+
   gateway:
-    image: saigonparkingmap/gateway:v1.0.1
+    image: ${DOCKER_HUB_ID}/gateway:${GATEWAY_VERSION}
     networks:
-      - kong-net
+      - saigonparking-gateway
     environment:
-      TZ:                 Asia/Bangkok
-      KONG_LOG_LEVEL:     info
-      KONG_SSL_CERT:      /usr/local/kong/certificate/saigonparking_server.crt
-      KONG_SSL_CERT_KEY:  /usr/local/kong/certificate/saigonparking_key.pem
-      KONG_DATABASE:      postgres
-      KONG_PG_HOST:       kong-database
-      KONG_PG_DATABASE:   kong
-      KONG_PG_USER:       kong
-      KONG_PG_PASSWORD:   kong
-      KONG_PROXY_LISTEN:  0.0.0.0:8000, 0.0.0.0:8443 ssl, 0.0.0.0:9080 http2, 0.0.0.0:9081 http2 ssl
-      KONG_ADMIN_LISTEN:  0.0.0.0:8001, 0.0.0.0:8444 ssl
+      TZ:                 ${TIMEZONE}
+      KONG_LOG_LEVEL:     ${KONG_LOG_LEVEL}
+      KONG_DATABASE:      ${KONG_DATABASE}
+      KONG_PG_HOST:       gateway-database
+      KONG_PG_DATABASE:   ${KONG_PG_DATABASE}
+      KONG_PG_USER:       ${KONG_PG_USER}
+      KONG_PG_PASSWORD:   ${KONG_PG_PASSWORD}
+      KONG_SSL_CERT:      ${KONG_SSL_CERT_PATH}
+      KONG_SSL_CERT_KEY:  ${KONG_SSL_CERT_KEY_PATH}
+      KONG_PROXY_LISTEN:  ${KONG_PROXY_LISTEN}
+      KONG_ADMIN_LISTEN:  ${KONG_ADMIN_LISTEN}
     ports:
-      - "8000:8000"
-      - "8443:8443"
-      - "9080:9080"
-      - "9081:9081"
-      - "127.0.0.1:8001:8001"
-      - "127.0.0.1:8444:8444"
+      - "${KONG_HTTP_PORT}:${KONG_HTTP_PORT}"
+      - "${KONG_HTTP_SSL_PORT}:${KONG_HTTP_SSL_PORT}"
+      - "${KONG_GRPC_PORT}:${KONG_GRPC_PORT}"
+      - "${KONG_GRPC_SSL_PORT}:${KONG_GRPC_SSL_PORT}"
+      - "127.0.0.1:${KONG_ADMIN_PORT}:${KONG_ADMIN_PORT}"
+      - "127.0.0.1:${KONG_ADMIN_SSL_PORT}:${KONG_ADMIN_SSL_PORT}"
     links:
-      - kong-database
+      - gateway-database
     depends_on:
-      - kong-database
-      - kong-migration
+      - gateway-database
+      - gateway-migration
     healthcheck:
       test: ["CMD", "kong", "health"]
       interval: 5s

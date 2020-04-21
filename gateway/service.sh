@@ -1,7 +1,14 @@
 #!/bin/sh
+
+# Gateway is the 1st vm instance in GCP
+# Gateway is config with static EXTERNAL IP address: referenced by www.saigonparking.wtf
 KONG_ADMIN_HOST=localhost
 KONG_ADMIN_PORT=8001
 CONNECT_TIMEOUT=10000
+
+# Service is another vm instance in GCP
+# Service is config with static INTERNAL IP address: referenced by saigonparkingservice
+SERVICE_HOST=saigonparkingservice
 
 registerService () {
     printf "\nRegister %s service\n" $1
@@ -26,7 +33,6 @@ registerServiceRoutes () {
 }
 
 SERVICE_NAME=user
-SERVICE_HOST=10.148.0.7
 SERVICE_PORT=9999
 SERVICE_PATH=/com.bht.parkingmap.api.proto.user.UserService/
 
@@ -34,7 +40,6 @@ registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOU
 registerServiceRoutes ${SERVICE_NAME} ${SERVICE_PATH}
 
 SERVICE_NAME=parkinglot
-SERVICE_HOST=10.148.0.7
 SERVICE_PORT=9999
 SERVICE_PATH=/com.bht.parkingmap.api.proto.parkinglot.ParkingLotService/
 

@@ -1,0 +1,50 @@
+Document's name:    Parking Map Project Frequently-Use Commands
+Author:             Huynh Thanh Binh
+Last updated:       Tue, April 21st, 2020
+========================================================================================================================
+
+We will simply deploy our system in 2 VM instances in GCP: Gateway & Service
+Each VM instance needs to be installed & run docker on it. (Docker host)
+Because we will deploy multiple apps as multiple docker containers in host (VM instance)
+Client request/response flow when calling an API: (there are 2 available protocols: HTTP & GRPC)
+
+                            (Docker Host)               (Docker Host)
+    __________               ___________                 ___________
+    |        |               |         |                 |         |
+    |        |    (1) SSL    |         | (2) plain-text  |         |
+    |        | ------------> | Gateway | --------------> | Service | -----|
+    | Client |               |  Host   |                 |  Host   |      | (3) Processing
+    |        | <------------ |   (A)   | <-------------- |   (B)   | <----|
+    |        |    (5) SSL    |         | (4) plain-text  |         |
+    |________|               |_________|                 |_________|
+Web/Mobile/Desktop       www.saigonparking.wtf      saigonparkingservice (private host)
+                         (static EXTERNAL IP)       (static INTERNAL IP)
+
+About these VM instances:
+
+Gateway is the 1st vm instance in GCP (A)
+Gateway prerequisites: Ubuntu 18.04, 8GB RAM, 20GB SSD, Teamviewer for Remote Control
+Gateway is config with static EXTERNAL IP address: referenced by www.saigonparking.wtf
+Gateway will be reached by Client via SSL encrypted communication(s).
+
+Gateway public ports:
+    + 80:   WEB
+    + 443:  WEB SSL
+    + 8000: API HTTP
+    + 8443: API HTTP SSL
+    + 9080: API GRPC/HTTP2
+    + 9081: API GRPC/HTTP2 SSL
+    + 8432: GATEWAY POSTGRES DB
+Gateway private ports:
+    + 8001: KONG ADMIN HTTP
+    + 8444: KONG ADMIN HTTP SSL
+
+Service is another vm instance in GCP (B)
+Service prerequisites: Ubuntu 18.04, 8GB RAM, 20GB SSD, Teamviewer for Remote Control
+Service is config with static INTERNAL IP address: referenced by saigonparkingservice
+Service will be reached by Gateway via non-SSL plain-text communication(s).
+
+Deployment:
+1. Clone/Pull newest code from parkingmap repository (this project).
+2. Run [ $ docker-compose up ] at project's gateway directory.
+3. Run [ $ docker-compose up ] at project's root directory.
