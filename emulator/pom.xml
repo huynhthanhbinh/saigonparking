@@ -10,21 +10,21 @@
 
     <name>EMULATOR</name>
     <parent>
-        <groupId>com.bht.parkingmap</groupId>
-        <artifactId>core</artifactId>
+        <groupId>com.bht.saigonparking</groupId>
+        <artifactId>saigonparking-parent</artifactId>
         <version>${revision}</version>
     </parent>
 
     <properties>
         <source.directory>src/main/java</source.directory>
         <resources.directory>src/main/resources</resources.directory>
-        <basePackage>com.bht.parkingmap.emulator</basePackage>
-        <start-class>com.bht.parkingmap.emulator.Emulator</start-class>
+        <basePackage>com.bht.saigonparking.emulator</basePackage>
+        <start-class>com.bht.saigonparking.emulator.Emulator</start-class>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>com.bht.parkingmap</groupId>
+            <groupId>com.bht.saigonparking</groupId>
             <artifactId>api</artifactId>
             <version>${revision}</version>
         </dependency>

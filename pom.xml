@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.bht.parkingmap</groupId>
-    <artifactId>core</artifactId>
+    <artifactId>saigonparking-parent</artifactId>
+    <groupId>com.bht.saigonparking</groupId>
     <packaging>pom</packaging>
     <version>${revision}</version>
 
-    <name>PARKINGMAP</name>
+    <name>SAIGONPARKING</name>
     <modules>
         <module>gateway</module>
         <module>api</module>
@@ -17,9 +17,9 @@
         <module>emulator</module>
     </modules>
 
-    <url>https://github.com/huynhthanhbinh/parkingmap</url>
+    <url>https://github.com/huynhthanhbinh/saigonparking</url>
     <description>
-        Parking Map Project is aim to help people to find nearby parking-lot by current or target location.
+        Saigon Parking Project is aim to help people to find nearby parking-lot by current or target location.
         This project is our group's final project at Ho Chi Minh University of Science, focus on Ho Chi Minh City only.
     </description>
 

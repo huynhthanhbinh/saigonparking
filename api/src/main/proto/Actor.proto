@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package com.bht.parkingmap.api.proto.user;
+package com.bht.saigonparking.api.proto.user;
 //option java_generic_services = true;
 option java_multiple_files = true;
-option java_outer_classname = "ParkingMapUser";
+option java_outer_classname = "SaigonParkingUser";
 
 import "google/protobuf/wrappers.proto";
 

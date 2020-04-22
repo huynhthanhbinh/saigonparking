@@ -1,4 +1,4 @@
-Document's name:    Parking Map Project Frequently-Use Commands
+Document's name:    Parking Map Project Deployment
 Author:             Huynh Thanh Binh
 Last updated:       Tue, April 21st, 2020
 ========================================================================================================================
@@ -45,6 +45,6 @@ Service is config with static INTERNAL IP address: referenced by saigonparkingse
 Service will be reached by Gateway via non-SSL plain-text communication(s).
 
 Deployment:
-1. Clone/Pull newest code from parkingmap repository (this project).
+1. Clone/Pull newest code from saigonparking repository (this project).
 2. Run [ $ docker-compose up ] at project's gateway directory.
 3. Run [ $ docker-compose up ] at project's root directory.

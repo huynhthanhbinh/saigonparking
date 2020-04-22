@@ -10,8 +10,8 @@
 
     <name>GATEWAY</name>
     <parent>
-        <artifactId>core</artifactId>
-        <groupId>com.bht.parkingmap</groupId>
+        <groupId>com.bht.saigonparking</groupId>
+        <artifactId>saigonparking-parent</artifactId>
         <version>${revision}</version>
     </parent>
 

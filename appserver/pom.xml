@@ -10,8 +10,8 @@
 
     <name>APP-SERVER</name>
     <parent>
-        <groupId>com.bht.parkingmap</groupId>
-        <artifactId>core</artifactId>
+        <groupId>com.bht.saigonparking</groupId>
+        <artifactId>saigonparking-parent</artifactId>
         <version>${revision}</version>
     </parent>
 
@@ -20,14 +20,14 @@
         <docker.directory>src/main/docker</docker.directory>
         <resources.directory>src/main/resources</resources.directory>
 
-        <basePackage>com.bht.parkingmap.appserver</basePackage>
-        <start-class>com.bht.parkingmap.appserver.AppServer</start-class>
+        <basePackage>com.bht.saigonparking.saigonparking</basePackage>
+        <start-class>com.bht.saigonparking.appserver.AppServer</start-class>
         <project.package.name>${project.build.finalName}-${project.release.classifier}.jar</project.package.name>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>com.bht.parkingmap</groupId>
+            <groupId>com.bht.saigonparking</groupId>
             <artifactId>api</artifactId>
             <version>${revision}</version>
         </dependency>
