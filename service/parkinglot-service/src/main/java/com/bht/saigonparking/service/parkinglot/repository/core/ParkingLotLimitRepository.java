@@ -25,6 +25,6 @@ public interface ParkingLotLimitRepository extends JpaRepository<ParkingLotLimit
             "JOIN FETCH PLL.parkingLotEntity PL " +
             "JOIN FETCH PL.parkingLotTypeEntity PLT " +
             "JOIN FETCH PL.parkingLotInformationEntity PLI " +
-            "WHERE PLI.id = ?1")
+            "WHERE PLL.id = ?1")
     ParkingLotLimitEntity getById(@NotNull Long id);
 }

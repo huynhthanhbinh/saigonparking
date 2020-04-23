@@ -51,6 +51,9 @@ public final class ParkingLotSuggestionEntity extends BaseEntity {
     @Column(name = "[IS_HANDLED]")
     private Boolean isHandled;
 
+    @Column(name = "[CUSTOMER_ID]", nullable = false)
+    private Long customerId;
+
     @EqualsAndHashCode.Exclude
     @Column(name = "[LAST_UPDATED]")
     private Timestamp lastUpdated;

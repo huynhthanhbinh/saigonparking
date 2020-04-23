@@ -48,6 +48,9 @@ public final class ParkingLotRatingEntity extends BaseEntity {
     @Column(name = "[COMMENT]")
     private String comment;
 
+    @Column(name = "[CUSTOMER_ID]", nullable = false)
+    private Long customerId;
+
     @EqualsAndHashCode.Exclude
     @Column(name = "[LAST_UPDATED]")
     private Timestamp lastUpdated;

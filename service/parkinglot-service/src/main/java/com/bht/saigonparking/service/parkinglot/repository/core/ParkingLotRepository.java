@@ -34,20 +34,6 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Lo
     ParkingLotEntity getById(@NotNull Long id);
 
 
-    /**
-     *
-     * get all parking lot entity
-     * which has not been referenced
-     * by any of parking lot employee
-     */
-    @Query("SELECT PL " +
-            "FROM ParkingLotEntity PL " +
-            "JOIN FETCH PL.parkingLotTypeEntity PLT " +
-            "JOIN FETCH PL.parkingLotLimitEntity PLL " +
-            "JOIN FETCH PL.parkingLotInformationEntity PLI ")
-    List<ParkingLotEntity> getAllIndependent();
-
-
     @Query("SELECT FUNCTION('dbo.CHECK_AVAILABILITY', P.id) " +
             "FROM ParkingLotEntity P " +
             "WHERE P.id = ?1")

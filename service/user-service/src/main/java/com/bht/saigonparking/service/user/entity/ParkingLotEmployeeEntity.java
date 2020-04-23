@@ -32,6 +32,6 @@ import lombok.experimental.SuperBuilder;
 @PrimaryKeyJoinColumn(name = "[ID]")
 public final class ParkingLotEmployeeEntity extends UserEntity {
 
-    @Column(name = "[PARKING_LOT_ID]", nullable = false)
+    @Column(name = "[PARKING_LOT_ID]", unique = true, nullable = false)
     private Long parkingLotId;
 }

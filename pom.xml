@@ -15,7 +15,6 @@
         <module>service</module>
         <module>gateway</module>
         <module>emulator</module>
-        <module>appserver</module>
     </modules>
 
     <url>https://github.com/huynhthanhbinh/saigonparking</url>

@@ -5,12 +5,22 @@ networks:
 
 services:
 
-  appserver:
-    image: ${DOCKER_HUB_ID}/appserver:${APP_SERVER_VERSION}
+  user-service:
+    image: ${DOCKER_HUB_ID}/user-service:${USER_SERVICE_VERSION}
     networks:
       - saigonparking-service
     environment:
       TZ: ${TIMEZONE}
     ports:
-      - "${APP_SERVER_HTTP_PORT}:${APP_SERVER_HTTP_PORT}"
-      - "${APP_SERVER_GRPC_PORT}:${APP_SERVER_GRPC_PORT}"
+      - "${USER_SERVICE_HTTP_PORT}:${USER_SERVICE_HTTP_PORT}"
+      - "${USER_SERVICE_GRPC_PORT}:${USER_SERVICE_GRPC_PORT}"
+
+  parkinglot-service:
+    image: ${DOCKER_HUB_ID}/parkinglot-service:${PARKING_LOT_SERVICE_VERSION}
+    networks:
+      - saigonparking-service
+    environment:
+      TZ: ${TIMEZONE}
+    ports:
+      - "${PARKING_LOT_SERVICE_HTTP_PORT}:${PARKING_LOT_SERVICE_HTTP_PORT}"
+      - "${PARKING_LOT_SERVICE_GRPC_PORT}:${PARKING_LOT_SERVICE_GRPC_PORT}"

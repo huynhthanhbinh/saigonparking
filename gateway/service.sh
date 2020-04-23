@@ -33,7 +33,7 @@ registerServiceRoutes() {
 }
 
 SERVICE_NAME=user
-SERVICE_PORT=9999
+SERVICE_PORT=8888
 SERVICE_PATH=/com.bht.saigonparking.api.grpc.user.UserService/
 
 registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOUT}

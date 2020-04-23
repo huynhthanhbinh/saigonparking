@@ -5,7 +5,6 @@ package com.bht.saigonparking.api.grpc.parkinglot;
 option java_multiple_files = true;
 
 import "google/protobuf/wrappers.proto";
-import "Actor.proto";
 
 enum ParkingLotType {
     BUILDING = 0;
@@ -59,23 +58,25 @@ message ParkingLotUnit {
 message ParkingLotRating {
     int64 id = 1;
     int64 parkingLotId = 2;
-    user.Customer customer = 3;
-    int32 rating = 4;
-    string comment = 5;
-    string lastUpdated = 6;
-    int64 version = 7;
+    int64 customerId = 3;
+    string customerFullName = 4;
+    int32 rating = 5;
+    string comment = 6;
+    string lastUpdated = 7;
+    int64 version = 8;
 }
 
 message ParkingLotSuggestion {
     int64 id = 1;
-    user.Customer customer = 2;
-    string parkingLotName = 3;
-    string address = 4;
-    double latitude = 5;
-    double longitude = 6;
-    bool isHandled = 7;
-    string lastUpdated = 8;
-    int64 version = 9;
+    int64 customerId = 2;
+    string customerFullName = 3;
+    string parkingLotName = 4;
+    string address = 5;
+    double latitude = 6;
+    double longitude = 7;
+    bool isHandled = 8;
+    string lastUpdated = 9;
+    int64 version = 10;
 }
 
 message ParkingLotIdList {
