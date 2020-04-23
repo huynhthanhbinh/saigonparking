@@ -23,7 +23,7 @@
     <dependencies>
         <dependency>
             <groupId>com.bht.saigonparking</groupId>
-            <artifactId>user-private-api</artifactId>
+            <artifactId>parkinglot-private-api</artifactId>
             <version>${revision}</version>
         </dependency>
     </dependencies>
