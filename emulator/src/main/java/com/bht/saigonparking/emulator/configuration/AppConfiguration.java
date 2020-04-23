@@ -6,10 +6,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.bht.saigonparking.api.proto.parkinglot.ParkingLotServiceGrpc;
-import com.bht.saigonparking.api.proto.parkinglot.ParkingLotServiceGrpc.ParkingLotServiceBlockingStub;
-import com.bht.saigonparking.api.proto.user.UserServiceGrpc;
-import com.bht.saigonparking.api.proto.user.UserServiceGrpc.UserServiceBlockingStub;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc.ParkingLotServiceBlockingStub;
+import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
+import com.bht.saigonparking.api.grpc.user.UserServiceGrpc.UserServiceBlockingStub;
 
 import io.grpc.ManagedChannel;
 

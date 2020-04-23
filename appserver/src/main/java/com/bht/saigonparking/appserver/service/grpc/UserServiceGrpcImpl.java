@@ -4,12 +4,12 @@ import org.apache.logging.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.bht.saigonparking.api.proto.user.Customer;
-import com.bht.saigonparking.api.proto.user.LoginRequest;
-import com.bht.saigonparking.api.proto.user.LoginResponse;
-import com.bht.saigonparking.api.proto.user.ParkingLotEmployee;
-import com.bht.saigonparking.api.proto.user.User;
-import com.bht.saigonparking.api.proto.user.UserServiceGrpc.UserServiceImplBase;
+import com.bht.saigonparking.api.grpc.user.Customer;
+import com.bht.saigonparking.api.grpc.user.LoginRequest;
+import com.bht.saigonparking.api.grpc.user.LoginResponse;
+import com.bht.saigonparking.api.grpc.user.ParkingLotEmployee;
+import com.bht.saigonparking.api.grpc.user.User;
+import com.bht.saigonparking.api.grpc.user.UserServiceGrpc.UserServiceImplBase;
 import com.bht.saigonparking.appserver.mapper.EnumMapper;
 import com.bht.saigonparking.appserver.mapper.UserMapper;
 import com.bht.saigonparking.appserver.service.main.UserService;

@@ -2,7 +2,7 @@ package com.bht.saigonparking.appserver.mapper;
 
 import javax.validation.constraints.NotNull;
 
-import com.bht.saigonparking.api.proto.parkinglot.ParkingLot;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.appserver.entity.parkinglot.ParkingLotEntity;
 
 /**

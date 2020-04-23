@@ -10,8 +10,8 @@
 
     <name>EMULATOR</name>
     <parent>
-        <groupId>com.bht.saigonparking</groupId>
         <artifactId>saigonparking-parent</artifactId>
+        <groupId>com.bht.saigonparking</groupId>
         <version>${revision}</version>
     </parent>
 
@@ -25,7 +25,12 @@
     <dependencies>
         <dependency>
             <groupId>com.bht.saigonparking</groupId>
-            <artifactId>api</artifactId>
+            <artifactId>user-private-api</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bht.saigonparking</groupId>
+            <artifactId>parkinglot-private-api</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package com.bht.saigonparking.api.proto.user;
+package com.bht.saigonparking.api.grpc.user;
 //option java_generic_services = true;
 option java_multiple_files = true;
 option java_outer_classname = "SaigonParkingUser";

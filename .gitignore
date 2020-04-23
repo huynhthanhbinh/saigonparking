@@ -1,6 +1,7 @@
-.idea/*
+.idea/
+target/
+log/
 */sonarlint/*
-*/target/
 *.log
 *.log.gz
 *.iml

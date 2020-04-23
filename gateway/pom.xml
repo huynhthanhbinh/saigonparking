@@ -10,16 +10,18 @@
 
     <name>GATEWAY</name>
     <parent>
-        <groupId>com.bht.saigonparking</groupId>
         <artifactId>saigonparking-parent</artifactId>
+        <groupId>com.bht.saigonparking</groupId>
         <version>${revision}</version>
     </parent>
 
     <properties>
+        <proto.directory>src/main/proto</proto.directory>
         <docker.directory>src/main/docker</docker.directory>
     </properties>
 
     <build>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -51,7 +53,7 @@
                         <configuration>
                             <resources>
                                 <resource>
-                                    <directory>${project.basedir}/../api/src/main/proto</directory>
+                                    <directory>${proto.directory}</directory>
                                 </resource>
                             </resources>
                             <outputDirectory>${project.build.directory}/docker/proto</outputDirectory>
@@ -65,7 +67,7 @@
                 <version>${maven.plugin.docker.version}</version>
                 <configuration>
                     <skipDockerBuild>false</skipDockerBuild>
-                    <imageName>${project.docker.hub-id}/${project.artifactId}:${project.version}</imageName>
+                    <imageName>${project.docker.hub-id}/${project.build.finalName}:${project.version}</imageName>
                     <dockerHost>http://localhost:2375</dockerHost>
                     <dockerDirectory>${project.build.directory}/docker</dockerDirectory>
                 </configuration>

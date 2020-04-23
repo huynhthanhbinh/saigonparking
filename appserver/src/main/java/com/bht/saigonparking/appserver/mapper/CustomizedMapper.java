@@ -12,13 +12,14 @@ import org.mapstruct.NullValueMappingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.bht.saigonparking.api.proto.parkinglot.ParkingLotInformation;
-import com.bht.saigonparking.api.proto.parkinglot.ParkingLotType;
-import com.bht.saigonparking.api.proto.user.Customer;
-import com.bht.saigonparking.api.proto.user.User;
-import com.bht.saigonparking.api.proto.user.UserRole;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotInformation;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
+import com.bht.saigonparking.api.grpc.user.Customer;
+import com.bht.saigonparking.api.grpc.user.User;
+import com.bht.saigonparking.api.grpc.user.UserRole;
 import com.bht.saigonparking.appserver.configuration.AppConfiguration;
 import com.bht.saigonparking.appserver.service.extra.ImageService;
+import com.bht.saigonparking.appserver.util.ImageUtil;
 import com.google.protobuf.ByteString;
 
 import lombok.Setter;
@@ -82,7 +83,7 @@ public abstract class CustomizedMapper {
 
     @Named("toEncodedParkingLotImage")
     public ByteString toEncodedParkingLotImage(@NotNull Integer parkingLotId) throws IOException {
-        return com.bht.saigonparking.api.util.ImageUtil.encodeImage(imageService.getImage(
+        return ImageUtil.encodeImage(imageService.getImage(
                 "plot" + parkingLotId, ImageService.ImageExtension.JPG));
     }
 }

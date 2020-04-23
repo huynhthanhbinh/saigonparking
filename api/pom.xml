@@ -6,7 +6,7 @@
 
     <artifactId>api</artifactId>
     <version>${revision}</version>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <name>API</name>
     <parent>
@@ -14,6 +14,11 @@
         <groupId>com.bht.saigonparking</groupId>
         <version>${revision}</version>
     </parent>
+
+    <modules>
+        <module>public-api</module>
+        <module>private-api</module>
+    </modules>
 
     <properties>
         <proto.path>${basedir}/src/main/proto</proto.path>

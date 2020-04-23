@@ -10,8 +10,8 @@
 
     <name>APP-SERVER</name>
     <parent>
-        <groupId>com.bht.saigonparking</groupId>
         <artifactId>saigonparking-parent</artifactId>
+        <groupId>com.bht.saigonparking</groupId>
         <version>${revision}</version>
     </parent>
 
@@ -20,7 +20,7 @@
         <docker.directory>src/main/docker</docker.directory>
         <resources.directory>src/main/resources</resources.directory>
 
-        <basePackage>com.bht.saigonparking.saigonparking</basePackage>
+        <basePackage>com.bht.saigonparking.appserver</basePackage>
         <start-class>com.bht.saigonparking.appserver.AppServer</start-class>
         <project.package.name>${project.build.finalName}-${project.release.classifier}.jar</project.package.name>
     </properties>
@@ -28,7 +28,12 @@
     <dependencies>
         <dependency>
             <groupId>com.bht.saigonparking</groupId>
-            <artifactId>api</artifactId>
+            <artifactId>user-private-api</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bht.saigonparking</groupId>
+            <artifactId>parkinglot-private-api</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>

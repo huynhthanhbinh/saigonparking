@@ -5,8 +5,8 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.bht.saigonparking.api.proto.parkinglot.ParkingLot;
-import com.bht.saigonparking.api.proto.parkinglot.ParkingLotInformation;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotInformation;
 import com.bht.saigonparking.appserver.entity.parkinglot.ParkingLotEntity;
 import com.bht.saigonparking.appserver.entity.parkinglot.ParkingLotInformationEntity;
 import com.bht.saigonparking.appserver.entity.parkinglot.ParkingLotLimitEntity;

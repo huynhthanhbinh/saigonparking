@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bht.saigonparking.api.proto.user.LoginResponseType;
+import com.bht.saigonparking.api.grpc.user.LoginResponseType;
 import com.bht.saigonparking.appserver.entity.user.CustomerEntity;
 import com.bht.saigonparking.appserver.entity.user.ParkingLotEmployeeEntity;
 import com.bht.saigonparking.appserver.entity.user.UserEntity;

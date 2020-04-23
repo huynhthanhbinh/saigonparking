@@ -9,12 +9,13 @@
     <packaging>pom</packaging>
     <version>${revision}</version>
 
-    <name>SAIGONPARKING</name>
+    <name>SAIGON-PARKING</name>
     <modules>
-        <module>gateway</module>
         <module>api</module>
-        <module>appserver</module>
+        <module>service</module>
+        <module>gateway</module>
         <module>emulator</module>
+        <module>appserver</module>
     </modules>
 
     <url>https://github.com/huynhthanhbinh/saigonparking</url>
@@ -22,7 +23,6 @@
         Saigon Parking Project is aim to help people to find nearby parking-lot by current or target location.
         This project is our group's final project at Ho Chi Minh University of Science, focus on Ho Chi Minh City only.
     </description>
-
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -60,7 +60,7 @@
     </developers>
 
     <properties>
-        <revision>v1.0.1</revision> <!-- version of project -->
+        <revision>v1.0</revision> <!-- version of project -->
         <java.version>1.8</java.version> <!-- version of java (jdk) -->
 
         <project.docker.hub-id>saigonparkingmap</project.docker.hub-id>

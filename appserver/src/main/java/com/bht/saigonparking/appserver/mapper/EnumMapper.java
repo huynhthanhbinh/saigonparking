@@ -11,8 +11,8 @@ import org.mapstruct.NullValueMappingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.bht.saigonparking.api.proto.parkinglot.ParkingLotType;
-import com.bht.saigonparking.api.proto.user.UserRole;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
+import com.bht.saigonparking.api.grpc.user.UserRole;
 import com.bht.saigonparking.appserver.base.BaseBean;
 import com.bht.saigonparking.appserver.configuration.AppConfiguration;
 import com.bht.saigonparking.appserver.entity.user.UserRoleEntity;

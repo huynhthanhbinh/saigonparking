@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
-import com.bht.saigonparking.api.proto.user.Customer;
-import com.bht.saigonparking.api.proto.user.ParkingLotEmployee;
-import com.bht.saigonparking.api.proto.user.User;
+import com.bht.saigonparking.api.grpc.user.Customer;
+import com.bht.saigonparking.api.grpc.user.ParkingLotEmployee;
+import com.bht.saigonparking.api.grpc.user.User;
 import com.bht.saigonparking.appserver.configuration.AppConfiguration;
 import com.bht.saigonparking.appserver.entity.user.CustomerEntity;
 import com.bht.saigonparking.appserver.entity.user.ParkingLotEmployeeEntity;

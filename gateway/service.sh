@@ -34,14 +34,14 @@ registerServiceRoutes() {
 
 SERVICE_NAME=user
 SERVICE_PORT=9999
-SERVICE_PATH=/com.bht.saigonparking.api.proto.user.UserService/
+SERVICE_PATH=/com.bht.saigonparking.api.grpc.user.UserService/
 
 registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOUT}
 registerServiceRoutes ${SERVICE_NAME} ${SERVICE_PATH}
 
 SERVICE_NAME=parkinglot
 SERVICE_PORT=9999
-SERVICE_PATH=/com.bht.saigonparking.api.proto.parkinglot.ParkingLotService/
+SERVICE_PATH=/com.bht.saigonparking.api.grpc.parkinglot.ParkingLotService/
 
 registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOUT}
 registerServiceRoutes ${SERVICE_NAME} ${SERVICE_PATH}

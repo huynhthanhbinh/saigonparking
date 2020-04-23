@@ -6,8 +6,8 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import com.bht.saigonparking.api.proto.parkinglot.ParkingLotInformation;
-import com.bht.saigonparking.api.proto.parkinglot.ParkingLotServiceGrpc;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotInformation;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
 import com.bht.saigonparking.emulator.configuration.SpringApplicationContext;
 import com.google.protobuf.Int64Value;
 
