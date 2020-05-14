@@ -1,6 +1,6 @@
 Document's name:    Parking Map Project References
 Author:             Huynh Thanh Binh
-Last updated:       Tue, April 7th, 2020
+Last updated:       Fri, May 15th, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -101,3 +101,21 @@ Last updated:       Tue, April 7th, 2020
 
 33. Enable TCP port 2375 for external connection to Docker - Ubuntu
         https://gist.github.com/styblope/dc55e0ad2a9848f2cc3307d4819d819f
+
+34. gRPC Authorization using Interceptors in Java
+        https://kuros.in/grpc/2019/01/grpc-interceptors/
+
+35. Lognet gRPC Spring Boot Starter - Interceptors support
+        https://github.com/LogNet/grpc-spring-boot-starter#interceptors-support
+
+36. How to add a custom header in grpc client?
+        https://stackoverflow.com/questions/45125601/android-how-to-add-a-custom-header-in-grpc-client
+
+37. gRPC + Postman
+        https://medium.com/@jnewmano/grpc-postman-173b62a64341
+
+38. gRPC Web - Add option to set withCredentials to true
+        https://github.com/grpc/grpc-web/pull/604
+
+39. What is the significance of IP addresses starting with 172 ?
+        https://www.quora.com/What-is-the-significance-of-IP-addresses-starting-with-172

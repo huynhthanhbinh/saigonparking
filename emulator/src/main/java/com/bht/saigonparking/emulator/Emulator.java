@@ -13,6 +13,7 @@ import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
 import com.bht.saigonparking.emulator.configuration.SpringApplicationContext;
 import com.google.protobuf.Int64Value;
 
+import io.grpc.StatusRuntimeException;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -43,24 +44,43 @@ public class Emulator extends SpringBootServletInitializer {
         ParkingLotInformation parkingLotInformation;
         User user;
 
-        log.info("Start calling API");
-        parkingLotInformation = parkingLotServiceBlockingStub.getParkingLotById(Int64Value.of(1)).getInformation();
-        log.info("End calling API");
-        log.info("\n" + parkingLotInformation);
+        try {
+//            log.info("Start calling API");
+//            parkingLotInformation = parkingLotServiceBlockingStub.getParkingLotById(Int64Value.of(1)).getInformation();
+//            log.info("End calling API");
+//            log.info("\n" + parkingLotInformation);
 
-        log.info("Start calling API");
-        user = userServiceBlockingStub.getUserById(Int64Value.of(1));
-        log.info("End calling API");
-        log.info("\n" + user);
+            log.info("Start calling API");
+            user = userServiceBlockingStub.getUserById(Int64Value.of(1));
+            log.info("End calling API");
+            log.info("\n" + user);
 
-        log.info("Start calling API");
-        parkingLotInformation = parkingLotServiceBlockingStub.getParkingLotById(Int64Value.of(3)).getInformation();
-        log.info("End calling API");
-        log.info("\n" + parkingLotInformation);
+//            log.info("Start calling API");
+//            parkingLotInformation = parkingLotServiceBlockingStub.getParkingLotById(Int64Value.of(3)).getInformation();
+//            log.info("End calling API");
+//            log.info("\n" + parkingLotInformation);
 
-        log.info("Start calling API");
-        user = userServiceBlockingStub.getUserById(Int64Value.of(4));
-        log.info("End calling API");
-        log.info("\n" + user);
+            log.info("Start calling API");
+            user = userServiceBlockingStub.getUserById(Int64Value.of(4));
+            log.info("End calling API");
+            log.info("\n" + user);
+
+        } catch (StatusRuntimeException exception) {
+
+            switch (exception.getStatus().getCode()) {
+                case UNAUTHENTICATED:
+                    log.error("Unauthenticated user ! Please login !");
+                    break;
+                case PERMISSION_DENIED:
+                    log.error("Permission denied ! Please login as another user !");
+                    break;
+                case UNIMPLEMENTED:
+                    log.error("Service is unimplemented ! Please try another service !");
+                    break;
+                default:
+                    log.error(exception.getStatus());
+                    break;
+            }
+        }
     }
 }
