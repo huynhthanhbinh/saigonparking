@@ -24,7 +24,7 @@ registerService() {
 }
 
 registerServiceRoute() {
-  printf "\nRegister %s service routes\n" $1
+  printf "\nRegister %s service route\n" $1
   curl -XPOST ${KONG_ADMIN_HOST}:${KONG_ADMIN_PORT}/services/$1/routes \
     --data protocols=grpc \
     --data name=$1 \
@@ -33,9 +33,9 @@ registerServiceRoute() {
 }
 
 registerServiceRoutePlugins() {
-  printf "\nRegister %s service web routes\n" $1
+  printf "\nRegister %s service route plugins\n" $1
   curl -XPOST ${KONG_ADMIN_HOST}:${KONG_ADMIN_PORT}/routes/$1/plugins \
-    --data name=$1-grpc-web \
+    --data name=grpc-web \
     --data proto=/usr/local/kong/proto/$2
   printf "\n"
 }
