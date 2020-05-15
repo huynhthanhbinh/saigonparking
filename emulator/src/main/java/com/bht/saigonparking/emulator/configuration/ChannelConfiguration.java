@@ -3,10 +3,13 @@ package com.bht.saigonparking.emulator.configuration;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
+
+import com.bht.saigonparking.emulator.interceptor.AuthTokenProvideInterceptor;
 
 import io.grpc.ManagedChannel;
 import io.grpc.netty.GrpcSslContexts;
@@ -33,7 +36,8 @@ public final class ChannelConfiguration {
                                          @Value("${gateway.connection.idle-timeout}") int timeout,
                                          @Value("${gateway.connection.max-inbound-message-size}") int maxInBoundMessageSize,
                                          @Value("${gateway.connection.max-inbound-metadata-size}") int maxInBoundMetadataSize,
-                                         @Value("${gateway.connection.certificate-path}") Resource certificate) throws IOException {
+                                         @Value("${gateway.connection.certificate-path}") Resource certificate,
+                                         @Autowired AuthTokenProvideInterceptor authTokenProvideInterceptor) throws IOException {
 
         NettyChannelBuilder channelBuilder = (host.equals("localhost"))                                 // if host is localhost means local development
                 ? NettyChannelBuilder.forAddress(host, port).usePlaintext()                             // use plain-text on development environment
@@ -45,6 +49,7 @@ public final class ChannelConfiguration {
                 .idleTimeout(timeout, TimeUnit.MILLISECONDS)                    // 10000 milliseconds / 1000 = 10 seconds --> request time-out
                 .maxInboundMessageSize(maxInBoundMessageSize * 1024 * 1024)     // 10KB * 1024 = 10MB --> max message size to transfer together
                 .maxInboundMetadataSize(maxInBoundMetadataSize * 1024 * 1024)   // 2KB * 1024 = 2MB --> max message header size
+                .intercept(authTokenProvideInterceptor)                         // Interceptor for providing token per each request
                 .build();                                                       // Build channel to communicate over gRPC
     }
 }
