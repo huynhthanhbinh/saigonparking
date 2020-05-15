@@ -16,9 +16,9 @@
     </parent>
 
     <modules>
-        <module>parkinglot-service</module>
-        <module>user-service</module>
         <module>auth-service</module>
+        <module>user-service</module>
+        <module>parkinglot-service</module>
     </modules>
 
     <properties>
@@ -169,6 +169,11 @@
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
             <version>${aws.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${java-jwt.version}</version>
         </dependency>
     </dependencies>
 

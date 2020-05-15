@@ -4,6 +4,8 @@ import java.net.InetSocketAddress;
 import java.util.Objects;
 
 import org.lognet.springboot.grpc.GRpcGlobalInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import io.grpc.Context;
@@ -17,6 +19,7 @@ import io.grpc.ServerInterceptor;
 import io.grpc.Status;
 import io.grpc.StatusRuntimeException;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
@@ -24,31 +27,42 @@ import lombok.Getter;
  */
 @Component
 @GRpcGlobalInterceptor
+@Setter(onMethod = @__(@Autowired))
 public final class UserServiceInterceptor implements ServerInterceptor {
 
+    @Qualifier("localhost")
+    private String localHost;
+
     @Getter
-    private final Context.Key<String> tokenContext = Context.key("Authorization");
+    private final Context.Key<String> roleContext = Context.key("Role");
 
     @Override
     public <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> serverCall,
                                                                  Metadata metadata,
                                                                  ServerCallHandler<ReqT, RespT> serverCallHandler) {
 
-        InetSocketAddress clientAddress = (InetSocketAddress) serverCall.getAttributes().get(Grpc.TRANSPORT_ATTR_REMOTE_ADDR);
-        System.out.println("Network address: " + Objects.requireNonNull(clientAddress).getHostString());
-        System.out.println("Is same network: " + Objects.requireNonNull(clientAddress).getHostString().startsWith("172"));
+        boolean isInternalService = isOnSameNetwork(Objects
+                .requireNonNull((InetSocketAddress) serverCall
+                        .getAttributes().get(Grpc.TRANSPORT_ATTR_REMOTE_ADDR)).getHostString());
+
+        System.out.println("\n\n\n" + metadata + "\n\n\n");
 
         Key<String> authKey = Key.of("Authorization", Metadata.ASCII_STRING_MARSHALLER);
         String authToken = metadata.get(authKey);
 
-        if (authToken == null) {
+        if (authToken == null && !isInternalService) {
             throw new StatusRuntimeException(Status.UNAUTHENTICATED);
         }
 
         return Contexts.interceptCall(
-                Context.current().withValue(tokenContext, authToken),
+                Context.current().withValue(roleContext, authToken),
                 serverCall,
                 metadata,
                 serverCallHandler);
+    }
+
+    private boolean isOnSameNetwork(String otherAddress) {
+        return otherAddress.substring(0, otherAddress.lastIndexOf('.'))
+                .equals(localHost.substring(0, localHost.lastIndexOf('.')));
     }
 }

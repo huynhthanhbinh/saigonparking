@@ -1,9 +1,11 @@
 package com.bht.saigonparking.service.user.configuration;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -16,7 +18,6 @@ import com.bht.saigonparking.service.user.annotation.InheritedComponent;
 @Configuration
 @EnableTransactionManagement
 @SuppressWarnings("squid:S1118")
-@Import(AwsConfiguration.class)
 @ComponentScan(basePackages = AppConfiguration.BASE_PACKAGE,
         includeFilters = @ComponentScan.Filter(InheritedComponent.class))
 public class AppConfiguration {
@@ -26,5 +27,10 @@ public class AppConfiguration {
     @Bean
     public ProtobufHttpMessageConverter protobufHttpMessageConverter() {
         return new ProtobufHttpMessageConverter();
+    }
+
+    @Bean("localhost")
+    public String localHost() throws UnknownHostException {
+        return InetAddress.getLocalHost().getHostAddress();
     }
 }

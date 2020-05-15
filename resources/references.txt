@@ -117,5 +117,5 @@ Last updated:       Fri, May 15th, 2020
 38. gRPC Web - Add option to set withCredentials to true
         https://github.com/grpc/grpc-web/pull/604
 
-39. What is the significance of IP addresses starting with 172 ?
-        https://www.quora.com/What-is-the-significance-of-IP-addresses-starting-with-172
+39. Authentication with JWT Example - gRPC Java
+        https://github.com/grpc/grpc-java/tree/master/examples/example-jwt-auth
