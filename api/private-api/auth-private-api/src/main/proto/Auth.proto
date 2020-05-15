@@ -3,24 +3,28 @@ syntax = "proto3";
 package com.bht.saigonparking.api.grpc.auth;
 //option java_generic_services = true;
 option java_multiple_files = true;
+option java_outer_classname = "SaigonParkingAuth";
 
+import "Actor.proto";
 import "google/protobuf/wrappers.proto";
 
 message ValidateRequest {
     string username = 1;
     string password = 2;
+    user.UserRole role = 3;
+}
+
+enum ValidateResponseType {
+    AUTHENTICATED = 0;
+    INCORRECT = 1;
+    NON_EXIST = 2;
+    INACTIVATED = 3;
+    DISALLOWED = 4;
 }
 
 message ValidateResponse {
     ValidateResponseType response = 1;
     string accessToken = 2;
-}
-
-enum ValidateResponseType {
-    SUCCESS = 0;
-    INCORRECT = 1;
-    NON_EXIST = 2;
-    INACTIVATED = 3;
 }
 
 message RegisterRequest {
@@ -32,13 +36,13 @@ message RegisterRequest {
     string phone = 6;
 }
 
-message RegisterResponse {
-    RegisterResponseType response = 1;
-}
-
 enum RegisterResponseType {
     SUCCESS = 0;
     EXISTED = 1;
+}
+
+message RegisterResponse {
+    RegisterResponseType response = 1;
 }
 
 service AuthService {

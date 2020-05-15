@@ -8,6 +8,7 @@
     <version>${revision}</version>
     <packaging>jar</packaging>
 
+    <name>AUTH-SERVICE</name>
     <parent>
         <artifactId>service</artifactId>
         <groupId>com.bht.saigonparking</groupId>
@@ -23,6 +24,11 @@
         <dependency>
             <groupId>com.bht.saigonparking</groupId>
             <artifactId>auth-private-api</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bht.saigonparking</groupId>
+            <artifactId>user-private-api</artifactId>
             <version>${revision}</version>
         </dependency>
     </dependencies>

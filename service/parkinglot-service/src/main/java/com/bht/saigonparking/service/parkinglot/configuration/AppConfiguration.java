@@ -21,7 +21,7 @@ import com.bht.saigonparking.service.parkinglot.annotation.InheritedComponent;
         includeFilters = @ComponentScan.Filter(InheritedComponent.class))
 public class AppConfiguration {
 
-    public static final String BASE_PACKAGE = "com.bht.saigonparking.service.parkinglot"; // base package of APPSERVER module
+    public static final String BASE_PACKAGE = "com.bht.saigonparking.service.parkinglot";
 
     @Bean
     public ProtobufHttpMessageConverter protobufHttpMessageConverter() {

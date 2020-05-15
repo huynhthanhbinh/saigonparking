@@ -5,16 +5,17 @@ import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bht.saigonparking.api.grpc.user.Customer;
-import com.bht.saigonparking.api.grpc.user.LoginRequest;
-import com.bht.saigonparking.api.grpc.user.LoginResponse;
 import com.bht.saigonparking.api.grpc.user.ParkingLotEmployee;
 import com.bht.saigonparking.api.grpc.user.User;
 import com.bht.saigonparking.api.grpc.user.UserServiceGrpc.UserServiceImplBase;
+import com.bht.saigonparking.service.user.interceptor.UserServiceInterceptor;
 import com.bht.saigonparking.service.user.mapper.EnumMapper;
 import com.bht.saigonparking.service.user.mapper.UserMapper;
 import com.bht.saigonparking.service.user.service.main.UserService;
 import com.bht.saigonparking.service.user.util.LoggingUtil;
+import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
+import com.google.protobuf.StringValue;
 
 import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
@@ -35,27 +36,23 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public final class UserServiceGrpcImpl extends UserServiceImplBase {
 
+    private final UserServiceInterceptor userServiceInterceptor;
+
     private final UserService userService;
     private final UserMapper userMapper;
     private final EnumMapper enumMapper;
 
     @Override
-    public void validateLogin(LoginRequest request, StreamObserver<LoginResponse> responseObserver) {
+    public void getUserByUsername(StringValue request, StreamObserver<User> responseObserver) {
         try {
-            LoginResponse loginResponse = LoginResponse.newBuilder().setResponse(userService
-                    .validateLogin(
-                            request.getUsername(),
-                            request.getPassword(),
-                            enumMapper.toUserRoleEntity(request.getUserRole())))
-                    .build();
+            User user = userMapper.toUser(userService
+                    .getUserByUsername(request.getValue()));
 
-            responseObserver.onNext(loginResponse);
+            responseObserver.onNext(user);
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("validateLogin(%s, %s, %s): %s",
-                            request.getUsername(), request.getPassword(), request.getUserRole(), loginResponse.getResponse()));
-
+                    String.format("getUserByUsername(%s)", request.getValue()));
 
         } catch (Exception exception) {
 
@@ -64,8 +61,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                    String.format("validateLogin(%s, %s, %s)",
-                            request.getUsername(), request.getPassword(), request.getUserRole()));
+                    String.format("getUserByUsername(%s)", request.getValue()));
         }
     }
 
@@ -138,6 +134,29 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("getParkingLotEmployeeById(%d)", request.getValue()));
+        }
+    }
+
+
+    @Override
+    public void updateUserLastSignIn(Int64Value request, StreamObserver<Empty> responseObserver) {
+        try {
+            userService.updateUserLastSignIn(request.getValue());
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("updateUserLastSignIn(%d)", request.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("updateUserLastSignIn(%d)", request.getValue()));
         }
     }
 }

@@ -70,7 +70,7 @@
                 <configuration>
                     <pluginId>grpc-java</pluginId>
                     <protoSourceRoot>${proto.path}</protoSourceRoot>
-                    <attachProtoSources>false</attachProtoSources>
+                    <attachProtoSources>true</attachProtoSources>
                     <protocArtifact>
                         com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}
                     </protocArtifact>

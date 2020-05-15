@@ -22,7 +22,7 @@ import com.bht.saigonparking.service.user.annotation.InheritedComponent;
         includeFilters = @ComponentScan.Filter(InheritedComponent.class))
 public class AppConfiguration {
 
-    public static final String BASE_PACKAGE = "com.bht.saigonparking.service.user"; // base package of APPSERVER module
+    public static final String BASE_PACKAGE = "com.bht.saigonparking.service.user";
 
     @Bean
     public ProtobufHttpMessageConverter protobufHttpMessageConverter() {

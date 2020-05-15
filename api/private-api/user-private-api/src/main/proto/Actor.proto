@@ -6,6 +6,7 @@ option java_multiple_files = true;
 option java_outer_classname = "SaigonParkingUser";
 
 import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
 
 enum UserRole {
     CUSTOMER = 0;
@@ -20,8 +21,9 @@ message User {
     string username = 3;
     string password = 4;
     string email = 5;
-    string lastSignIn = 6;
-    int64 version = 7;
+    bool isActivated = 6;
+    string lastSignIn = 7;
+    int64 version = 8;
 }
 
 message Customer {
@@ -39,6 +41,8 @@ message ParkingLotEmployee {
 
 service UserService {
     rpc getUserById (google.protobuf.Int64Value) returns (User);
+    rpc getUserByUsername (google.protobuf.StringValue) returns (User);
     rpc getCustomerById (google.protobuf.Int64Value) returns (Customer);
     rpc getParkingLotEmployeeById (google.protobuf.Int64Value) returns (ParkingLotEmployee);
+    rpc updateUserLastSignIn (google.protobuf.Int64Value) returns (google.protobuf.Empty);
 }

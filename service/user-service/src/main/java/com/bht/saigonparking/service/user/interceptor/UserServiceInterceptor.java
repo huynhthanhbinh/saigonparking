@@ -41,17 +41,21 @@ public final class UserServiceInterceptor implements ServerInterceptor {
                                                                  Metadata metadata,
                                                                  ServerCallHandler<ReqT, RespT> serverCallHandler) {
 
-        boolean isInternalService = isOnSameNetwork(Objects
-                .requireNonNull((InetSocketAddress) serverCall
-                        .getAttributes().get(Grpc.TRANSPORT_ATTR_REMOTE_ADDR)).getHostString());
+        boolean isCallFromInternalService = isOnSameNetwork(Objects
+                .requireNonNull((InetSocketAddress) serverCall.getAttributes()
+                        .get(Grpc.TRANSPORT_ATTR_REMOTE_ADDR)).getHostString());
 
         System.out.println("\n\n\n" + metadata + "\n\n\n");
 
         Key<String> authKey = Key.of("Authorization", Metadata.ASCII_STRING_MARSHALLER);
         String authToken = metadata.get(authKey);
 
-        if (authToken == null && !isInternalService) {
+        if (authToken == null && !isCallFromInternalService) {
             throw new StatusRuntimeException(Status.UNAUTHENTICATED);
+        }
+
+        if (isCallFromInternalService) {
+            // TODO: set role to admin
         }
 
         return Contexts.interceptCall(

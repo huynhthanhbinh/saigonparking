@@ -1,18 +1,14 @@
 package com.bht.saigonparking.service.user.service.main.impl;
 
-import java.sql.Timestamp;
-
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bht.saigonparking.api.grpc.user.LoginResponseType;
 import com.bht.saigonparking.service.user.entity.CustomerEntity;
 import com.bht.saigonparking.service.user.entity.ParkingLotEmployeeEntity;
 import com.bht.saigonparking.service.user.entity.UserEntity;
-import com.bht.saigonparking.service.user.entity.UserRoleEntity;
 import com.bht.saigonparking.service.user.repository.core.CustomerRepository;
 import com.bht.saigonparking.service.user.repository.core.ParkingLotEmployeeRepository;
 import com.bht.saigonparking.service.user.repository.core.UserRepository;
@@ -42,28 +38,13 @@ public class UserServiceImpl implements UserService {
     private final ParkingLotEmployeeRepository parkingLotEmployeeRepository;
 
     @Override
-    public LoginResponseType validateLogin(@NotNull String username, @NotNull String password, @NotNull UserRoleEntity userRoleEntity) {
-        UserEntity userEntity = userRepository.getByUsername(username);
-        if (userEntity != null) {
-            if (userRoleEntity.equals(userEntity.getUserRoleEntity())) {
-                if (Boolean.TRUE.equals(userEntity.getIsActivated())) {
-                    if (password.equals(userEntity.getPassword())) {
-                        userEntity.setLastSignIn(new Timestamp(System.currentTimeMillis()));
-                        userRepository.save(userEntity);
-                        return LoginResponseType.SUCCESS;
-                    }
-                    return LoginResponseType.INCORRECT;
-                }
-                return LoginResponseType.INACTIVATED;
-            }
-            return LoginResponseType.NON_EXIST;
-        }
-        return LoginResponseType.NON_EXIST;
+    public UserEntity getUserById(@NotNull Long id) {
+        return userRepository.getOne(id);
     }
 
     @Override
-    public UserEntity getUserById(@NotNull Long id) {
-        return userRepository.getOne(id);
+    public UserEntity getUserByUsername(@NotNull String username) {
+        return userRepository.getByUsername(username);
     }
 
     @Override
@@ -74,5 +55,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public ParkingLotEmployeeEntity getParkingLotEmployeeById(@NotNull Long id) {
         return parkingLotEmployeeRepository.getOne(id);
+    }
+
+    @Override
+    public void updateUserLastSignIn(@NotNull Long id) {
+        userRepository.updateUserLastSignIn(id);
     }
 }
