@@ -4,7 +4,7 @@
 # Gateway is config with static EXTERNAL IP address: referenced by www.saigonparking.wtf
 KONG_ADMIN_HOST=localhost
 KONG_ADMIN_PORT=8001
-CONNECT_TIMEOUT=10000
+CONNECT_TIMEOUT=20000
 
 # Service is another vm instance in GCP
 # Service is config with static INTERNAL IP address: referenced by saigonparkingservice
@@ -23,32 +23,46 @@ registerService() {
   printf "\n"
 }
 
-registerServiceRoutes() {
+registerServiceRoute() {
   printf "\nRegister %s service routes\n" $1
   curl -XPOST ${KONG_ADMIN_HOST}:${KONG_ADMIN_PORT}/services/$1/routes \
     --data protocols=grpc \
-    --data name=catch-all-$1-services \
+    --data name=$1 \
     --data paths=$2
+  printf "\n"
+}
+
+registerServiceRoutePlugins() {
+  printf "\nRegister %s service web routes\n" $1
+  curl -XPOST ${KONG_ADMIN_HOST}:${KONG_ADMIN_PORT}/routes/$1/plugins \
+    --data name=$1-grpc-web \
+    --data proto=/usr/local/kong/proto/$2
   printf "\n"
 }
 
 SERVICE_NAME=auth
 SERVICE_PORT=7777
 SERVICE_PATH=/com.bht.saigonparking.api.grpc.auth.AuthService/
+PROTO_PATH=Auth.proto
 
 registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOUT}
-registerServiceRoutes ${SERVICE_NAME} ${SERVICE_PATH}
+registerServiceRoute ${SERVICE_NAME} ${SERVICE_PATH}
+registerServiceRoutePlugins ${SERVICE_NAME} ${PROTO_PATH}
 
 SERVICE_NAME=user
 SERVICE_PORT=8888
 SERVICE_PATH=/com.bht.saigonparking.api.grpc.user.UserService/
+PROTO_PATH=Actor.proto
 
 registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOUT}
-registerServiceRoutes ${SERVICE_NAME} ${SERVICE_PATH}
+registerServiceRoute ${SERVICE_NAME} ${SERVICE_PATH}
+registerServiceRoutePlugins ${SERVICE_NAME} ${PROTO_PATH}
 
 SERVICE_NAME=parkinglot
 SERVICE_PORT=9999
 SERVICE_PATH=/com.bht.saigonparking.api.grpc.parkinglot.ParkingLotService/
+PROTO_PATH=ParkingLot.proto
 
 registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOUT}
-registerServiceRoutes ${SERVICE_NAME} ${SERVICE_PATH}
+registerServiceRoute ${SERVICE_NAME} ${SERVICE_PATH}
+registerServiceRoutePlugins ${SERVICE_NAME} ${PROTO_PATH}

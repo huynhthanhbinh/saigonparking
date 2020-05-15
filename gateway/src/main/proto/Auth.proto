@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package com.bht.saigonparking.api.grpc.auth;
+//option java_generic_services = true;
+option java_multiple_files = true;
+option java_outer_classname = "SaigonParkingAuth";
+
+import "Actor.proto";
+import "google/protobuf/wrappers.proto";
+
+message ValidateRequest {
+    string username = 1;
+    string password = 2;
+    user.UserRole role = 3;
+}
+
+enum ValidateResponseType {
+    AUTHENTICATED = 0;
+    INCORRECT = 1;
+    NON_EXIST = 2;
+    INACTIVATED = 3;
+    DISALLOWED = 4;
+}
+
+message ValidateResponse {
+    ValidateResponseType response = 1;
+    string accessToken = 2;
+}
+
+message RegisterRequest {
+    string username = 1;
+    string password = 2;
+    string email = 3;
+    string firstName = 4;
+    string lastName = 5;
+    string phone = 6;
+}
+
+enum RegisterResponseType {
+    SUCCESS = 0;
+    EXISTED = 1;
+}
+
+message RegisterResponse {
+    RegisterResponseType response = 1;
+}
+
+service AuthService {
+
+    /* Validate all type of user */
+    rpc validateUser (ValidateRequest) returns (ValidateResponse);
+    /* Register customer user only */
+    rpc registerUser (RegisterRequest) returns (RegisterResponse);
+}
