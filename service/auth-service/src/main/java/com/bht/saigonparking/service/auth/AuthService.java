@@ -1,4 +1,4 @@
-package com.bht.saigonparking.service.user;
+package com.bht.saigonparking.service.auth;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,23 +8,23 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  *
- * This class is user-service main class
+ * This class is auth-service main class
  * which contains the main() method to execute the service.
- * User service is simply a spring-boot server
- * which communicate directly with the RDBMS
+ * Auth service is simply a spring-boot server
+ * which communicate indirectly with the RDBMS through User Service
  *
  * @author bht
  */
 @EnableScheduling
 @SpringBootApplication
-public class UserService extends SpringBootServletInitializer {
+public class AuthService extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(UserService.class);
+        return builder.sources(AuthService.class);
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(UserService.class, args);
+        SpringApplication.run(AuthService.class, args);
     }
 }

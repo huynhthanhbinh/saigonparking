@@ -32,6 +32,13 @@ registerServiceRoutes() {
   printf "\n"
 }
 
+SERVICE_NAME=auth
+SERVICE_PORT=7777
+SERVICE_PATH=/com.bht.saigonparking.api.grpc.auth.AuthService/
+
+registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOUT}
+registerServiceRoutes ${SERVICE_NAME} ${SERVICE_PATH}
+
 SERVICE_NAME=user
 SERVICE_PORT=8888
 SERVICE_PATH=/com.bht.saigonparking.api.grpc.user.UserService/

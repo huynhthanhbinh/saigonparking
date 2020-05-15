@@ -4,20 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>private-api</artifactId>
+    <artifactId>auth-private-api</artifactId>
     <version>${revision}</version>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
-    <name>PRIVATE-API</name>
+    <name>AUTH-PRIVATE-API</name>
     <parent>
-        <artifactId>api</artifactId>
+        <artifactId>private-api</artifactId>
         <groupId>com.bht.saigonparking</groupId>
         <version>${revision}</version>
     </parent>
-
-    <modules>
-        <module>parkinglot-private-api</module>
-        <module>user-private-api</module>
-        <module>auth-private-api</module>
-    </modules>
 </project>

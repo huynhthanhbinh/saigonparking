@@ -37,25 +37,7 @@ message ParkingLotEmployee {
     int64 parkingLotId = 2;
 }
 
-message LoginRequest {
-    string username = 1;
-    string password = 2;
-    UserRole userRole = 3;
-}
-
-enum LoginResponseType {
-    SUCCESS = 0;
-    INCORRECT = 1;
-    NON_EXIST = 2;
-    INACTIVATED = 3;
-}
-
-message LoginResponse {
-    LoginResponseType response = 1;
-}
-
 service UserService {
-    rpc validateLogin (LoginRequest) returns (LoginResponse);
     rpc getUserById (google.protobuf.Int64Value) returns (User);
     rpc getCustomerById (google.protobuf.Int64Value) returns (Customer);
     rpc getParkingLotEmployeeById (google.protobuf.Int64Value) returns (ParkingLotEmployee);

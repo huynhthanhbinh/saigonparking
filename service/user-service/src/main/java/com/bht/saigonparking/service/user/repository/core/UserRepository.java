@@ -18,17 +18,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>, UserRep
 
     /**
      *
-     * self-implement getById method
-     * in order to prevent N+1 problem
-     */
-    @Query("SELECT U " +
-            "FROM UserEntity U " +
-            "JOIN FETCH U.userRoleEntity UR " +
-            "WHERE U.id = ?1")
-    UserEntity getById(@NotNull Long id);
-
-    /**
-     *
      * self-implement getByUsername method
      * in order to prevent N+1 problem
      */

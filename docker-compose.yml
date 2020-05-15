@@ -5,6 +5,16 @@ networks:
 
 services:
 
+  auth-service:
+    image: ${DOCKER_HUB_ID}/auth-service:${AUTH_SERVICE_VERSION}
+    networks:
+      - saigonparking-service
+    environment:
+      TZ: ${TIMEZONE}
+    ports:
+      - "${AUTH_SERVICE_HTTP_PORT}:${AUTH_SERVICE_HTTP_PORT}"
+      - "${AUTH_SERVICE_GRPC_PORT}:${AUTH_SERVICE_GRPC_PORT}"
+
   user-service:
     image: ${DOCKER_HUB_ID}/user-service:${USER_SERVICE_VERSION}
     networks:
