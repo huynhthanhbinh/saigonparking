@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import com.bht.saigonparking.service.user.base.BaseBean;
 import com.bht.saigonparking.service.user.util.LoggingUtil;
 
+import javassist.NotFoundException;
+
 /**
  *
  * @author bht
@@ -19,7 +21,7 @@ public final class SpringBeanLifeCycle implements BaseBean, DestructionAwareBean
 
 
     @Override
-    public void initialize() {
+    public void initialize() throws NotFoundException {
         BaseBean.super.initialize();
         LoggingUtil.log(Level.DEBUG, "SPRING", "BeanCreation", "springBeanLifeCycle");
     }

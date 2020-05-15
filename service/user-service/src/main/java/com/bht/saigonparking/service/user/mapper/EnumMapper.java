@@ -13,9 +13,11 @@ import com.bht.saigonparking.service.user.base.BaseBean;
 import com.bht.saigonparking.service.user.configuration.AppConfiguration;
 import com.bht.saigonparking.service.user.entity.UserRoleEntity;
 import com.bht.saigonparking.service.user.repository.core.UserRoleRepository;
+import com.bht.saigonparking.service.user.util.ExceptionUtil;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
+import javassist.NotFoundException;
 import lombok.Setter;
 
 /**
@@ -47,7 +49,7 @@ public abstract class EnumMapper implements BaseBean {
     private static final BiMap<UserRoleEntity, UserRole> USER_ROLE_BI_MAP = HashBiMap.create();
 
     @Override
-    public void initialize() {
+    public void initialize() throws NotFoundException {
         initUserRoleBiMap();
     }
 
@@ -62,9 +64,13 @@ public abstract class EnumMapper implements BaseBean {
     }
 
     // initialize ======================================================================================================
-    private void initUserRoleBiMap() {
-        USER_ROLE_BI_MAP.put(userRoleRepository.getOne(1L), UserRole.ADMIN);
-        USER_ROLE_BI_MAP.put(userRoleRepository.getOne(2L), UserRole.CUSTOMER);
-        USER_ROLE_BI_MAP.put(userRoleRepository.getOne(3L), UserRole.PARKING_LOT_EMPLOYEE);
+    private void initUserRoleBiMap() throws NotFoundException {
+        USER_ROLE_BI_MAP.put(getUserRoleById(1L), UserRole.ADMIN);
+        USER_ROLE_BI_MAP.put(getUserRoleById(2L), UserRole.CUSTOMER);
+        USER_ROLE_BI_MAP.put(getUserRoleById(3L), UserRole.PARKING_LOT_EMPLOYEE);
+    }
+
+    private UserRoleEntity getUserRoleById(@NotNull Long id) throws NotFoundException {
+        return userRoleRepository.findById(id).orElseThrow(ExceptionUtil::throwEntityNotFoundException);
     }
 }

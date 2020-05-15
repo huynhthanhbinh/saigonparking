@@ -3,6 +3,8 @@ package com.bht.saigonparking.service.user.base;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import javassist.NotFoundException;
+
 /**
  * Parking Map Project Base Bean
  *
@@ -15,7 +17,7 @@ public interface BaseBean {
      * as the bean has been initialized
      */
     @PostConstruct
-    default void initialize() {
+    default void initialize() throws NotFoundException {
     }
 
     /**
