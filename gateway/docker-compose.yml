@@ -60,6 +60,7 @@ services:
       - saigonparking-gateway
     environment:
       TZ:                 ${TIMEZONE}
+      KONG_PLUGINS:       ${KONG_PLUGINS}
       KONG_LOG_LEVEL:     ${KONG_LOG_LEVEL}
       KONG_DATABASE:      ${KONG_DATABASE}
       KONG_PG_HOST:       gateway-database
