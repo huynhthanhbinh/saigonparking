@@ -14,9 +14,7 @@
         <groupId>com.bht.saigonparking</groupId>
         <version>${revision}</version>
     </parent>
-
     <properties>
-        <proto.directory>src/main/proto</proto.directory>
         <docker.directory>src/main/docker</docker.directory>
     </properties>
 
@@ -42,21 +40,6 @@
                                 </resource>
                             </resources>
                             <outputDirectory>${project.build.directory}/docker</outputDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-proto-resources</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <resources>
-                                <resource>
-                                    <directory>${proto.directory}</directory>
-                                </resource>
-                            </resources>
-                            <outputDirectory>${project.build.directory}/docker/proto</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>

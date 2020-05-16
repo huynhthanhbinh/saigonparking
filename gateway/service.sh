@@ -10,6 +10,7 @@ CONNECT_TIMEOUT=20000
 # Service is config with static INTERNAL IP address: referenced by saigonparkingservice
 SERVICE_HOST=saigonparkingservice
 
+# register all bash functions for code's reusability
 registerService() {
   printf "\nRegister %s service\n" $1
   curl -XPOST ${KONG_ADMIN_HOST}:${KONG_ADMIN_PORT}/services \
@@ -35,34 +36,33 @@ registerServiceRoute() {
 registerServiceRoutePlugins() {
   printf "\nRegister %s service route plugins\n" $1
   curl -XPOST ${KONG_ADMIN_HOST}:${KONG_ADMIN_PORT}/routes/$1/plugins \
-    --data name=grpc-web \
-    --data proto=/usr/local/kong/proto/$2
+    --data name=grpc-web
   printf "\n"
 }
 
+# register Auth Service
 SERVICE_NAME=auth
 SERVICE_PORT=7777
 SERVICE_PATH=/com.bht.saigonparking.api.grpc.auth.AuthService/
-PROTO_PATH=Auth.proto
 
 registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOUT}
 registerServiceRoute ${SERVICE_NAME} ${SERVICE_PATH}
-registerServiceRoutePlugins ${SERVICE_NAME} ${PROTO_PATH}
+registerServiceRoutePlugins ${SERVICE_NAME}
 
+# register User Service
 SERVICE_NAME=user
 SERVICE_PORT=8888
 SERVICE_PATH=/com.bht.saigonparking.api.grpc.user.UserService/
-PROTO_PATH=Actor.proto
 
 registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOUT}
 registerServiceRoute ${SERVICE_NAME} ${SERVICE_PATH}
-registerServiceRoutePlugins ${SERVICE_NAME} ${PROTO_PATH}
+registerServiceRoutePlugins ${SERVICE_NAME}
 
+# register ParkingLot Service
 SERVICE_NAME=parkinglot
 SERVICE_PORT=9999
 SERVICE_PATH=/com.bht.saigonparking.api.grpc.parkinglot.ParkingLotService/
-PROTO_PATH=ParkingLot.proto
 
 registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOUT}
 registerServiceRoute ${SERVICE_NAME} ${SERVICE_PATH}
-registerServiceRoutePlugins ${SERVICE_NAME} ${PROTO_PATH}
+registerServiceRoutePlugins ${SERVICE_NAME}
