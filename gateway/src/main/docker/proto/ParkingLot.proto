@@ -1,0 +1,109 @@
+syntax = "proto3";
+
+package com.bht.saigonparking.api.grpc.parkinglot;
+//option java_generic_services = true;
+option java_multiple_files = true;
+
+import "google/protobuf/wrappers.proto";
+
+enum ParkingLotType {
+    BUILDING = 0;
+    PRIVATE = 1;
+    STREET = 2;
+}
+
+message ParkingLotResult {
+    int64 id = 1;
+    string name = 2;
+    ParkingLotType type = 3;
+    double latitude = 4;
+    double longitude = 5;
+    int32 availableSlot = 6;
+    int32 totalSlot = 7;
+    double distance = 8;
+}
+
+message ParkingLotInformation {
+    string name = 1;
+    string address = 2;
+    string phone = 3;
+    double ratingAverage = 4;
+    int32 numberOfRating = 5;
+    bytes imageData = 6;
+    int64 version = 7;
+}
+
+message ParkingLot {
+    int64 id = 1;
+    ParkingLotType type = 2;
+    double latitude = 3;
+    double longitude = 4;
+    string openingHour = 5;
+    string closingHour = 6;
+    int32 availableSlot = 7;
+    int32 totalSlot = 8;
+    int64 version = 9;
+    ParkingLotInformation information = 10;
+}
+
+message ParkingLotUnit {
+    int64 id = 1;
+    int64 parkingLotId = 2;
+    int32 lowerBoundHour = 3;
+    int32 upperBoundHour = 4;
+    int32 unitPrice = 5;
+    int64 version = 6;
+}
+
+message ParkingLotRating {
+    int64 id = 1;
+    int64 parkingLotId = 2;
+    int64 customerId = 3;
+    string customerFullName = 4;
+    int32 rating = 5;
+    string comment = 6;
+    string lastUpdated = 7;
+    int64 version = 8;
+}
+
+message ParkingLotSuggestion {
+    int64 id = 1;
+    int64 customerId = 2;
+    string customerFullName = 3;
+    string parkingLotName = 4;
+    string address = 5;
+    double latitude = 6;
+    double longitude = 7;
+    bool isHandled = 8;
+    string lastUpdated = 9;
+    int64 version = 10;
+}
+
+message ParkingLotIdList {
+    repeated int64 parkingLotId = 1;
+}
+
+message ScanningByRadiusRequest {
+    double latitude = 1;
+    double longitude = 2;
+    int32 radiusToScan = 3;
+    int32 nResult = 4;
+}
+
+message ParkingLotLimit {
+    int32 availableSlot = 1;
+    int32 totalSlot = 2;
+}
+
+message ParkingLotResultList {
+    repeated ParkingLotResult parkingLotResult = 1;
+}
+
+service ParkingLotService {
+    rpc checkLimit (google.protobuf.Int64Value) returns (ParkingLotLimit);
+    rpc checkAvailability (google.protobuf.Int64Value) returns (google.protobuf.BoolValue);
+    rpc checkUnavailability (ParkingLotIdList) returns (ParkingLotIdList);
+    rpc getParkingLotById (google.protobuf.Int64Value) returns (ParkingLot);
+    rpc getTopParkingLotInRegionOrderByDistanceWithName (ScanningByRadiusRequest) returns (ParkingLotResultList);
+    rpc getTopParkingLotInRegionOrderByDistanceWithoutName (ScanningByRadiusRequest) returns (ParkingLotResultList);
+}

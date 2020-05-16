@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package com.bht.saigonparking.api.grpc.user;
+//option java_generic_services = true;
+option java_multiple_files = true;
+option java_outer_classname = "SaigonParkingUser";
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+
+enum UserRole {
+    CUSTOMER = 0;
+    PARKING_LOT_EMPLOYEE = 1;
+    GOVERNMENT_EMPLOYEE = 2;
+    ADMIN = 3;
+}
+
+message User {
+    int64 id = 1;
+    UserRole role = 2;
+    string username = 3;
+    string password = 4;
+    string email = 5;
+    bool isActivated = 6;
+    string lastSignIn = 7;
+    int64 version = 8;
+}
+
+message Customer {
+    User userInfo = 1;
+    string firstName = 2;
+    string lastName = 3;
+    string phone = 4;
+    string lastUpdated = 5;
+}
+
+message ParkingLotEmployee {
+    User userInfo = 1;
+    int64 parkingLotId = 2;
+}
+
+service UserService {
+    rpc getUserById (google.protobuf.Int64Value) returns (User);
+    rpc getUserByUsername (google.protobuf.StringValue) returns (User);
+    rpc getCustomerById (google.protobuf.Int64Value) returns (Customer);
+    rpc getParkingLotEmployeeById (google.protobuf.Int64Value) returns (ParkingLotEmployee);
+    rpc updateUserLastSignIn (google.protobuf.Int64Value) returns (google.protobuf.Empty);
+}
