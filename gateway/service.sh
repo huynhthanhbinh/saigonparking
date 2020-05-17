@@ -37,7 +37,7 @@ registerServiceHttpRoute() {
   curl -XPOST ${KONG_ADMIN_HOST}:${KONG_ADMIN_PORT}/services/$1/routes \
     --data protocols=http \
     --data name=$1 \
-    --data paths=/
+    --data paths=/api$2
   printf "\n"
 }
 
@@ -45,7 +45,23 @@ registerServiceHttpRoutePlugins() {
   printf "\nRegister %s service HTTP route plugins\n" $1
   curl -XPOST ${KONG_ADMIN_HOST}:${KONG_ADMIN_PORT}/routes/$1/plugins \
     --data name=grpc-web \
-    --data proto=/usr/local/kong/proto/$2
+    --data config.proto=/usr/local/kong/proto/$2
+  printf "\n\n"
+  curl -XPOST ${KONG_ADMIN_HOST}:${KONG_ADMIN_PORT}/routes/$1/plugins \
+    --data name=cors \
+    --data config.origins=* \
+    --data config.methods=GET \
+    --data config.methods=POST \
+    --data config.headers=Accept \
+    --data config.headers=Accept-Version \
+    --data config.headers=Authorization \
+    --data config.headers=Content-Length \
+    --data config.headers=Content-MD5 \
+    --data config.headers=Content-Type \
+    --data config.headers=Date \
+    --data config.headers=X-Auth-Token \
+    --data config.credentials=false \
+    --data config.max_age=1800
   printf "\n"
 }
 
@@ -57,7 +73,7 @@ PROTO_PATH=Auth.proto
 
 registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOUT}
 registerServiceGrpcRoute ${SERVICE_NAME} ${SERVICE_PATH}
-registerServiceHttpRoute ${SERVICE_NAME}
+registerServiceHttpRoute ${SERVICE_NAME} ${SERVICE_PATH}
 registerServiceHttpRoutePlugins ${SERVICE_NAME} ${PROTO_PATH}
 
 # register User Service
@@ -68,7 +84,7 @@ PROTO_PATH=Actor.proto
 
 registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOUT}
 registerServiceGrpcRoute ${SERVICE_NAME} ${SERVICE_PATH}
-registerServiceHttpRoute ${SERVICE_NAME}
+registerServiceHttpRoute ${SERVICE_NAME} ${SERVICE_PATH}
 registerServiceHttpRoutePlugins ${SERVICE_NAME} ${PROTO_PATH}
 
 # register ParkingLot Service
@@ -79,5 +95,5 @@ PROTO_PATH=ParkingLot.proto
 
 registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOUT}
 registerServiceGrpcRoute ${SERVICE_NAME} ${SERVICE_PATH}
-registerServiceHttpRoute ${SERVICE_NAME}
+registerServiceHttpRoute ${SERVICE_NAME} ${SERVICE_PATH}
 registerServiceHttpRoutePlugins ${SERVICE_NAME} ${PROTO_PATH}
