@@ -11,9 +11,10 @@
 
     <name>SAIGON-PARKING</name>
     <modules>
+        <module>proxy</module>
+        <module>gateway</module>
         <module>api</module>
         <module>service</module>
-        <module>gateway</module>
         <module>emulator</module>
     </modules>
 

@@ -1,6 +1,6 @@
 Document's name:    Parking Map Project References
 Author:             Huynh Thanh Binh
-Last updated:       Fri, May 15th, 2020
+Last updated:       Sun, May 17th, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -119,3 +119,15 @@ Last updated:       Fri, May 15th, 2020
 
 39. Authentication with JWT Example - gRPC Java
         https://github.com/grpc/grpc-java/tree/master/examples/example-jwt-auth
+
+40. Ditching REST with gRPC-web and Envoy
+        https://medium.com/swlh/ditching-rest-with-grpc-web-and-envoy-bfaa89a39b32
+
+41. gRPC-Web Hello World Guide
+        https://github.com/grpc/grpc-web/tree/master/net/grpc/gateway/examples/helloworld
+
+42. SETTING UP SSL IN ENVOY
+        https://www.envoyproxy.io/learn/ssl
+
+43. Docker RUN vs CMD vs ENTRYPOINT
+        https://goinbigdata.com/docker-run-vs-cmd-vs-entrypoint/
