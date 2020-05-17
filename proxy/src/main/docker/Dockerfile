@@ -1,4 +1,4 @@
-FROM envoyproxy/envoy-alpine:v1.14.1
+FROM envoyproxy/envoy:v1.12.2
 USER root
 RUN mkdir -p /usr/local/envoy
 ADD certificate /usr/local/envoy/certificate
