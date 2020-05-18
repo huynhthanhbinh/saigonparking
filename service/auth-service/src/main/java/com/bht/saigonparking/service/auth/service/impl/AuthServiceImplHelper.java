@@ -1,7 +1,6 @@
 package com.bht.saigonparking.service.auth.service.impl;
 
 import java.io.IOException;
-import java.nio.file.Files;
 
 import javax.validation.constraints.NotNull;
 
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.bht.saigonparking.api.grpc.user.UserRole;
 import com.bht.saigonparking.service.auth.base.BaseBean;
+import com.google.common.io.ByteStreams;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -43,7 +43,7 @@ public final class AuthServiceImplHelper implements BaseBean {
     }
 
     private String getPrivateKeyContent() throws IOException {
-        return new String(Files.readAllBytes(rsaPrivateKeyResource.getFile().toPath()))
+        return new String(ByteStreams.toByteArray(rsaPrivateKeyResource.getInputStream()))
                 .replace("-----BEGIN RSA PRIVATE KEY-----", "")
                 .replace("-----END RSA PRIVATE KEY-----", "")
                 .replaceAll("\\n", "");

@@ -18,6 +18,7 @@ import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 
+import io.grpc.Context;
 import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
 
@@ -40,29 +41,19 @@ public class AuthServiceImpl implements AuthService {
                                                             @NotNull UserRole userRole) {
 
         User user = userServiceBlockingStub.getUserByUsername(StringValue.of(username));
-
         if (!user.equals(User.getDefaultInstance())) {
             if (user.getRole().equals(userRole)) {
                 if (Boolean.TRUE.equals(user.getIsActivated())) {
                     if (password.equals(user.getPassword())) {
-                        userServiceStub.updateUserLastSignIn(Int64Value.of(user.getId()), new StreamObserver<Empty>() {
-                            @Override
-                            public void onNext(Empty empty) {
-                                LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                                        String.format("updateUserLastSignIn(%d)", user.getId()));
-                            }
 
-                            @Override
-                            public void onError(Throwable throwable) {
-                                LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", throwable.getMessage());
-                            }
+                        /* Asynchronously update user last sign in */
+                        Context context = Context.current().fork();
+                        context.run(() -> updateUserLastSignIn(user.getId()));
 
-                            @Override
-                            public void onCompleted() {
-                                // finish request
-                            }
-                        });
+                        /* Generate new access token for user with Id, Role */
                         String accessToken = authServiceImplHelper.generateAccessToken(user.getId(), userRole);
+
+                        /* Return response with two field: 1st ResponseType, 2nd AccessToken */
                         return Pair.of(ValidateResponseType.AUTHENTICATED, accessToken);
                     }
                     return Pair.of(ValidateResponseType.INCORRECT, "");
@@ -72,5 +63,26 @@ public class AuthServiceImpl implements AuthService {
             return Pair.of(ValidateResponseType.DISALLOWED, "");
         }
         return Pair.of(ValidateResponseType.NON_EXIST, "");
+    }
+
+    private void updateUserLastSignIn(Long userId) {
+        userServiceStub.updateUserLastSignIn(Int64Value.of(userId), new StreamObserver<Empty>() {
+            @Override
+            public void onNext(Empty empty) {
+                LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                        String.format("updateUserLastSignIn(%d)", userId));
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                LoggingUtil.log(Level.ERROR, "SERVICE", "Exception",
+                        throwable.getMessage());
+            }
+
+            @Override
+            public void onCompleted() {
+                // finish request
+            }
+        });
     }
 }

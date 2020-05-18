@@ -1,6 +1,6 @@
 Document's name:    Parking Map Project References
 Author:             Huynh Thanh Binh
-Last updated:       Sun, May 17th, 2020
+Last updated:       Tue, May 19th, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -131,3 +131,9 @@ Last updated:       Sun, May 17th, 2020
 
 43. Docker RUN vs CMD vs ENTRYPOINT
         https://goinbigdata.com/docker-run-vs-cmd-vs-entrypoint/
+
+44. Java InputStream to Byte Array and ByteBuffer
+        https://www.baeldung.com/convert-input-stream-to-array-of-bytes
+
+45. gRPC: Random CANCELLED exception on RPC calls - gRPC Asynchronous Stub Calling
+        https://stackoverflow.com/questions/57110811/grpc-random-cancelled-exception-on-rpc-calls

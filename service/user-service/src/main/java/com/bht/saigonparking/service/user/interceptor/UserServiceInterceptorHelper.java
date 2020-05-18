@@ -1,7 +1,6 @@
 package com.bht.saigonparking.service.user.interceptor;
 
 import java.io.IOException;
-import java.nio.file.Files;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,6 +9,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import com.bht.saigonparking.service.user.base.BaseBean;
+import com.google.common.io.ByteStreams;
 
 import javassist.NotFoundException;
 import lombok.AccessLevel;
@@ -45,7 +45,7 @@ public final class UserServiceInterceptorHelper implements BaseBean {
     }
 
     private String getPrivateKeyContent() throws IOException {
-        return new String(Files.readAllBytes(rsaPrivateKeyResource.getFile().toPath()))
+        return new String(ByteStreams.toByteArray(rsaPrivateKeyResource.getInputStream()))
                 .replace("-----BEGIN RSA PRIVATE KEY-----", "")
                 .replace("-----END RSA PRIVATE KEY-----", "")
                 .replaceAll("\\n", "");
