@@ -1,5 +1,7 @@
 package com.bht.saigonparking.service.user.base;
 
+import java.io.IOException;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
@@ -17,7 +19,7 @@ public interface BaseBean {
      * as the bean has been initialized
      */
     @PostConstruct
-    default void initialize() throws NotFoundException {
+    default void initialize() throws NotFoundException, IOException {
     }
 
     /**

@@ -3,6 +3,7 @@ package com.bht.saigonparking.service.auth.service.grpc;
 import org.apache.logging.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 
 import com.bht.saigonparking.api.grpc.auth.AuthServiceGrpc;
 import com.bht.saigonparking.api.grpc.auth.RegisterRequest;
@@ -29,18 +30,14 @@ public final class AuthServiceGrpcImpl extends AuthServiceGrpc.AuthServiceImplBa
     @Override
     public void validateUser(ValidateRequest request, StreamObserver<ValidateResponse> responseObserver) {
         try {
-            ValidateResponseType validateResponseType = authService.validateLogin(
+            Pair<ValidateResponseType, String> validateResponsePair = authService.validateLogin(
                     request.getUsername(),
                     request.getPassword(),
                     request.getRole());
 
-            String accessToken = validateResponseType.equals(ValidateResponseType.AUTHENTICATED)
-                    ? authService.generateAccessToken(request.getUsername(), request.getRole())
-                    : "";
-
             ValidateResponse validateResponse = ValidateResponse.newBuilder()
-                    .setResponse(validateResponseType)
-                    .setAccessToken(accessToken)
+                    .setResponse(validateResponsePair.getFirst())
+                    .setAccessToken(validateResponsePair.getSecond())
                     .build();
 
             responseObserver.onNext(validateResponse);

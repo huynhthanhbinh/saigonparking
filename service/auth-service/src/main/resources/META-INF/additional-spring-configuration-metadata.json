@@ -79,6 +79,16 @@
       "name": "service.user.max-inbound-metadata-size",
       "type": "java.lang.Integer",
       "description": "Connection max inbound metadata size in megabytes to USER service."
+    },
+    {
+      "name": "token.user-id.decode.key",
+      "type": "java.lang.Long",
+      "description": "Key using for encode/decode user id in token payload."
+    },
+    {
+      "name": "token.rsa-private-key.path",
+      "type": "java.lang.String",
+      "description": "Description for rsa_private_key.path."
     }
   ]
 }

@@ -4,6 +4,7 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,13 +30,14 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthServiceImpl implements AuthService {
 
+    private final AuthServiceImplHelper authServiceImplHelper;
     private final UserServiceGrpc.UserServiceStub userServiceStub;
     private final UserServiceGrpc.UserServiceBlockingStub userServiceBlockingStub;
 
     @Override
-    public ValidateResponseType validateLogin(@NotNull String username,
-                                              @NotNull String password,
-                                              @NotNull UserRole userRole) {
+    public Pair<ValidateResponseType, String> validateLogin(@NotNull String username,
+                                                            @NotNull String password,
+                                                            @NotNull UserRole userRole) {
 
         User user = userServiceBlockingStub.getUserByUsername(StringValue.of(username));
 
@@ -60,19 +62,15 @@ public class AuthServiceImpl implements AuthService {
                                 // finish request
                             }
                         });
-                        return ValidateResponseType.AUTHENTICATED;
+                        String accessToken = authServiceImplHelper.generateAccessToken(user.getId(), userRole);
+                        return Pair.of(ValidateResponseType.AUTHENTICATED, accessToken);
                     }
-                    return ValidateResponseType.INCORRECT;
+                    return Pair.of(ValidateResponseType.INCORRECT, "");
                 }
-                return ValidateResponseType.INACTIVATED;
+                return Pair.of(ValidateResponseType.INACTIVATED, "");
             }
-            return ValidateResponseType.DISALLOWED;
+            return Pair.of(ValidateResponseType.DISALLOWED, "");
         }
-        return ValidateResponseType.NON_EXIST;
-    }
-
-    @Override
-    public String generateAccessToken(@NotNull String username, @NotNull UserRole userRole) {
-        return "tempAccessToken";
+        return Pair.of(ValidateResponseType.NON_EXIST, "");
     }
 }

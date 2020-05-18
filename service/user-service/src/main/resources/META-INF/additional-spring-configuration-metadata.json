@@ -49,6 +49,16 @@
       "name": "aws.bucket",
       "type": "java.lang.String",
       "description": "Bucket of amazon S3."
+    },
+    {
+      "name": "token.user-id.decode.key",
+      "type": "java.lang.Long",
+      "description": "Key using for encode/decode user id in token payload."
+    },
+    {
+      "name": "token.rsa-private-key.path",
+      "type": "java.lang.String",
+      "description": "Description for rsa_private_key.path."
     }
   ]
 }

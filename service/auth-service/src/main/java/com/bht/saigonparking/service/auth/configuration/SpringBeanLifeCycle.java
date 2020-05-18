@@ -1,5 +1,6 @@
 package com.bht.saigonparking.service.auth.configuration;
 
+import java.io.IOException;
 import java.lang.reflect.Proxy;
 
 import org.apache.logging.log4j.Level;
@@ -19,7 +20,7 @@ public final class SpringBeanLifeCycle implements BaseBean, DestructionAwareBean
 
 
     @Override
-    public void initialize() {
+    public void initialize() throws IOException {
         BaseBean.super.initialize();
         LoggingUtil.log(Level.INFO, "SPRING", "BeanCreation", "springBeanLifeCycle");
     }
