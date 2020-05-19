@@ -1,51 +1,53 @@
 package com.bht.saigonparking.service.auth.service.impl;
 
-import java.io.IOException;
-
 import javax.validation.constraints.NotNull;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
+import org.apache.logging.log4j.Level;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bht.saigonparking.api.grpc.user.UserRole;
-import com.bht.saigonparking.service.auth.base.BaseBean;
-import com.google.common.io.ByteStreams;
+import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
+import com.bht.saigonparking.service.auth.util.LoggingUtil;
+import com.google.protobuf.Empty;
+import com.google.protobuf.Int64Value;
 
-import lombok.AccessLevel;
-import lombok.Getter;
+import io.grpc.stub.StreamObserver;
+import lombok.Setter;
 
 /**
  *
  * @author bht
  */
 @Component
-public final class AuthServiceImplHelper implements BaseBean {
+public final class AuthServiceImplHelper {
 
-    @Value("${token.user-id.decode.key}")
-    private Long userIdEncodeKey;
-
-    @Value("${token.rsa-private-key.path}")
-    private Resource rsaPrivateKeyResource;
-
-    @Getter(AccessLevel.PACKAGE)
-    private String rsaPrivateKeyContent;
-
-    @Override
-    public void initialize() throws IOException {
-        BaseBean.super.initialize();
-        rsaPrivateKeyContent = getPrivateKeyContent();
-    }
+    @Setter(onMethod = @__(@Autowired))
+    private UserServiceGrpc.UserServiceStub userServiceStub;
 
     String generateAccessToken(@NotNull Long userId,
                                @NotNull UserRole userRole) {
         return "tempAccessToken";
     }
 
-    private String getPrivateKeyContent() throws IOException {
-        return new String(ByteStreams.toByteArray(rsaPrivateKeyResource.getInputStream()))
-                .replace("-----BEGIN RSA PRIVATE KEY-----", "")
-                .replace("-----END RSA PRIVATE KEY-----", "")
-                .replaceAll("\\n", "");
+    void updateUserLastSignIn(Long userId) {
+        userServiceStub.updateUserLastSignIn(Int64Value.of(userId), new StreamObserver<Empty>() {
+            @Override
+            public void onNext(Empty empty) {
+                LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                        String.format("updateUserLastSignIn(%d)", userId));
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                LoggingUtil.log(Level.ERROR, "SERVICE", "Exception",
+                        throwable.getMessage());
+            }
+
+            @Override
+            public void onCompleted() {
+                // finish request
+            }
+        });
     }
 }

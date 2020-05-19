@@ -1,15 +1,14 @@
 package com.bht.saigonparking.service.auth.configuration;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import java.io.IOException;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
-import com.bht.saigonparking.api.grpc.user.UserServiceGrpc.UserServiceBlockingStub;
-
-import io.grpc.ManagedChannel;
+import com.bht.saigonparking.common.auth.SaigonParkingBaseAuthentication;
+import com.bht.saigonparking.common.interceptor.SaigonParkingClientInterceptor;
 
 /**
  *
@@ -22,15 +21,13 @@ public class AppConfiguration {
 
     static final String BASE_PACKAGE = "com.bht.saigonparking.service.auth"; // base package of auth module, contains all
 
-    // asynchronous user service stub
     @Bean
-    public UserServiceGrpc.UserServiceStub userServiceStub(@Qualifier("userChannel") ManagedChannel channel) {
-        return UserServiceGrpc.newStub(channel);
+    public SaigonParkingBaseAuthentication saigonParkingBaseAuthentication() throws IOException {
+        return new SaigonParkingBaseAuthentication();
     }
 
-    // synchronous user service stub
     @Bean
-    public UserServiceBlockingStub userServiceBlockingStub(@Qualifier("userChannel") ManagedChannel channel) {
-        return UserServiceGrpc.newBlockingStub(channel);
+    public SaigonParkingClientInterceptor saigonParkingClientInterceptor() {
+        return new SaigonParkingClientInterceptor(SaigonParkingClientInterceptor.INTERNAL_CODE_AUTH_SERVICE);
     }
 }

@@ -1,4 +1,4 @@
-package com.bht.saigonparking.service.auth.configuration;
+package com.bht.saigonparking.service.parkinglot.configuration;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,6 +21,7 @@ import io.grpc.netty.NettyChannelBuilder;
  */
 @Component
 public final class ChannelConfiguration {
+
 
     /**
      *

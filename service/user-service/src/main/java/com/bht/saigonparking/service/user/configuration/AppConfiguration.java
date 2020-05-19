@@ -1,14 +1,18 @@
 package com.bht.saigonparking.service.user.configuration;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.io.IOException;
 
+import org.lognet.springboot.grpc.GRpcGlobalInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.bht.saigonparking.common.auth.SaigonParkingBaseAuthentication;
+import com.bht.saigonparking.common.interceptor.SaigonParkingClientInterceptor;
+import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
 import com.bht.saigonparking.service.user.annotation.InheritedComponent;
 
 /**
@@ -18,6 +22,7 @@ import com.bht.saigonparking.service.user.annotation.InheritedComponent;
 @Configuration
 @EnableTransactionManagement
 @SuppressWarnings("squid:S1118")
+@Import(ChannelConfiguration.class)
 @ComponentScan(basePackages = AppConfiguration.BASE_PACKAGE,
         includeFilters = @ComponentScan.Filter(InheritedComponent.class))
 public class AppConfiguration {
@@ -29,8 +34,19 @@ public class AppConfiguration {
         return new ProtobufHttpMessageConverter();
     }
 
-    @Bean("localhost")
-    public String localHost() throws UnknownHostException {
-        return InetAddress.getLocalHost().getHostAddress();
+    @Bean
+    public SaigonParkingBaseAuthentication saigonParkingBaseAuthentication() throws IOException {
+        return new SaigonParkingBaseAuthentication();
+    }
+
+    @Bean
+    public SaigonParkingClientInterceptor saigonParkingClientInterceptor() {
+        return new SaigonParkingClientInterceptor(SaigonParkingClientInterceptor.INTERNAL_CODE_PARKING_LOT_SERVICE);
+    }
+
+    @Bean
+    @GRpcGlobalInterceptor
+    public SaigonParkingServerInterceptor saigonParkingServerInterceptor() {
+        return new SaigonParkingServerInterceptor();
     }
 }

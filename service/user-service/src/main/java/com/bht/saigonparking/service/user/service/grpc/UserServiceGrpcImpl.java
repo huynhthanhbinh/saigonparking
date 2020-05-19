@@ -8,7 +8,6 @@ import com.bht.saigonparking.api.grpc.user.Customer;
 import com.bht.saigonparking.api.grpc.user.ParkingLotEmployee;
 import com.bht.saigonparking.api.grpc.user.User;
 import com.bht.saigonparking.api.grpc.user.UserServiceGrpc.UserServiceImplBase;
-import com.bht.saigonparking.service.user.interceptor.UserServiceInterceptor;
 import com.bht.saigonparking.service.user.mapper.EnumMapper;
 import com.bht.saigonparking.service.user.mapper.UserMapper;
 import com.bht.saigonparking.service.user.service.main.UserService;
@@ -35,8 +34,6 @@ import lombok.AllArgsConstructor;
 @GRpcService
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public final class UserServiceGrpcImpl extends UserServiceImplBase {
-
-    private final UserServiceInterceptor userServiceInterceptor;
 
     private final UserService userService;
     private final UserMapper userMapper;

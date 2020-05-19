@@ -49,6 +49,36 @@
       "name": "aws.bucket",
       "type": "java.lang.String",
       "description": "Bucket of amazon S3."
+    },
+    {
+      "name": "service.user.host",
+      "type": "java.lang.String",
+      "description": "Host of USER service."
+    },
+    {
+      "name": "service.user.port.http",
+      "type": "java.lang.Integer",
+      "description": "Port HTTP of USER service."
+    },
+    {
+      "name": "service.user.port.grpc",
+      "type": "java.lang.Integer",
+      "description": "Port GRPC of USER service."
+    },
+    {
+      "name": "service.user.idle-timeout",
+      "type": "java.lang.Integer",
+      "description": "Connection timeout in milliseconds to USER service."
+    },
+    {
+      "name": "service.user.max-inbound-message-size",
+      "type": "java.lang.Integer",
+      "description": "Connection max inbound message size in megabytes to USER service."
+    },
+    {
+      "name": "service.user.max-inbound-metadata-size",
+      "type": "java.lang.Integer",
+      "description": "Connection max inbound metadata size in megabytes to USER service."
     }
   ]
 }

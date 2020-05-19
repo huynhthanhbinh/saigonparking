@@ -51,14 +51,34 @@
       "description": "Bucket of amazon S3."
     },
     {
-      "name": "token.user-id.decode.key",
-      "type": "java.lang.Long",
-      "description": "Key using for encode/decode user id in token payload."
+      "name": "service.parkinglot.host",
+      "type": "java.lang.String",
+      "description": "Host of USER service."
     },
     {
-      "name": "token.rsa-private-key.path",
-      "type": "java.lang.String",
-      "description": "Description for rsa_private_key.path."
+      "name": "service.parkinglot.port.http",
+      "type": "java.lang.Integer",
+      "description": "Port HTTP of USER service."
+    },
+    {
+      "name": "service.parkinglot.port.grpc",
+      "type": "java.lang.Integer",
+      "description": "Port GRPC of USER service."
+    },
+    {
+      "name": "service.parkinglot.idle-timeout",
+      "type": "java.lang.Integer",
+      "description": "Connection timeout in milliseconds to USER service."
+    },
+    {
+      "name": "service.parkinglot.max-inbound-message-size",
+      "type": "java.lang.Integer",
+      "description": "Connection max inbound message size in megabytes to USER service."
+    },
+    {
+      "name": "service.parkinglot.max-inbound-metadata-size",
+      "type": "java.lang.Integer",
+      "description": "Connection max inbound metadata size in megabytes to USER service."
     }
   ]
 }
