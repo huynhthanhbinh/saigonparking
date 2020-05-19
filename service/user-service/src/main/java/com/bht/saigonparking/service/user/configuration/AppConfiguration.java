@@ -41,7 +41,7 @@ public class AppConfiguration {
 
     @Bean
     public SaigonParkingClientInterceptor saigonParkingClientInterceptor() {
-        return new SaigonParkingClientInterceptor(SaigonParkingClientInterceptor.INTERNAL_CODE_PARKING_LOT_SERVICE);
+        return new SaigonParkingClientInterceptor(SaigonParkingClientInterceptor.INTERNAL_CODE_USER_SERVICE);
     }
 
     @Bean

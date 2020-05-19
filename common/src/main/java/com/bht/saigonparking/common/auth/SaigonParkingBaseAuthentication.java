@@ -19,10 +19,6 @@ public final class SaigonParkingBaseAuthentication {
 
     public SaigonParkingBaseAuthentication() throws IOException {
         init();
-        System.out.println(userIdDecodeKey);
-        System.out.println(encodeUserId(100L));
-        System.out.println(decodeUserId(encodeUserId(100L)));
-        System.out.println(privateKeyContent);
     }
 
     public Long encodeUserId(Long userId) {
