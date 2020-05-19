@@ -17,4 +17,4 @@
 <h6>5. 1653076 - Dang Duc Tai - 1653076@student.hcmus.edu.vn</h6>
 <br/>
 
-![](resources/references/00_ParkingMap_Architecture.png)
+![](dev/architecture.png)

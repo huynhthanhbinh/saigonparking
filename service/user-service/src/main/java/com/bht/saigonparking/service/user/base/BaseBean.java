@@ -8,7 +8,7 @@ import javax.annotation.PreDestroy;
 import javassist.NotFoundException;
 
 /**
- * Parking Map Project Base Bean
+ * Saigon Parking Project Base Bean
  *
  * @author bht
  */

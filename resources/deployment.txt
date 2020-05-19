@@ -1,6 +1,6 @@
-Document's name:    Parking Map Project Deployment
+Document's name:    Saigon Parking Project Deployment
 Author:             Huynh Thanh Binh
-Last updated:       Tue, April 21st, 2020
+Last updated:       Tue, May 19th, 2020
 ========================================================================================================================
 
 We will simply deploy our system in 2 VM instances in GCP: Gateway & Service
@@ -35,7 +35,11 @@ Gateway public ports:
     + 9080: API GRPC/HTTP2
     + 9081: API GRPC/HTTP2 SSL
     + 8432: GATEWAY POSTGRES DB
+    + 8338: PROXY HTTP
+    + 8448: PROXY HTTP SSL
+
 Gateway private ports:
+    + 9901: ENVOY ADMIN HTTP
     + 8001: KONG ADMIN HTTP
     + 8444: KONG ADMIN HTTP SSL
 

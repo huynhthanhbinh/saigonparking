@@ -7,7 +7,7 @@ import lombok.extern.log4j.Log4j2;
 /**
  * This is util class for logging purpose
  * Logging methods here have been customized
- * for using only in Parking Map Project here
+ * for using only in Saigon Parking Project here
  *
  * Current project using logging framework of Apache
  * That is Log4J - logging for java, which 'til now has 2 versions

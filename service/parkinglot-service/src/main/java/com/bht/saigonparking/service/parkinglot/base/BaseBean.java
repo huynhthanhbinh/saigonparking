@@ -4,7 +4,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 /**
- * Parking Map Project Base Bean
+ * Saigon Parking Project Base Bean
  *
  * @author bht
  */

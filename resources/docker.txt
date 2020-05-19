@@ -1,6 +1,6 @@
-Document's name:    Parking Map Project Config Docker Daemon
+Document's name:    Saigon Parking Project Config Docker Daemon
 Author:             Huynh Thanh Binh
-Last updated:       Tue, April 21st, 2020
+Last updated:       Tue, May 19th, 2020
 ========================================================================================================================
 
 Enable TCP port 2375 for external connection to Docker - Ubuntu

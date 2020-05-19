@@ -1,8 +1,8 @@
-Document's name:    Parking Map Project Setup Guide
+Document's name:    Saigon Parking Project Setup Guide
 Author:             Huynh Thanh Binh
-Last updated:       Wed, March 11th, 2020
+Last updated:       Tue, May 19th, 2020
 ========================================================================================================================
-All necessary setup files are provided in Parking Map Project's private Google Drive. Please do NOT share anything outside
+All necessary setup files are provided in Saigon Parking Project's private Google Drive. Please do NOT share anything outside
 
 Step 00: Download all necessary things: ( dependencies / libraries / tools / plugins / project )
 
@@ -11,7 +11,7 @@ Step 00: Download all necessary things: ( dependencies / libraries / tools / plu
                             username: saigonparkingmap
                             password: 0506122076
 
-    2. Clone Parking Map project from private repository:
+    2. Clone Saigon Parking project from private repository:
 
                             https://github.com/huynhthanhbinh/parkingmap
 

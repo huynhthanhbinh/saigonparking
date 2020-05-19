@@ -9,7 +9,7 @@ import lombok.Getter;
 /**
  * This is util class for processing images purpose
  * such as get/save/delete images,
- * for using only in Parking Map Project here
+ * for using only in Saigon Parking Project here
  *
  * Used to store images on machine only
  * Currently using cloud storage: Amazon S3

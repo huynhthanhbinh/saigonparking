@@ -1,0 +1,17 @@
+Document's name:    Saigon Parking Proto Compiler References
+Author:             Huynh Thanh Binh
+Last updated:       Tue, May 19th, 2020
+========================================================================================================================
+How to compile proto file into Java file, Java Script File, ... ?
+
++ Download newest protoc (proto compiler) (.ZIP) from Github release page of Protocol Buffer: (currently using v3.12)
+    https://github.com/protocolbuffers/protobuf/releases
++ Extract protoc zip into a folder
++ Concat PATH system environment variables with path to protoc's bin folder
++ Restart the computer for system environment variable to take affect !
++ Check if the installation is success by query for protoc version in command line
++ to use the included well known types copy the contents of the 'include' directory
+  somewhere as well, for example into '/usr/local/include/'.
+  All well-known proto message is defined inside '/include/google/protobuf' folder!
++ Finally, use the proto compiler to compile proto file into Java, JavaScript,...Eg:
+    protoc -I=. Actor.proto --js_out=import_style=commonjs:. --grpc-web_out=import_style=commonjs,mode=grpcwebtext:.

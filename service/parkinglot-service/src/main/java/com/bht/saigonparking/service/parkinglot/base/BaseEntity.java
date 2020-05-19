@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 
 /**
  *
- * Parking Map Project Base Entity
+ * Saigon Parking Project Base Entity
  *
  * Mutual fields of each entity is declared in this abstract class, include:
  *      + id: unique id, primary key of each entity

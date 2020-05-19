@@ -51,5 +51,10 @@
             <artifactId>grpc-stub</artifactId>
             <version>${grpc.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${java-jwt.version}</version>
+        </dependency>
     </dependencies>
 </project>
