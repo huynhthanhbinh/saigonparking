@@ -1,5 +1,7 @@
 package com.bht.saigonparking.common.interceptor;
 
+import static com.bht.saigonparking.common.auth.SaigonParkingBaseAuthentication.INTERNAL_KEY_NAME;
+
 import io.grpc.CallOptions;
 import io.grpc.Channel;
 import io.grpc.ClientCall;
@@ -30,7 +32,6 @@ import lombok.AllArgsConstructor;
 public final class SaigonParkingClientInterceptor implements ClientInterceptor {
 
     private final Long internalServiceCode;
-    public static final String INTERNAL_KEY_NAME = "SaigonParkingInternal";
     public static final Key<String> INTERNAL_SERVICE_KEY = Key.of(INTERNAL_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER);
 
     public static final Long INTERNAL_CODE_AUTH_SERVICE = 165305061220760001L;

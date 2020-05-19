@@ -25,6 +25,11 @@
     <dependencies>
         <dependency>
             <groupId>com.bht.saigonparking</groupId>
+            <artifactId>auth-private-api</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bht.saigonparking</groupId>
             <artifactId>user-private-api</artifactId>
             <version>${revision}</version>
         </dependency>

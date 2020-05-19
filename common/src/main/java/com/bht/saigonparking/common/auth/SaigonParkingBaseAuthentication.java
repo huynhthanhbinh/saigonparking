@@ -17,6 +17,9 @@ public final class SaigonParkingBaseAuthentication {
     private Long userIdDecodeKey;
     private String privateKeyContent;
 
+    public static final String AUTHORIZATION_KEY_NAME = "authorization";
+    public static final String INTERNAL_KEY_NAME = "saigon-parking-internal";
+
     public SaigonParkingBaseAuthentication() throws IOException {
         init();
     }

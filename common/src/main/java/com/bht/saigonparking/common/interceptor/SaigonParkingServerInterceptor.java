@@ -1,5 +1,8 @@
 package com.bht.saigonparking.common.interceptor;
 
+import static com.bht.saigonparking.common.auth.SaigonParkingBaseAuthentication.AUTHORIZATION_KEY_NAME;
+import static com.bht.saigonparking.common.auth.SaigonParkingBaseAuthentication.INTERNAL_KEY_NAME;
+
 import io.grpc.Context;
 import io.grpc.Contexts;
 import io.grpc.Metadata;
@@ -28,10 +31,8 @@ public final class SaigonParkingServerInterceptor implements ServerInterceptor {
     private final Context.Key<String> roleContext = Context.key("role");
     private final Context.Key<Long> userIdContext = Context.key("userId");
 
-    public static final String INTERNAL_KEY_NAME = "SaigonParkingInternal";
-    public static final String AUTHORIZATION_KEY_NAME = "Authorization";
     public static final Key<String> INTERNAL_SERVICE_KEY = Key.of(INTERNAL_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER);
-    public static final Key<String> AUTHORIZATION_KEY = Key.of(INTERNAL_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER);
+    public static final Key<String> AUTHORIZATION_KEY = Key.of(AUTHORIZATION_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER);
 
     @Override
     public <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> serverCall,
