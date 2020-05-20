@@ -1,6 +1,6 @@
 package com.bht.saigonparking.common.interceptor;
 
-import static com.bht.saigonparking.common.auth.SaigonParkingBaseAuthentication.INTERNAL_KEY_NAME;
+import static com.bht.saigonparking.common.auth.SaigonParkingAuthentication.INTERNAL_KEY_NAME;
 
 import io.grpc.CallOptions;
 import io.grpc.Channel;

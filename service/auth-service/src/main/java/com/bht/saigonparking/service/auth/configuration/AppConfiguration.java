@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.bht.saigonparking.common.auth.SaigonParkingBaseAuthentication;
+import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
 import com.bht.saigonparking.common.interceptor.SaigonParkingClientInterceptor;
 
 /**
@@ -22,8 +22,8 @@ public class AppConfiguration {
     static final String BASE_PACKAGE = "com.bht.saigonparking.service.auth"; // base package of auth module, contains all
 
     @Bean
-    public SaigonParkingBaseAuthentication saigonParkingBaseAuthentication() throws IOException {
-        return new SaigonParkingBaseAuthentication();
+    public SaigonParkingAuthentication saigonParkingBaseAuthentication() throws IOException {
+        return new SaigonParkingAuthentication();
     }
 
     @Bean

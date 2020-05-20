@@ -8,26 +8,27 @@ import org.springframework.stereotype.Component;
 
 import com.bht.saigonparking.api.grpc.user.UserRole;
 import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
+import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
 import com.bht.saigonparking.service.auth.util.LoggingUtil;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 
 import io.grpc.stub.StreamObserver;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
 
 /**
  *
  * @author bht
  */
 @Component
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 public final class AuthServiceImplHelper {
 
-    @Setter(onMethod = @__(@Autowired))
-    private UserServiceGrpc.UserServiceStub userServiceStub;
+    private final SaigonParkingAuthentication authentication;
+    private final UserServiceGrpc.UserServiceStub userServiceStub;
 
-    String generateAccessToken(@NotNull Long userId,
-                               @NotNull UserRole userRole) {
-        return "tempAccessToken";
+    String generateAccessToken(@NotNull Long userId, @NotNull UserRole userRole) {
+        return authentication.generateJwtToken(userId, userRole.toString());
     }
 
     void updateUserLastSignIn(Long userId) {
