@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotInformation;
+import com.bht.saigonparking.common.exception.ConcurrentUpdateException;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotInformationEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
-import com.bht.saigonparking.service.parkinglot.exception.ConcurrentUpdateException;
 import com.bht.saigonparking.service.parkinglot.mapper.CustomizedMapper;
 import com.bht.saigonparking.service.parkinglot.mapper.ParkingLotMapperExt;
 import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotRepository;

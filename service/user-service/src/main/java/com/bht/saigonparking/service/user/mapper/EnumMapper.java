@@ -1,5 +1,6 @@
 package com.bht.saigonparking.service.user.mapper;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
 
 import org.mapstruct.Mapper;
@@ -9,15 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bht.saigonparking.api.grpc.user.UserRole;
-import com.bht.saigonparking.service.user.base.BaseBean;
+import com.bht.saigonparking.common.base.BaseBean;
 import com.bht.saigonparking.service.user.configuration.AppConfiguration;
 import com.bht.saigonparking.service.user.entity.UserRoleEntity;
 import com.bht.saigonparking.service.user.repository.core.UserRoleRepository;
-import com.bht.saigonparking.service.user.util.ExceptionUtil;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
-import javassist.NotFoundException;
 import lombok.Setter;
 
 /**
@@ -49,7 +48,7 @@ public abstract class EnumMapper implements BaseBean {
     private static final BiMap<UserRoleEntity, UserRole> USER_ROLE_BI_MAP = HashBiMap.create();
 
     @Override
-    public void initialize() throws NotFoundException {
+    public void initialize() {
         initUserRoleBiMap();
     }
 
@@ -64,13 +63,13 @@ public abstract class EnumMapper implements BaseBean {
     }
 
     // initialize ======================================================================================================
-    private void initUserRoleBiMap() throws NotFoundException {
+    private void initUserRoleBiMap() {
         USER_ROLE_BI_MAP.put(getUserRoleById(1L), UserRole.ADMIN);
         USER_ROLE_BI_MAP.put(getUserRoleById(2L), UserRole.CUSTOMER);
         USER_ROLE_BI_MAP.put(getUserRoleById(3L), UserRole.PARKING_LOT_EMPLOYEE);
     }
 
-    private UserRoleEntity getUserRoleById(@NotNull Long id) throws NotFoundException {
-        return userRoleRepository.findById(id).orElseThrow(ExceptionUtil::throwEntityNotFoundException);
+    private UserRoleEntity getUserRoleById(@NotNull Long id) {
+        return userRoleRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 }

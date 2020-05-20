@@ -2,6 +2,7 @@ package com.bht.saigonparking.service.user.service.main.impl;
 
 import java.sql.Timestamp;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,7 @@ import com.bht.saigonparking.service.user.repository.core.CustomerRepository;
 import com.bht.saigonparking.service.user.repository.core.ParkingLotEmployeeRepository;
 import com.bht.saigonparking.service.user.repository.core.UserRepository;
 import com.bht.saigonparking.service.user.service.main.UserService;
-import com.bht.saigonparking.service.user.util.ExceptionUtil;
 
-import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 
 /**
@@ -42,9 +41,8 @@ public class UserServiceImpl implements UserService {
     private final ParkingLotEmployeeRepository parkingLotEmployeeRepository;
 
     @Override
-    public UserEntity getUserById(@NotNull Long id) throws NotFoundException {
-        return userRepository.findById(id)
-                .orElseThrow(ExceptionUtil::throwEntityNotFoundException);
+    public UserEntity getUserById(@NotNull Long id) {
+        return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
@@ -53,19 +51,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CustomerEntity getCustomerById(@NotNull Long id) throws NotFoundException {
-        return customerRepository.findById(id)
-                .orElseThrow(ExceptionUtil::throwEntityNotFoundException);
+    public CustomerEntity getCustomerById(@NotNull Long id) {
+        return customerRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
-    public ParkingLotEmployeeEntity getParkingLotEmployeeById(@NotNull Long id) throws NotFoundException {
-        return parkingLotEmployeeRepository.findById(id)
-                .orElseThrow(ExceptionUtil::throwEntityNotFoundException);
+    public ParkingLotEmployeeEntity getParkingLotEmployeeById(@NotNull Long id) {
+        return parkingLotEmployeeRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
-    public void updateUserLastSignIn(@NotNull Long id) throws NotFoundException {
+    public void updateUserLastSignIn(@NotNull Long id) {
         UserEntity userEntity = getUserById(id);
         userEntity.setLastSignIn(new Timestamp(System.currentTimeMillis()));
         userRepository.saveAndFlush(userEntity);

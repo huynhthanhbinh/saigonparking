@@ -15,8 +15,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
+import com.bht.saigonparking.common.base.BaseEntity;
 import com.bht.saigonparking.service.parkinglot.annotation.TimeFlowValidation;
-import com.bht.saigonparking.service.parkinglot.base.BaseEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

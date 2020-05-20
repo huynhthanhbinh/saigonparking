@@ -1,4 +1,4 @@
-package com.bht.saigonparking.service.parkinglot.base;
+package com.bht.saigonparking.common.base;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

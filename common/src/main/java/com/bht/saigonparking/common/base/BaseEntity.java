@@ -1,4 +1,4 @@
-package com.bht.saigonparking.service.user.base;
+package com.bht.saigonparking.common.base;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;

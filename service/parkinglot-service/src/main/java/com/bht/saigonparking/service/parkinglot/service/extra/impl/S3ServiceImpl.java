@@ -14,8 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.parkinglot.service.extra.S3Service;
-import com.bht.saigonparking.service.parkinglot.util.LoggingUtil;
 import com.google.common.io.ByteSource;
 
 import lombok.AllArgsConstructor;

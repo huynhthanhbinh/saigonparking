@@ -11,8 +11,8 @@ import com.bht.saigonparking.api.grpc.auth.RegisterResponse;
 import com.bht.saigonparking.api.grpc.auth.ValidateRequest;
 import com.bht.saigonparking.api.grpc.auth.ValidateResponse;
 import com.bht.saigonparking.api.grpc.auth.ValidateResponseType;
+import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.auth.service.AuthService;
-import com.bht.saigonparking.service.auth.util.LoggingUtil;
 
 import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;

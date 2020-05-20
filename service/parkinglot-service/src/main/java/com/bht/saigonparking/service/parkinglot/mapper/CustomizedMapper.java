@@ -14,9 +14,9 @@ import org.springframework.stereotype.Component;
 
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotInformation;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
+import com.bht.saigonparking.common.util.ImageUtil;
 import com.bht.saigonparking.service.parkinglot.configuration.AppConfiguration;
 import com.bht.saigonparking.service.parkinglot.service.extra.ImageService;
-import com.bht.saigonparking.service.parkinglot.util.ImageUtil;
 import com.google.protobuf.ByteString;
 
 import lombok.Setter;

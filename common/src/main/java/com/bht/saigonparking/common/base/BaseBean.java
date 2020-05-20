@@ -1,4 +1,6 @@
-package com.bht.saigonparking.service.parkinglot.base;
+package com.bht.saigonparking.common.base;
+
+import java.io.IOException;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -15,7 +17,7 @@ public interface BaseBean {
      * as the bean has been initialized
      */
     @PostConstruct
-    default void initialize() {
+    default void initialize() throws IOException {
     }
 
     /**

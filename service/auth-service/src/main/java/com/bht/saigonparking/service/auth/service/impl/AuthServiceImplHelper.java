@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import com.bht.saigonparking.api.grpc.user.UserRole;
 import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
 import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
-import com.bht.saigonparking.service.auth.util.LoggingUtil;
+import com.bht.saigonparking.common.util.LoggingUtil;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 

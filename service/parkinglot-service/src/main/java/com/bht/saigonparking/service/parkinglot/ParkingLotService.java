@@ -6,6 +6,8 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
+import com.bht.saigonparking.common.handler.SaigonParkingExceptionHandler;
+
 /**
  *
  * This class is parking-map-service main class
@@ -31,5 +33,6 @@ public class ParkingLotService extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
         SpringApplication.run(ParkingLotService.class, args);
+        Thread.setDefaultUncaughtExceptionHandler(new SaigonParkingExceptionHandler());
     }
 }

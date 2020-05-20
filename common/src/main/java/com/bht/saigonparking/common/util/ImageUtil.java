@@ -1,4 +1,4 @@
-package com.bht.saigonparking.service.parkinglot.util;
+package com.bht.saigonparking.common.util;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Internal;

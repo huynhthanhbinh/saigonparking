@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
-import com.bht.saigonparking.service.parkinglot.base.BaseBean;
+import com.bht.saigonparking.common.base.BaseBean;
 import com.bht.saigonparking.service.parkinglot.configuration.AppConfiguration;
 
 import lombok.Setter;

@@ -1,21 +1,13 @@
-package com.bht.saigonparking.service.parkinglot.configuration;
+package com.bht.saigonparking.common.spring;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Component;
 
 /**
  *
- * This class is used for testing purpose only
- * or used for getting spring bean dynamically
- * via calling method getBean()
- * with 1 param only is bean class,
- * eg. {@code getBean(ParkingLotService.class)}
- *
  * @author bht
  */
-@Component
 public final class SpringApplicationContext implements ApplicationContextAware {
 
     private static ApplicationContext context;

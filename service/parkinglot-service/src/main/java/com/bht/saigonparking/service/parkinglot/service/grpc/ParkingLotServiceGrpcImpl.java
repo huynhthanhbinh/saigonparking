@@ -13,10 +13,10 @@ import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResult;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResultList;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc.ParkingLotServiceImplBase;
 import com.bht.saigonparking.api.grpc.parkinglot.ScanningByRadiusRequest;
+import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
 import com.bht.saigonparking.service.parkinglot.mapper.ParkingLotMapper;
 import com.bht.saigonparking.service.parkinglot.service.main.ParkingLotService;
-import com.bht.saigonparking.service.parkinglot.util.LoggingUtil;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.Int64Value;
 

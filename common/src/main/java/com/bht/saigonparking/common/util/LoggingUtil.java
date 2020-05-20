@@ -1,4 +1,4 @@
-package com.bht.saigonparking.service.auth.util;
+package com.bht.saigonparking.common.util;
 
 import org.apache.logging.log4j.Level;
 

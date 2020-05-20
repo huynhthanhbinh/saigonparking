@@ -1,4 +1,4 @@
-package com.bht.saigonparking.service.parkinglot.annotation;
+package com.bht.saigonparking.common.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;

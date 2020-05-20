@@ -1,4 +1,4 @@
-package com.bht.saigonparking.service.parkinglot.exception;
+package com.bht.saigonparking.common.exception;
 
 /**
  *
