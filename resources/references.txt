@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Tue, May 19th, 2020
+Last updated:       Wed, May 20th, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -137,3 +137,6 @@ Last updated:       Tue, May 19th, 2020
 
 45. gRPC: Random CANCELLED exception on RPC calls - gRPC Asynchronous Stub Calling
         https://stackoverflow.com/questions/57110811/grpc-random-cancelled-exception-on-rpc-calls
+
+46. Git Bash confuse with Slash '/' when running bash script on Windows - Asked by me =))))
+        https://stackoverflow.com/questions/61907994/git-bash-confuse-with-slash-when-running-bash-script-on-windows

@@ -1,9 +1,11 @@
 #!/bin/sh
+export MSYS_NO_PATHCONV=1
 
 KONG_ADMIN_HOST=localhost
 KONG_ADMIN_PORT=8001
 CONNECT_TIMEOUT=20000
 
+# create function to prevent boilerplate code
 registerService() {
   printf "\nRegister %s service\n" $1
   curl -XPOST ${KONG_ADMIN_HOST}:${KONG_ADMIN_PORT}/services \
@@ -17,6 +19,7 @@ registerService() {
   printf "\n"
 }
 
+# create function to prevent boilerplate code
 registerServiceGrpcRoute() {
   printf "\nRegister %s service gRPC route\n" $1
   curl -XPOST ${KONG_ADMIN_HOST}:${KONG_ADMIN_PORT}/services/$1/routes \
@@ -52,3 +55,5 @@ SERVICE_PATH=/com.bht.saigonparking.api.grpc.parkinglot.ParkingLotService/
 
 registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOUT}
 registerServiceGrpcRoute ${SERVICE_NAME} ${SERVICE_PATH}
+
+export MSYS_NO_PATHCONV=0
