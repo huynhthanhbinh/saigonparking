@@ -17,6 +17,6 @@ public final class SaigonParkingExceptionHandler implements Thread.UncaughtExcep
 
     @Override
     public void uncaughtException(Thread t, Throwable e) {
-        LoggingUtil.log(Level.ERROR, "GLOBAL", "Exception", e.getMessage());
+        LoggingUtil.log(Level.ERROR, "GLOBAL", "Exception", e.getClass().getSimpleName());
     }
 }
