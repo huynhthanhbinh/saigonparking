@@ -6,19 +6,12 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import com.bht.saigonparking.common.handler.SaigonParkingExceptionHandler;
-
 /**
  *
  * This class is parking-map-service main class
  * which contains the main() method to execute the service.
  * Parking-map service is simply a spring-boot server
  * which communicate directly with the RDBMS
- *
- * All other upper layer services or web-server...
- * must access the data through Parking-Map Service,
- * cannot call directly to the RDBMS
- * for querying or modifying data !!
  *
  * @author bht
  */
@@ -33,6 +26,5 @@ public class ParkingLotService extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
         SpringApplication.run(ParkingLotService.class, args);
-        Thread.setDefaultUncaughtExceptionHandler(new SaigonParkingExceptionHandler());
     }
 }

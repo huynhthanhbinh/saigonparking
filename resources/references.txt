@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Wed, May 20th, 2020
+Last updated:       Fri, May 22nd, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -140,3 +140,9 @@ Last updated:       Wed, May 20th, 2020
 
 46. Git Bash confuse with Slash '/' when running bash script on Windows - Asked by me =))))
         https://stackoverflow.com/questions/61907994/git-bash-confuse-with-slash-when-running-bash-script-on-windows
+
+47. Why must I use try catch when I use global exception handling?
+        https://stackoverflow.com/questions/25753752/why-must-i-use-try-catch-when-i-use-global-exception-handling
+
+48. User IDs and passwords: Equally important for access security
+        https://www.techrepublic.com/blog/it-security/user-ids-and-passwords-equally-important-for-access-security/

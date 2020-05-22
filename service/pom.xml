@@ -62,7 +62,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${springboot.version}</version>
                 <configuration>
-                    <excludeDevtools>false</excludeDevtools>
+                    <excludeDevtools>true</excludeDevtools>
                     <jvmArguments>
                         -Dfile.encoding=UTF-8 -Xms500m -Xmx4000m -XX:ReservedCodeCacheSize=500m -XX:+UseConcMarkSweepGC
                         -XX:SoftRefLRUPolicyMSPerMB=50 -XX:+HeapDumpOnOutOfMemoryError -XX:-OmitStackTraceInFastThrow

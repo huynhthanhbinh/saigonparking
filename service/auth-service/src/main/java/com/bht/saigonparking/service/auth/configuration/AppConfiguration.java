@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
+import com.bht.saigonparking.common.auth.SaigonParkingAuthenticationImpl;
 import com.bht.saigonparking.common.interceptor.SaigonParkingClientInterceptor;
 import com.bht.saigonparking.common.spring.SpringApplicationContext;
 import com.bht.saigonparking.common.spring.SpringBeanLifeCycle;
@@ -35,7 +36,7 @@ public class AppConfiguration {
 
     @Bean
     public SaigonParkingAuthentication saigonParkingBaseAuthentication() throws IOException {
-        return new SaigonParkingAuthentication();
+        return new SaigonParkingAuthenticationImpl();
     }
 
     @Bean

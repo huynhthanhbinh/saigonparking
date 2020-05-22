@@ -17,4 +17,10 @@ public final class ConcurrentUpdateException extends RuntimeException {
     public ConcurrentUpdateException(String message) {
         super(message);
     }
+
+    /* Disable print out stack trace */
+    @Override
+    public synchronized Throwable fillInStackTrace() {
+        return this;
+    }
 }

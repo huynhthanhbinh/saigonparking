@@ -7,4 +7,10 @@ package com.bht.saigonparking.common.exception;
  * @author bht
  */
 public final class TokenModifiedException extends RuntimeException {
+
+    /* Disable print out stack trace */
+    @Override
+    public synchronized Throwable fillInStackTrace() {
+        return this;
+    }
 }

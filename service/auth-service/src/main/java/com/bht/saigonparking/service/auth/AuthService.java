@@ -6,8 +6,6 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import com.bht.saigonparking.common.handler.SaigonParkingExceptionHandler;
-
 /**
  *
  * This class is auth-service main class
@@ -28,6 +26,5 @@ public class AuthService extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
         SpringApplication.run(AuthService.class, args);
-        Thread.setDefaultUncaughtExceptionHandler(new SaigonParkingExceptionHandler());
     }
 }
