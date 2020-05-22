@@ -1,0 +1,123 @@
+{
+  "rabbit_version": "3.8.3",
+  "rabbitmq_version": "3.8.3",
+  "users": [
+    {
+      "name": "guest",
+      "password_hash": "xBKug1RCpBoSfJaWecX+pUh7E4nsB26pwWwj1Rr738mM0jcv",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": "administrator"
+    },
+    {
+      "name": "saigonparking",
+      "password_hash": "UGCy8VFyenMIxefMm/MqlATvVggpwEhfo3bdAHpFXJOmuwT/",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": "administrator"
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "/"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "guest",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    },
+    {
+      "user": "saigonparking",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "topic_permissions": [],
+  "parameters": [
+    {
+      "value": {
+        "max-connections": 1000
+      },
+      "vhost": "/",
+      "component": "vhost-limits",
+      "name": "limits"
+    }
+  ],
+  "global_parameters": [
+    {
+      "name": "cluster_name",
+      "value": "rabbitmq@saigonparking"
+    }
+  ],
+  "policies": [],
+  "queues": [
+    {
+      "name": "saigonparking.mail",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "saigonparking.parkinglot",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "saigonparking.user",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    }
+  ],
+  "exchanges": [
+    {
+      "name": "saigonparking.exchange",
+      "vhost": "/",
+      "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "source": "saigonparking.exchange",
+      "vhost": "/",
+      "destination": "saigonparking.mail",
+      "destination_type": "queue",
+      "routing_key": "saigonparking.mail.#",
+      "arguments": {}
+    },
+    {
+      "source": "saigonparking.exchange",
+      "vhost": "/",
+      "destination": "saigonparking.parkinglot",
+      "destination_type": "queue",
+      "routing_key": "saigonparking.parkinglot.#",
+      "arguments": {}
+    },
+    {
+      "source": "saigonparking.exchange",
+      "vhost": "/",
+      "destination": "saigonparking.user",
+      "destination_type": "queue",
+      "routing_key": "saigonparking.user.#",
+      "arguments": {}
+    }
+  ]
+}

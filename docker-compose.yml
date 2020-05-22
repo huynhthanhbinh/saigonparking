@@ -1,9 +1,21 @@
 version: '3'
+
 networks:
   saigonparking-service:
     driver: bridge
 
 services:
+  message-queue:
+    image: ${DOCKER_HUB_ID}/queue:${MESSAGE_QUEUE_VERSION}
+    networks:
+      - saigonparking-service
+    environment:
+      TZ: ${TIMEZONE}
+      RABBITMQ_CONFIG_FILE:                 ${RABBITMQ_CONFIG_FILE}
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS:  ${RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS}
+    ports:
+      - "${MESSAGE_QUEUE_PORT}:${MESSAGE_QUEUE_PORT}"
+      - "${MESSAGE_QUEUE_MANAGEMENT_PORT}:${MESSAGE_QUEUE_MANAGEMENT_PORT}"
 
   auth-service:
     image: ${DOCKER_HUB_ID}/auth-service:${AUTH_SERVICE_VERSION}
