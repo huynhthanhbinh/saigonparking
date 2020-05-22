@@ -20,7 +20,6 @@ import com.bht.saigonparking.service.user.annotation.InheritedComponent;
  */
 @Configuration
 @EnableTransactionManagement
-@SuppressWarnings("squid:S1118")
 @Import(ChannelConfiguration.class)
 @ComponentScan(basePackages = AppConfiguration.BASE_PACKAGE,
         includeFilters = @ComponentScan.Filter(InheritedComponent.class))

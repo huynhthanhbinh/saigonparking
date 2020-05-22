@@ -1,0 +1,84 @@
+{
+  "properties": [
+    {
+      "name": "database.dbms",
+      "type": "java.lang.String",
+      "description": "Database Management System of database server."
+    },
+    {
+      "name": "database.host",
+      "type": "java.lang.String",
+      "description": "Host of database server."
+    },
+    {
+      "name": "database.port",
+      "type": "java.lang.Integer",
+      "description": "Port of database server."
+    },
+    {
+      "name": "database.name",
+      "type": "java.lang.String",
+      "description": "Name of database in DBMS."
+    },
+    {
+      "name": "database.user",
+      "type": "java.lang.String",
+      "description": "Username in DBMS to connect database server."
+    },
+    {
+      "name": "database.pass",
+      "type": "java.lang.String",
+      "description": "Password in DBMS to connect database server."
+    },
+    {
+      "name": "aws.access.key.id",
+      "type": "java.lang.String",
+      "description": "Access key id of aws."
+    },
+    {
+      "name": "aws.access.key.secret",
+      "type": "java.lang.String",
+      "description": "Access key secret of aws."
+    },
+    {
+      "name": "aws.region",
+      "type": "java.lang.String",
+      "description": "Region of aws."
+    },
+    {
+      "name": "aws.bucket",
+      "type": "java.lang.String",
+      "description": "Bucket of amazon S3."
+    },
+    {
+      "name": "service.user.host",
+      "type": "java.lang.String",
+      "description": "Host of USER service."
+    },
+    {
+      "name": "service.user.port.http",
+      "type": "java.lang.Integer",
+      "description": "Port HTTP of USER service."
+    },
+    {
+      "name": "service.user.port.grpc",
+      "type": "java.lang.Integer",
+      "description": "Port GRPC of USER service."
+    },
+    {
+      "name": "service.user.idle-timeout",
+      "type": "java.lang.Integer",
+      "description": "Connection timeout in milliseconds to USER service."
+    },
+    {
+      "name": "service.user.max-inbound-message-size",
+      "type": "java.lang.Integer",
+      "description": "Connection max inbound message size in megabytes to USER service."
+    },
+    {
+      "name": "service.user.max-inbound-metadata-size",
+      "type": "java.lang.Integer",
+      "description": "Connection max inbound metadata size in megabytes to USER service."
+    }
+  ]
+}

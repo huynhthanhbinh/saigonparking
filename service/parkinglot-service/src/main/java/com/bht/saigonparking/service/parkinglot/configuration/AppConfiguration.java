@@ -20,7 +20,6 @@ import com.bht.saigonparking.common.spring.SpringBeanLifeCycle;
  */
 @Configuration
 @EnableTransactionManagement
-@SuppressWarnings("squid:S1118")
 @Import({AwsConfiguration.class, ChannelConfiguration.class})
 @ComponentScan(basePackages = AppConfiguration.BASE_PACKAGE,
         includeFilters = @ComponentScan.Filter(InheritedComponent.class))
