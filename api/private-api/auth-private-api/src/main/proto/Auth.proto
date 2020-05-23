@@ -6,6 +6,7 @@ option java_multiple_files = true;
 option java_outer_classname = "SaigonParkingAuth";
 
 import "Actor.proto";
+import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
 
 message ValidateRequest {
@@ -43,12 +44,27 @@ enum RegisterResponseType {
 
 message RegisterResponse {
     RegisterResponseType response = 1;
+    string email = 2;
 }
 
 service AuthService {
-
     /* Validate all type of user */
     rpc validateUser (ValidateRequest) returns (ValidateResponse);
+
     /* Register customer user only */
     rpc registerUser (RegisterRequest) returns (RegisterResponse);
+
+    /**
+     * request: username
+     * response: userEmail, if succeed
+     * please notice link provided in mail will expired in 5 min
+     * please notice mail can be in spam folder, carefully check */
+    rpc sendResetPasswordEmail (google.protobuf.StringValue) returns (google.protobuf.StringValue);
+
+    /**
+     * request: username
+     * response: userEmail, if succeed
+     * please notice link provided in mail will expired in 5 min
+     * please notice mail can be in spam folder, carefully check */
+    rpc sendActivateAccountEmail (google.protobuf.StringValue) returns (google.protobuf.StringValue);
 }

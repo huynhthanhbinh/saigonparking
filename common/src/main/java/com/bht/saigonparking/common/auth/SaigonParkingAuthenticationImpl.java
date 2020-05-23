@@ -72,7 +72,7 @@ public final class SaigonParkingAuthenticationImpl implements SaigonParkingAuthe
     }
 
     @Override
-    public String generateJwtToken(Long userId, String userRole) {
+    public String generateJwtToken(Long userId, String userRole, Integer timeAmount, ChronoUnit timeUnit) {
         Instant now = Instant.now();
         Integer factor = new Random().nextInt(MAX_RANDOM_EXCLUSIVE);
         return Jwts.builder()
@@ -81,7 +81,7 @@ public final class SaigonParkingAuthenticationImpl implements SaigonParkingAuthe
                 .claim(FACTOR_KEY_NAME, factor)
                 .setSubject(encryptUserId(userId, factor).toString())
                 .setIssuedAt(Date.from(now))
-                .setExpiration(Date.from(now.plus(30, ChronoUnit.DAYS)))
+                .setExpiration(Date.from(now.plus(timeAmount, timeUnit)))
                 .signWith(secretKey)
                 .compact();
     }

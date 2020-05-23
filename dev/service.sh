@@ -29,6 +29,15 @@ registerServiceGrpcRoute() {
   printf "\n"
 }
 
+# register Mail Service
+SERVICE_NAME=mail
+SERVICE_HOST=mail-service
+SERVICE_PORT=6666
+SERVICE_PATH=/com.bht.saigonparking.api.grpc.mail.MailService/
+
+registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOUT}
+registerServiceGrpcRoute ${SERVICE_NAME} ${SERVICE_PATH}
+
 # register Auth Service
 SERVICE_NAME=auth
 SERVICE_HOST=auth-service

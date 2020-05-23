@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Fri, May 22nd, 2020
+Last updated:       Sat, May 23rd, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -146,3 +146,9 @@ Last updated:       Fri, May 22nd, 2020
 
 48. User IDs and passwords: Equally important for access security
         https://www.techrepublic.com/blog/it-security/user-ids-and-passwords-equally-important-for-access-security/
+
+49. Messaging with Spring AMQP
+        https://www.baeldung.com/spring-amqp
+
+50. RabbitMQ Custom Docker Image with Custom Configuration and Definitions
+        https://youtu.be/I8QHPfMhqAU

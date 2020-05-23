@@ -1,5 +1,7 @@
 package com.bht.saigonparking.service.auth.service.impl;
 
+import java.time.temporal.ChronoUnit;
+
 import javax.validation.constraints.NotNull;
 
 import org.apache.logging.log4j.Level;
@@ -28,7 +30,7 @@ public final class AuthServiceImplHelper {
     private final UserServiceGrpc.UserServiceStub userServiceStub;
 
     String generateAccessToken(@NotNull Long userId, @NotNull UserRole userRole) {
-        return authentication.generateJwtToken(userId, userRole.toString());
+        return authentication.generateJwtToken(userId, userRole.toString(), 7, ChronoUnit.DAYS);
     }
 
     void updateUserLastSignIn(Long userId) {
