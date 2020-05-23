@@ -11,6 +11,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import com.bht.saigonparking.api.grpc.mail.MailRequest;
+import com.bht.saigonparking.api.grpc.mail.MailRequestType;
 import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
 import com.bht.saigonparking.common.auth.SaigonParkingAuthenticationImpl;
 import com.bht.saigonparking.common.interceptor.SaigonParkingClientInterceptor;
@@ -49,7 +51,14 @@ public class AppConfiguration {
 
     @Bean
     public SaigonParkingClientInterceptor saigonParkingClientInterceptor() {
-        rabbitTemplate.convertAndSend(MAIL_TOPIC_ROUTING_KEY, "Hello RabbitMQ");
+        MailRequest mailRequest = MailRequest.newBuilder()
+                .setType(MailRequestType.ACTIVATE_ACCOUNT)
+                .setAccessToken("4erd6re8.54td96gd.fg54er")
+                .setUsername("htbinh")
+                .setEmail("huynhthanhbinh1998@gmail.com")
+                .build();
+
+        rabbitTemplate.convertAndSend(MAIL_TOPIC_ROUTING_KEY, mailRequest);
         return new SaigonParkingClientInterceptor(SaigonParkingClientInterceptor.INTERNAL_CODE_AUTH_SERVICE);
     }
 }

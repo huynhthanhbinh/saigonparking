@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package com.bht.saigonparking.api.grpc.mail;
+//option java_generic_services = true;
+option java_multiple_files = true;
+option java_outer_classname = "SaigonParkingMail";
+
+import "google/protobuf/wrappers.proto";
+
+enum MailRequestType {
+    ACTIVATE_ACCOUNT = 0;
+    RESET_PASSWORD = 1;
+}
+
+message MailRequest {
+    MailRequestType type = 1;
+    string accessToken = 2;
+    string username = 3;
+    string email = 4;
+}
