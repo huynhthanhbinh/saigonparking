@@ -1,7 +1,11 @@
 package com.bht.saigonparking.service.auth.configuration;
 
+import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.MAIL_TOPIC_ROUTING_KEY;
+
 import java.io.IOException;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,16 +17,20 @@ import com.bht.saigonparking.common.interceptor.SaigonParkingClientInterceptor;
 import com.bht.saigonparking.common.spring.SpringApplicationContext;
 import com.bht.saigonparking.common.spring.SpringBeanLifeCycle;
 
+import lombok.AllArgsConstructor;
+
 /**
  *
  * @author bht
  */
 @Configuration
 @Import(ChannelConfiguration.class)
+@AllArgsConstructor(onConstructor = @__(@Autowired))
 @ComponentScan(basePackages = AppConfiguration.BASE_PACKAGE)
 public class AppConfiguration {
 
     static final String BASE_PACKAGE = "com.bht.saigonparking.service.auth"; // base package of auth module, contains all
+    private final RabbitTemplate rabbitTemplate;
 
     @Bean
     public SpringApplicationContext springApplicationContext() {
@@ -41,6 +49,7 @@ public class AppConfiguration {
 
     @Bean
     public SaigonParkingClientInterceptor saigonParkingClientInterceptor() {
+        rabbitTemplate.convertAndSend(MAIL_TOPIC_ROUTING_KEY, "Hello RabbitMQ");
         return new SaigonParkingClientInterceptor(SaigonParkingClientInterceptor.INTERNAL_CODE_AUTH_SERVICE);
     }
 }

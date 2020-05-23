@@ -17,6 +17,16 @@ services:
       - "${MESSAGE_QUEUE_PORT}:${MESSAGE_QUEUE_PORT}"
       - "${MESSAGE_QUEUE_MANAGEMENT_PORT}:${MESSAGE_QUEUE_MANAGEMENT_PORT}"
 
+  mail-service:
+    image: ${DOCKER_HUB_ID}/mail-service:${MAIL_SERVICE_VERSION}
+    networks:
+      - saigonparking-service
+    environment:
+      TZ: ${TIMEZONE}
+    ports:
+      - "${MAIL_SERVICE_HTTP_PORT}:${MAIL_SERVICE_HTTP_PORT}"
+      - "${MAIL_SERVICE_GRPC_PORT}:${MAIL_SERVICE_GRPC_PORT}"
+
   auth-service:
     image: ${DOCKER_HUB_ID}/auth-service:${AUTH_SERVICE_VERSION}
     networks:
