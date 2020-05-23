@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Sat, May 23rd, 2020
+Last updated:       Sun, May 24th, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -152,3 +152,9 @@ Last updated:       Sat, May 23rd, 2020
 
 50. RabbitMQ Custom Docker Image with Custom Configuration and Definitions
         https://youtu.be/I8QHPfMhqAU
+
+51. Unpacking specific artifacts
+        https://maven.apache.org/plugins/maven-dependency-plugin/examples/unpacking-artifacts.html
+
+52. How to Share Resources Across Projects in Maven
+        https://blog.sonatype.com/2008/04/how-to-share-resources-across-projects-in-maven/

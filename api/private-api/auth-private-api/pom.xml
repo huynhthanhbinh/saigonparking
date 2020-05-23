@@ -14,4 +14,37 @@
         <groupId>com.bht.saigonparking</groupId>
         <version>${revision}</version>
     </parent>
+
+    <dependencies>
+        <dependency>
+            <artifactId>user-private-api</artifactId>
+            <groupId>com.bht.saigonparking</groupId>
+            <version>${revision}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-shared-resources</id>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                            <includeArtifactIds>user-private-api</includeArtifactIds>
+                            <includeGroupIds>com.bht.saigonparking</includeGroupIds>
+                            <excludeTransitive>true</excludeTransitive>
+                            <includes>**/*.proto</includes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
