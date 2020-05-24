@@ -38,7 +38,7 @@ public class MailServiceImpl implements MailService {
                     ? "[Saigon Parking] Activate new account"
                     : "[Saigon Parking] Reset password";
 
-            String content = composeMail(isActivateEmail, request.getUsername(), request.getAccessToken());
+            String content = composeMail(isActivateEmail, request.getUsername(), request.getTemporaryToken());
 
             message.setTo(request.getEmail());
             message.setSubject(subject);

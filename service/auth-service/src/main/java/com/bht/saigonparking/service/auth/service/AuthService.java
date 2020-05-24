@@ -1,9 +1,11 @@
 package com.bht.saigonparking.service.auth.service;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.data.util.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 
+import com.bht.saigonparking.api.grpc.auth.RegisterRequest;
 import com.bht.saigonparking.api.grpc.auth.ValidateResponseType;
 import com.bht.saigonparking.api.grpc.user.UserRole;
 
@@ -13,7 +15,50 @@ import com.bht.saigonparking.api.grpc.user.UserRole;
  */
 public interface AuthService {
 
-    Pair<ValidateResponseType, String> validateLogin(@NotNull String username,
-                                                     @NotNull String password,
-                                                     @NotNull UserRole userRole);
+    /**
+     *
+     * @return triple of:
+     * left:   responseType
+     * middle: accessToken
+     * right:  refreshToken
+     */
+    Triple<ValidateResponseType, String, String> validateLogin(@NotEmpty String username,
+                                                               @NotEmpty String password,
+                                                               @NotNull UserRole userRole);
+
+    /**
+     *
+     * @return user's email if succeed
+     */
+    String registerUser(@NotNull RegisterRequest request);
+
+    /**
+     *
+     * @return user's email if succeed
+     */
+    String sendResetPasswordEmail(@NotEmpty String username);
+
+    /**
+     *
+     * @return user's email if succeed
+     */
+    String sendActivateAccountEmail(@NotEmpty String username);
+
+    /**
+     *
+     * @return triple of:
+     * left:   username
+     * middle: accessToken
+     * right:  refreshToken
+     */
+    Triple<String, String, String> generateNewToken(@NotNull Long userId);
+
+    /**
+     *
+     * @return triple of:
+     * left:   username
+     * middle: accessToken
+     * right:  refreshToken
+     */
+    Triple<String, String, String> activateNewAccount(@NotNull Long userId);
 }

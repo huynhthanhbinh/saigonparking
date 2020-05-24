@@ -54,10 +54,10 @@ service AuthService {
     /** PUBLIC
      * use-case: register new customer (user type CUSTOMER only !!!)
      *  + request: register request
-     *  + response: empty value, if succeed, otherwise, throw exception
+     *  + response: userEmail, if succeed --> notify user that an email has been sent to <userEmail>
      *
      * Note that: exception will be thrown whether username or email already exist !*/
-    rpc registerUser (RegisterRequest) returns (google.protobuf.Empty);
+    rpc registerUser (RegisterRequest) returns (google.protobuf.StringValue);
 
     /** PUBLIC
      * use-case: reset password by email

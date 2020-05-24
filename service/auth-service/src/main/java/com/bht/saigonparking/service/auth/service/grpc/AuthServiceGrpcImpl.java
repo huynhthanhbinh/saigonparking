@@ -1,9 +1,9 @@
 package com.bht.saigonparking.service.auth.service.grpc;
 
+import org.apache.commons.lang3.tuple.Triple;
 import org.apache.logging.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Pair;
 
 import com.bht.saigonparking.api.grpc.auth.AuthServiceGrpc;
 import com.bht.saigonparking.api.grpc.auth.RefreshTokenResponse;
@@ -34,14 +34,15 @@ public final class AuthServiceGrpcImpl extends AuthServiceGrpc.AuthServiceImplBa
     @Override
     public void validateUser(ValidateRequest request, StreamObserver<ValidateResponse> responseObserver) {
         try {
-            Pair<ValidateResponseType, String> validateResponsePair = authService.validateLogin(
+            Triple<ValidateResponseType, String, String> validateResponseTriple = authService.validateLogin(
                     request.getUsername(),
                     request.getPassword(),
                     request.getRole());
 
             ValidateResponse validateResponse = ValidateResponse.newBuilder()
-                    .setResponse(validateResponsePair.getFirst())
-                    .setAccessToken(validateResponsePair.getSecond())
+                    .setResponse(validateResponseTriple.getLeft())
+                    .setAccessToken(validateResponseTriple.getMiddle())
+                    .setRefreshToken(validateResponseTriple.getRight())
                     .build();
 
             responseObserver.onNext(validateResponse);
@@ -63,27 +64,128 @@ public final class AuthServiceGrpcImpl extends AuthServiceGrpc.AuthServiceImplBa
     }
 
     @Override
-    public void registerUser(RegisterRequest request, StreamObserver<Empty> responseObserver) {
-        super.registerUser(request, responseObserver);
+    public void registerUser(RegisterRequest request, StreamObserver<StringValue> responseObserver) {
+        try {
+            StringValue email = StringValue.of(authService.registerUser(request));
+
+            responseObserver.onNext(email);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("registerUser(%s)", request.getUsername()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("registerUser(%s)", request.getUsername()));
+        }
     }
 
     @Override
     public void sendResetPasswordEmail(StringValue request, StreamObserver<StringValue> responseObserver) {
-        super.sendResetPasswordEmail(request, responseObserver);
+        try {
+            StringValue email = StringValue.of(authService
+                    .sendResetPasswordEmail(request.getValue()));
+
+            responseObserver.onNext(email);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("sendResetPasswordEmail(%s)", request.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("sendResetPasswordEmail(%s)", request.getValue()));
+        }
     }
 
     @Override
     public void sendActivateAccountEmail(StringValue request, StreamObserver<StringValue> responseObserver) {
-        super.sendActivateAccountEmail(request, responseObserver);
+        try {
+            StringValue email = StringValue.of(authService
+                    .sendActivateAccountEmail(request.getValue()));
+
+            responseObserver.onNext(email);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("sendActivateAccountEmail(%s)", request.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("sendActivateAccountEmail(%s)", request.getValue()));
+        }
     }
 
     @Override
     public void generateNewToken(Empty request, StreamObserver<RefreshTokenResponse> responseObserver) {
-        super.generateNewToken(request, responseObserver);
+        Long userId = serverInterceptor.getUserIdContext().get();
+        try {
+            Triple<String, String, String> refreshTokenTriple = authService.generateNewToken(userId);
+
+            RefreshTokenResponse refreshTokenResponse = RefreshTokenResponse.newBuilder()
+                    .setUsername(refreshTokenTriple.getLeft())
+                    .setAccessToken(refreshTokenTriple.getMiddle())
+                    .setRefreshToken(refreshTokenTriple.getRight())
+                    .build();
+
+            responseObserver.onNext(refreshTokenResponse);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("generateNewToken(%d)", userId));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("generateNewToken(%d)", userId));
+        }
     }
 
     @Override
     public void activateNewAccount(Empty request, StreamObserver<RefreshTokenResponse> responseObserver) {
-        super.activateNewAccount(request, responseObserver);
+        Long userId = serverInterceptor.getUserIdContext().get();
+        try {
+            Triple<String, String, String> refreshTokenTriple = authService.activateNewAccount(userId);
+
+            RefreshTokenResponse refreshTokenResponse = RefreshTokenResponse.newBuilder()
+                    .setUsername(refreshTokenTriple.getLeft())
+                    .setAccessToken(refreshTokenTriple.getMiddle())
+                    .setRefreshToken(refreshTokenTriple.getRight())
+                    .build();
+
+            responseObserver.onNext(refreshTokenResponse);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("activateNewAccount(%d)", userId));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("activateNewAccount(%d)", userId));
+        }
     }
 }

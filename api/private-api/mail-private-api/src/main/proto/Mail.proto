@@ -14,7 +14,7 @@ enum MailRequestType {
 
 message MailRequest {
     MailRequestType type = 1;
-    string accessToken = 2;
+    string temporaryToken = 2;
     string username = 3;
     string email = 4;
 }

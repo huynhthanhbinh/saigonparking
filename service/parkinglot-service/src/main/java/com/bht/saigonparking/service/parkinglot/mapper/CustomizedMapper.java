@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Time;
 import java.sql.Timestamp;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.mapstruct.Mapper;
@@ -60,7 +61,7 @@ public abstract class CustomizedMapper {
     }
 
     @Named("toTime")
-    public Time toTime(@NotNull String timeString) {
+    public Time toTime(@NotEmpty String timeString) {
         return Time.valueOf(timeString);
     }
 
@@ -70,7 +71,7 @@ public abstract class CustomizedMapper {
     }
 
     @Named("toTimestamp")
-    public Timestamp toTimestamp(@NotNull String timestampString) {
+    public Timestamp toTimestamp(@NotEmpty String timestampString) {
         return Timestamp.valueOf(timestampString);
     }
 

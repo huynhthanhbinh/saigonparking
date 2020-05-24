@@ -1,5 +1,6 @@
 package com.bht.saigonparking.service.user.service.main;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.bht.saigonparking.service.user.entity.CustomerEntity;
@@ -16,15 +17,15 @@ public interface UserService {
 
     UserEntity getUserById(@NotNull Long id) throws NotFoundException;
 
-    UserEntity getUserByUsername(@NotNull String username);
+    UserEntity getUserByUsername(@NotEmpty String username);
 
     CustomerEntity getCustomerById(@NotNull Long id) throws NotFoundException;
 
-    CustomerEntity getCustomerByUsername(@NotNull String username);
+    CustomerEntity getCustomerByUsername(@NotEmpty String username);
 
     ParkingLotEmployeeEntity getParkingLotEmployeeById(@NotNull Long id) throws NotFoundException;
 
-    ParkingLotEmployeeEntity getParkingLotEmployeeByUsername(@NotNull String username);
+    ParkingLotEmployeeEntity getParkingLotEmployeeByUsername(@NotEmpty String username);
 
     void updateUserLastSignIn(@NotNull Long id) throws NotFoundException;
 }

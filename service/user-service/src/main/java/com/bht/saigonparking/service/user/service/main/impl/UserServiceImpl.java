@@ -3,6 +3,7 @@ package com.bht.saigonparking.service.user.service.main.impl;
 import java.sql.Timestamp;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity getUserByUsername(@NotNull String username) {
+    public UserEntity getUserByUsername(@NotEmpty String username) {
         return userRepository.getByUsername(username);
     }
 
@@ -56,7 +57,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CustomerEntity getCustomerByUsername(@NotNull String username) {
+    public CustomerEntity getCustomerByUsername(@NotEmpty String username) {
         return customerRepository.getByUsername(username);
     }
 
@@ -66,7 +67,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ParkingLotEmployeeEntity getParkingLotEmployeeByUsername(@NotNull String username) {
+    public ParkingLotEmployeeEntity getParkingLotEmployeeByUsername(@NotEmpty String username) {
         return parkingLotEmployeeRepository.getByUsername(username);
     }
 
