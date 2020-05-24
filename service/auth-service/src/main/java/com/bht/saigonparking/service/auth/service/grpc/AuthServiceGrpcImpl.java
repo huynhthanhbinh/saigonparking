@@ -53,6 +53,7 @@ public final class AuthServiceGrpcImpl extends AuthServiceGrpc.AuthServiceImplBa
                             request.getUsername(), request.getPassword(), request.getRole(), validateResponse.getResponse()));
 
         } catch (Exception exception) {
+
             responseObserver.onError(exception);
             responseObserver.onCompleted();
 

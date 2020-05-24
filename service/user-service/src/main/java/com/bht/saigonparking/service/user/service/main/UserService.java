@@ -7,25 +7,27 @@ import com.bht.saigonparking.service.user.entity.CustomerEntity;
 import com.bht.saigonparking.service.user.entity.ParkingLotEmployeeEntity;
 import com.bht.saigonparking.service.user.entity.UserEntity;
 
-import javassist.NotFoundException;
-
 /**
  *
  * @author bht
  */
 public interface UserService {
 
-    UserEntity getUserById(@NotNull Long id) throws NotFoundException;
+    UserEntity getUserById(@NotNull Long id);
 
     UserEntity getUserByUsername(@NotEmpty String username);
 
-    CustomerEntity getCustomerById(@NotNull Long id) throws NotFoundException;
+    CustomerEntity getCustomerById(@NotNull Long id);
 
     CustomerEntity getCustomerByUsername(@NotEmpty String username);
 
-    ParkingLotEmployeeEntity getParkingLotEmployeeById(@NotNull Long id) throws NotFoundException;
+    ParkingLotEmployeeEntity getParkingLotEmployeeById(@NotNull Long id);
 
     ParkingLotEmployeeEntity getParkingLotEmployeeByUsername(@NotEmpty String username);
 
-    void updateUserLastSignIn(@NotNull Long id) throws NotFoundException;
+    void updateUserLastSignIn(@NotNull Long id);
+
+    void activateUserWithId(@NotNull Long id);
+
+    void updateUserPassword(@NotNull Long userId, @NotEmpty String username, @NotEmpty String password);
 }

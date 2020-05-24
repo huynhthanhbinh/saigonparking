@@ -45,28 +45,25 @@ public class AuthServiceImpl implements AuthService {
                                                                       @NotNull UserRole userRole) {
 
         User user = userServiceBlockingStub.getUserByUsername(StringValue.of(username));
-        if (!user.equals(User.getDefaultInstance())) {
-            if (user.getRole().equals(userRole)) {
-                if (Boolean.TRUE.equals(user.getIsActivated())) {
-                    if (password.equals(user.getPassword())) {
+        if (user.getRole().equals(userRole)) {
+            if (Boolean.TRUE.equals(user.getIsActivated())) {
+                if (password.equals(user.getPassword())) {
 
-                        /* Asynchronously update user last sign in */
-                        Context context = Context.current().fork();
-                        context.run(() -> authServiceImplHelper.updateUserLastSignIn(user.getId()));
+                    /* Asynchronously update user last sign in */
+                    Context context = Context.current().fork();
+                    context.run(() -> authServiceImplHelper.updateUserLastSignIn(user.getId()));
 
-                        /* Generate new access token for user with Id, Role */
-                        String accessToken = authServiceImplHelper.generateAccessToken(user.getId(), userRole);
+                    /* Generate new access token for user with Id, Role */
+                    String accessToken = authServiceImplHelper.generateAccessToken(user.getId(), userRole);
 
-                        /* Return response with two field: 1st ResponseType, 2nd AccessToken */
-                        return Triple.of(ValidateResponseType.AUTHENTICATED, accessToken, "tempRefreshToken");
-                    }
-                    return Triple.of(ValidateResponseType.INCORRECT, "", "");
+                    /* Return response with two field: 1st ResponseType, 2nd AccessToken */
+                    return Triple.of(ValidateResponseType.AUTHENTICATED, accessToken, "tempRefreshToken");
                 }
-                return Triple.of(ValidateResponseType.INACTIVATED, "", "");
+                return Triple.of(ValidateResponseType.INCORRECT, "", "");
             }
-            return Triple.of(ValidateResponseType.DISALLOWED, "", "");
+            return Triple.of(ValidateResponseType.INACTIVATED, "", "");
         }
-        return Triple.of(ValidateResponseType.NON_EXIST, "", "");
+        return Triple.of(ValidateResponseType.DISALLOWED, "", "");
     }
 
     @Override

@@ -9,6 +9,7 @@ import com.bht.saigonparking.api.grpc.user.ParkingLotEmployee;
 import com.bht.saigonparking.api.grpc.user.UpdatePasswordRequest;
 import com.bht.saigonparking.api.grpc.user.User;
 import com.bht.saigonparking.api.grpc.user.UserServiceGrpc.UserServiceImplBase;
+import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.user.mapper.EnumMapper;
 import com.bht.saigonparking.service.user.mapper.UserMapper;
@@ -17,6 +18,8 @@ import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
 
@@ -39,34 +42,17 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
     private final UserService userService;
     private final UserMapper userMapper;
     private final EnumMapper enumMapper;
-
-    @Override
-    public void getUserByUsername(StringValue request, StreamObserver<User> responseObserver) {
-        try {
-            User user = userMapper.toUser(userService
-                    .getUserByUsername(request.getValue()));
-
-            responseObserver.onNext(user);
-            responseObserver.onCompleted();
-
-            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("getUserByUsername(%s)", request.getValue()));
-
-        } catch (Exception exception) {
-
-            responseObserver.onError(exception);
-            responseObserver.onCompleted();
-
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
-            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                    String.format("getUserByUsername(%s)", request.getValue()));
-        }
-    }
-
+    private final SaigonParkingServerInterceptor serverInterceptor;
 
     @Override
     public void getUserById(Int64Value request, StreamObserver<User> responseObserver) {
         try {
+            String userRole = serverInterceptor.getRoleContext().get();
+
+            if (!userRole.equals("ADMIN")) {
+                throw new StatusRuntimeException(Status.PERMISSION_DENIED);
+            }
+
             User user = userMapper.toUser(userService
                     .getUserById(request.getValue()));
 
@@ -89,10 +75,42 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
 
 
     @Override
+    public void getUserByUsername(StringValue request, StreamObserver<User> responseObserver) {
+        try {
+            User user = userMapper.toUser(userService
+                    .getUserByUsername(request.getValue()));
+
+            if (user.equals(User.getDefaultInstance())) {
+                throw new StatusRuntimeException(Status.UNKNOWN);
+            }
+
+            responseObserver.onNext(user);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getUserByUsername(%s)", request.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getUserByUsername(%s)", request.getValue()));
+        }
+    }
+
+
+    @Override
     public void getCustomerByUsername(StringValue request, StreamObserver<Customer> responseObserver) {
         try {
             Customer customer = userMapper.toCustomer(userService
                     .getCustomerByUsername(request.getValue()));
+
+            if (customer.equals(Customer.getDefaultInstance())) {
+                throw new StatusRuntimeException(Status.UNKNOWN);
+            }
 
             responseObserver.onNext(customer);
             responseObserver.onCompleted();
@@ -117,6 +135,10 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
         try {
             ParkingLotEmployee parkingLotEmployee = userMapper.toParkingLotEmployee(userService
                     .getParkingLotEmployeeByUsername(request.getValue()));
+
+            if (parkingLotEmployee.equals(ParkingLotEmployee.getDefaultInstance())) {
+                throw new StatusRuntimeException(Status.UNKNOWN);
+            }
 
             responseObserver.onNext(parkingLotEmployee);
             responseObserver.onCompleted();
@@ -165,11 +187,52 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
 
     @Override
     public void updatePassword(UpdatePasswordRequest request, StreamObserver<Empty> responseObserver) {
-        super.updatePassword(request, responseObserver);
+        try {
+            Long userId = serverInterceptor.getUserIdContext().get();
+            userService.updateUserPassword(userId, request.getUsername(), request.getNewPassword());
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("updatePasswordOfUser(%s)", request.getUsername()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("updatePasswordOfUser(%s)", request.getUsername()));
+        }
     }
 
     @Override
     public void activateUser(Int64Value request, StreamObserver<Empty> responseObserver) {
-        super.activateUser(request, responseObserver);
+        try {
+            String userRole = serverInterceptor.getRoleContext().get();
+
+            if (!userRole.equals("ADMIN")) {
+                throw new StatusRuntimeException(Status.PERMISSION_DENIED);
+            }
+
+            userService.activateUserWithId(request.getValue());
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("activateUserWithId(%d)", request.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("activateUserWithId(%d)", request.getValue()));
+        }
     }
 }

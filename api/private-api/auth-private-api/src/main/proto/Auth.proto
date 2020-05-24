@@ -18,9 +18,8 @@ message ValidateRequest {
 enum ValidateResponseType {
     AUTHENTICATED = 0;
     INCORRECT = 1;
-    NON_EXIST = 2;
-    INACTIVATED = 3;
-    DISALLOWED = 4;
+    INACTIVATED = 2;
+    DISALLOWED = 3;
 }
 
 message ValidateResponse {

@@ -18,6 +18,8 @@ import com.bht.saigonparking.service.user.repository.core.ParkingLotEmployeeRepo
 import com.bht.saigonparking.service.user.repository.core.UserRepository;
 import com.bht.saigonparking.service.user.service.main.UserService;
 
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 import lombok.AllArgsConstructor;
 
 /**
@@ -75,6 +77,23 @@ public class UserServiceImpl implements UserService {
     public void updateUserLastSignIn(@NotNull Long id) {
         UserEntity userEntity = getUserById(id);
         userEntity.setLastSignIn(new Timestamp(System.currentTimeMillis()));
+        userRepository.saveAndFlush(userEntity);
+    }
+
+    @Override
+    public void activateUserWithId(@NotNull Long id) {
+        UserEntity userEntity = getUserById(id);
+        userEntity.setIsActivated(true);
+        userRepository.saveAndFlush(userEntity);
+    }
+
+    @Override
+    public void updateUserPassword(@NotNull Long userId, @NotEmpty String username, @NotEmpty String password) {
+        UserEntity userEntity = getUserById(userId);
+        if (!username.equals(userEntity.getUsername())) {
+            throw new StatusRuntimeException(Status.PERMISSION_DENIED);
+        }
+        userEntity.setPassword(password);
         userRepository.saveAndFlush(userEntity);
     }
 }
