@@ -7,12 +7,12 @@ import org.springframework.data.util.Pair;
 
 import com.bht.saigonparking.api.grpc.auth.AuthServiceGrpc;
 import com.bht.saigonparking.api.grpc.auth.RegisterRequest;
-import com.bht.saigonparking.api.grpc.auth.RegisterResponse;
 import com.bht.saigonparking.api.grpc.auth.ValidateRequest;
 import com.bht.saigonparking.api.grpc.auth.ValidateResponse;
 import com.bht.saigonparking.api.grpc.auth.ValidateResponseType;
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.auth.service.AuthService;
+import com.google.protobuf.Empty;
 
 import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
@@ -59,7 +59,7 @@ public final class AuthServiceGrpcImpl extends AuthServiceGrpc.AuthServiceImplBa
     }
 
     @Override
-    public void registerUser(RegisterRequest request, StreamObserver<RegisterResponse> responseObserver) {
+    public void registerUser(RegisterRequest request, StreamObserver<Empty> responseObserver) {
         super.registerUser(request, responseObserver);
     }
 }

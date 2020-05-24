@@ -26,6 +26,7 @@ enum ValidateResponseType {
 message ValidateResponse {
     ValidateResponseType response = 1;
     string accessToken = 2;
+    string refreshToken = 3;
 }
 
 message RegisterRequest {
@@ -37,34 +38,62 @@ message RegisterRequest {
     string phone = 6;
 }
 
-enum RegisterResponseType {
-    SUCCESS = 0;
-    EXISTED = 1;
-}
-
-message RegisterResponse {
-    RegisterResponseType response = 1;
-    string email = 2;
+message RefreshTokenResponse {
+    string username = 1;
+    string accessToken = 2;
+    string refreshToken = 3;
 }
 
 service AuthService {
-    /* Validate all type of user */
+    /** PUBLIC
+     * use-case: user login (Validate all type of user)
+     *  + request: validate request, includes username, password and role
+     *  + response: validate response type, AUTHENTICATED if succeed */
     rpc validateUser (ValidateRequest) returns (ValidateResponse);
 
-    /* Register customer user only */
-    rpc registerUser (RegisterRequest) returns (RegisterResponse);
+    /** PUBLIC
+     * use-case: register new customer (user type CUSTOMER only !!!)
+     *  + request: register request
+     *  + response: empty value, if succeed, otherwise, throw exception
+     *
+     * Note that: exception will be thrown whether username or email already exist !*/
+    rpc registerUser (RegisterRequest) returns (google.protobuf.Empty);
 
-    /**
-     * request: username
-     * response: userEmail, if succeed
+    /** PUBLIC
+     * use-case: reset password by email
+     *  + request: username
+     *  + response: userEmail, if succeed --> notify user that an email has been sent to <userEmail>
+     *
      * please notice link provided in mail will expired in 5 min
      * please notice mail can be in spam folder, carefully check */
     rpc sendResetPasswordEmail (google.protobuf.StringValue) returns (google.protobuf.StringValue);
 
-    /**
-     * request: username
-     * response: userEmail, if succeed
+    /** PUBLIC
+     * use-case: activate new account by email
+     *  + request: username
+     *  + response: userEmail, if succeed --> notify user that an email has been sent to <userEmail>
+     *
      * please notice link provided in mail will expired in 5 min
      * please notice mail can be in spam folder, carefully check */
     rpc sendActivateAccountEmail (google.protobuf.StringValue) returns (google.protobuf.StringValue);
+
+    /** PUBLIC
+     * use-case: reset password by email, refresh token
+     *  + request: empty value (please provide token!)
+     *  + response: new short term access token + new long term refresh token (if refresh token nearly expired)
+     *
+     * generate new token as soon as user click on the link provided by email:
+     * request send to server NEED TO PROVIDE short-term access token via metadata, so that server can know
+     * who is request for new token or whether the token provided is expired or not */
+    rpc generateNewToken (google.protobuf.Empty) returns (RefreshTokenResponse);
+
+    /** PUBLIC
+     * use-case: activate new account by email
+     *  + request: empty value (please provide token!)
+     *  + response: new short term access token + new long term refresh token (if refresh token nearly expired)
+     *
+     * generate new token as soon as user click on the link provided by email:
+     * request send to server NEED TO PROVIDE short-term access token via metadata, so that server can know
+     * who is request for new token or whether the token provided is expired or not */
+    rpc activateNewAccount (google.protobuf.Empty) returns (RefreshTokenResponse);
 }

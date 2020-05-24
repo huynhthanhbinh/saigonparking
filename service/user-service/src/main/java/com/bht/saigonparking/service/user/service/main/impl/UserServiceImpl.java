@@ -56,8 +56,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public CustomerEntity getCustomerByUsername(@NotNull String username) {
+        return customerRepository.getByUsername(username);
+    }
+
+    @Override
     public ParkingLotEmployeeEntity getParkingLotEmployeeById(@NotNull Long id) {
         return parkingLotEmployeeRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Override
+    public ParkingLotEmployeeEntity getParkingLotEmployeeByUsername(@NotNull String username) {
+        return parkingLotEmployeeRepository.getByUsername(username);
     }
 
     @Override

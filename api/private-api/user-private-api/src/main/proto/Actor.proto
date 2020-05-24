@@ -45,23 +45,55 @@ message UpdatePasswordRequest {
 }
 
 service UserService {
+
+    /** PRIVATE
+     * use-case: get user by user ID
+     *  + request: user ID
+     *  + response: user object if succeed, otherwise, throw exception */
     rpc getUserById (google.protobuf.Int64Value) returns (User);
+
+    /** PUBLIC
+     * use-case: get user account information (basic information only)
+     *  + request: username
+     *  + response: user object if succeed, otherwise, throw exception */
     rpc getUserByUsername (google.protobuf.StringValue) returns (User);
-    rpc getCustomerById (google.protobuf.Int64Value) returns (Customer);
-    rpc getParkingLotEmployeeById (google.protobuf.Int64Value) returns (ParkingLotEmployee);
+
+    /** PUBLIC
+     * use-case: get customer account information
+     *  + request: customer's username
+     *  + response: customer object if succeed, otherwise, throw exception */
+    rpc getCustomerByUsername (google.protobuf.StringValue) returns (Customer);
+
+    /** PUBLIC
+     * use-case: get employee account information
+     *  + request: employee's username
+     *  + response: employee object if succeed, otherwise, throw exception */
+    rpc getParkingLotEmployeeByUsername (google.protobuf.StringValue) returns (ParkingLotEmployee);
+
+    /** PRIVATE
+     * use-case: user login (will be called be AuthService)
+     *  + request: user ID
+     *  + response: empty value if succeed, otherwise, throw exception */
     rpc updateUserLastSignIn (google.protobuf.Int64Value) returns (google.protobuf.Empty);
 
-    /**
-     * Update password: 2 cases
-     * 1/ forgot password
-     * 2/ change password
-     * return Empty value, if succeed,
+    /** PRIVATE
+    * use-case: register user, CUSTOMER type (will be called by AuthService)
+    *  + request: Customer
+    *  + response: new user ID if succeed, otherwise, throw exception */
+    rpc registerCustomer (Customer) returns (google.protobuf.Int64Value);
+
+    /** PUBLIC
+     * Update password: 2 use-cases
+     *  1/ forgot password
+     *  2/ change password
+     *
+     * return empty value, if succeed,
      * otherwise, throw exception */
     rpc updatePassword (UpdatePasswordRequest) returns (google.protobuf.Empty);
 
-    /* generate new token as soon as user click on the link provided by email:
-     * activate new account by email or reset password by email
-     * request send to server need to provide 5-min access token via metadata, so that server can know
-     * who is request for new token or whether the token provided is expired or not */
-    rpc generateNewToken (google.protobuf.Empty) returns (google.protobuf.StringValue);
+    /** PRIVATE
+     * use-case: activate new account (will be called by AuthService)
+     *  + request: user ID
+     *  + response: empty value if succeed, otherwise, throw exception */
+    rpc activateUser (google.protobuf.Int64Value) returns (google.protobuf.Empty);
 }

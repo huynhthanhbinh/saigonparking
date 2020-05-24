@@ -20,7 +20,11 @@ public interface UserService {
 
     CustomerEntity getCustomerById(@NotNull Long id) throws NotFoundException;
 
+    CustomerEntity getCustomerByUsername(@NotNull String username);
+
     ParkingLotEmployeeEntity getParkingLotEmployeeById(@NotNull Long id) throws NotFoundException;
+
+    ParkingLotEmployeeEntity getParkingLotEmployeeByUsername(@NotNull String username);
 
     void updateUserLastSignIn(@NotNull Long id) throws NotFoundException;
 }

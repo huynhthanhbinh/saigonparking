@@ -88,16 +88,16 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
 
 
     @Override
-    public void getCustomerById(Int64Value request, StreamObserver<Customer> responseObserver) {
+    public void getCustomerByUsername(StringValue request, StreamObserver<Customer> responseObserver) {
         try {
             Customer customer = userMapper.toCustomer(userService
-                    .getCustomerById(request.getValue()));
+                    .getCustomerByUsername(request.getValue()));
 
             responseObserver.onNext(customer);
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("getCustomerById(%d)", request.getValue()));
+                    String.format("getCustomerByUsername(%s)", request.getValue()));
 
         } catch (Exception exception) {
 
@@ -106,22 +106,22 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                    String.format("getCustomerById(%d)", request.getValue()));
+                    String.format("getCustomerByUsername(%s)", request.getValue()));
         }
     }
 
 
     @Override
-    public void getParkingLotEmployeeById(Int64Value request, StreamObserver<ParkingLotEmployee> responseObserver) {
+    public void getParkingLotEmployeeByUsername(StringValue request, StreamObserver<ParkingLotEmployee> responseObserver) {
         try {
             ParkingLotEmployee parkingLotEmployee = userMapper.toParkingLotEmployee(userService
-                    .getParkingLotEmployeeById(request.getValue()));
+                    .getParkingLotEmployeeByUsername(request.getValue()));
 
             responseObserver.onNext(parkingLotEmployee);
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("getParkingLotEmployeeById(%d)", request.getValue()));
+                    String.format("getParkingLotEmployeeByUsername(%s)", request.getValue()));
 
         } catch (Exception exception) {
 
@@ -130,7 +130,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                    String.format("getParkingLotEmployeeById(%d)", request.getValue()));
+                    String.format("getParkingLotEmployeeByUsername(%s)", request.getValue()));
         }
     }
 
