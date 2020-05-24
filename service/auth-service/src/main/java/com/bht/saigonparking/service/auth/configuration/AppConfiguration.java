@@ -4,6 +4,7 @@ import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.MA
 
 import java.io.IOException;
 
+import org.lognet.springboot.grpc.GRpcGlobalInterceptor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,8 +17,10 @@ import com.bht.saigonparking.api.grpc.mail.MailRequestType;
 import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
 import com.bht.saigonparking.common.auth.SaigonParkingAuthenticationImpl;
 import com.bht.saigonparking.common.interceptor.SaigonParkingClientInterceptor;
+import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
 import com.bht.saigonparking.common.spring.SpringApplicationContext;
 import com.bht.saigonparking.common.spring.SpringBeanLifeCycle;
+import com.google.common.collect.ImmutableSet;
 
 import lombok.AllArgsConstructor;
 
@@ -47,6 +50,17 @@ public class AppConfiguration {
     @Bean
     public SaigonParkingAuthentication saigonParkingBaseAuthentication() throws IOException {
         return new SaigonParkingAuthenticationImpl();
+    }
+
+    @Bean
+    @GRpcGlobalInterceptor
+    public SaigonParkingServerInterceptor saigonParkingServerInterceptor() {
+        return new SaigonParkingServerInterceptor(new ImmutableSet.Builder<String>()
+                .add("com.bht.saigonparking.api.grpc.auth.AuthService/validateUser")
+                .add("com.bht.saigonparking.api.grpc.auth.AuthService/registerUser")
+                .add("com.bht.saigonparking.api.grpc.auth.AuthService/sendResetPasswordEmail")
+                .add("com.bht.saigonparking.api.grpc.auth.AuthService/sendActivateAccountEmail")
+                .build());
     }
 
     @Bean

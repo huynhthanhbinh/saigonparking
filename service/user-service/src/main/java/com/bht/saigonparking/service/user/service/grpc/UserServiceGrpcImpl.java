@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bht.saigonparking.api.grpc.user.Customer;
 import com.bht.saigonparking.api.grpc.user.ParkingLotEmployee;
+import com.bht.saigonparking.api.grpc.user.UpdatePasswordRequest;
 import com.bht.saigonparking.api.grpc.user.User;
 import com.bht.saigonparking.api.grpc.user.UserServiceGrpc.UserServiceImplBase;
 import com.bht.saigonparking.common.util.LoggingUtil;
@@ -155,5 +156,20 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("updateUserLastSignIn(%d)", request.getValue()));
         }
+    }
+
+    @Override
+    public void registerCustomer(Customer request, StreamObserver<Int64Value> responseObserver) {
+        super.registerCustomer(request, responseObserver);
+    }
+
+    @Override
+    public void updatePassword(UpdatePasswordRequest request, StreamObserver<Empty> responseObserver) {
+        super.updatePassword(request, responseObserver);
+    }
+
+    @Override
+    public void activateUser(Int64Value request, StreamObserver<Empty> responseObserver) {
+        super.activateUser(request, responseObserver);
     }
 }

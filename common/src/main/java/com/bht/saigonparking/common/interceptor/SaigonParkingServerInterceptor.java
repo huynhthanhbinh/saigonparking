@@ -4,6 +4,8 @@ import static com.bht.saigonparking.common.interceptor.SaigonParkingTransactiona
 import static com.bht.saigonparking.common.interceptor.SaigonParkingTransactionalMetadata.INTERNAL_KEY_NAME;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Set;
 
 import org.springframework.data.util.Pair;
 
@@ -31,7 +33,6 @@ import lombok.extern.log4j.Log4j2;
 /**
  *
  * This interceptor is using in gRPC server side
- * Except Authentication Service !!!!!!!!!!!!!!!
  *
  * This interceptor is using for checking if client's provided token is valid
  * This is using for Authentication and Authorization process in server's side
@@ -45,6 +46,10 @@ public final class SaigonParkingServerInterceptor implements ServerInterceptor {
     @Getter(AccessLevel.NONE)
     private SaigonParkingAuthentication authentication;
 
+    /* skip checking token for these methods */
+    @Getter(AccessLevel.NONE)
+    private Set<String> nonProvideTokenMethodSet;
+
     private final Context.Key<String> roleContext = Context.key("role");
     private final Context.Key<Long> userIdContext = Context.key("userId");
 
@@ -52,8 +57,14 @@ public final class SaigonParkingServerInterceptor implements ServerInterceptor {
     private static final Key<String> AUTHORIZATION_KEY = Key.of(AUTHORIZATION_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER);
 
     public SaigonParkingServerInterceptor() {
+        this(Collections.emptySet());
+    }
+
+    public SaigonParkingServerInterceptor(Set<String> nonProvideTokenMethodSet) {
         try {
             authentication = new SaigonParkingAuthenticationImpl();
+            this.nonProvideTokenMethodSet = nonProvideTokenMethodSet;
+
         } catch (IOException e) {
             log.error("Cannot find secret key file !");
         }
@@ -65,10 +76,19 @@ public final class SaigonParkingServerInterceptor implements ServerInterceptor {
                                                                  ServerCallHandler<ReqT, RespT> serverCallHandler) {
         long userId;
         String role;
+
+        /* get metadata from header of incoming request */
         String token = metadata.get(AUTHORIZATION_KEY);
         String internalServiceCodeString = metadata.get(INTERNAL_SERVICE_KEY);
 
-        if (token == null && internalServiceCodeString == null) { /* spam requests */
+        /* Method's full name, eg. com.bht.saigonparking.api.grpc.auth.AuthService/registerUser */
+        String fullMethodName = serverCall.getMethodDescriptor().getFullMethodName();
+
+        if (nonProvideTokenMethodSet.contains(fullMethodName)) { /* method skip check token */
+            role = "UNRECOGNIZED";
+            userId = 0L;
+
+        } else if (token == null && internalServiceCodeString == null) { /* spam requests */
             throw new StatusRuntimeException(Status.UNAUTHENTICATED);
 
         } else if (token != null) { /* external requests */
