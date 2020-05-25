@@ -164,3 +164,6 @@ Last updated:       Mon, May 25th, 2020
 
 54. EXCEPTION HANDLING AND ERROR PROPAGATION IN GRPC JAVA
         https://sultanov.dev/blog/exception-handling-in-grpc-java-server/
+
+56. How can I remove a commit on GitHub?
+        https://stackoverflow.com/questions/448919/how-can-i-remove-a-commit-on-github
