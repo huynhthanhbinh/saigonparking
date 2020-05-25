@@ -29,6 +29,17 @@ registerServiceGrpcRoute() {
   printf "\n"
 }
 
+# create function to prevent boilerplate code
+registerRateLimiting() {
+  printf "\nRegister %s service rate-limiting\n" $1
+  curl -XPOST ${KONG_ADMIN_HOST}:${KONG_ADMIN_PORT}/services/$1/plugins \
+    --data "name=rate-limiting" \
+    --data "config.second=2" \
+    --data "config.hour=10000" \
+    --data "config.policy=local"
+  printf "\n"
+}
+
 # register Mail Service
 SERVICE_NAME=mail
 SERVICE_HOST=mail-service
@@ -37,6 +48,7 @@ SERVICE_PATH=/com.bht.saigonparking.api.grpc.mail.MailService/
 
 registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOUT}
 registerServiceGrpcRoute ${SERVICE_NAME} ${SERVICE_PATH}
+registerRateLimiting ${SERVICE_NAME}
 
 # register Auth Service
 SERVICE_NAME=auth
@@ -46,6 +58,7 @@ SERVICE_PATH=/com.bht.saigonparking.api.grpc.auth.AuthService/
 
 registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOUT}
 registerServiceGrpcRoute ${SERVICE_NAME} ${SERVICE_PATH}
+registerRateLimiting ${SERVICE_NAME}
 
 # register User Service
 SERVICE_NAME=user
@@ -55,6 +68,7 @@ SERVICE_PATH=/com.bht.saigonparking.api.grpc.user.UserService/
 
 registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOUT}
 registerServiceGrpcRoute ${SERVICE_NAME} ${SERVICE_PATH}
+registerRateLimiting ${SERVICE_NAME}
 
 # register ParkingLot Service
 SERVICE_NAME=parkinglot
@@ -64,5 +78,6 @@ SERVICE_PATH=/com.bht.saigonparking.api.grpc.parkinglot.ParkingLotService/
 
 registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOUT}
 registerServiceGrpcRoute ${SERVICE_NAME} ${SERVICE_PATH}
+registerRateLimiting ${SERVICE_NAME}
 
 export MSYS_NO_PATHCONV=0
