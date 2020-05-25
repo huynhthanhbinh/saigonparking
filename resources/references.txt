@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Sun, May 24th, 2020
+Last updated:       Mon, May 25th, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -158,3 +158,9 @@ Last updated:       Sun, May 24th, 2020
 
 52. How to Share Resources Across Projects in Maven
         https://blog.sonatype.com/2008/04/how-to-share-resources-across-projects-in-maven/
+
+53. SQLServerException: Invalid object name 'hibernate_sequence'
+        https://stackoverflow.com/questions/49037803/sql-server-2016-invalid-object-name-hibernate-sequence
+
+54. EXCEPTION HANDLING AND ERROR PROPAGATION IN GRPC JAVA
+        https://sultanov.dev/blog/exception-handling-in-grpc-java-server/

@@ -2,6 +2,7 @@ package com.bht.saigonparking.common.base;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
@@ -44,9 +45,9 @@ import lombok.experimental.SuperBuilder;
 public abstract class BaseEntity {
 
     @Id
-    @GeneratedValue
     @Column(name = "[ID]")
     @EqualsAndHashCode.Exclude
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
 
     @Version

@@ -109,12 +109,15 @@ public final class SaigonParkingServerInterceptor implements ServerInterceptor {
             userId = 1L;
         }
 
-        return Contexts.interceptCall(
-                Context.current()
-                        .withValue(roleContext, role)
-                        .withValue(userIdContext, userId),
-                serverCall,
-                metadata,
-                serverCallHandler);
+        ServerCall.Listener<ReqT> listener = Contexts
+                .interceptCall(Context.current()
+                                .withValue(roleContext, role)
+                                .withValue(userIdContext, userId),
+                        serverCall,
+                        metadata,
+                        serverCallHandler);
+
+        /* listen to and throw exception with extra information to gRPC Client */
+        return new ExceptionHandlingServerCallListener<>(listener, serverCall, metadata);
     }
 }
