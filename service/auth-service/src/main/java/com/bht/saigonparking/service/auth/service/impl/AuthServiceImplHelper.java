@@ -1,6 +1,7 @@
 package com.bht.saigonparking.service.auth.service.impl;
 
 import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.MAIL_TOPIC_ROUTING_KEY;
+import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.USER_TOPIC_ROUTING_KEY;
 
 import java.time.temporal.ChronoUnit;
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import com.bht.saigonparking.api.grpc.mail.MailRequest;
 import com.bht.saigonparking.api.grpc.mail.MailRequestType;
+import com.bht.saigonparking.api.grpc.user.UpdateUserLastSignInRequest;
 import com.bht.saigonparking.api.grpc.user.UserRole;
 import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
 import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
@@ -45,23 +47,10 @@ public final class AuthServiceImplHelper {
     }
 
     void updateUserLastSignIn(@NotNull Long userId) {
-        userServiceStub.updateUserLastSignIn(Int64Value.of(userId), new StreamObserver<Empty>() {
-            @Override
-            public void onNext(Empty empty) {
-                LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                        String.format("updateUserLastSignIn(%d)", userId));
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", e.getMessage());
-            }
-
-            @Override
-            public void onCompleted() {
-                // finish request
-            }
-        });
+        rabbitTemplate.convertAndSend(USER_TOPIC_ROUTING_KEY, UpdateUserLastSignInRequest.newBuilder()
+                .setUserId(userId)
+                .setTimeInMillis(System.currentTimeMillis())
+                .build());
     }
 
     void activateUserWithId(@NotNull Long userId) {

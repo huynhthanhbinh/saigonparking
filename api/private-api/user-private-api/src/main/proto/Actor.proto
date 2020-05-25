@@ -44,6 +44,11 @@ message UpdatePasswordRequest {
     string newPassword = 2;
 }
 
+message UpdateUserLastSignInRequest {
+    int64 userId = 1;
+    int64 timeInMillis = 2;
+}
+
 service UserService {
 
     /** PRIVATE
@@ -69,12 +74,6 @@ service UserService {
      *  + request: employee's username
      *  + response: employee object if succeed, otherwise, throw exception */
     rpc getParkingLotEmployeeByUsername (google.protobuf.StringValue) returns (ParkingLotEmployee);
-
-    /** PRIVATE
-     * use-case: user login (will be called be AuthService)
-     *  + request: user ID
-     *  + response: empty value if succeed, otherwise, throw exception */
-    rpc updateUserLastSignIn (google.protobuf.Int64Value) returns (google.protobuf.Empty);
 
     /** PRIVATE
     * use-case: create user, CUSTOMER type (will be called by AuthService)

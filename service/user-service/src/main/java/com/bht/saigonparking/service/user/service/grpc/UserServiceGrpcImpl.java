@@ -158,29 +158,6 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
         }
     }
 
-
-    @Override
-    public void updateUserLastSignIn(Int64Value request, StreamObserver<Empty> responseObserver) {
-        try {
-            userService.updateUserLastSignIn(request.getValue());
-
-            responseObserver.onNext(Empty.getDefaultInstance());
-            responseObserver.onCompleted();
-
-            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("updateUserLastSignIn(%d)", request.getValue()));
-
-        } catch (Exception exception) {
-
-            responseObserver.onError(exception);
-            responseObserver.onCompleted();
-
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
-            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                    String.format("updateUserLastSignIn(%d)", request.getValue()));
-        }
-    }
-
     @Override
     public void createCustomer(Customer request, StreamObserver<Int64Value> responseObserver) {
         try {

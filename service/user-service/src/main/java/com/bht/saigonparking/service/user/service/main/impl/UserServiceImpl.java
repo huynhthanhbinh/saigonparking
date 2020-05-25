@@ -85,9 +85,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserLastSignIn(@NotNull Long id) {
+    public void updateUserLastSignIn(@NotNull Long id, @NotNull Long timeInMillis) {
         UserEntity userEntity = getUserById(id);
-        userEntity.setLastSignIn(new Timestamp(System.currentTimeMillis()));
+        userEntity.setLastSignIn(new Timestamp(timeInMillis));
         userRepository.saveAndFlush(userEntity);
     }
 

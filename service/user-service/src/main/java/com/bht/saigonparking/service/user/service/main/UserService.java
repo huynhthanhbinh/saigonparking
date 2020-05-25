@@ -29,7 +29,7 @@ public interface UserService {
 
     void updateCustomer(@NotNull CustomerEntity customerEntity);
 
-    void updateUserLastSignIn(@NotNull Long id);
+    void updateUserLastSignIn(@NotNull Long id, @NotNull Long timeInMillis);
 
     void activateUserWithId(@NotNull Long id);
 

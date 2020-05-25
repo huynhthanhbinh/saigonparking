@@ -21,7 +21,7 @@ import com.bht.saigonparking.common.spring.SpringBeanLifeCycle;
  */
 @Configuration
 @EnableTransactionManagement
-@Import(ChannelConfiguration.class)
+@Import({ChannelConfiguration.class, MessageQueueConfiguration.class})
 @ComponentScan(basePackages = AppConfiguration.BASE_PACKAGE,
         includeFilters = @ComponentScan.Filter(InheritedComponent.class))
 public class AppConfiguration {
