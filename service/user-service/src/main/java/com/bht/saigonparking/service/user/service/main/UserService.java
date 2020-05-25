@@ -25,6 +25,10 @@ public interface UserService {
 
     ParkingLotEmployeeEntity getParkingLotEmployeeByUsername(@NotEmpty String username);
 
+    Long createCustomer(@NotNull CustomerEntity customerEntity);
+
+    void updateCustomer(@NotNull CustomerEntity customerEntity);
+
     void updateUserLastSignIn(@NotNull Long id);
 
     void activateUserWithId(@NotNull Long id);

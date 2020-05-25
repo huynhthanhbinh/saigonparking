@@ -11,8 +11,9 @@ import com.bht.saigonparking.api.grpc.user.User;
 import com.bht.saigonparking.api.grpc.user.UserServiceGrpc.UserServiceImplBase;
 import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
 import com.bht.saigonparking.common.util.LoggingUtil;
-import com.bht.saigonparking.service.user.mapper.EnumMapper;
+import com.bht.saigonparking.service.user.entity.CustomerEntity;
 import com.bht.saigonparking.service.user.mapper.UserMapper;
+import com.bht.saigonparking.service.user.mapper.UserMapperExt;
 import com.bht.saigonparking.service.user.service.main.UserService;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
@@ -41,7 +42,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
 
     private final UserService userService;
     private final UserMapper userMapper;
-    private final EnumMapper enumMapper;
+    private final UserMapperExt userMapperExt;
     private final SaigonParkingServerInterceptor serverInterceptor;
 
     @Override
@@ -181,8 +182,61 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
     }
 
     @Override
-    public void registerCustomer(Customer request, StreamObserver<Int64Value> responseObserver) {
-        super.registerCustomer(request, responseObserver);
+    public void createCustomer(Customer request, StreamObserver<Int64Value> responseObserver) {
+        try {
+            String userRole = serverInterceptor.getRoleContext().get();
+
+            if (!userRole.equals("ADMIN")) {
+                throw new StatusRuntimeException(Status.PERMISSION_DENIED);
+            }
+
+            CustomerEntity customerEntity = userMapperExt.toCustomerEntity(request, true);
+            Long newCustomerId = userService.createCustomer(customerEntity);
+
+            responseObserver.onNext(Int64Value.of(newCustomerId));
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("createCustomer(%s)", request.getUserInfo().getUsername()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("createCustomer(%s)", request.getUserInfo().getUsername()));
+        }
+    }
+
+    @Override
+    public void updateCustomer(Customer request, StreamObserver<Empty> responseObserver) {
+        try {
+            Long userId = serverInterceptor.getUserIdContext().get();
+            CustomerEntity customerEntity = userMapperExt.toCustomerEntity(request, false);
+
+            if (!userId.equals(customerEntity.getId())) {
+                throw new StatusRuntimeException(Status.PERMISSION_DENIED);
+            }
+
+            userService.updateCustomer(customerEntity);
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("updateCustomer(%s)", request.getUserInfo().getUsername()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("updateCustomer(%s)", request.getUserInfo().getUsername()));
+        }
     }
 
     @Override

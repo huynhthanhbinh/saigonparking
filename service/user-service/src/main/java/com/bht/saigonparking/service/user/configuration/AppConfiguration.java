@@ -8,11 +8,12 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.bht.saigonparking.common.annotation.InheritedComponent;
 import com.bht.saigonparking.common.interceptor.SaigonParkingClientInterceptor;
 import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
 import com.bht.saigonparking.common.spring.SpringApplicationContext;
 import com.bht.saigonparking.common.spring.SpringBeanLifeCycle;
-import com.bht.saigonparking.service.user.annotation.InheritedComponent;
+
 
 /**
  *

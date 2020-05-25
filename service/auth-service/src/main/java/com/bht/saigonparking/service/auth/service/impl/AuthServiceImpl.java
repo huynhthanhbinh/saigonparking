@@ -69,7 +69,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String registerUser(RegisterRequest request) {
         UserRole userRole = UserRole.CUSTOMER;
-        Long userId = userServiceBlockingStub.registerCustomer(Customer.newBuilder()
+        Long userId = userServiceBlockingStub.createCustomer(Customer.newBuilder()
                 .setUserInfo(User.newBuilder()
                         .setUsername(request.getUsername())
                         .setPassword(request.getPassword())

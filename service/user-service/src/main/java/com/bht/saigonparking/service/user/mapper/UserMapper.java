@@ -6,8 +6,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.NullValueMappingStrategy;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 import com.bht.saigonparking.api.grpc.user.Customer;
@@ -18,8 +16,6 @@ import com.bht.saigonparking.service.user.entity.CustomerEntity;
 import com.bht.saigonparking.service.user.entity.ParkingLotEmployeeEntity;
 import com.bht.saigonparking.service.user.entity.UserEntity;
 
-import lombok.Setter;
-
 /**
  *
  * Mapper class for user entities and its families
@@ -29,17 +25,12 @@ import lombok.Setter;
  * @author bht
  */
 @Component
-@DependsOn("userMapperExt")
 @SuppressWarnings("UnmappedTargetProperties")
-@Setter(onMethod = @__(@Autowired))
 @Mapper(componentModel = "spring",
         implementationPackage = AppConfiguration.BASE_PACKAGE + ".mapper.impl",
         nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT,
         uses = {EnumMapper.class, CustomizedMapper.class})
-public abstract class UserMapper {
-
-    private UserMapperExt userMapperExt;
-
+public interface UserMapper {
 
     @Named("toUser")
     @Mapping(target = "id", source = "id", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
@@ -50,7 +41,7 @@ public abstract class UserMapper {
     @Mapping(target = "isActivated", source = "isActivated", defaultExpression = "java(customizedMapper.DEFAULT_BOOL_VALUE)")
     @Mapping(target = "lastSignIn", source = "lastSignIn", qualifiedByName = "toTimestampString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "version", source = "version", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
-    public abstract User toUser(@NotNull UserEntity userEntity);
+    User toUser(@NotNull UserEntity userEntity);
 
 
     @Named("toCustomer")
@@ -59,7 +50,7 @@ public abstract class UserMapper {
     @Mapping(target = "lastName", source = "lastName", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "phone", source = "phone", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "lastUpdated", source = "lastUpdated", qualifiedByName = "toTimestampString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
-    public abstract Customer toCustomer(@NotNull CustomerEntity customerEntity);
+    Customer toCustomer(@NotNull CustomerEntity customerEntity);
 
 
     @Named("toCustomerWithoutUserInfo")
@@ -68,11 +59,11 @@ public abstract class UserMapper {
     @Mapping(target = "lastName", source = "lastName", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "phone", source = "phone", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "lastUpdated", source = "lastUpdated", qualifiedByName = "toTimestampString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
-    public abstract Customer toCustomerWithoutUserInfo(@NotNull CustomerEntity customerEntity);
+    Customer toCustomerWithoutUserInfo(@NotNull CustomerEntity customerEntity);
 
 
     @Named("toParkingLotEmployee")
     @Mapping(target = "userInfo", source = "parkingLotEmployeeEntity", qualifiedByName = "toUser", defaultExpression = "java(customizedMapper.DEFAULT_USER)")
     @Mapping(target = "parkingLotId", source = "parkingLotId", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
-    public abstract ParkingLotEmployee toParkingLotEmployee(@NotNull ParkingLotEmployeeEntity parkingLotEmployeeEntity);
+    ParkingLotEmployee toParkingLotEmployee(@NotNull ParkingLotEmployeeEntity parkingLotEmployeeEntity);
 }

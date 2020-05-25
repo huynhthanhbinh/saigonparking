@@ -77,10 +77,16 @@ service UserService {
     rpc updateUserLastSignIn (google.protobuf.Int64Value) returns (google.protobuf.Empty);
 
     /** PRIVATE
-    * use-case: register user, CUSTOMER type (will be called by AuthService)
-    *  + request: Customer
-    *  + response: new user ID if succeed, otherwise, throw exception */
-    rpc registerCustomer (Customer) returns (google.protobuf.Int64Value);
+    * use-case: create user, CUSTOMER type (will be called by AuthService)
+    *  + request: Customer object
+    *  + response: user ID if succeed, otherwise, throw exception */
+    rpc createCustomer (Customer) returns (google.protobuf.Int64Value);
+
+    /** PUBLIC
+    * use-case: update user, CUSTOMER type (will be called by AuthService)
+    *  + request: Customer object
+    *  + response: empty value if succeed, otherwise, throw exception */
+    rpc updateCustomer (Customer) returns (google.protobuf.Empty);
 
     /** PUBLIC
      * Update password: 2 use-cases

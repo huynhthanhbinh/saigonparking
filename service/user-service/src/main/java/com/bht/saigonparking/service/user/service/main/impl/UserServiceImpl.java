@@ -74,6 +74,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Long createCustomer(@NotNull CustomerEntity customerEntity) {
+        CustomerEntity result = customerRepository.saveAndFlush(customerEntity);
+        return result.getId();
+    }
+
+    @Override
+    public void updateCustomer(@NotNull CustomerEntity customerEntity) {
+        customerRepository.saveAndFlush(customerEntity);
+    }
+
+    @Override
     public void updateUserLastSignIn(@NotNull Long id) {
         UserEntity userEntity = getUserById(id);
         userEntity.setLastSignIn(new Timestamp(System.currentTimeMillis()));
