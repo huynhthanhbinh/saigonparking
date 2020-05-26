@@ -11,7 +11,6 @@
 
     <name>SAIGON-PARKING</name>
     <modules>
-        <module>proxy</module>
         <module>gateway</module>
         <module>queue</module>
 
