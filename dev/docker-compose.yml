@@ -15,17 +15,6 @@ services:
       - "80:${WEB_SERVER_HTTP_DOCKER_PORT}"
       - "443:${WEB_SERVER_HTTP_SSL_DOCKER_PORT}"
 
-  proxy:
-    image: ${DOCKER_HUB_ID}/proxy:${PROXY_VERSION}
-    networks:
-      - saigonparking
-    environment:
-      TZ: ${TIMEZONE}
-    ports:
-      - "${PROXY_HTTP_PORT}:${PROXY_HTTP_PORT}"
-      - "${PROXY_HTTP_SSL_PORT}:${PROXY_HTTP_SSL_PORT}"
-      - "127.0.0.1:${PROXY_ADMIN_PORT}:${PROXY_ADMIN_PORT}"
-
   gateway-database:
     image: postgres:${POSTGRES_VERSION}
     networks:
