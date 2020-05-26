@@ -15,60 +15,20 @@ services:
       - "80:${WEB_SERVER_HTTP_DOCKER_PORT}"
       - "443:${WEB_SERVER_HTTP_SSL_DOCKER_PORT}"
 
-  gateway-database:
-    image: postgres:${POSTGRES_VERSION}
-    networks:
-      - saigonparking
-    ports:
-      - "${POSTGRES_LOCAL_PORT}:5432"
-    environment:
-      TZ:                 ${TIMEZONE}
-      PGTZ:               ${TIMEZONE}
-      POSTGRES_DB:        ${KONG_PG_DATABASE}
-      POSTGRES_USER:      ${KONG_PG_USER}
-      POSTGRES_PASSWORD:  ${KONG_PG_PASSWORD}
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "kong"]
-      interval: 30s
-      timeout: 30s
-      retries: 3
-    restart: on-failure
-
-  gateway-migration:
-    image: kong:${KONG_VERSION}
-    networks:
-      - saigonparking
-    environment:
-      TZ:                 ${TIMEZONE}
-      KONG_DATABASE:      ${KONG_DATABASE}
-      KONG_PG_HOST:       gateway-database
-      KONG_PG_DATABASE:   ${KONG_PG_DATABASE}
-      KONG_PG_USER:       ${KONG_PG_USER}
-      KONG_PG_PASSWORD:   ${KONG_PG_PASSWORD}
-    links:
-      - gateway-database
-    depends_on:
-      - gateway-database
-    command: "kong migrations bootstrap"
-    restart: on-failure
-
   gateway:
     image: ${DOCKER_HUB_ID}/gateway:${GATEWAY_VERSION}
     networks:
       - saigonparking
     environment:
-      TZ:                 ${TIMEZONE}
-      KONG_PLUGINS:       ${KONG_PLUGINS}
-      KONG_LOG_LEVEL:     ${KONG_LOG_LEVEL}
-      KONG_DATABASE:      ${KONG_DATABASE}
-      KONG_PG_HOST:       gateway-database
-      KONG_PG_DATABASE:   ${KONG_PG_DATABASE}
-      KONG_PG_USER:       ${KONG_PG_USER}
-      KONG_PG_PASSWORD:   ${KONG_PG_PASSWORD}
-      KONG_SSL_CERT:      ${KONG_SSL_CERT_PATH}
-      KONG_SSL_CERT_KEY:  ${KONG_SSL_CERT_KEY_PATH}
-      KONG_PROXY_LISTEN:  ${KONG_PROXY_LISTEN}
-      KONG_ADMIN_LISTEN:  ${KONG_ADMIN_LISTEN}
+      TZ:                       ${TIMEZONE}
+      KONG_PLUGINS:             ${KONG_PLUGINS}
+      KONG_LOG_LEVEL:           ${KONG_LOG_LEVEL}
+      KONG_DATABASE:            ${KONG_DATABASE}
+      KONG_DECLARATIVE_CONFIG:  ${KONG_DECLARATIVE_CONFIG}
+      KONG_SSL_CERT:            ${KONG_SSL_CERT_PATH}
+      KONG_SSL_CERT_KEY:        ${KONG_SSL_CERT_KEY_PATH}
+      KONG_PROXY_LISTEN:        ${KONG_PROXY_LISTEN}
+      KONG_ADMIN_LISTEN:        ${KONG_ADMIN_LISTEN}
     ports:
       - "${KONG_HTTP_PORT}:${KONG_HTTP_PORT}"
       - "${KONG_HTTP_SSL_PORT}:${KONG_HTTP_SSL_PORT}"
@@ -76,11 +36,6 @@ services:
       - "${KONG_GRPC_SSL_PORT}:${KONG_GRPC_SSL_PORT}"
       - "127.0.0.1:${KONG_ADMIN_PORT}:${KONG_ADMIN_PORT}"
       - "127.0.0.1:${KONG_ADMIN_SSL_PORT}:${KONG_ADMIN_SSL_PORT}"
-    links:
-      - gateway-database
-    depends_on:
-      - gateway-database
-      - gateway-migration
     healthcheck:
       test: ["CMD", "kong", "health"]
       interval: 5s
