@@ -35,11 +35,6 @@ services:
       - "${KONG_GRPC_SSL_PORT}:${KONG_GRPC_SSL_PORT}"
       - "127.0.0.1:${KONG_ADMIN_PORT}:${KONG_ADMIN_PORT}"
       - "127.0.0.1:${KONG_ADMIN_SSL_PORT}:${KONG_ADMIN_SSL_PORT}"
-    links:
-      - gateway-database
-    depends_on:
-      - gateway-database
-      - gateway-migration
     healthcheck:
       test: ["CMD", "kong", "health"]
       interval: 5s
