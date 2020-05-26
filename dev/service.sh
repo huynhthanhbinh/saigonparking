@@ -40,6 +40,30 @@ registerRateLimiting() {
   printf "\n"
 }
 
+# create function to prevent boilerplate code
+registerCrossOriginResourceSharing() {
+  printf "\nRegister %s service CORS\n" $1
+  curl -XPOST ${KONG_ADMIN_HOST}:${KONG_ADMIN_PORT}/services/$1/plugins \
+    --data "name=cors" \
+    --data "config.origins=*" \
+    --data "config.methods=GET" \
+    --data "config.methods=POST" \
+    --data "config.methods=PUT" \
+    --data "config.methods=DELETE" \
+    --data "config.methods=OPTIONS" \
+    --data "config.headers=Accept" \
+    --data "config.headers=Accept-Version" \
+    --data "config.headers=Authorization" \
+    --data "config.headers=Content-Length" \
+    --data "config.headers=Content-MD5" \
+    --data "config.headers=Content-Type" \
+    --data "config.headers=Date" \
+    --data "config.headers=X-Auth-Token" \
+    --data "config.credentials=false" \
+    --data "config.max_age=3600"
+  printf "\n"
+}
+
 # register Mail Service
 SERVICE_NAME=mail
 SERVICE_HOST=mail-service
@@ -49,6 +73,7 @@ SERVICE_PATH=/com.bht.saigonparking.api.grpc.mail.MailService/
 registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOUT}
 registerServiceGrpcRoute ${SERVICE_NAME} ${SERVICE_PATH}
 registerRateLimiting ${SERVICE_NAME}
+registerCrossOriginResourceSharing ${SERVICE_NAME}
 
 # register Auth Service
 SERVICE_NAME=auth
@@ -59,6 +84,7 @@ SERVICE_PATH=/com.bht.saigonparking.api.grpc.auth.AuthService/
 registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOUT}
 registerServiceGrpcRoute ${SERVICE_NAME} ${SERVICE_PATH}
 registerRateLimiting ${SERVICE_NAME}
+registerCrossOriginResourceSharing ${SERVICE_NAME}
 
 # register User Service
 SERVICE_NAME=user
@@ -69,6 +95,7 @@ SERVICE_PATH=/com.bht.saigonparking.api.grpc.user.UserService/
 registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOUT}
 registerServiceGrpcRoute ${SERVICE_NAME} ${SERVICE_PATH}
 registerRateLimiting ${SERVICE_NAME}
+registerCrossOriginResourceSharing ${SERVICE_NAME}
 
 # register ParkingLot Service
 SERVICE_NAME=parkinglot
@@ -79,5 +106,6 @@ SERVICE_PATH=/com.bht.saigonparking.api.grpc.parkinglot.ParkingLotService/
 registerService ${SERVICE_NAME} ${SERVICE_HOST} ${SERVICE_PORT} ${CONNECT_TIMEOUT}
 registerServiceGrpcRoute ${SERVICE_NAME} ${SERVICE_PATH}
 registerRateLimiting ${SERVICE_NAME}
+registerCrossOriginResourceSharing ${SERVICE_NAME}
 
 export MSYS_NO_PATHCONV=0
