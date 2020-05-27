@@ -1,41 +1,56 @@
 version: '3'
-
 networks:
   saigonparking:
     driver: bridge
 
 services:
-  webserver:
-    image: ${DOCKER_HUB_ID}/webserver:${WEB_SERVER_VERSION}
-    networks:
-      - saigonparking
-    environment:
-      TZ: ${TIMEZONE}
-    ports:
-      - "80:${WEB_SERVER_HTTP_DOCKER_PORT}"
-      - "443:${WEB_SERVER_HTTP_SSL_DOCKER_PORT}"
-
-  gateway:
+  gateway-grpc:
     image: ${DOCKER_HUB_ID}/gateway:${GATEWAY_VERSION}
     networks:
       - saigonparking
     environment:
       TZ:                       ${TIMEZONE}
-      KONG_PLUGINS:             ${KONG_PLUGINS}
       KONG_LOG_LEVEL:           ${KONG_LOG_LEVEL}
       KONG_DATABASE:            ${KONG_DATABASE}
-      KONG_DECLARATIVE_CONFIG:  ${KONG_DECLARATIVE_CONFIG}
       KONG_SSL_CERT:            ${KONG_SSL_CERT_PATH}
       KONG_SSL_CERT_KEY:        ${KONG_SSL_CERT_KEY_PATH}
-      KONG_PROXY_LISTEN:        ${KONG_PROXY_LISTEN}
-      KONG_ADMIN_LISTEN:        ${KONG_ADMIN_LISTEN}
+      KONG_MEM_CACHE_SIZE:      ${KONG_MEM_CACHE_SIZE}
+      KONG_DECLARATIVE_CONFIG:  ${KONG_GRPC_DECLARATIVE_CONFIG}
+      KONG_PROXY_LISTEN:        ${KONG_GRPC_PROXY_LISTEN}
+      KONG_ADMIN_LISTEN:        ${KONG_GRPC_ADMIN_LISTEN}
+      KONG_PLUGINS:             ${KONG_GRPC_PLUGINS}
+    ports:
+      - "${KONG_GRPC_PORT}:${KONG_GRPC_PORT}"
+      - "${KONG_GRPC_SSL_PORT}:${KONG_GRPC_SSL_PORT}"
+      - "127.0.0.1:${KONG_GRPC_ADMIN_PORT}:${KONG_GRPC_ADMIN_PORT}"
+      - "127.0.0.1:${KONG_GRPC_ADMIN_SSL_PORT}:${KONG_GRPC_ADMIN_SSL_PORT}"
+    healthcheck:
+      test: ["CMD", "kong", "health"]
+      interval: 5s
+      timeout: 2s
+      retries: 15
+    restart: on-failure
+
+  gateway-http:
+    image: ${DOCKER_HUB_ID}/gateway:${GATEWAY_VERSION}
+    networks:
+      - saigonparking
+    environment:
+      TZ:                       ${TIMEZONE}
+      KONG_LOG_LEVEL:           ${KONG_LOG_LEVEL}
+      KONG_DATABASE:            ${KONG_DATABASE}
+      KONG_SSL_CERT:            ${KONG_SSL_CERT_PATH}
+      KONG_SSL_CERT_KEY:        ${KONG_SSL_CERT_KEY_PATH}
+      KONG_MEM_CACHE_SIZE:      ${KONG_MEM_CACHE_SIZE}
+      KONG_DECLARATIVE_CONFIG:  ${KONG_HTTP_DECLARATIVE_CONFIG}
+      KONG_PROXY_LISTEN:        ${KONG_HTTP_PROXY_LISTEN}
+      KONG_ADMIN_LISTEN:        ${KONG_HTTP_ADMIN_LISTEN}
+      KONG_PLUGINS:             ${KONG_HTTP_PLUGINS}
     ports:
       - "${KONG_HTTP_PORT}:${KONG_HTTP_PORT}"
       - "${KONG_HTTP_SSL_PORT}:${KONG_HTTP_SSL_PORT}"
-      - "${KONG_GRPC_PORT}:${KONG_GRPC_PORT}"
-      - "${KONG_GRPC_SSL_PORT}:${KONG_GRPC_SSL_PORT}"
-      - "127.0.0.1:${KONG_ADMIN_PORT}:${KONG_ADMIN_PORT}"
-      - "127.0.0.1:${KONG_ADMIN_SSL_PORT}:${KONG_ADMIN_SSL_PORT}"
+      - "127.0.0.1:${KONG_HTTP_ADMIN_PORT}:${KONG_HTTP_ADMIN_PORT}"
+      - "127.0.0.1:${KONG_HTTP_ADMIN_SSL_PORT}:${KONG_HTTP_ADMIN_SSL_PORT}"
     healthcheck:
       test: ["CMD", "kong", "health"]
       interval: 5s

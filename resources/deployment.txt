@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project Deployment
 Author:             Huynh Thanh Binh
-Last updated:       Tue, May 19th, 2020
+Last updated:       Wed, May 27th, 2020
 ========================================================================================================================
 
 We will simply deploy our system in 2 VM instances in GCP: Gateway & Service
@@ -34,14 +34,26 @@ Gateway public ports:
     + 8443: API HTTP SSL
     + 9080: API GRPC/HTTP2
     + 9081: API GRPC/HTTP2 SSL
-    + 8432: GATEWAY POSTGRES DB
-    + 8338: PROXY HTTP
-    + 8448: PROXY HTTP SSL
 
 Gateway private ports:
-    + 9901: ENVOY ADMIN HTTP
-    + 8001: KONG ADMIN HTTP
-    + 8444: KONG ADMIN HTTP SSL
+    + 8001: KONG ADMIN HTTP (KONG-GRPC)
+    + 8002: KONG ADMIN HTTP (KONG-HTTP)
+    + 8444: KONG ADMIN HTTP SSL (KONG-GRPC)
+    + 8445: KONG ADMIN HTTP SSL (KONG-HTTP)
+
+Service public ports:
+    + 6060: Mail Service HTTP
+    + 6666: Mail Service GRPC
+    + 7070: Auth Service HTTP
+    + 7777: Auth Service GRPC
+    + 8080: User Servicd HTTP
+    + 8888: User Service GRPC
+    + 9090: ParkingLot Service HTTP
+    + 9999: ParkingLot Service GRPC
+
+Service private ports:
+    + 5672:  Rabbit MQ HTTP
+    + 15672: Rabbit MQ Management HTTP
 
 Service is another vm instance in GCP (B)
 Service prerequisites: Ubuntu 18.04, 8GB RAM, 20GB SSD, Teamviewer for Remote Control
@@ -50,5 +62,5 @@ Service will be reached by Gateway via non-SSL plain-text communication(s).
 
 Deployment:
 1. Clone/Pull newest code from saigonparking repository (this project).
-2. Run [ $ docker-compose up ] at project's gateway directory.
-3. Run [ $ docker-compose up ] at project's root directory.
+2. Run [ $ docker-compose up ] at project's gateway directory.  (at gateway VM instance)
+3. Run [ $ docker-compose up ] at project's root directory.     (at service VM instance)

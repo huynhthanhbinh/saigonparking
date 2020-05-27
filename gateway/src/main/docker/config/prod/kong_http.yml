@@ -49,11 +49,6 @@ services:
                 - X-User-Agent
               credentials: false
               max_age: 3600
-      - name: mail-grpc
-        protocols:
-          - grpc
-        paths:
-          - /com.bht.saigonparking.api.grpc.mail.MailService/
     retries: 3
     read_timeout: 30000
     write_timeout: 30000
@@ -109,11 +104,6 @@ services:
                 - X-User-Agent
               credentials: false
               max_age: 3600
-      - name: auth-grpc
-        protocols:
-          - grpc
-        paths:
-          - /com.bht.saigonparking.api.grpc.auth.AuthService/
     retries: 3
     read_timeout: 30000
     write_timeout: 30000
@@ -169,11 +159,6 @@ services:
                 - X-User-Agent
               credentials: false
               max_age: 3600
-      - name: user-grpc
-        protocols:
-          - grpc
-        paths:
-          - /com.bht.saigonparking.api.grpc.user.UserService/
     retries: 3
     read_timeout: 30000
     write_timeout: 30000
@@ -229,11 +214,6 @@ services:
                 - X-User-Agent
               credentials: false
               max_age: 3600
-      - name: parkinglot-grpc
-        protocols:
-          - grpc
-        paths:
-          - /com.bht.saigonparking.api.grpc.parkinglot.ParkingLotService/
     retries: 3
     read_timeout: 30000
     write_timeout: 30000
