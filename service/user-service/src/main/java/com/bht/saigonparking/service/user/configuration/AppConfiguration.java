@@ -1,5 +1,7 @@
 package com.bht.saigonparking.service.user.configuration;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.lognet.springboot.grpc.GRpcGlobalInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -13,6 +15,7 @@ import com.bht.saigonparking.common.interceptor.SaigonParkingClientInterceptor;
 import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
 import com.bht.saigonparking.common.spring.SpringApplicationContext;
 import com.bht.saigonparking.common.spring.SpringBeanLifeCycle;
+import com.google.common.collect.ImmutableMap;
 
 
 /**
@@ -51,6 +54,8 @@ public class AppConfiguration {
     @Bean
     @GRpcGlobalInterceptor
     public SaigonParkingServerInterceptor saigonParkingServerInterceptor() {
-        return new SaigonParkingServerInterceptor();
+        return new SaigonParkingServerInterceptor(new ImmutableMap.Builder<Class<? extends Throwable>, String>()
+                .put(EntityNotFoundException.class, "SPE#00007")
+                .build());
     }
 }
