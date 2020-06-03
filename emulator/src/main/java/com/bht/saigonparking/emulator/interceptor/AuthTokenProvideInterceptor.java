@@ -26,7 +26,7 @@ public final class AuthTokenProvideInterceptor implements ClientInterceptor {
         return new ForwardingClientCall.SimpleForwardingClientCall<ReqT, RespT>(channel.newCall(methodDescriptor, callOptions)) {
             @Override
             public void start(Listener<RespT> responseListener, Metadata headers) {
-                headers.put(INTERNAL_SERVICE_KEY, "Saigon Parking Emulator");
+                headers.put(INTERNAL_SERVICE_KEY, "165305061220760000");
                 super.start(responseListener, headers);
             }
         };

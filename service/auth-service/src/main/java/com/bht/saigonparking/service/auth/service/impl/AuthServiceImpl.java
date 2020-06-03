@@ -13,11 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bht.saigonparking.api.grpc.auth.RegisterRequest;
 import com.bht.saigonparking.api.grpc.auth.ValidateResponseType;
-import com.bht.saigonparking.api.grpc.mail.MailRequestType;
 import com.bht.saigonparking.api.grpc.user.Customer;
 import com.bht.saigonparking.api.grpc.user.User;
 import com.bht.saigonparking.api.grpc.user.UserRole;
 import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
+import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
 import com.bht.saigonparking.service.auth.service.AuthService;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
@@ -36,6 +36,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthServiceImpl implements AuthService {
 
+    private final SaigonParkingAuthentication authentication;
     private final AuthServiceImplHelper authServiceImplHelper;
     private final UserServiceGrpc.UserServiceBlockingStub userServiceBlockingStub;
 
@@ -53,11 +54,12 @@ public class AuthServiceImpl implements AuthService {
                     Context context = Context.current().fork();
                     context.run(() -> authServiceImplHelper.updateUserLastSignIn(user.getId()));
 
-                    /* Generate new access token for user with Id, Role */
-                    String accessToken = authServiceImplHelper.generateAccessToken(user.getId(), userRole);
+                    /* Generate new access token, new refresh token for user with Id, Role */
+                    String accessToken = authentication.generateAccessToken(user.getId(), userRole.toString());
+                    String refreshToken = authentication.generateRefreshToken(user.getId(), userRole.toString());
 
                     /* Return response with two field: 1st ResponseType, 2nd AccessToken */
-                    return Triple.of(ValidateResponseType.AUTHENTICATED, accessToken, "tempRefreshToken");
+                    return Triple.of(ValidateResponseType.AUTHENTICATED, accessToken, refreshToken);
                 }
                 return Triple.of(ValidateResponseType.INCORRECT, "", "");
             }
@@ -82,30 +84,33 @@ public class AuthServiceImpl implements AuthService {
                 .build())
                 .getValue();
 
-        String temporaryToken = authServiceImplHelper.generateTemporaryToken(userId, userRole);
-        authServiceImplHelper.sendMail(ACTIVATE_ACCOUNT, request.getEmail(), request.getUsername(), temporaryToken);
+        String activateAccountToken = authentication.generateActivateAccountToken(userId, userRole.toString());
+        authServiceImplHelper.sendMail(ACTIVATE_ACCOUNT, request.getEmail(), request.getUsername(), activateAccountToken);
 
         return request.getEmail();
     }
 
     @Override
     public String sendResetPasswordEmail(String username) {
-        return sendNewMail(username, RESET_PASSWORD);
-    }
-
-    @Override
-    public String sendActivateAccountEmail(String username) {
-        return sendNewMail(username, ACTIVATE_ACCOUNT);
-    }
-
-    private String sendNewMail(String username, MailRequestType mailRequestType) {
         User user = userServiceBlockingStub.getUserByUsername(StringValue.of(username));
         if (user.equals(User.getDefaultInstance())) {
             throw new StatusRuntimeException(Status.UNKNOWN);
         }
 
-        String temporaryToken = authServiceImplHelper.generateTemporaryToken(user.getId(), user.getRole());
-        authServiceImplHelper.sendMail(mailRequestType, user.getEmail(), username, temporaryToken);
+        String resetPasswordToken = authentication.generateResetPasswordToken(user.getId(), user.getRole().toString());
+        authServiceImplHelper.sendMail(RESET_PASSWORD, user.getEmail(), username, resetPasswordToken);
+        return user.getEmail();
+    }
+
+    @Override
+    public String sendActivateAccountEmail(String username) {
+        User user = userServiceBlockingStub.getUserByUsername(StringValue.of(username));
+        if (user.equals(User.getDefaultInstance())) {
+            throw new StatusRuntimeException(Status.UNKNOWN);
+        }
+
+        String activateAccountToken = authentication.generateActivateAccountToken(user.getId(), user.getRole().toString());
+        authServiceImplHelper.sendMail(ACTIVATE_ACCOUNT, user.getEmail(), username, activateAccountToken);
         return user.getEmail();
     }
 
@@ -116,8 +121,9 @@ public class AuthServiceImpl implements AuthService {
             throw new StatusRuntimeException(Status.UNKNOWN);
         }
 
-        String accessToken = authServiceImplHelper.generateAccessToken(user.getId(), user.getRole());
-        String refreshToken = "tempRefreshToken";
+        /* Generate new access token, new refresh token for user with Id, Role */
+        String accessToken = authentication.generateAccessToken(user.getId(), user.getRole().toString());
+        String refreshToken = authentication.generateRefreshToken(user.getId(), user.getRole().toString());
         return Triple.of(user.getUsername(), accessToken, refreshToken);
     }
 
@@ -132,8 +138,9 @@ public class AuthServiceImpl implements AuthService {
         Context context = Context.current().fork();
         context.run(() -> authServiceImplHelper.activateUserWithId(userId));
 
-        String accessToken = authServiceImplHelper.generateAccessToken(user.getId(), user.getRole());
-        String refreshToken = "tempRefreshToken";
+        /* Generate new access token, new refresh token for user with Id, Role */
+        String accessToken = authentication.generateAccessToken(user.getId(), user.getRole().toString());
+        String refreshToken = authentication.generateRefreshToken(user.getId(), user.getRole().toString());
         return Triple.of(user.getUsername(), accessToken, refreshToken);
     }
 }

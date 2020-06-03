@@ -1,5 +1,7 @@
 package com.bht.saigonparking.common.auth;
 
+import static com.bht.saigonparking.common.auth.SaigonParkingTokenType.*;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
@@ -11,8 +13,12 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.Random;
 
-import org.springframework.data.util.Pair;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
+import org.apache.logging.log4j.Level;
+
+import com.bht.saigonparking.common.util.LoggingUtil;
 import com.google.common.io.ByteStreams;
 
 import io.jsonwebtoken.Claims;
@@ -26,40 +32,43 @@ import io.jsonwebtoken.security.Keys;
 public final class SaigonParkingAuthenticationImpl implements SaigonParkingAuthentication {
 
     private static final String SAIGON_PARKING_ISSUER = "www.saigonparking.wtf";
+    private static final short MAX_RANDOM_EXCLUSIVE = 1000;
+
     private static final String USER_ROLE_KEY_NAME = "role";
     private static final String FACTOR_KEY_NAME = "fac";
-    private static final short MAX_RANDOM_EXCLUSIVE = 1000;
+    private static final String TOKEN_TYPE_KEY_NAME = "classification";
 
     private Long userIdDecodeKey;
     private Key secretKey;
 
-    public SaigonParkingAuthenticationImpl() throws IOException {
-        init();
+    public SaigonParkingAuthenticationImpl() {
+        Properties properties = new Properties();
+        try {
+            properties.load(Objects.requireNonNull(SaigonParkingAuthenticationImpl.class
+                    .getClassLoader()
+                    .getResourceAsStream("common.properties")));
+
+            userIdDecodeKey = Long.valueOf((String) properties.get("token.user-id.decode.key"));
+            secretKey = getSecretKey((String) properties.get("token.rsa-private-key.path"));
+
+        } catch (IOException e) {
+            LoggingUtil.log(Level.ERROR, "AUTH", "Read resource", "Resource is unavailable !");
+        }
     }
 
-    private Long encryptUserId(Long userId, Integer factor) {
+    private Long encryptUserId(@NotNull Long userId, @NotNull Integer factor) {
         return userId ^ (userIdDecodeKey * factor);
     }
 
-    private Long decryptUserId(Long encodedUserId, Integer factor) {
+    private Long decryptUserId(@NotNull Long encodedUserId, @NotNull Integer factor) {
         return encodedUserId ^ (userIdDecodeKey * factor);
     }
 
-    private void init() throws IOException {
-        Properties properties = new Properties();
-        properties.load(Objects.requireNonNull(SaigonParkingAuthenticationImpl.class
-                .getClassLoader()
-                .getResourceAsStream("common.properties")));
-
-        userIdDecodeKey = Long.valueOf((String) properties.get("token.user-id.decode.key"));
-        secretKey = getSecretKey((String) properties.get("token.rsa-private-key.path"));
-    }
-
-    private Key getSecretKey(String keyPath) throws IOException {
+    private Key getSecretKey(@NotEmpty String keyPath) throws IOException {
         return Keys.hmacShaKeyFor(getSecretKeyByteArray(keyPath));
     }
 
-    private byte[] getSecretKeyByteArray(String keyPath) throws IOException {
+    private byte[] getSecretKeyByteArray(@NotEmpty String keyPath) throws IOException {
         return Base64.getDecoder()
                 .decode(new String(ByteStreams.toByteArray(Objects
                         .requireNonNull(SaigonParkingAuthenticationImpl.class
@@ -71,15 +80,23 @@ public final class SaigonParkingAuthenticationImpl implements SaigonParkingAuthe
                         .getBytes(StandardCharsets.UTF_8));
     }
 
-    @Override
-    public String generateJwtToken(Long userId, String userRole, Integer timeAmount, ChronoUnit timeUnit) {
+    private String generateJwtToken(@NotNull SaigonParkingTokenType type,
+                                    @NotNull Long userId,
+                                    @NotEmpty String userRole,
+                                    @NotNull Integer timeAmount,
+                                    @NotNull ChronoUnit timeUnit) {
+
         Instant now = Instant.now();
         Integer factor = new Random().nextInt(MAX_RANDOM_EXCLUSIVE);
+        Long encryptedUserId = encryptUserId(userId, factor);
+
         return Jwts.builder()
+                .setId(String.format("%d@%d", encryptedUserId, now.toEpochMilli()))
                 .setIssuer(SAIGON_PARKING_ISSUER)
                 .claim(USER_ROLE_KEY_NAME, userRole)
                 .claim(FACTOR_KEY_NAME, factor)
-                .setSubject(encryptUserId(userId, factor).toString())
+                .claim(TOKEN_TYPE_KEY_NAME, type)
+                .setSubject(encryptedUserId.toString())
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(now.plus(timeAmount, timeUnit)))
                 .signWith(secretKey)
@@ -87,14 +104,37 @@ public final class SaigonParkingAuthenticationImpl implements SaigonParkingAuthe
     }
 
     @Override
-    public Pair<Long, String> parseJwtToken(String jwtBearerToken) {
-        String realToken = jwtBearerToken.replace("Bearer ", "");
+    public SaigonParkingTokenBody parseJwtToken(@NotEmpty String jsonWebToken) {
+        String realToken = jsonWebToken.replace("Bearer ", "");
         Claims tokenBody = Jwts.parserBuilder().setSigningKey(secretKey).build()
                 .parseClaimsJws(realToken)
                 .getBody();
 
-        Long userId = decryptUserId(Long.valueOf(tokenBody.getSubject()), tokenBody.get(FACTOR_KEY_NAME, Integer.class));
-        String userRole = tokenBody.get(USER_ROLE_KEY_NAME, String.class);
-        return Pair.of(userId, userRole);
+        return SaigonParkingTokenBody.builder()
+                .tokenId(tokenBody.getId())
+                .tokenType(SaigonParkingTokenType.valueOf(tokenBody.get(TOKEN_TYPE_KEY_NAME, String.class)))
+                .userId(decryptUserId(Long.valueOf(tokenBody.getSubject()), tokenBody.get(FACTOR_KEY_NAME, Integer.class)))
+                .userRole(tokenBody.get(USER_ROLE_KEY_NAME, String.class))
+                .build();
+    }
+
+    @Override
+    public String generateAccessToken(@NotNull Long userId, @NotEmpty String userRole) {
+        return generateJwtToken(ACCESS_TOKEN, userId, userRole, 30, ChronoUnit.MINUTES);
+    }
+
+    @Override
+    public String generateRefreshToken(@NotNull Long userId, @NotEmpty String userRole) {
+        return generateJwtToken(REFRESH_TOKEN, userId, userRole, 30, ChronoUnit.DAYS);
+    }
+
+    @Override
+    public String generateActivateAccountToken(@NotNull Long userId, @NotEmpty String userRole) {
+        return generateJwtToken(ACTIVATE_TOKEN, userId, userRole, 5, ChronoUnit.MINUTES);
+    }
+
+    @Override
+    public String generateResetPasswordToken(@NotNull Long userId, @NotEmpty String userRole) {
+        return generateJwtToken(RESET_PW_TOKEN, userId, userRole, 5, ChronoUnit.MINUTES);
     }
 }

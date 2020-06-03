@@ -1,18 +1,15 @@
 package com.bht.saigonparking.common.interceptor;
 
-import static com.bht.saigonparking.common.interceptor.SaigonParkingTransactionalMetadata.AUTHORIZATION_KEY_NAME;
-import static com.bht.saigonparking.common.interceptor.SaigonParkingTransactionalMetadata.INTERNAL_KEY_NAME;
+import static com.bht.saigonparking.common.constant.SaigonParkingTransactionalMetadata.AUTHORIZATION_KEY_NAME;
+import static com.bht.saigonparking.common.constant.SaigonParkingTransactionalMetadata.INTERNAL_KEY_NAME;
 
-import java.io.IOException;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
-
-import org.springframework.data.util.Pair;
 
 import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
 import com.bht.saigonparking.common.auth.SaigonParkingAuthenticationImpl;
-import com.bht.saigonparking.common.exception.TokenExpiredException;
-import com.bht.saigonparking.common.exception.TokenModifiedException;
+import com.bht.saigonparking.common.auth.SaigonParkingTokenBody;
 
 import io.grpc.Context;
 import io.grpc.Contexts;
@@ -22,10 +19,9 @@ import io.grpc.ServerCall;
 import io.grpc.ServerCallHandler;
 import io.grpc.ServerInterceptor;
 import io.grpc.Status;
-import io.grpc.StatusRuntimeException;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 
@@ -40,40 +36,43 @@ import lombok.extern.log4j.Log4j2;
  * @author bht
  */
 @Log4j2
-@Getter
 public final class SaigonParkingServerInterceptor implements ServerInterceptor {
 
-    @Getter(AccessLevel.NONE)
-    private SaigonParkingAuthentication authentication;
+    private final SaigonParkingAuthentication authentication;
+    private final Set<String> nonProvideTokenMethodSet;
+    private final Map<Class<? extends Throwable>, String> errorCodeMap;
 
-    /* skip checking token for these methods */
-    @Getter(AccessLevel.NONE)
-    private Set<String> nonProvideTokenMethodSet;
-
+    @Getter
     private final Context.Key<String> roleContext = Context.key("role");
+    @Getter
     private final Context.Key<Long> userIdContext = Context.key("userId");
 
     private static final Key<String> INTERNAL_SERVICE_KEY = Key.of(INTERNAL_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER);
     private static final Key<String> AUTHORIZATION_KEY = Key.of(AUTHORIZATION_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER);
 
     public SaigonParkingServerInterceptor() {
-        this(Collections.emptySet());
+        this(Collections.emptySet(), Collections.emptyMap());
     }
 
-    public SaigonParkingServerInterceptor(Set<String> nonProvideTokenMethodSet) {
-        try {
-            authentication = new SaigonParkingAuthenticationImpl();
-            this.nonProvideTokenMethodSet = nonProvideTokenMethodSet;
+    public SaigonParkingServerInterceptor(Map<Class<? extends Throwable>, String> errorCodeMap) {
+        this(Collections.emptySet(), errorCodeMap);
+    }
 
-        } catch (IOException e) {
-            log.error("Cannot find secret key file !");
-        }
+    public SaigonParkingServerInterceptor(Set<String> nonProvideTokenMethodSet,
+                                          Map<Class<? extends Throwable>, String> errorCodeMap) {
+        authentication = new SaigonParkingAuthenticationImpl();
+        this.errorCodeMap = errorCodeMap;
+        this.nonProvideTokenMethodSet = nonProvideTokenMethodSet;
     }
 
     @Override
     public <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> serverCall,
                                                                  Metadata metadata,
                                                                  ServerCallHandler<ReqT, RespT> serverCallHandler) {
+
+        ServerCall.Listener<ReqT> newCallListener = new ServerCall.Listener<ReqT>() {
+        };
+
         long userId;
         String role;
 
@@ -84,24 +83,35 @@ public final class SaigonParkingServerInterceptor implements ServerInterceptor {
         /* Method's full name, eg. com.bht.saigonparking.api.grpc.auth.AuthService/registerUser */
         String fullMethodName = serverCall.getMethodDescriptor().getFullMethodName();
 
-        if (nonProvideTokenMethodSet.contains(fullMethodName)) { /* method skip check token */
+        if (nonProvideTokenMethodSet.contains(fullMethodName)) { /* method skip check token => AuthService */
             role = "UNRECOGNIZED";
             userId = 0L;
 
         } else if (token == null && internalServiceCodeString == null) { /* spam requests */
-            throw new StatusRuntimeException(Status.UNAUTHENTICATED);
+            serverCall.close(Status.UNAUTHENTICATED.withDescription("SPE#00004"), metadata);
+            return newCallListener;
 
         } else if (token != null) { /* external requests */
             try {
-                Pair<Long, String> tokenBody = authentication.parseJwtToken(token);
-                userId = tokenBody.getFirst();
-                role = tokenBody.getSecond();
+                SaigonParkingTokenBody tokenBody = authentication.parseJwtToken(token);
+                userId = tokenBody.getUserId();
+                role = tokenBody.getUserRole();
 
             } catch (ExpiredJwtException expiredJwtException) {
-                throw new TokenExpiredException();
+                serverCall.close(Status.UNAUTHENTICATED.withDescription("SPE#00001"), metadata);
+                return newCallListener;
 
             } catch (SignatureException signatureException) {
-                throw new TokenModifiedException();
+                serverCall.close(Status.UNAUTHENTICATED.withDescription("SPE#00002"), metadata);
+                return newCallListener;
+
+            } catch (MalformedJwtException malformedJwtException) {
+                serverCall.close(Status.UNAUTHENTICATED.withDescription("SPE#00003"), metadata);
+                return newCallListener;
+
+            } catch (Exception exception) {
+                serverCall.close(Status.INTERNAL.withDescription("SPE#00000"), metadata);
+                return newCallListener;
             }
 
         } else { /* internal requests */
@@ -109,15 +119,12 @@ public final class SaigonParkingServerInterceptor implements ServerInterceptor {
             userId = 1L;
         }
 
-        ServerCall.Listener<ReqT> listener = Contexts
-                .interceptCall(Context.current()
-                                .withValue(roleContext, role)
-                                .withValue(userIdContext, userId),
-                        serverCall,
-                        metadata,
-                        serverCallHandler);
-
-        /* listen to and throw exception with extra information to gRPC Client */
-        return new ExceptionHandlingServerCallListener<>(listener, serverCall, metadata);
+        ServerCall<ReqT, RespT> wrappedServerCall = new SaigonParkingCustomizedServerCall<>(serverCall, errorCodeMap);
+        return Contexts.interceptCall(Context.current()
+                        .withValue(roleContext, role)
+                        .withValue(userIdContext, userId),
+                wrappedServerCall,
+                metadata,
+                serverCallHandler);
     }
 }

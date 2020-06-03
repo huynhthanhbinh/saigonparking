@@ -43,12 +43,12 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Lo
     @Query("SELECT P.id " +
             "FROM ParkingLotEntity P " +
             "WHERE P.id IN ?1 " +
-            "AND (P.isAvailable = 0 OR " +
-            "FUNCTION('CONVERT', TIME, FUNCTION('CURRENT_TIME')) NOT BETWEEN P.openingHour AND P.closingHour)")
+            "AND (P.isAvailable = FALSE " +
+            "OR CURRENT_TIME NOT BETWEEN P.openingHour AND P.closingHour)")
     List<Long> checkUnavailability(@NotEmpty List<Long> parkingLotIdList);
 
 
-    @SuppressWarnings({"SpringDataRepositoryMethodReturnTypeInspection", "SqlResolve"})
+    @SuppressWarnings({"SpringDataRepositoryMethodReturnTypeInspection", "SqlResolve", "SqlDialectInspection"})
     @Query(value = "SELECT P.ID, P.PARKING_LOT_TYPE_ID, P.LATITUDE, P.LONGITUDE, PLL.AVAILABILITY, PLL.CAPACITY " +
             "FROM PARKING_LOT P " +
             "INNER JOIN (SELECT ID, CAPACITY, AVAILABILITY FROM PARKING_LOT_LIMIT) AS PLL ON PLL.ID = P.ID " +
@@ -65,7 +65,7 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Lo
             @NotNull Integer nResult);
 
 
-    @SuppressWarnings({"SpringDataRepositoryMethodReturnTypeInspection", "SqlResolve"})
+    @SuppressWarnings({"SpringDataRepositoryMethodReturnTypeInspection", "SqlResolve", "SqlDialectInspection"})
     @Query(value = "SELECT P.ID, PLI.NAME, P.PARKING_LOT_TYPE_ID, P.LATITUDE, P.LONGITUDE, PLL.AVAILABILITY, PLL.CAPACITY " +
             "FROM PARKING_LOT P " +
             "INNER JOIN (SELECT ID, NAME FROM PARKING_LOT_INFORMATION) AS PLI ON PLI.ID = P.ID " +
