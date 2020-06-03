@@ -2,6 +2,7 @@ package com.bht.saigonparking.service.parkinglot.service.main.impl;
 
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.Tuple;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -42,12 +43,12 @@ public class ParkingLotServiceImpl implements ParkingLotService {
 
     @Override
     public ParkingLotEntity getParkingLotById(@NotNull Long id) {
-        return parkingLotRepository.getById(id);
+        return parkingLotRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
     public ParkingLotLimitEntity getParkingLotLimitById(@NotNull Long id) {
-        return parkingLotLimitRepository.getById(id);
+        return parkingLotLimitRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
