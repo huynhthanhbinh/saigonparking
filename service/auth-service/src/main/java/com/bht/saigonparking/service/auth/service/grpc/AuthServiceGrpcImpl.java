@@ -56,7 +56,7 @@ public final class AuthServiceGrpcImpl extends AuthServiceGrpc.AuthServiceImplBa
 
             responseObserver.onError(exception);
 
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("validateUser(%s, %s, %s)",
                             request.getUsername(), request.getPassword(), request.getRole()));
@@ -78,7 +78,7 @@ public final class AuthServiceGrpcImpl extends AuthServiceGrpc.AuthServiceImplBa
 
             responseObserver.onError(exception);
 
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("registerUser(%s)", request.getUsername()));
         }
@@ -100,7 +100,7 @@ public final class AuthServiceGrpcImpl extends AuthServiceGrpc.AuthServiceImplBa
 
             responseObserver.onError(exception);
 
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("sendResetPasswordEmail(%s)", request.getValue()));
         }
@@ -122,7 +122,7 @@ public final class AuthServiceGrpcImpl extends AuthServiceGrpc.AuthServiceImplBa
 
             responseObserver.onError(exception);
 
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("sendActivateAccountEmail(%s)", request.getValue()));
         }
@@ -150,7 +150,7 @@ public final class AuthServiceGrpcImpl extends AuthServiceGrpc.AuthServiceImplBa
 
             responseObserver.onError(exception);
 
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("generateNewToken(%d)", userId));
         }
@@ -178,7 +178,7 @@ public final class AuthServiceGrpcImpl extends AuthServiceGrpc.AuthServiceImplBa
 
             responseObserver.onError(exception);
 
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("activateNewAccount(%d)", userId));
         }

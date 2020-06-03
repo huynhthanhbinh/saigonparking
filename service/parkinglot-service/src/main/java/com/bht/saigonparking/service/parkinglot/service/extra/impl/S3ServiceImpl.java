@@ -55,7 +55,7 @@ public class S3ServiceImpl implements S3Service {
         } catch (AmazonServiceException exception) {
 
             if (warnOnFail) {
-                LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+                LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
                 LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                         String.format("getS3File(\"%s\")", filePath));
             }
@@ -77,7 +77,7 @@ public class S3ServiceImpl implements S3Service {
         } catch (AmazonServiceException exception) {
 
             if (warnOnFail) {
-                LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+                LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
                 LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                         String.format("saveS3File(\"%s\")", filePath));
             }
@@ -95,7 +95,7 @@ public class S3ServiceImpl implements S3Service {
         } catch (AmazonServiceException exception) {
 
             if (warnOnFail) {
-                LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+                LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
                 LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                         String.format("deleteS3File(\"%s\")", filePath));
             }

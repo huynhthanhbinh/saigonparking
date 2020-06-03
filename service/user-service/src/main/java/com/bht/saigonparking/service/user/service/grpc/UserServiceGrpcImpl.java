@@ -67,7 +67,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
 
             responseObserver.onError(exception);
 
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("getUserById(%d)", request.getValue()));
         }
@@ -94,7 +94,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
 
             responseObserver.onError(exception);
 
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("getUserByUsername(%s)", request.getValue()));
         }
@@ -121,7 +121,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
 
             responseObserver.onError(exception);
 
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("getCustomerByUsername(%s)", request.getValue()));
         }
@@ -148,7 +148,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
 
             responseObserver.onError(exception);
 
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("getParkingLotEmployeeByUsername(%s)", request.getValue()));
         }
@@ -176,7 +176,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
 
             responseObserver.onError(exception);
 
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("createCustomer(%s)", request.getUserInfo().getUsername()));
         }
@@ -204,7 +204,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
 
             responseObserver.onError(exception);
 
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("updateCustomer(%s)", request.getUserInfo().getUsername()));
         }
@@ -226,7 +226,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
 
             responseObserver.onError(exception);
 
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("updatePasswordOfUser(%s)", request.getUsername()));
         }
@@ -253,7 +253,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
 
             responseObserver.onError(exception);
 
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("activateUserWithId(%d)", request.getValue()));
         }

@@ -58,7 +58,7 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
 
             responseObserver.onError(exception);
 
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("getParkingLotInformationByParkingLotId(%d)", request.getValue()));
         }
@@ -84,7 +84,7 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
 
             responseObserver.onError(exception);
 
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("checkLimit(%d)", request.getValue()));
         }
@@ -107,7 +107,7 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
 
             responseObserver.onError(exception);
 
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("checkAvailability(%d)", request.getValue()));
         }
@@ -130,7 +130,7 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
 
             responseObserver.onError(exception);
 
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("checkUnavailability of %d parking-lot", request.getParkingLotIdCount()));
         }
@@ -157,7 +157,7 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
 
             responseObserver.onError(exception);
 
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("getTopParkingLotInRegionOrderByDistanceWithName(%f, %f, %d, %d)",
                             request.getLatitude(), request.getLongitude(), request.getRadiusToScan(), request.getNResult()));
@@ -185,7 +185,7 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
 
             responseObserver.onError(exception);
 
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("getTopParkingLotInRegionOrderByDistanceWithoutName(%f, %f, %d, %d)",
                             request.getLatitude(), request.getLongitude(), request.getRadiusToScan(), request.getNResult()));
