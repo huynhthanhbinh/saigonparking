@@ -1,5 +1,6 @@
 package com.bht.saigonparking.service.user.mapper;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public final class UserMapperExtImpl implements UserMapperExt {
 
         User userInfo = customer.getUserInfo();
         CustomerEntity customerEntity = !isAboutToCreate
-                ? customerRepository.getByUsername(userInfo.getUsername())
+                ? customerRepository.getByUsername(userInfo.getUsername()).orElseThrow(EntityNotFoundException::new)
                 : new CustomerEntity();
 
         customerEntity.setUserRoleEntity(enumMapper.toUserRoleEntity(UserRole.CUSTOMER));

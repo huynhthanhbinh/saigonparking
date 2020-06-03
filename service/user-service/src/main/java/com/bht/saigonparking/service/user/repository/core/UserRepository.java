@@ -1,5 +1,7 @@
 package com.bht.saigonparking.service.user.repository.core;
 
+import java.util.Optional;
+
 import javax.validation.constraints.NotEmpty;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,5 +27,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>, UserRep
             "FROM UserEntity U " +
             "JOIN FETCH U.userRoleEntity UR " +
             "WHERE U.username = ?1")
-    UserEntity getByUsername(@NotEmpty String username);
+    Optional<UserEntity> getByUsername(@NotEmpty String username);
 }

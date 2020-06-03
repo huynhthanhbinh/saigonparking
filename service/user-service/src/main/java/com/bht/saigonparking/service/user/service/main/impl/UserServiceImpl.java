@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity getUserByUsername(@NotEmpty String username) {
-        return userRepository.getByUsername(username);
+        return userRepository.getByUsername(username).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public CustomerEntity getCustomerByUsername(@NotEmpty String username) {
-        return customerRepository.getByUsername(username);
+        return customerRepository.getByUsername(username).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ParkingLotEmployeeEntity getParkingLotEmployeeByUsername(@NotEmpty String username) {
-        return parkingLotEmployeeRepository.getByUsername(username);
+        return parkingLotEmployeeRepository.getByUsername(username).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override

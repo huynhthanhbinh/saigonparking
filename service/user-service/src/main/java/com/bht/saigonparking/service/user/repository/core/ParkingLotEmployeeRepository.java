@@ -1,5 +1,7 @@
 package com.bht.saigonparking.service.user.repository.core;
 
+import java.util.Optional;
+
 import javax.validation.constraints.NotEmpty;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,5 +26,5 @@ public interface ParkingLotEmployeeRepository extends JpaRepository<ParkingLotEm
             "FROM ParkingLotEmployeeEntity PLE " +
             "JOIN FETCH PLE.userRoleEntity UR " +
             "WHERE PLE.username = ?1")
-    ParkingLotEmployeeEntity getByUsername(@NotEmpty String username);
+    Optional<ParkingLotEmployeeEntity> getByUsername(@NotEmpty String username);
 }
