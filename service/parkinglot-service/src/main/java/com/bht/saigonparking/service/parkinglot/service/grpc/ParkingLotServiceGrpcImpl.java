@@ -57,7 +57,6 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
         } catch (Exception exception) {
 
             responseObserver.onError(exception);
-            responseObserver.onCompleted();
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
@@ -84,7 +83,6 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
         } catch (Exception exception) {
 
             responseObserver.onError(exception);
-            responseObserver.onCompleted();
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
@@ -108,7 +106,6 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
         } catch (Exception exception) {
 
             responseObserver.onError(exception);
-            responseObserver.onCompleted();
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
@@ -132,7 +129,6 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
         } catch (Exception exception) {
 
             responseObserver.onError(exception);
-            responseObserver.onCompleted();
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
@@ -160,7 +156,6 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
         } catch (Exception exception) {
 
             responseObserver.onError(exception);
-            responseObserver.onCompleted();
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
@@ -189,7 +184,6 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
         } catch (Exception exception) {
 
             responseObserver.onError(exception);
-            responseObserver.onCompleted();
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getMessage());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",

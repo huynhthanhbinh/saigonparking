@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Mon, May 25th, 2020
+Last updated:       Wed, Jun 03rd, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -167,3 +167,6 @@ Last updated:       Mon, May 25th, 2020
 
 56. How can I remove a commit on GitHub?
         https://stackoverflow.com/questions/448919/how-can-i-remove-a-commit-on-github
+
+57. gRPC: Should not call onComplete after onError
+        https://github.com/scalapb/ScalaPB/issues/71
