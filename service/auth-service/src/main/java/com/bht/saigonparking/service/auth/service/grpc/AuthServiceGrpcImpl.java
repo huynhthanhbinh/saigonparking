@@ -11,8 +11,8 @@ import com.bht.saigonparking.api.grpc.auth.RegisterRequest;
 import com.bht.saigonparking.api.grpc.auth.ValidateRequest;
 import com.bht.saigonparking.api.grpc.auth.ValidateResponse;
 import com.bht.saigonparking.api.grpc.auth.ValidateResponseType;
-import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
 import com.bht.saigonparking.common.util.LoggingUtil;
+import com.bht.saigonparking.service.auth.interceptor.AuthServiceInterceptor;
 import com.bht.saigonparking.service.auth.service.AuthService;
 import com.google.protobuf.Empty;
 import com.google.protobuf.StringValue;
@@ -29,7 +29,7 @@ import lombok.AllArgsConstructor;
 public final class AuthServiceGrpcImpl extends AuthServiceGrpc.AuthServiceImplBase {
 
     private final AuthService authService;
-    private final SaigonParkingServerInterceptor serverInterceptor;
+    private final AuthServiceInterceptor authServiceInterceptor;
 
     @Override
     public void validateUser(ValidateRequest request, StreamObserver<ValidateResponse> responseObserver) {
@@ -130,7 +130,7 @@ public final class AuthServiceGrpcImpl extends AuthServiceGrpc.AuthServiceImplBa
 
     @Override
     public void generateNewToken(Empty request, StreamObserver<RefreshTokenResponse> responseObserver) {
-        Long userId = serverInterceptor.getUserIdContext().get();
+        Long userId = authServiceInterceptor.getUserIdContext().get();
         try {
             Triple<String, String, String> refreshTokenTriple = authService.generateNewToken(userId);
 
@@ -158,7 +158,7 @@ public final class AuthServiceGrpcImpl extends AuthServiceGrpc.AuthServiceImplBa
 
     @Override
     public void activateNewAccount(Empty request, StreamObserver<RefreshTokenResponse> responseObserver) {
-        Long userId = serverInterceptor.getUserIdContext().get();
+        Long userId = authServiceInterceptor.getUserIdContext().get();
         try {
             Triple<String, String, String> refreshTokenTriple = authService.activateNewAccount(userId);
 
