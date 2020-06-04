@@ -5,6 +5,7 @@ package com.bht.saigonparking.api.grpc.parkinglot;
 option java_multiple_files = true;
 
 import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
 
 enum ParkingLotType {
     BUILDING = 0;
@@ -99,11 +100,72 @@ message ParkingLotResultList {
     repeated ParkingLotResult parkingLotResult = 1;
 }
 
+message GetAllParkingLotRequest {
+    int32 nRow = 1;
+    int32 pageNumber = 2;
+}
+
+message GetAllParkingLotResponse {
+    repeated ParkingLot parkingLot = 1;
+}
+
 service ParkingLotService {
+
+    /** PUBLIC - ADMIN ONLY
+     * use-case: get all parking-lots
+     *  + request: empty value
+     *  + response: number of parking-lot currently in the DBs
+     *
+     * For front-end team:
+     *  + show total number of parking-lot (nRow) in the UI
+     *  + calculate number of page by the following formula:
+     *      ==> nPage = ceil( nRow / nRowPerPage )
+     * (with nRowPerPage is number of rows in 1 page, max: 20)
+     *
+     * Eg. 123 parking-lot, you want to show in each page 10 parking-lot
+     * so that there will be 123 / 10 = 12.3 ==> ceil(12.3) = 13 pages */
+    rpc countAll (google.protobuf.Empty) returns (google.protobuf.Int64Value);
+
+    /** PUBLIC - ADMIN ONLY
+     * use-case: get all parking-lots
+     *  + request: GetAllParkingLotRequest: you need to provide 2 params:
+     *      ++ nRow: number of rows you want to show per page (max: 20)
+     *      ++ pageNumber: page you want to get
+     *  + response: GetAllParkingLotResponse: it will be a parking-lot list (with nRow result max)
+     *
+     * Eg. You request for page 1 with 10 rows,
+     * ==> you will get ParkingLot from ID 1 to ID 10 (if no one had been deleted) */
+    rpc getAllParkingLot (GetAllParkingLotRequest) returns (GetAllParkingLotResponse);
+
+    /** PUBLIC
+     * use-case: check parking-lot status on the way driver going to
+     * ensure parking-lot is available as soon as the driver reach the target */
     rpc checkLimit (google.protobuf.Int64Value) returns (ParkingLotLimit);
+
+    /** PUBLIC
+     * use-case: check parking-lot status on the way driver going to
+     * ensure parking-lot is available as soon as the driver reach the target */
     rpc checkAvailability (google.protobuf.Int64Value) returns (google.protobuf.BoolValue);
+
+    /** PUBLIC
+     * use-case: remove parking-lot markers on the map as soon as they're full
+     * frequently check with the server the status of these parking-lot showing on the map
+     * after a specific amount of time, such as 1 min, and remove markers which parking-lot is full */
     rpc checkUnavailability (ParkingLotIdList) returns (ParkingLotIdList);
+
+    /** PUBLIC
+     * use-case: show information of a specific parking-lot */
     rpc getParkingLotById (google.protobuf.Int64Value) returns (ParkingLot);
+
+    /** PUBLIC
+     * use-case: Show a list of suggested parking-lot (need parking-lot name)
+     * remember: JOIN TABLE is expensive, this method will JOIN TABLE !!!!
+     * therefore: unless you need the name of the parking lot in the result, please use the WITHOUT name method */
     rpc getTopParkingLotInRegionOrderByDistanceWithName (ScanningByRadiusRequest) returns (ParkingLotResultList);
+
+    /** PUBLIC
+     * use-case: Show markers on the map (don't need parking-lot's name)
+     * remember: JOIN TABLE is expensive, this method NOT JOIN TABLE !!!!
+     * therefore: unless you need the name of the parking lot in the result, please use this method instead */
     rpc getTopParkingLotInRegionOrderByDistanceWithoutName (ScanningByRadiusRequest) returns (ParkingLotResultList);
 }

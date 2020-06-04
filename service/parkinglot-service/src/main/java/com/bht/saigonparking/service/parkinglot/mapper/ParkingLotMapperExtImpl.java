@@ -1,4 +1,4 @@
-package com.bht.saigonparking.service.parkinglot.mapper.impl;
+package com.bht.saigonparking.service.parkinglot.mapper;
 
 import javax.validation.constraints.NotNull;
 
@@ -11,8 +11,6 @@ import com.bht.saigonparking.common.exception.ConcurrentUpdateException;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotInformationEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
-import com.bht.saigonparking.service.parkinglot.mapper.CustomizedMapper;
-import com.bht.saigonparking.service.parkinglot.mapper.ParkingLotMapperExt;
 import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotRepository;
 
 import lombok.AllArgsConstructor;
@@ -46,14 +44,14 @@ public final class ParkingLotMapperExtImpl implements ParkingLotMapperExt {
     private final ParkingLotRepository parkingLotRepository;
 
     @Override
-    public final ParkingLotEntity toParkingLotEntity(@NotNull ParkingLot parkingLot) {
+    public final ParkingLotEntity toParkingLotEntity(@NotNull ParkingLot parkingLot, boolean isAboutToCreate) {
 
         long parkingLotId = parkingLot.getId();
         ParkingLotEntity parkingLotEntity;
         ParkingLotInformationEntity parkingLotInformationEntity;
         ParkingLotInformation parkingLotInformation = parkingLot.getInformation();
 
-        if (parkingLotId != 0) {    // update parkingLotEntity
+        if (!isAboutToCreate) {    // update parkingLotEntity
             parkingLotEntity = parkingLotRepository.getById(parkingLotId);
             parkingLotInformationEntity = parkingLotEntity.getParkingLotInformationEntity();
 

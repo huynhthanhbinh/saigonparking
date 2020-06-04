@@ -11,5 +11,5 @@ import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
  */
 public interface ParkingLotMapperExt {
 
-    ParkingLotEntity toParkingLotEntity(@NotNull ParkingLot parkingLot);
+    ParkingLotEntity toParkingLotEntity(@NotNull ParkingLot parkingLot, boolean isAboutToCreate);
 }

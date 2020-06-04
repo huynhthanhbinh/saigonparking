@@ -6,6 +6,8 @@ import org.apache.logging.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.bht.saigonparking.api.grpc.parkinglot.GetAllParkingLotRequest;
+import com.bht.saigonparking.api.grpc.parkinglot.GetAllParkingLotResponse;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotIdList;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotLimit;
@@ -13,13 +15,18 @@ import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResult;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResultList;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc.ParkingLotServiceImplBase;
 import com.bht.saigonparking.api.grpc.parkinglot.ScanningByRadiusRequest;
+import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
 import com.bht.saigonparking.service.parkinglot.mapper.ParkingLotMapper;
+import com.bht.saigonparking.service.parkinglot.mapper.ParkingLotMapperExt;
 import com.bht.saigonparking.service.parkinglot.service.main.ParkingLotService;
 import com.google.protobuf.BoolValue;
+import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 
+import io.grpc.Status;
+import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
 
@@ -41,6 +48,57 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
 
     private final ParkingLotService parkingLotService;
     private final ParkingLotMapper parkingLotMapper;
+    private final ParkingLotMapperExt parkingLotMapperExt;
+    private final SaigonParkingServerInterceptor serverInterceptor;
+
+    @Override
+    public void countAll(Empty request, StreamObserver<Int64Value> responseObserver) {
+        try {
+            if (!serverInterceptor.getRoleContext().get().equals("ADMIN")) {
+                throw new StatusRuntimeException(Status.PERMISSION_DENIED);
+            }
+
+            Long count = parkingLotService.countAll();
+
+            responseObserver.onNext(Int64Value.of(count));
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success", "countAllParkingLot");
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL", "countAllParkingLot");
+        }
+    }
+
+    @Override
+    public void getAllParkingLot(GetAllParkingLotRequest request, StreamObserver<GetAllParkingLotResponse> responseObserver) {
+        try {
+            if (!serverInterceptor.getRoleContext().get().equals("ADMIN")) {
+                throw new StatusRuntimeException(Status.PERMISSION_DENIED);
+            }
+
+            List<ParkingLot> parkingLotList = parkingLotMapper.toParkingLotList(parkingLotService
+                    .getAll(request.getNRow(), request.getPageNumber()));
+
+            responseObserver.onNext(GetAllParkingLotResponse.newBuilder().addAllParkingLot(parkingLotList).build());
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getAllParkingLot(%d, %d)", request.getNRow(), request.getPageNumber()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getAllParkingLot(%d, %d)", request.getNRow(), request.getPageNumber()));
+        }
+    }
 
     @Override
     public void getParkingLotById(Int64Value request, StreamObserver<ParkingLot> responseObserver) {

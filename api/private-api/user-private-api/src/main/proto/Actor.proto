@@ -60,7 +60,7 @@ message GetAllUserResponse {
 
 service UserService {
 
-    /** PUBLIC
+    /** PUBLIC - ADMIN ONLY
      * use-case: get all users
      *  + request: empty value
      *  + response: number of user currently in the DBs
@@ -72,11 +72,10 @@ service UserService {
      * (with nRowPerPage is number of rows in 1 page, max: 20)
      *
      * Eg. 123 user, you want to show in each page 10 user
-     * so that there will be 123 / 10 = 12.3 ==> ceil(12.3) = 13 pages
-     **/
+     * so that there will be 123 / 10 = 12.3 ==> ceil(12.3) = 13 pages */
     rpc countAll (google.protobuf.Empty) returns (google.protobuf.Int64Value);
 
-    /** PUBLIC
+    /** PUBLIC - ADMIN ONLY
      * use-case: get all users
      *  + request: GetAllUserRequest: you need to provide 2 params:
      *      ++ nRow: number of rows you want to show per page (max: 20)
