@@ -1,5 +1,8 @@
 package com.bht.saigonparking.service.user.mapper;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.validation.constraints.NotNull;
 
 import org.mapstruct.Mapper;
@@ -42,6 +45,12 @@ public interface UserMapper {
     @Mapping(target = "lastSignIn", source = "lastSignIn", qualifiedByName = "toTimestampString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "version", source = "version", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
     User toUser(@NotNull UserEntity userEntity);
+
+
+    @Named("toUserList")
+    default List<User> toUserList(@NotNull List<UserEntity> userEntityList) {
+        return userEntityList.stream().map(this::toUser).collect(Collectors.toList());
+    }
 
 
     @Named("toCustomer")

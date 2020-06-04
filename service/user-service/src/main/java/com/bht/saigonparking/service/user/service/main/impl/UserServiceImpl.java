@@ -1,8 +1,10 @@
 package com.bht.saigonparking.service.user.service.main.impl;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -44,6 +46,11 @@ public class UserServiceImpl implements UserService {
     private final ParkingLotEmployeeRepository parkingLotEmployeeRepository;
 
     @Override
+    public Long countAll() {
+        return userRepository.countAll();
+    }
+
+    @Override
     public UserEntity getUserById(@NotNull Long id) {
         return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
@@ -71,6 +78,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public ParkingLotEmployeeEntity getParkingLotEmployeeByUsername(@NotEmpty String username) {
         return parkingLotEmployeeRepository.getByUsername(username).orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Override
+    public List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber) {
+        return userRepository.getAll(nRow, pageNumber);
     }
 
     @Override

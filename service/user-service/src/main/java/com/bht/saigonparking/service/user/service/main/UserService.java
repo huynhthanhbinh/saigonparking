@@ -1,5 +1,8 @@
 package com.bht.saigonparking.service.user.service.main;
 
+import java.util.List;
+
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -13,6 +16,8 @@ import com.bht.saigonparking.service.user.entity.UserEntity;
  */
 public interface UserService {
 
+    Long countAll();
+
     UserEntity getUserById(@NotNull Long id);
 
     UserEntity getUserByUsername(@NotEmpty String username);
@@ -24,6 +29,8 @@ public interface UserService {
     ParkingLotEmployeeEntity getParkingLotEmployeeById(@NotNull Long id);
 
     ParkingLotEmployeeEntity getParkingLotEmployeeByUsername(@NotEmpty String username);
+
+    List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber);
 
     Long createCustomer(@NotNull CustomerEntity customerEntity);
 

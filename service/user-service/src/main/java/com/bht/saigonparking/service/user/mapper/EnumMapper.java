@@ -22,7 +22,7 @@ import lombok.Setter;
 /**
  *
  * this class is self-customized mapper for all enums, include:
- *      + UserRole:       3 role --> ADMIN, CUSTOMER, PARKING_LOT_EMPLOYEE
+ *      + UserRole:       4 role --> ADMIN, CUSTOMER, PARKING_LOT_EMPLOYEE, GOVERNMENT_EMPLOYEE
  *      + ParkingLotType: 3 type --> PRIVATE, BUILDING, STREET
  *
  * for using repository inside Component class,
@@ -62,11 +62,11 @@ public abstract class EnumMapper implements BaseBean {
         return USER_ROLE_BI_MAP.inverse().get(userRole);
     }
 
-    // initialize ======================================================================================================
     private void initUserRoleBiMap() {
         USER_ROLE_BI_MAP.put(getUserRoleById(1L), UserRole.ADMIN);
         USER_ROLE_BI_MAP.put(getUserRoleById(2L), UserRole.CUSTOMER);
         USER_ROLE_BI_MAP.put(getUserRoleById(3L), UserRole.PARKING_LOT_EMPLOYEE);
+        USER_ROLE_BI_MAP.put(getUserRoleById(4L), UserRole.GOVERNMENT_EMPLOYEE);
     }
 
     private UserRoleEntity getUserRoleById(@NotNull Long id) {

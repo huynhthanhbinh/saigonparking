@@ -1,10 +1,14 @@
 package com.bht.saigonparking.service.user.service.grpc;
 
+import java.util.List;
+
 import org.apache.logging.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bht.saigonparking.api.grpc.user.Customer;
+import com.bht.saigonparking.api.grpc.user.GetAllUserRequest;
+import com.bht.saigonparking.api.grpc.user.GetAllUserResponse;
 import com.bht.saigonparking.api.grpc.user.ParkingLotEmployee;
 import com.bht.saigonparking.api.grpc.user.UpdatePasswordRequest;
 import com.bht.saigonparking.api.grpc.user.User;
@@ -44,6 +48,55 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
     private final UserMapper userMapper;
     private final UserMapperExt userMapperExt;
     private final SaigonParkingServerInterceptor serverInterceptor;
+
+    @Override
+    public void countAll(Empty request, StreamObserver<Int64Value> responseObserver) {
+        try {
+            if (!serverInterceptor.getRoleContext().get().equals("ADMIN")) {
+                throw new StatusRuntimeException(Status.PERMISSION_DENIED);
+            }
+
+            Long count = userService.countAll();
+
+            responseObserver.onNext(Int64Value.of(count));
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success", "countAllUser");
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL", "countAllUser");
+        }
+    }
+
+    @Override
+    public void getAllUser(GetAllUserRequest request, StreamObserver<GetAllUserResponse> responseObserver) {
+        try {
+            if (!serverInterceptor.getRoleContext().get().equals("ADMIN")) {
+                throw new StatusRuntimeException(Status.PERMISSION_DENIED);
+            }
+
+            List<User> userList = userMapper.toUserList(userService
+                    .getAll(request.getNRow(), request.getPageNumber()));
+
+            responseObserver.onNext(GetAllUserResponse.newBuilder().addAllUser(userList).build());
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getAllUser(%d, %d)", request.getNRow(), request.getPageNumber()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getAllUser(%d, %d)", request.getNRow(), request.getPageNumber()));
+        }
+    }
 
     @Override
     public void getUserById(Int64Value request, StreamObserver<User> responseObserver) {

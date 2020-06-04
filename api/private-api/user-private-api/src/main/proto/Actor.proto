@@ -49,7 +49,43 @@ message UpdateUserLastSignInRequest {
     int64 timeInMillis = 2;
 }
 
+message GetAllUserRequest {
+    int32 nRow = 1;
+    int32 pageNumber = 2;
+}
+
+message GetAllUserResponse {
+    repeated User user = 1;
+}
+
 service UserService {
+
+    /** PUBLIC
+     * use-case: get all users
+     *  + request: empty value
+     *  + response: number of user currently in the DBs
+     *
+     * For front-end team:
+     *  + show total number of user (nRow) in the UI
+     *  + calculate number of page by the following formula:
+     *      ==> nPage = ceil( nRow / nRowPerPage )
+     * (with nRowPerPage is number of rows in 1 page, max: 20)
+     *
+     * Eg. 123 user, you want to show in each page 10 user
+     * so that there will be 123 / 10 = 12.3 ==> ceil(12.3) = 13 pages
+     **/
+    rpc countAll (google.protobuf.Empty) returns (google.protobuf.Int64Value);
+
+    /** PUBLIC
+     * use-case: get all users
+     *  + request: GetAllUserRequest: you need to provide 2 params:
+     *      ++ nRow: number of rows you want to show per page (max: 20)
+     *      ++ pageNumber: page you want to get
+     *  + response: GetAllUserResponse: it will be a user list (with nRow result max)
+     *
+     * Eg. You request for page 1 with 10 rows,
+     * ==> you will get User from ID 1 to ID 10 (if no one had been deleted) */
+    rpc getAllUser (GetAllUserRequest) returns (GetAllUserResponse);
 
     /** PRIVATE
      * use-case: get user by user ID
