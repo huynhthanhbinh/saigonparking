@@ -6,6 +6,8 @@ import static com.bht.saigonparking.common.constant.SaigonParkingTransactionalMe
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.lognet.springboot.grpc.GRpcGlobalInterceptor;
 
 import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
@@ -72,6 +74,7 @@ public final class AuthServiceInterceptor implements ServerInterceptor {
                 .build();
 
         errorCodeMap = new ImmutableMap.Builder<Class<? extends Throwable>, String>()
+                .put(EntityNotFoundException.class, "SPE#00007")
                 .build();
     }
 
