@@ -98,11 +98,23 @@ service UserService {
      *  + response: user object if succeed, otherwise, throw exception */
     rpc getUserByUsername (google.protobuf.StringValue) returns (User);
 
+    /** PRIVATE
+     * use-case: get customer account information
+     *  + request: customer's ID
+     *  + response: customer object if succeed, otherwise, throw exception */
+    rpc getCustomerById (google.protobuf.Int64Value) returns (Customer);
+
     /** PUBLIC
      * use-case: get customer account information
      *  + request: customer's username
      *  + response: customer object if succeed, otherwise, throw exception */
     rpc getCustomerByUsername (google.protobuf.StringValue) returns (Customer);
+
+    /** PRIVATE
+     * use-case: get employee account information
+     *  + request: employee's ID
+     *  + response: employee object if succeed, otherwise, throw exception */
+    rpc getParkingLotEmployeeById (google.protobuf.Int64Value) returns (ParkingLotEmployee);
 
     /** PUBLIC
      * use-case: get employee account information
@@ -132,8 +144,14 @@ service UserService {
     rpc updatePassword (UpdatePasswordRequest) returns (google.protobuf.Empty);
 
     /** PRIVATE
-     * use-case: activate new account (will be called by AuthService)
+     * use-case: activate new account (will be called by AuthService + ADMIN)
      *  + request: user ID
      *  + response: empty value if succeed, otherwise, throw exception */
     rpc activateUser (google.protobuf.Int64Value) returns (google.protobuf.Empty);
+
+    /** PRIVATE
+     * use-case: deactivate user (will be called by AuthService + ADMIN)
+     *  + request: user ID
+     *  + response: empty value if succeed, otherwise, throw exception */
+    rpc deactivateUser (google.protobuf.Int64Value) returns (google.protobuf.Empty);
 }

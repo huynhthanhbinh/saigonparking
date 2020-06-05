@@ -40,5 +40,7 @@ public interface UserService {
 
     void activateUserWithId(@NotNull Long id);
 
+    void deactivateUserWithId(@NotNull Long id);
+
     void updateUserPassword(@NotNull Long userId, @NotEmpty String username, @NotEmpty String password);
 }

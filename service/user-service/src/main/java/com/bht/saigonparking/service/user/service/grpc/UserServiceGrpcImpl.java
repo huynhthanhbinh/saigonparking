@@ -126,7 +126,6 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
         }
     }
 
-
     @Override
     public void getUserByUsername(StringValue request, StreamObserver<User> responseObserver) {
         try {
@@ -153,6 +152,31 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
         }
     }
 
+    @Override
+    public void getCustomerById(Int64Value request, StreamObserver<Customer> responseObserver) {
+        try {
+            Customer customer = userMapper.toCustomer(userService
+                    .getCustomerById(request.getValue()));
+
+            if (customer.equals(Customer.getDefaultInstance())) {
+                throw new StatusRuntimeException(Status.UNKNOWN);
+            }
+
+            responseObserver.onNext(customer);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getCustomerById(%d)", request.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getCustomerById(%d)", request.getValue()));
+        }
+    }
 
     @Override
     public void getCustomerByUsername(StringValue request, StreamObserver<Customer> responseObserver) {
@@ -180,6 +204,31 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
         }
     }
 
+    @Override
+    public void getParkingLotEmployeeById(Int64Value request, StreamObserver<ParkingLotEmployee> responseObserver) {
+        try {
+            ParkingLotEmployee parkingLotEmployee = userMapper.toParkingLotEmployee(userService
+                    .getParkingLotEmployeeById(request.getValue()));
+
+            if (parkingLotEmployee.equals(ParkingLotEmployee.getDefaultInstance())) {
+                throw new StatusRuntimeException(Status.UNKNOWN);
+            }
+
+            responseObserver.onNext(parkingLotEmployee);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getParkingLotEmployeeById(%d)", request.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getParkingLotEmployeeById(%d)", request.getValue()));
+        }
+    }
 
     @Override
     public void getParkingLotEmployeeByUsername(StringValue request, StreamObserver<ParkingLotEmployee> responseObserver) {
@@ -309,6 +358,33 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("activateUserWithId(%d)", request.getValue()));
+        }
+    }
+
+    @Override
+    public void deactivateUser(Int64Value request, StreamObserver<Empty> responseObserver) {
+        try {
+            String userRole = serverInterceptor.getRoleContext().get();
+
+            if (!userRole.equals("ADMIN")) {
+                throw new StatusRuntimeException(Status.PERMISSION_DENIED);
+            }
+
+            userService.deactivateUserWithId(request.getValue());
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("deactivateUserWithId(%d)", request.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("deactivateUserWithId(%d)", request.getValue()));
         }
     }
 }

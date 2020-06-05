@@ -111,11 +111,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void deactivateUserWithId(@NotNull Long id) {
+        UserEntity userEntity = getUserById(id);
+        userEntity.setIsActivated(false);
+        userRepository.saveAndFlush(userEntity);
+    }
+
+    @Override
     public void updateUserPassword(@NotNull Long userId, @NotEmpty String username, @NotEmpty String password) {
         UserEntity userEntity = getUserById(userId);
         if (!username.equals(userEntity.getUsername())) {
             throw new StatusRuntimeException(Status.PERMISSION_DENIED);
         }
+
         userEntity.setPassword(password);
         userRepository.saveAndFlush(userEntity);
     }
