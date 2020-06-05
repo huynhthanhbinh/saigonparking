@@ -32,7 +32,7 @@ public final class SaigonParkingCustomizedServerCall<ReqT, RespT> extends Forwar
                 && status.getCause() != null && errorCodeMap.containsKey(status.getCause().getClass())) {
 
             Throwable e = status.getCause();
-            LoggingUtil.log(Level.ERROR, "onCloseGrpc", "Exception recorded", e.getClass().getSimpleName());
+            LoggingUtil.log(Level.ERROR, "onCloseGrpc", "Exception", e.getClass().getSimpleName());
             status = Status.INTERNAL.withDescription(errorCodeMap.get(e.getClass())).augmentDescription(e.getMessage());
         }
         super.close(status, trailers);

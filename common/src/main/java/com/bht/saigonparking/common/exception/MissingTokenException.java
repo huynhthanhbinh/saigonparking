@@ -2,11 +2,11 @@ package com.bht.saigonparking.common.exception;
 
 /**
  *
- * This exception will be thrown if token had been modified by someone
+ * This exception will be thrown if token had been left empty
  *
  * @author bht
  */
-public final class TokenModifiedException extends RuntimeException {
+public final class MissingTokenException extends RuntimeException {
 
     /* Disable print out stack trace */
     @Override

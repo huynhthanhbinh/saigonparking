@@ -8,13 +8,16 @@ import java.util.Set;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.apache.logging.log4j.Level;
 import org.lognet.springboot.grpc.GRpcGlobalInterceptor;
 
 import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
 import com.bht.saigonparking.common.auth.SaigonParkingAuthenticationImpl;
 import com.bht.saigonparking.common.auth.SaigonParkingTokenBody;
 import com.bht.saigonparking.common.auth.SaigonParkingTokenType;
+import com.bht.saigonparking.common.exception.MissingTokenException;
 import com.bht.saigonparking.common.interceptor.SaigonParkingCustomizedServerCall;
+import com.bht.saigonparking.common.util.LoggingUtil;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
@@ -98,49 +101,63 @@ public final class AuthServiceInterceptor implements ServerInterceptor {
         /* Method's full name, eg. com.bht.saigonparking.api.grpc.auth.AuthService/registerUser */
         String fullMethodName = serverCall.getMethodDescriptor().getFullMethodName();
 
-        if (nonProvideTokenMethodSet.contains(fullMethodName)) { /* method skip check token => AuthService */
-            userId = 0L;
-            userRole = "UNRECOGNIZED";
-            tokenId = "";
-            tokenType = null;
+        try {
+            if (nonProvideTokenMethodSet.contains(fullMethodName)) { /* method skip check token => AuthService */
 
-        } else if (token == null && internalServiceCodeString == null) { /* spam requests */
-            serverCall.close(Status.UNAUTHENTICATED.withDescription("SPE#00004"), metadata);
-            return newCallListener;
+                userId = 0L;
+                userRole = "UNRECOGNIZED";
+                tokenId = "";
+                tokenType = null;
 
-        } else if (token != null) { /* external requests */
-            try {
+            } else if (token == null && internalServiceCodeString == null) { /* spam requests */
+
+                throw new MissingTokenException();
+
+            } else if (token != null) { /* external requests */
+
                 SaigonParkingTokenBody tokenBody = authentication.parseJwtToken(token);
+
                 userId = tokenBody.getUserId();
                 userRole = tokenBody.getUserRole();
                 tokenId = tokenBody.getTokenId();
                 tokenType = tokenBody.getTokenType();
 
-            } catch (ExpiredJwtException expiredJwtException) {
-                serverCall.close(Status.UNAUTHENTICATED.withDescription("SPE#00001"), metadata);
-                return newCallListener;
+            } else { /* internal requests */
 
-            } catch (SignatureException signatureException) {
-                serverCall.close(Status.UNAUTHENTICATED.withDescription("SPE#00002"), metadata);
-                return newCallListener;
-
-            } catch (MalformedJwtException malformedJwtException) {
-                serverCall.close(Status.UNAUTHENTICATED.withDescription("SPE#00003"), metadata);
-                return newCallListener;
-
-            } catch (Exception exception) {
-                serverCall.close(Status.INTERNAL.withDescription("SPE#00000"), metadata);
-                return newCallListener;
+                userId = 1L;
+                userRole = "ADMIN";
+                tokenId = "";
+                tokenType = null;
             }
 
-        } else { /* internal requests */
-            userId = 1L;
-            userRole = "ADMIN";
-            tokenId = "";
-            tokenType = null;
+        } catch (ExpiredJwtException expiredJwtException) {
+            serverCall.close(Status.UNAUTHENTICATED.withDescription("SPE#00001"), metadata);
+            LoggingUtil.log(Level.ERROR, "ServerInterceptor", "Exception", "ExpiredJwtException");
+            return newCallListener;
+
+        } catch (SignatureException signatureException) {
+            serverCall.close(Status.UNAUTHENTICATED.withDescription("SPE#00002"), metadata);
+            LoggingUtil.log(Level.ERROR, "ServerInterceptor", "Exception", "SignatureException");
+            return newCallListener;
+
+        } catch (MalformedJwtException malformedJwtException) {
+            serverCall.close(Status.UNAUTHENTICATED.withDescription("SPE#00003"), metadata);
+            LoggingUtil.log(Level.ERROR, "ServerInterceptor", "Exception", "MalformedJwtException");
+            return newCallListener;
+
+        } catch (MissingTokenException missingTokenException) {
+            serverCall.close(Status.UNAUTHENTICATED.withDescription("SPE#00004"), metadata);
+            LoggingUtil.log(Level.ERROR, "ServerInterceptor", "Exception", "MissingTokenException");
+            return newCallListener;
+
+        } catch (Exception exception) {
+            serverCall.close(Status.INTERNAL.withDescription("SPE#00000"), metadata);
+            LoggingUtil.log(Level.ERROR, "ServerInterceptor", "Exception", exception.getClass().getSimpleName());
+            return newCallListener;
         }
 
         ServerCall<ReqT, RespT> wrappedServerCall = new SaigonParkingCustomizedServerCall<>(serverCall, errorCodeMap);
+
         return Contexts.interceptCall(Context.current()
                         .withValue(userIdContext, userId)
                         .withValue(userRoleContext, userRole)
