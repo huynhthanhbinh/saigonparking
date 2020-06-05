@@ -105,7 +105,7 @@ public final class SaigonParkingAuthenticationImpl implements SaigonParkingAuthe
 
     @Override
     public SaigonParkingTokenBody parseJwtToken(@NotEmpty String jsonWebToken) {
-        String realToken = jsonWebToken.replace("Bearer ", "");
+        String realToken = jsonWebToken.replace("Bearer", "").replace(" ", "");
         Claims tokenBody = Jwts.parserBuilder().setSigningKey(secretKey).build()
                 .parseClaimsJws(realToken)
                 .getBody();

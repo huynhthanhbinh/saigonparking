@@ -26,6 +26,7 @@ import io.grpc.ServerInterceptor;
 import io.grpc.Status;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.io.DecodingException;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.Getter;
 
@@ -112,13 +113,18 @@ public final class SaigonParkingServerInterceptor implements ServerInterceptor {
             LoggingUtil.log(Level.ERROR, "ServerInterceptor", "Exception", "MalformedJwtException");
             return newCallListener;
 
-        } catch (MissingTokenException missingTokenException) {
+        } catch (DecodingException decodingException) {
             serverCall.close(Status.UNAUTHENTICATED.withDescription("SPE#00004"), metadata);
+            LoggingUtil.log(Level.ERROR, "ServerInterceptor", "Exception", "DecodingException");
+            return newCallListener;
+
+        } catch (MissingTokenException missingTokenException) {
+            serverCall.close(Status.UNAUTHENTICATED.withDescription("SPE#00005"), metadata);
             LoggingUtil.log(Level.ERROR, "ServerInterceptor", "Exception", "MissingTokenException");
             return newCallListener;
 
         } catch (WrongTokenException wrongTokenException) {
-            serverCall.close(Status.UNAUTHENTICATED.withDescription("SPE#00005"), metadata);
+            serverCall.close(Status.UNAUTHENTICATED.withDescription("SPE#00006"), metadata);
             LoggingUtil.log(Level.ERROR, "ServerInterceptor", "Exception", "WrongTokenException");
             return newCallListener;
 
