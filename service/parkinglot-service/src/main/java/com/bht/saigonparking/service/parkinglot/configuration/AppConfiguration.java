@@ -54,7 +54,7 @@ public class AppConfiguration {
     @GRpcGlobalInterceptor
     public SaigonParkingServerInterceptor saigonParkingServerInterceptor() {
         return new SaigonParkingServerInterceptor(new ImmutableMap.Builder<Class<? extends Throwable>, String>()
-                .put(EntityNotFoundException.class, "SPE#00007")
+                .put(EntityNotFoundException.class, "SPE#00008")
                 .build());
     }
 }

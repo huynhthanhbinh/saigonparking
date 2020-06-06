@@ -11,6 +11,8 @@ import com.bht.saigonparking.api.grpc.auth.RegisterRequest;
 import com.bht.saigonparking.api.grpc.auth.ValidateRequest;
 import com.bht.saigonparking.api.grpc.auth.ValidateResponse;
 import com.bht.saigonparking.api.grpc.auth.ValidateResponseType;
+import com.bht.saigonparking.common.auth.SaigonParkingTokenType;
+import com.bht.saigonparking.common.exception.WrongTokenTypeException;
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.auth.interceptor.AuthServiceInterceptor;
 import com.bht.saigonparking.service.auth.service.AuthService;
@@ -132,7 +134,17 @@ public final class AuthServiceGrpcImpl extends AuthServiceGrpc.AuthServiceImplBa
     public void generateNewToken(Empty request, StreamObserver<RefreshTokenResponse> responseObserver) {
         Long userId = authServiceInterceptor.getUserIdContext().get();
         try {
-            Triple<String, String, String> refreshTokenTriple = authService.generateNewToken(userId);
+            SaigonParkingTokenType tokenType = authServiceInterceptor.getTokenTypeContext().get();
+
+            if (tokenType.equals(SaigonParkingTokenType.ACCESS_TOKEN)) {
+                throw new WrongTokenTypeException();
+            }
+
+            Triple<String, String, String> refreshTokenTriple = authService.generateNewToken(
+                    userId,
+                    authServiceInterceptor.getExpContext().get(),
+                    authServiceInterceptor.getTokenIdContext().get(),
+                    tokenType.equals(SaigonParkingTokenType.REFRESH_TOKEN));
 
             RefreshTokenResponse refreshTokenResponse = RefreshTokenResponse.newBuilder()
                     .setUsername(refreshTokenTriple.getLeft())
@@ -160,7 +172,17 @@ public final class AuthServiceGrpcImpl extends AuthServiceGrpc.AuthServiceImplBa
     public void activateNewAccount(Empty request, StreamObserver<RefreshTokenResponse> responseObserver) {
         Long userId = authServiceInterceptor.getUserIdContext().get();
         try {
-            Triple<String, String, String> refreshTokenTriple = authService.activateNewAccount(userId);
+            SaigonParkingTokenType tokenType = authServiceInterceptor.getTokenTypeContext().get();
+
+            if (!tokenType.equals(SaigonParkingTokenType.ACTIVATE_TOKEN)) {
+                throw new WrongTokenTypeException();
+            }
+
+            Triple<String, String, String> refreshTokenTriple = authService.activateNewAccount(
+                    userId,
+                    authServiceInterceptor.getExpContext().get(),
+                    authServiceInterceptor.getTokenIdContext().get(),
+                    false);
 
             RefreshTokenResponse refreshTokenResponse = RefreshTokenResponse.newBuilder()
                     .setUsername(refreshTokenTriple.getLeft())

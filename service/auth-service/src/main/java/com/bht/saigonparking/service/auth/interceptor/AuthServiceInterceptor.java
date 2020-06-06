@@ -3,6 +3,7 @@ package com.bht.saigonparking.service.auth.interceptor;
 import static com.bht.saigonparking.common.constant.SaigonParkingTransactionalMetadata.AUTHORIZATION_KEY_NAME;
 import static com.bht.saigonparking.common.constant.SaigonParkingTransactionalMetadata.INTERNAL_KEY_NAME;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,7 +16,9 @@ import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
 import com.bht.saigonparking.common.auth.SaigonParkingAuthenticationImpl;
 import com.bht.saigonparking.common.auth.SaigonParkingTokenBody;
 import com.bht.saigonparking.common.auth.SaigonParkingTokenType;
+import com.bht.saigonparking.common.exception.InvalidRefreshTokenException;
 import com.bht.saigonparking.common.exception.MissingTokenException;
+import com.bht.saigonparking.common.exception.WrongTokenTypeException;
 import com.bht.saigonparking.common.interceptor.SaigonParkingCustomizedServerCall;
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.google.common.collect.ImmutableMap;
@@ -63,6 +66,8 @@ public final class AuthServiceInterceptor implements ServerInterceptor {
     private final Context.Key<String> tokenIdContext = Context.key("tokenId");
     @Getter
     private final Context.Key<SaigonParkingTokenType> tokenTypeContext = Context.key("tokenType");
+    @Getter
+    private final Context.Key<Date> expContext = Context.key("exp");
 
     private static final Key<String> INTERNAL_SERVICE_KEY = Key.of(INTERNAL_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER);
     private static final Key<String> AUTHORIZATION_KEY = Key.of(AUTHORIZATION_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER);
@@ -78,7 +83,9 @@ public final class AuthServiceInterceptor implements ServerInterceptor {
                 .build();
 
         errorCodeMap = new ImmutableMap.Builder<Class<? extends Throwable>, String>()
-                .put(EntityNotFoundException.class, "SPE#00007")
+                .put(WrongTokenTypeException.class, "SPE#00006")
+                .put(InvalidRefreshTokenException.class, "SPE#00007")
+                .put(EntityNotFoundException.class, "SPE#00008")
                 .build();
     }
 
@@ -94,6 +101,7 @@ public final class AuthServiceInterceptor implements ServerInterceptor {
         String userRole;
         String tokenId;
         SaigonParkingTokenType tokenType;
+        Date exp;
 
         /* get metadata from header of incoming request */
         String token = metadata.get(AUTHORIZATION_KEY);
@@ -109,6 +117,7 @@ public final class AuthServiceInterceptor implements ServerInterceptor {
                 userRole = "UNRECOGNIZED";
                 tokenId = "";
                 tokenType = null;
+                exp = new Date();
 
             } else if (token == null && internalServiceCodeString == null) { /* spam requests */
 
@@ -122,6 +131,7 @@ public final class AuthServiceInterceptor implements ServerInterceptor {
                 userRole = tokenBody.getUserRole();
                 tokenId = tokenBody.getTokenId();
                 tokenType = tokenBody.getTokenType();
+                exp = tokenBody.getExp();
 
             } else { /* internal requests */
 
@@ -129,6 +139,7 @@ public final class AuthServiceInterceptor implements ServerInterceptor {
                 userRole = "ADMIN";
                 tokenId = "";
                 tokenType = null;
+                exp = new Date();
             }
 
         } catch (ExpiredJwtException expiredJwtException) {
@@ -168,7 +179,8 @@ public final class AuthServiceInterceptor implements ServerInterceptor {
                         .withValue(userIdContext, userId)
                         .withValue(userRoleContext, userRole)
                         .withValue(tokenIdContext, tokenId)
-                        .withValue(tokenTypeContext, tokenType),
+                        .withValue(tokenTypeContext, tokenType)
+                        .withValue(expContext, exp),
                 wrappedServerCall,
                 metadata,
                 serverCallHandler);

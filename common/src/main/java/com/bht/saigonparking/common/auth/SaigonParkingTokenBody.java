@@ -1,5 +1,7 @@
 package com.bht.saigonparking.common.auth;
 
+import java.util.Date;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,4 +24,5 @@ public final class SaigonParkingTokenBody {
     private final SaigonParkingTokenType tokenType;
     private final Long userId;
     private final String userRole;
+    private final Date exp;
 }

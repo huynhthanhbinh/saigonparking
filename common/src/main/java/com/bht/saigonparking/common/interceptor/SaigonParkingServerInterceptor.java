@@ -13,7 +13,7 @@ import com.bht.saigonparking.common.auth.SaigonParkingAuthenticationImpl;
 import com.bht.saigonparking.common.auth.SaigonParkingTokenBody;
 import com.bht.saigonparking.common.auth.SaigonParkingTokenType;
 import com.bht.saigonparking.common.exception.MissingTokenException;
-import com.bht.saigonparking.common.exception.WrongTokenException;
+import com.bht.saigonparking.common.exception.WrongTokenTypeException;
 import com.bht.saigonparking.common.util.LoggingUtil;
 
 import io.grpc.Context;
@@ -86,7 +86,7 @@ public final class SaigonParkingServerInterceptor implements ServerInterceptor {
                 SaigonParkingTokenBody tokenBody = authentication.parseJwtToken(token);
 
                 if (!tokenBody.getTokenType().equals(SaigonParkingTokenType.ACCESS_TOKEN)) {
-                    throw new WrongTokenException();
+                    throw new WrongTokenTypeException();
                 }
 
                 userId = tokenBody.getUserId();
@@ -123,9 +123,9 @@ public final class SaigonParkingServerInterceptor implements ServerInterceptor {
             LoggingUtil.log(Level.ERROR, "ServerInterceptor", "Exception", "MissingTokenException");
             return newCallListener;
 
-        } catch (WrongTokenException wrongTokenException) {
+        } catch (WrongTokenTypeException wrongTokenException) {
             serverCall.close(Status.UNAUTHENTICATED.withDescription("SPE#00006"), metadata);
-            LoggingUtil.log(Level.ERROR, "ServerInterceptor", "Exception", "WrongTokenException");
+            LoggingUtil.log(Level.ERROR, "ServerInterceptor", "Exception", "WrongTokenTypeException");
             return newCallListener;
 
         } catch (Exception exception) {

@@ -50,14 +50,22 @@ public class Emulator extends SpringBootServletInitializer {
 //        ValidateResponse validateResponse;
 
         try {
-//            log.info("Start calling API");
-//            validateResponse = authServiceBlockingStub.validateUser(ValidateRequest.newBuilder()
-//                    .setUsername("htbinh")
-//                    .setPassword("htbinh789")
-//                    .setRole(UserRole.CUSTOMER)
-//                    .build());
-//            log.info("End calling API");
-//            log.info("\n" + validateResponse);
+
+//            System.out.println("\n\n" + parkingLotServiceBlockingStub.countAll(Empty.getDefaultInstance()) + "\n\n");
+//
+//            System.out.println(parkingLotServiceBlockingStub.getAllParkingLot(GetAllParkingLotRequest.newBuilder()
+//                    .setNRow(10)
+//                    .setPageNumber(1)
+//                    .build()));
+
+            log.info("Start calling API");
+            validateResponse = authServiceBlockingStub.validateUser(ValidateRequest.newBuilder()
+                    .setUsername("htbinh")
+                    .setPassword("htbinh789")
+                    .setRole(UserRole.CUSTOMER)
+                    .build());
+            log.info("End calling API");
+            log.info("\n" + validateResponse);
 
 //            log.info("Start calling API");
 //            parkingLotInformation = parkingLotServiceBlockingStub.getParkingLotById(Int64Value.of(1)).getInformation();

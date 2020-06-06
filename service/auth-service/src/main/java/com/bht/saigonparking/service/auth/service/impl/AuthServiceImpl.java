@@ -3,11 +3,14 @@ package com.bht.saigonparking.service.auth.service.impl;
 import static com.bht.saigonparking.api.grpc.mail.MailRequestType.ACTIVATE_ACCOUNT;
 import static com.bht.saigonparking.api.grpc.mail.MailRequestType.RESET_PASSWORD;
 
+import java.util.Date;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +26,6 @@ import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 
 import io.grpc.Context;
-import io.grpc.Status;
-import io.grpc.StatusRuntimeException;
 import lombok.AllArgsConstructor;
 
 /**
@@ -55,11 +56,14 @@ public class AuthServiceImpl implements AuthService {
                     context.run(() -> authServiceImplHelper.updateUserLastSignIn(user.getId()));
 
                     /* Generate new access token, new refresh token for user with Id, Role */
-                    String accessToken = authentication.generateAccessToken(user.getId(), userRole.toString());
-                    String refreshToken = authentication.generateRefreshToken(user.getId(), userRole.toString());
+                    Pair<String, String> generatedAccessToken = authentication.generateAccessToken(user.getId(), user.getRole().toString());
+                    Pair<String, String> generatedRefreshToken = authentication.generateRefreshToken(user.getId(), user.getRole().toString());
+
+                    /* Asynchronously save user token to the database */
+                    authServiceImplHelper.saveUserRefreshToken(user.getId(), generatedRefreshToken.getFirst());
 
                     /* Return response with two field: 1st ResponseType, 2nd AccessToken */
-                    return Triple.of(ValidateResponseType.AUTHENTICATED, accessToken, refreshToken);
+                    return Triple.of(ValidateResponseType.AUTHENTICATED, generatedAccessToken.getSecond(), generatedRefreshToken.getSecond());
                 }
                 return Triple.of(ValidateResponseType.INCORRECT, "", "");
             }
@@ -69,7 +73,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String registerUser(RegisterRequest request) {
+    public String registerUser(@NotNull RegisterRequest request) {
         UserRole userRole = UserRole.CUSTOMER;
         Long userId = userServiceBlockingStub.createCustomer(Customer.newBuilder()
                 .setUserInfo(User.newBuilder()
@@ -84,63 +88,53 @@ public class AuthServiceImpl implements AuthService {
                 .build())
                 .getValue();
 
-        String activateAccountToken = authentication.generateActivateAccountToken(userId, userRole.toString());
+        String activateAccountToken = authentication.generateActivateAccountToken(userId, userRole.toString()).getSecond();
         authServiceImplHelper.sendMail(ACTIVATE_ACCOUNT, request.getEmail(), request.getUsername(), activateAccountToken);
 
         return request.getEmail();
     }
 
     @Override
-    public String sendResetPasswordEmail(String username) {
+    public String sendResetPasswordEmail(@NotEmpty String username) {
         User user = userServiceBlockingStub.getUserByUsername(StringValue.of(username));
-        if (user.equals(User.getDefaultInstance())) {
-            throw new StatusRuntimeException(Status.UNKNOWN);
-        }
+        String resetPasswordToken = authentication.generateResetPasswordToken(user.getId(), user.getRole().toString()).getSecond();
 
-        String resetPasswordToken = authentication.generateResetPasswordToken(user.getId(), user.getRole().toString());
         authServiceImplHelper.sendMail(RESET_PASSWORD, user.getEmail(), username, resetPasswordToken);
         return user.getEmail();
     }
 
     @Override
-    public String sendActivateAccountEmail(String username) {
+    public String sendActivateAccountEmail(@NotEmpty String username) {
         User user = userServiceBlockingStub.getUserByUsername(StringValue.of(username));
-        if (user.equals(User.getDefaultInstance())) {
-            throw new StatusRuntimeException(Status.UNKNOWN);
-        }
+        String activateAccountToken = authentication.generateActivateAccountToken(user.getId(), user.getRole().toString()).getSecond();
 
-        String activateAccountToken = authentication.generateActivateAccountToken(user.getId(), user.getRole().toString());
         authServiceImplHelper.sendMail(ACTIVATE_ACCOUNT, user.getEmail(), username, activateAccountToken);
         return user.getEmail();
     }
 
     @Override
-    public Triple<String, String, String> generateNewToken(Long userId) {
-        User user = userServiceBlockingStub.getUserById(Int64Value.of(userId));
-        if (user.equals(User.getDefaultInstance())) {
-            throw new StatusRuntimeException(Status.UNKNOWN);
-        }
+    public Triple<String, String, String> generateNewToken(@NotNull Long userId,
+                                                           @NotNull Date currentExp,
+                                                           @NotEmpty String currentTokenId,
+                                                           boolean currentIsRefreshToken) {
 
-        /* Generate new access token, new refresh token for user with Id, Role */
-        String accessToken = authentication.generateAccessToken(user.getId(), user.getRole().toString());
-        String refreshToken = authentication.generateRefreshToken(user.getId(), user.getRole().toString());
-        return Triple.of(user.getUsername(), accessToken, refreshToken);
+        User user = userServiceBlockingStub.getUserById(Int64Value.of(userId));
+
+        return authServiceImplHelper.generateNewToken(user, currentExp, currentTokenId, currentIsRefreshToken);
     }
 
     @Override
-    public Triple<String, String, String> activateNewAccount(Long userId) {
+    public Triple<String, String, String> activateNewAccount(@NotNull Long userId,
+                                                             @NotNull Date currentExp,
+                                                             @NotEmpty String currentTokenId,
+                                                             boolean currentIsRefreshToken) {
+
         User user = userServiceBlockingStub.getUserById(Int64Value.of(userId));
-        if (user.equals(User.getDefaultInstance())) {
-            throw new StatusRuntimeException(Status.UNKNOWN);
-        }
 
         /* Asynchronously activate user */
         Context context = Context.current().fork();
         context.run(() -> authServiceImplHelper.activateUserWithId(userId));
 
-        /* Generate new access token, new refresh token for user with Id, Role */
-        String accessToken = authentication.generateAccessToken(user.getId(), user.getRole().toString());
-        String refreshToken = authentication.generateRefreshToken(user.getId(), user.getRole().toString());
-        return Triple.of(user.getUsername(), accessToken, refreshToken);
+        return authServiceImplHelper.generateNewToken(user, currentExp, currentTokenId, currentIsRefreshToken);
     }
 }

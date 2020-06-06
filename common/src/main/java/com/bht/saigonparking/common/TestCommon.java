@@ -11,7 +11,7 @@ public final class TestCommon {
 
     public static void main(String[] args) {
         SaigonParkingAuthentication authentication = new SaigonParkingAuthenticationImpl();
-        String token = authentication.generateAccessToken(4L, "CUSTOMER");
+        String token = authentication.generateAccessToken(4L, "CUSTOMER").getSecond();
         System.out.println(token);
         System.out.println(authentication.parseJwtToken(token));
     }

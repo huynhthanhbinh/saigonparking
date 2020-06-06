@@ -1,5 +1,7 @@
 package com.bht.saigonparking.service.auth.service;
 
+import java.util.Date;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -51,7 +53,10 @@ public interface AuthService {
      * middle: accessToken
      * right:  refreshToken
      */
-    Triple<String, String, String> generateNewToken(@NotNull Long userId);
+    Triple<String, String, String> generateNewToken(@NotNull Long userId,
+                                                    @NotNull Date currentExp,
+                                                    @NotEmpty String currentTokenId,
+                                                    boolean currentIsRefreshToken);
 
     /**
      *
@@ -60,5 +65,8 @@ public interface AuthService {
      * middle: accessToken
      * right:  refreshToken
      */
-    Triple<String, String, String> activateNewAccount(@NotNull Long userId);
+    Triple<String, String, String> activateNewAccount(@NotNull Long userId,
+                                                      @NotNull Date currentExp,
+                                                      @NotEmpty String currentTokenId,
+                                                      boolean currentIsRefreshToken);
 }
