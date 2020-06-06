@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,7 +50,7 @@ public class AuthServiceImpl implements AuthService {
         User user = userServiceBlockingStub.getUserByUsername(StringValue.of(username));
         if (user.getRole().equals(userRole)) {
             if (Boolean.TRUE.equals(user.getIsActivated())) {
-                if (password.equals(user.getPassword())) {
+                if (BCrypt.checkpw(password, user.getPassword())) {
 
                     /* Asynchronously update user last sign in */
                     Context context = Context.current().fork();

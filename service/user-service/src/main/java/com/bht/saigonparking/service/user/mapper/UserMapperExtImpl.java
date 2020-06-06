@@ -4,6 +4,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.bht.saigonparking.api.grpc.user.Customer;
@@ -23,6 +24,7 @@ import lombok.AllArgsConstructor;
 public final class UserMapperExtImpl implements UserMapperExt {
 
     private final EnumMapper enumMapper;
+    private final PasswordEncoder passwordEncoder;
     private final CustomerRepository customerRepository;
 
     @Override
@@ -35,7 +37,7 @@ public final class UserMapperExtImpl implements UserMapperExt {
 
         customerEntity.setUserRoleEntity(enumMapper.toUserRoleEntity(UserRole.CUSTOMER));
         customerEntity.setUsername(userInfo.getUsername());
-        customerEntity.setPassword(userInfo.getPassword());
+        customerEntity.setPassword(isAboutToCreate ? passwordEncoder.encode(userInfo.getPassword()) : customerEntity.getPassword());
         customerEntity.setEmail(userInfo.getEmail());
         customerEntity.setFirstName(customer.getFirstName());
         customerEntity.setLastName(customer.getLastName());
@@ -43,7 +45,6 @@ public final class UserMapperExtImpl implements UserMapperExt {
 
         /* Optimistic version control - prevent loss update */
         customerEntity.setVersion(userInfo.getVersion());
-
         return customerEntity;
     }
 }
