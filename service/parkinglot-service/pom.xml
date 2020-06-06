@@ -23,12 +23,12 @@
     <dependencies>
         <dependency>
             <groupId>com.bht.saigonparking</groupId>
-            <artifactId>user-private-api</artifactId>
+            <artifactId>user-api</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>com.bht.saigonparking</groupId>
-            <artifactId>parkinglot-private-api</artifactId>
+            <artifactId>parkinglot-api</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>

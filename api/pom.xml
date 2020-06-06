@@ -16,8 +16,10 @@
     </parent>
 
     <modules>
-        <module>public-api</module>
-        <module>private-api</module>
+        <module>parkinglot-api</module>
+        <module>user-api</module>
+        <module>auth-api</module>
+        <module>mail-api</module>
     </modules>
 
     <properties>

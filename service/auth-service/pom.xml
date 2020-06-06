@@ -23,17 +23,17 @@
     <dependencies>
         <dependency>
             <groupId>com.bht.saigonparking</groupId>
-            <artifactId>auth-private-api</artifactId>
+            <artifactId>auth-api</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>com.bht.saigonparking</groupId>
-            <artifactId>mail-private-api</artifactId>
+            <artifactId>mail-api</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>com.bht.saigonparking</groupId>
-            <artifactId>user-private-api</artifactId>
+            <artifactId>user-api</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>

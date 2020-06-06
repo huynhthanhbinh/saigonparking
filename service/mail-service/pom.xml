@@ -23,7 +23,7 @@
     <dependencies>
         <dependency>
             <groupId>com.bht.saigonparking</groupId>
-            <artifactId>mail-private-api</artifactId>
+            <artifactId>mail-api</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>
