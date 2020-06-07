@@ -9,6 +9,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +42,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class UserServiceImpl implements UserService {
 
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final CustomerRepository customerRepository;
     private final ParkingLotEmployeeRepository parkingLotEmployeeRepository;
@@ -124,7 +126,7 @@ public class UserServiceImpl implements UserService {
             throw new StatusRuntimeException(Status.PERMISSION_DENIED);
         }
 
-        userEntity.setPassword(password);
+        userEntity.setPassword(passwordEncoder.encode(password));
         userRepository.saveAndFlush(userEntity);
     }
 }
