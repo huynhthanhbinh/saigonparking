@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project Error Code
 Author:             Huynh Thanh Binh
-Last updated:       Sat, Jun 06th, 2020
+Last updated:       Sun, Jun 07th, 2020
 ========================================================================================================================
 SPE#00000   | Unregistered error
 SPE#00001   | Token is expired
@@ -11,3 +11,6 @@ SPE#00005   | Missing token
 SPE#00006   | Token type is wrong
 SPE#00007   | Invalid refresh token
 SPE#00008   | Entity not found
+SPE#00009   | Constraint violation (example (constraint email unique) if email already exist, exception will be thrown)
+SPE#00010   | User already activated (when request for new activate account email)
+SPE#00011   | User is not yet activated (when request for new reset password email)

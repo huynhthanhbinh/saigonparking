@@ -22,6 +22,8 @@ import com.bht.saigonparking.api.grpc.user.User;
 import com.bht.saigonparking.api.grpc.user.UserRole;
 import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
 import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
+import com.bht.saigonparking.common.exception.UserAlreadyActivatedException;
+import com.bht.saigonparking.common.exception.UserNotActivatedException;
 import com.bht.saigonparking.service.auth.service.AuthService;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
@@ -98,6 +100,12 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String sendResetPasswordEmail(@NotEmpty String username) {
         User user = userServiceBlockingStub.getUserByUsername(StringValue.of(username));
+
+        /* Only send reset password email if user is already activated !!! */
+        if (!user.getIsActivated()) {
+            throw new UserNotActivatedException();
+        }
+
         String resetPasswordToken = authentication.generateResetPasswordToken(user.getId(), user.getRole().toString()).getSecond();
 
         authServiceImplHelper.sendMail(RESET_PASSWORD, user.getEmail(), username, resetPasswordToken);
@@ -107,6 +115,12 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String sendActivateAccountEmail(@NotEmpty String username) {
         User user = userServiceBlockingStub.getUserByUsername(StringValue.of(username));
+
+        /* Only send activate email if user is not activated yet !!! */
+        if (user.getIsActivated()) {
+            throw new UserAlreadyActivatedException();
+        }
+
         String activateAccountToken = authentication.generateActivateAccountToken(user.getId(), user.getRole().toString()).getSecond();
 
         authServiceImplHelper.sendMail(ACTIVATE_ACCOUNT, user.getEmail(), username, activateAccountToken);
