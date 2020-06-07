@@ -132,10 +132,6 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
             User user = userMapper.toUser(userService
                     .getUserByUsername(request.getValue()));
 
-            if (user.equals(User.getDefaultInstance())) {
-                throw new StatusRuntimeException(Status.UNKNOWN);
-            }
-
             responseObserver.onNext(user);
             responseObserver.onCompleted();
 
@@ -157,10 +153,6 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
         try {
             Customer customer = userMapper.toCustomer(userService
                     .getCustomerById(request.getValue()));
-
-            if (customer.equals(Customer.getDefaultInstance())) {
-                throw new StatusRuntimeException(Status.UNKNOWN);
-            }
 
             responseObserver.onNext(customer);
             responseObserver.onCompleted();
@@ -184,10 +176,6 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
             Customer customer = userMapper.toCustomer(userService
                     .getCustomerByUsername(request.getValue()));
 
-            if (customer.equals(Customer.getDefaultInstance())) {
-                throw new StatusRuntimeException(Status.UNKNOWN);
-            }
-
             responseObserver.onNext(customer);
             responseObserver.onCompleted();
 
@@ -210,10 +198,6 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
             ParkingLotEmployee parkingLotEmployee = userMapper.toParkingLotEmployee(userService
                     .getParkingLotEmployeeById(request.getValue()));
 
-            if (parkingLotEmployee.equals(ParkingLotEmployee.getDefaultInstance())) {
-                throw new StatusRuntimeException(Status.UNKNOWN);
-            }
-
             responseObserver.onNext(parkingLotEmployee);
             responseObserver.onCompleted();
 
@@ -235,10 +219,6 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
         try {
             ParkingLotEmployee parkingLotEmployee = userMapper.toParkingLotEmployee(userService
                     .getParkingLotEmployeeByUsername(request.getValue()));
-
-            if (parkingLotEmployee.equals(ParkingLotEmployee.getDefaultInstance())) {
-                throw new StatusRuntimeException(Status.UNKNOWN);
-            }
 
             responseObserver.onNext(parkingLotEmployee);
             responseObserver.onCompleted();

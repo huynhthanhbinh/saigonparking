@@ -4,13 +4,13 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.apache.logging.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 
 import com.bht.saigonparking.api.grpc.auth.AuthServiceGrpc;
 import com.bht.saigonparking.api.grpc.auth.RefreshTokenResponse;
 import com.bht.saigonparking.api.grpc.auth.RegisterRequest;
 import com.bht.saigonparking.api.grpc.auth.ValidateRequest;
 import com.bht.saigonparking.api.grpc.auth.ValidateResponse;
-import com.bht.saigonparking.api.grpc.auth.ValidateResponseType;
 import com.bht.saigonparking.common.auth.SaigonParkingTokenType;
 import com.bht.saigonparking.common.exception.WrongTokenTypeException;
 import com.bht.saigonparking.common.util.LoggingUtil;
@@ -36,23 +36,21 @@ public final class AuthServiceGrpcImpl extends AuthServiceGrpc.AuthServiceImplBa
     @Override
     public void validateUser(ValidateRequest request, StreamObserver<ValidateResponse> responseObserver) {
         try {
-            Triple<ValidateResponseType, String, String> validateResponseTriple = authService.validateLogin(
+            Pair<String, String> validateResponseTriple = authService.validateLogin(
                     request.getUsername(),
                     request.getPassword(),
                     request.getRole());
 
             ValidateResponse validateResponse = ValidateResponse.newBuilder()
-                    .setResponse(validateResponseTriple.getLeft())
-                    .setAccessToken(validateResponseTriple.getMiddle())
-                    .setRefreshToken(validateResponseTriple.getRight())
+                    .setAccessToken(validateResponseTriple.getFirst())
+                    .setRefreshToken(validateResponseTriple.getSecond())
                     .build();
 
             responseObserver.onNext(validateResponse);
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("validateUser(%s, %s, %s): %s",
-                            request.getUsername(), request.getPassword(), request.getRole(), validateResponse.getResponse()));
+                    String.format("validateUser(%s, %s)", request.getUsername(), request.getRole()));
 
         } catch (Exception exception) {
 

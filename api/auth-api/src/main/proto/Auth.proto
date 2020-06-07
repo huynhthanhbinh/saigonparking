@@ -15,17 +15,9 @@ message ValidateRequest {
     user.UserRole role = 3;
 }
 
-enum ValidateResponseType {
-    AUTHENTICATED = 0;
-    INCORRECT = 1;
-    INACTIVATED = 2;
-    DISALLOWED = 3;
-}
-
 message ValidateResponse {
-    ValidateResponseType response = 1;
-    string accessToken = 2;
-    string refreshToken = 3;
+    string accessToken = 1;
+    string refreshToken = 2;
 }
 
 message RegisterRequest {
@@ -47,7 +39,7 @@ service AuthService {
     /** PUBLIC
      * use-case: user login (Validate all type of user)
      *  + request: validate request, includes username, password and role
-     *  + response: validate response type, AUTHENTICATED if succeed */
+     *  + response: validate response: access token + refresh token */
     rpc validateUser (ValidateRequest) returns (ValidateResponse);
 
     /** PUBLIC

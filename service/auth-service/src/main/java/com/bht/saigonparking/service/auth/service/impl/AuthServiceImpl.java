@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bht.saigonparking.api.grpc.auth.RegisterRequest;
-import com.bht.saigonparking.api.grpc.auth.ValidateResponseType;
 import com.bht.saigonparking.api.grpc.user.Customer;
 import com.bht.saigonparking.api.grpc.user.User;
 import com.bht.saigonparking.api.grpc.user.UserRole;
@@ -24,6 +23,8 @@ import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
 import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
 import com.bht.saigonparking.common.exception.UserAlreadyActivatedException;
 import com.bht.saigonparking.common.exception.UserNotActivatedException;
+import com.bht.saigonparking.common.exception.WrongPasswordException;
+import com.bht.saigonparking.common.exception.WrongUserRoleException;
 import com.bht.saigonparking.service.auth.service.AuthService;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
@@ -45,9 +46,9 @@ public class AuthServiceImpl implements AuthService {
     private final UserServiceGrpc.UserServiceBlockingStub userServiceBlockingStub;
 
     @Override
-    public Triple<ValidateResponseType, String, String> validateLogin(@NotEmpty String username,
-                                                                      @NotEmpty String password,
-                                                                      @NotNull UserRole userRole) {
+    public Pair<String, String> validateLogin(@NotEmpty String username,
+                                              @NotEmpty String password,
+                                              @NotNull UserRole userRole) {
 
         User user = userServiceBlockingStub.getUserByUsername(StringValue.of(username));
         if (user.getRole().equals(userRole)) {
@@ -66,13 +67,13 @@ public class AuthServiceImpl implements AuthService {
                     authServiceImplHelper.saveUserRefreshToken(user.getId(), generatedRefreshToken.getFirst());
 
                     /* Return response with two field: 1st ResponseType, 2nd AccessToken */
-                    return Triple.of(ValidateResponseType.AUTHENTICATED, generatedAccessToken.getSecond(), generatedRefreshToken.getSecond());
+                    return Pair.of(generatedAccessToken.getSecond(), generatedRefreshToken.getSecond());
                 }
-                return Triple.of(ValidateResponseType.INCORRECT, "", "");
+                throw new WrongPasswordException();
             }
-            return Triple.of(ValidateResponseType.INACTIVATED, "", "");
+            throw new UserNotActivatedException();
         }
-        return Triple.of(ValidateResponseType.DISALLOWED, "", "");
+        throw new WrongUserRoleException();
     }
 
     @Override

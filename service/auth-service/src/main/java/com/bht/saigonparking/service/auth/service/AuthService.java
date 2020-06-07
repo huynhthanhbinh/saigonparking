@@ -6,9 +6,9 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.tuple.Triple;
+import org.springframework.data.util.Pair;
 
 import com.bht.saigonparking.api.grpc.auth.RegisterRequest;
-import com.bht.saigonparking.api.grpc.auth.ValidateResponseType;
 import com.bht.saigonparking.api.grpc.user.UserRole;
 
 /**
@@ -20,13 +20,12 @@ public interface AuthService {
     /**
      *
      * @return triple of:
-     * left:   responseType
-     * middle: accessToken
-     * right:  refreshToken
+     * 1st: accessToken
+     * 2nd: refreshToken
      */
-    Triple<ValidateResponseType, String, String> validateLogin(@NotEmpty String username,
-                                                               @NotEmpty String password,
-                                                               @NotNull UserRole userRole);
+    Pair<String, String> validateLogin(@NotEmpty String username,
+                                       @NotEmpty String password,
+                                       @NotNull UserRole userRole);
 
     /**
      *

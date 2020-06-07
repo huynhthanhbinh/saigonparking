@@ -21,7 +21,9 @@ import com.bht.saigonparking.common.exception.InvalidRefreshTokenException;
 import com.bht.saigonparking.common.exception.MissingTokenException;
 import com.bht.saigonparking.common.exception.UserAlreadyActivatedException;
 import com.bht.saigonparking.common.exception.UserNotActivatedException;
+import com.bht.saigonparking.common.exception.WrongPasswordException;
 import com.bht.saigonparking.common.exception.WrongTokenTypeException;
+import com.bht.saigonparking.common.exception.WrongUserRoleException;
 import com.bht.saigonparking.common.interceptor.SaigonParkingCustomizedServerCall;
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.google.common.collect.ImmutableMap;
@@ -93,6 +95,8 @@ public final class AuthServiceInterceptor implements ServerInterceptor {
                 .put(javax.validation.ConstraintViolationException.class, "SPE#00009")
                 .put(UserAlreadyActivatedException.class, "SPE#00010")
                 .put(UserNotActivatedException.class, "SPE#00011")
+                .put(WrongUserRoleException.class, "SPE#00012")
+                .put(WrongPasswordException.class, "SPE#00013")
                 .build();
     }
 
