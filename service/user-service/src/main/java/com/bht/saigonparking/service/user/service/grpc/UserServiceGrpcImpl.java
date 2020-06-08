@@ -13,9 +13,13 @@ import com.bht.saigonparking.api.grpc.user.ParkingLotEmployee;
 import com.bht.saigonparking.api.grpc.user.UpdatePasswordRequest;
 import com.bht.saigonparking.api.grpc.user.User;
 import com.bht.saigonparking.api.grpc.user.UserServiceGrpc.UserServiceImplBase;
+import com.bht.saigonparking.common.exception.PermissionDeniedException;
+import com.bht.saigonparking.common.exception.UsernameNotMatchException;
 import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.user.entity.CustomerEntity;
+import com.bht.saigonparking.service.user.entity.ParkingLotEmployeeEntity;
+import com.bht.saigonparking.service.user.entity.UserEntity;
 import com.bht.saigonparking.service.user.mapper.UserMapper;
 import com.bht.saigonparking.service.user.mapper.UserMapperExt;
 import com.bht.saigonparking.service.user.service.main.UserService;
@@ -23,8 +27,6 @@ import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 
-import io.grpc.Status;
-import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
 
@@ -53,7 +55,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
     public void countAll(Empty request, StreamObserver<Int64Value> responseObserver) {
         try {
             if (!serverInterceptor.getRoleContext().get().equals("ADMIN")) {
-                throw new StatusRuntimeException(Status.PERMISSION_DENIED);
+                throw new PermissionDeniedException();
             }
 
             Long count = userService.countAll();
@@ -76,7 +78,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
     public void getAllUser(GetAllUserRequest request, StreamObserver<GetAllUserResponse> responseObserver) {
         try {
             if (!serverInterceptor.getRoleContext().get().equals("ADMIN")) {
-                throw new StatusRuntimeException(Status.PERMISSION_DENIED);
+                throw new PermissionDeniedException();
             }
 
             List<User> userList = userMapper.toUserList(userService
@@ -104,7 +106,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
             String userRole = serverInterceptor.getRoleContext().get();
 
             if (!userRole.equals("ADMIN")) {
-                throw new StatusRuntimeException(Status.PERMISSION_DENIED);
+                throw new PermissionDeniedException();
             }
 
             User user = userMapper.toUser(userService
@@ -129,6 +131,12 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
     @Override
     public void getUserByUsername(StringValue request, StreamObserver<User> responseObserver) {
         try {
+            String userRole = serverInterceptor.getRoleContext().get();
+
+            if (!userRole.equals("ADMIN")) {
+                throw new PermissionDeniedException();
+            }
+
             User user = userMapper.toUser(userService
                     .getUserByUsername(request.getValue()));
 
@@ -151,6 +159,12 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
     @Override
     public void getCustomerById(Int64Value request, StreamObserver<Customer> responseObserver) {
         try {
+            String userRole = serverInterceptor.getRoleContext().get();
+
+            if (!userRole.equals("ADMIN")) {
+                throw new PermissionDeniedException();
+            }
+
             Customer customer = userMapper.toCustomer(userService
                     .getCustomerById(request.getValue()));
 
@@ -173,10 +187,14 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
     @Override
     public void getCustomerByUsername(StringValue request, StreamObserver<Customer> responseObserver) {
         try {
-            Customer customer = userMapper.toCustomer(userService
-                    .getCustomerByUsername(request.getValue()));
+            Long userId = serverInterceptor.getUserIdContext().get();
+            CustomerEntity customerEntity = userService.getCustomerByUsername(request.getValue());
 
-            responseObserver.onNext(customer);
+            if (!userId.equals(customerEntity.getId())) {
+                throw new UsernameNotMatchException();
+            }
+
+            responseObserver.onNext(userMapper.toCustomer(customerEntity));
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",
@@ -195,6 +213,12 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
     @Override
     public void getParkingLotEmployeeById(Int64Value request, StreamObserver<ParkingLotEmployee> responseObserver) {
         try {
+            String userRole = serverInterceptor.getRoleContext().get();
+
+            if (!userRole.equals("ADMIN")) {
+                throw new PermissionDeniedException();
+            }
+
             ParkingLotEmployee parkingLotEmployee = userMapper.toParkingLotEmployee(userService
                     .getParkingLotEmployeeById(request.getValue()));
 
@@ -217,10 +241,14 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
     @Override
     public void getParkingLotEmployeeByUsername(StringValue request, StreamObserver<ParkingLotEmployee> responseObserver) {
         try {
-            ParkingLotEmployee parkingLotEmployee = userMapper.toParkingLotEmployee(userService
-                    .getParkingLotEmployeeByUsername(request.getValue()));
+            Long userId = serverInterceptor.getUserIdContext().get();
+            ParkingLotEmployeeEntity parkingLotEmployeeEntity = userService.getParkingLotEmployeeByUsername(request.getValue());
 
-            responseObserver.onNext(parkingLotEmployee);
+            if (!userId.equals(parkingLotEmployeeEntity.getId())) {
+                throw new UsernameNotMatchException();
+            }
+
+            responseObserver.onNext(userMapper.toParkingLotEmployee(parkingLotEmployeeEntity));
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",
@@ -242,7 +270,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
             String userRole = serverInterceptor.getRoleContext().get();
 
             if (!userRole.equals("ADMIN")) {
-                throw new StatusRuntimeException(Status.PERMISSION_DENIED);
+                throw new PermissionDeniedException();
             }
 
             CustomerEntity customerEntity = userMapperExt.toCustomerEntity(request, true);
@@ -271,7 +299,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
             CustomerEntity customerEntity = userMapperExt.toCustomerEntity(request, false);
 
             if (!userId.equals(customerEntity.getId())) {
-                throw new StatusRuntimeException(Status.PERMISSION_DENIED);
+                throw new UsernameNotMatchException();
             }
 
             userService.updateCustomer(customerEntity);
@@ -296,7 +324,13 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
     public void updatePassword(UpdatePasswordRequest request, StreamObserver<Empty> responseObserver) {
         try {
             Long userId = serverInterceptor.getUserIdContext().get();
-            userService.updateUserPassword(userId, request.getUsername(), request.getNewPassword());
+            UserEntity userEntity = userService.getUserByUsername(request.getUsername());
+
+            if (!userId.equals(userEntity.getId())) {
+                throw new UsernameNotMatchException();
+            }
+
+            userService.updateUserPassword(userEntity, request.getNewPassword());
 
             responseObserver.onNext(Empty.getDefaultInstance());
             responseObserver.onCompleted();
@@ -320,7 +354,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
             String userRole = serverInterceptor.getRoleContext().get();
 
             if (!userRole.equals("ADMIN")) {
-                throw new StatusRuntimeException(Status.PERMISSION_DENIED);
+                throw new PermissionDeniedException();
             }
 
             userService.activateUserWithId(request.getValue());
@@ -347,7 +381,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
             String userRole = serverInterceptor.getRoleContext().get();
 
             if (!userRole.equals("ADMIN")) {
-                throw new StatusRuntimeException(Status.PERMISSION_DENIED);
+                throw new PermissionDeniedException();
             }
 
             userService.deactivateUserWithId(request.getValue());

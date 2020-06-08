@@ -42,5 +42,5 @@ public interface UserService {
 
     void deactivateUserWithId(@NotNull Long id);
 
-    void updateUserPassword(@NotNull Long userId, @NotEmpty String username, @NotEmpty String password);
+    void updateUserPassword(@NotNull UserEntity userEntity, @NotEmpty String newPassword);
 }

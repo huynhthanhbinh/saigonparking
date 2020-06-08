@@ -19,8 +19,10 @@ import com.bht.saigonparking.common.auth.SaigonParkingTokenBody;
 import com.bht.saigonparking.common.auth.SaigonParkingTokenType;
 import com.bht.saigonparking.common.exception.InvalidRefreshTokenException;
 import com.bht.saigonparking.common.exception.MissingTokenException;
+import com.bht.saigonparking.common.exception.PermissionDeniedException;
 import com.bht.saigonparking.common.exception.UserAlreadyActivatedException;
 import com.bht.saigonparking.common.exception.UserNotActivatedException;
+import com.bht.saigonparking.common.exception.UsernameNotMatchException;
 import com.bht.saigonparking.common.exception.WrongPasswordException;
 import com.bht.saigonparking.common.exception.WrongTokenTypeException;
 import com.bht.saigonparking.common.exception.WrongUserRoleException;
@@ -97,6 +99,8 @@ public final class AuthServiceInterceptor implements ServerInterceptor {
                 .put(UserNotActivatedException.class, "SPE#00011")
                 .put(WrongUserRoleException.class, "SPE#00012")
                 .put(WrongPasswordException.class, "SPE#00013")
+                .put(UsernameNotMatchException.class, "SPE#00014")
+                .put(PermissionDeniedException.class, "SPE#00015")
                 .build();
     }
 

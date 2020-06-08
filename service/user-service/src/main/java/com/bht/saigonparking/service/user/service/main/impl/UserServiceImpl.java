@@ -21,8 +21,6 @@ import com.bht.saigonparking.service.user.repository.core.ParkingLotEmployeeRepo
 import com.bht.saigonparking.service.user.repository.core.UserRepository;
 import com.bht.saigonparking.service.user.service.main.UserService;
 
-import io.grpc.Status;
-import io.grpc.StatusRuntimeException;
 import lombok.AllArgsConstructor;
 
 /**
@@ -120,13 +118,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserPassword(@NotNull Long userId, @NotEmpty String username, @NotEmpty String password) {
-        UserEntity userEntity = getUserById(userId);
-        if (!username.equals(userEntity.getUsername())) {
-            throw new StatusRuntimeException(Status.PERMISSION_DENIED);
-        }
-
-        userEntity.setPassword(passwordEncoder.encode(password));
+    public void updateUserPassword(@NotNull UserEntity userEntity, @NotEmpty String newPassword) {
+        userEntity.setPassword(passwordEncoder.encode(newPassword));
         userRepository.saveAndFlush(userEntity);
     }
 }

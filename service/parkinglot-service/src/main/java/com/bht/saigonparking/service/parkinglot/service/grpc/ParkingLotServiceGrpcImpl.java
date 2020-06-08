@@ -15,6 +15,7 @@ import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResult;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResultList;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc.ParkingLotServiceImplBase;
 import com.bht.saigonparking.api.grpc.parkinglot.ScanningByRadiusRequest;
+import com.bht.saigonparking.common.exception.PermissionDeniedException;
 import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
@@ -25,8 +26,6 @@ import com.google.protobuf.BoolValue;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 
-import io.grpc.Status;
-import io.grpc.StatusRuntimeException;
 import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
 
@@ -55,7 +54,7 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
     public void countAll(Empty request, StreamObserver<Int64Value> responseObserver) {
         try {
             if (!serverInterceptor.getRoleContext().get().equals("ADMIN")) {
-                throw new StatusRuntimeException(Status.PERMISSION_DENIED);
+                throw new PermissionDeniedException();
             }
 
             Long count = parkingLotService.countAll();
@@ -78,7 +77,7 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
     public void getAllParkingLot(GetAllParkingLotRequest request, StreamObserver<GetAllParkingLotResponse> responseObserver) {
         try {
             if (!serverInterceptor.getRoleContext().get().equals("ADMIN")) {
-                throw new StatusRuntimeException(Status.PERMISSION_DENIED);
+                throw new PermissionDeniedException();
             }
 
             List<ParkingLot> parkingLotList = parkingLotMapper.toParkingLotList(parkingLotService

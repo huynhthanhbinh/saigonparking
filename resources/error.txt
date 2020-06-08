@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project Error Code
 Author:             Huynh Thanh Binh
-Last updated:       Sun, Jun 07th, 2020
+Last updated:       Mon, Jun 08th, 2020
 ========================================================================================================================
 SPE#00000   | Unregistered error
 SPE#00001   | Token is expired
@@ -16,3 +16,5 @@ SPE#00010   | User already activated (when request for new activate account emai
 SPE#00011   | User is not yet activated (when request for new reset password email)
 SPE#00012   | Wrong user role
 SPE#00013   | Wrong password
+SPE#00014   | Username and user Id is not of the same person
+SPE#00015   | Permission Denied (for example service for admin only)

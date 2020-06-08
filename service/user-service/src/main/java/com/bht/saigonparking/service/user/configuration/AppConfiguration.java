@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.bht.saigonparking.common.annotation.InheritedComponent;
+import com.bht.saigonparking.common.exception.PermissionDeniedException;
+import com.bht.saigonparking.common.exception.UsernameNotMatchException;
 import com.bht.saigonparking.common.interceptor.SaigonParkingClientInterceptor;
 import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
 import com.bht.saigonparking.common.spring.SpringApplicationContext;
@@ -66,6 +68,8 @@ public class AppConfiguration {
                 .put(EntityNotFoundException.class, "SPE#00008")
                 .put(ConstraintViolationException.class, "SPE#00009")
                 .put(javax.validation.ConstraintViolationException.class, "SPE#00009")
+                .put(UsernameNotMatchException.class, "SPE#00014")
+                .put(PermissionDeniedException.class, "SPE#00015")
                 .build());
     }
 }
