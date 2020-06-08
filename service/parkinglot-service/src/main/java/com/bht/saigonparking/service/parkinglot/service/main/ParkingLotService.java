@@ -37,4 +37,6 @@ public interface ParkingLotService {
                                                                 @NotNull Double lng,
                                                                 @NotNull Integer radius,
                                                                 @NotNull Integer nResult);
+
+    void deleteParkingLotById(@NotNull Long id);
 }

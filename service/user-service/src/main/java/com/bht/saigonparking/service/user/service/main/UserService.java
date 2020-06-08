@@ -43,4 +43,6 @@ public interface UserService {
     void deactivateUserWithId(@NotNull Long id);
 
     void updateUserPassword(@NotNull UserEntity userEntity, @NotEmpty String newPassword);
+
+    void deleteParkingLotEmployeeByParkingLotId(@NotNull Long parkingLotId);
 }

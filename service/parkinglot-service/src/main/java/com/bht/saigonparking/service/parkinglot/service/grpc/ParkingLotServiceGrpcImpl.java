@@ -109,7 +109,7 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("getParkingLotInformationByParkingLotId(%d)", request.getValue()));
+                    String.format("getParkingLotById(%d)", request.getValue()));
 
         } catch (Exception exception) {
 
@@ -117,7 +117,7 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                    String.format("getParkingLotInformationByParkingLotId(%d)", request.getValue()));
+                    String.format("getParkingLotById(%d)", request.getValue()));
         }
     }
 
@@ -246,6 +246,31 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("getTopParkingLotInRegionOrderByDistanceWithoutName(%f, %f, %d, %d)",
                             request.getLatitude(), request.getLongitude(), request.getRadiusToScan(), request.getNResult()));
+        }
+    }
+
+    @Override
+    public void deleteParkingLotById(Int64Value request, StreamObserver<Empty> responseObserver) {
+        try {
+            if (!serverInterceptor.getRoleContext().get().equals("ADMIN")) {
+                throw new PermissionDeniedException();
+            }
+
+            parkingLotService.deleteParkingLotById(request.getValue());
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("deleteParkingLotById(%d)", request.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("deleteParkingLotById(%d)", request.getValue()));
         }
     }
 }

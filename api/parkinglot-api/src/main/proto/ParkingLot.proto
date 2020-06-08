@@ -109,6 +109,10 @@ message GetAllParkingLotResponse {
     repeated ParkingLot parkingLot = 1;
 }
 
+message DeleteParkingLotNotification {
+    int64 parkingLotId = 1;
+}
+
 service ParkingLotService {
 
     /** PUBLIC - ADMIN ONLY
@@ -168,4 +172,9 @@ service ParkingLotService {
      * remember: JOIN TABLE is expensive, this method NOT JOIN TABLE !!!!
      * therefore: unless you need the name of the parking lot in the result, please use this method instead */
     rpc getTopParkingLotInRegionOrderByDistanceWithoutName (ScanningByRadiusRequest) returns (ParkingLotResultList);
+
+    /** PRIVATE
+     * use-case: Admin delete 1 parking-lot
+     * note that: delete parking-lot also delete correspondent parking-lot-employee */
+    rpc deleteParkingLotById (google.protobuf.Int64Value) returns (google.protobuf.Empty);
 }

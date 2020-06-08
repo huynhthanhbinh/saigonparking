@@ -122,4 +122,11 @@ public class UserServiceImpl implements UserService {
         userEntity.setPassword(passwordEncoder.encode(newPassword));
         userRepository.saveAndFlush(userEntity);
     }
+
+    @Override
+    public void deleteParkingLotEmployeeByParkingLotId(@NotNull Long parkingLotId) {
+        ParkingLotEmployeeEntity parkingLotEmployeeEntity = parkingLotEmployeeRepository
+                .getByParkingLotId(parkingLotId).orElseThrow(EntityNotFoundException::new);
+        parkingLotEmployeeRepository.delete(parkingLotEmployeeEntity);
+    }
 }
