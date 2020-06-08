@@ -10,8 +10,8 @@ import java.util.Set;
 import javax.persistence.EntityNotFoundException;
 
 import org.apache.logging.log4j.Level;
-import org.hibernate.exception.ConstraintViolationException;
 import org.lognet.springboot.grpc.GRpcGlobalInterceptor;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
 import com.bht.saigonparking.common.auth.SaigonParkingAuthenticationImpl;
@@ -93,8 +93,7 @@ public final class AuthServiceInterceptor implements ServerInterceptor {
                 .put(WrongTokenTypeException.class, "SPE#00006")
                 .put(InvalidRefreshTokenException.class, "SPE#00007")
                 .put(EntityNotFoundException.class, "SPE#00008")
-                .put(ConstraintViolationException.class, "SPE#00009")
-                .put(javax.validation.ConstraintViolationException.class, "SPE#00009")
+                .put(DataIntegrityViolationException.class, "SPE#00009")
                 .put(UserAlreadyActivatedException.class, "SPE#00010")
                 .put(UserNotActivatedException.class, "SPE#00011")
                 .put(WrongUserRoleException.class, "SPE#00012")

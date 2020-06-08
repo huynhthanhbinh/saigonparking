@@ -2,12 +2,12 @@ package com.bht.saigonparking.service.user.configuration;
 
 import javax.persistence.EntityNotFoundException;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.lognet.springboot.grpc.GRpcGlobalInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -66,8 +66,7 @@ public class AppConfiguration {
     public SaigonParkingServerInterceptor saigonParkingServerInterceptor() {
         return new SaigonParkingServerInterceptor(new ImmutableMap.Builder<Class<? extends Throwable>, String>()
                 .put(EntityNotFoundException.class, "SPE#00008")
-                .put(ConstraintViolationException.class, "SPE#00009")
-                .put(javax.validation.ConstraintViolationException.class, "SPE#00009")
+                .put(DataIntegrityViolationException.class, "SPE#00009")
                 .put(UsernameNotMatchException.class, "SPE#00014")
                 .put(PermissionDeniedException.class, "SPE#00015")
                 .build());
