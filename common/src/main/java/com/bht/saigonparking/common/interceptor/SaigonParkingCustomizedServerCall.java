@@ -33,7 +33,7 @@ public final class SaigonParkingCustomizedServerCall<ReqT, RespT> extends Forwar
 
             Throwable e = status.getCause();
             LoggingUtil.log(Level.ERROR, "ServerInterceptor", "Exception", e.getClass().getSimpleName());
-            status = Status.INTERNAL.withDescription(errorCodeMap.get(e.getClass())).augmentDescription(e.getMessage());
+            status = Status.INTERNAL.withDescription(errorCodeMap.get(e.getClass()));
         }
         super.close(status, trailers);
     }
