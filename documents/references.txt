@@ -168,8 +168,14 @@ Last updated:       Fri, Jun 12th, 2020
 56. How can I remove a commit on GitHub?
         https://stackoverflow.com/questions/448919/how-can-i-remove-a-commit-on-github
 
-57. gRPC: Should not call onComplete after onError
+57. How can I undo the last commit?
+        https://www.git-tower.com/learn/git/faq/undo-last-commit
+
+58. gRPC: Should not call onComplete after onError
         https://github.com/scalapb/ScalaPB/issues/71
 
-58. How can I configure log4j to not print the exception stacktrace?
+59. How can I configure log4j to not print the exception stacktrace?
         https://stackoverflow.com/questions/348582/how-can-i-configure-log4j-to-not-print-the-exception-stacktrace
+
+60. Remove “Using default security password” on Spring Boot
+        https://stackoverflow.com/questions/30761253/remove-using-default-security-password-on-spring-boot
