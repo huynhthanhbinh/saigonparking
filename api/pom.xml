@@ -14,12 +14,12 @@
         <groupId>com.bht.saigonparking</groupId>
         <version>${revision}</version>
     </parent>
-
     <modules>
         <module>parkinglot-api</module>
         <module>user-api</module>
         <module>auth-api</module>
         <module>mail-api</module>
+        <module>official-api</module>
     </modules>
 
     <properties>

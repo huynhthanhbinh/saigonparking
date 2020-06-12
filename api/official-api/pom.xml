@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>official-api</artifactId>
+    <version>${revision}</version>
+    <packaging>jar</packaging>
+
+    <name>OFFICIAL-API</name>
+    <parent>
+        <artifactId>api</artifactId>
+        <groupId>com.bht.saigonparking</groupId>
+        <version>${revision}</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <artifactId>mail-api</artifactId>
+            <groupId>com.bht.saigonparking</groupId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <artifactId>auth-api</artifactId>
+            <groupId>com.bht.saigonparking</groupId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <artifactId>user-api</artifactId>
+            <groupId>com.bht.saigonparking</groupId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <artifactId>parkinglot-api</artifactId>
+            <groupId>com.bht.saigonparking</groupId>
+            <version>${revision}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-shared-resources-mail</id>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                            <includeArtifactIds>mail-api</includeArtifactIds>
+                            <includeGroupIds>com.bht.saigonparking</includeGroupIds>
+                            <excludeTransitive>true</excludeTransitive>
+                            <includes>**/*.proto, **/*.class</includes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>unpack-shared-resources-auth</id>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                            <includeArtifactIds>auth-api</includeArtifactIds>
+                            <includeGroupIds>com.bht.saigonparking</includeGroupIds>
+                            <excludeTransitive>true</excludeTransitive>
+                            <includes>**/*.proto, **/*.class</includes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>unpack-shared-resources-user</id>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                            <includeArtifactIds>user-api</includeArtifactIds>
+                            <includeGroupIds>com.bht.saigonparking</includeGroupIds>
+                            <excludeTransitive>true</excludeTransitive>
+                            <includes>**/*.proto, **/*.class</includes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>unpack-shared-resources-parkinglot</id>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                            <includeArtifactIds>parkinglot-api</includeArtifactIds>
+                            <includeGroupIds>com.bht.saigonparking</includeGroupIds>
+                            <excludeTransitive>true</excludeTransitive>
+                            <includes>**/*.proto, **/*.class</includes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
