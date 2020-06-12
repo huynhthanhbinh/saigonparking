@@ -108,6 +108,8 @@ services:
     ports:
       - "${MESSAGE_QUEUE_PORT}:${MESSAGE_QUEUE_PORT}"
       - "${MESSAGE_QUEUE_MANAGEMENT_PORT}:${MESSAGE_QUEUE_MANAGEMENT_PORT}"
+    depends_on:
+      - gateway
 
   mail-service:
     image: ${DOCKER_HUB_ID}/mail-service:${MAIL_SERVICE_VERSION}
@@ -118,6 +120,8 @@ services:
     ports:
       - "${MAIL_SERVICE_HTTP_PORT}:${MAIL_SERVICE_HTTP_PORT}"
       - "${MAIL_SERVICE_GRPC_PORT}:${MAIL_SERVICE_GRPC_PORT}"
+    depends_on:
+      - message-queue
 
   auth-service:
     image: ${DOCKER_HUB_ID}/auth-service:${AUTH_SERVICE_VERSION}
@@ -128,6 +132,8 @@ services:
     ports:
       - "${AUTH_SERVICE_HTTP_PORT}:${AUTH_SERVICE_HTTP_PORT}"
       - "${AUTH_SERVICE_GRPC_PORT}:${AUTH_SERVICE_GRPC_PORT}"
+    depends_on:
+      - message-queue
 
   user-service:
     image: ${DOCKER_HUB_ID}/user-service:${USER_SERVICE_VERSION}
@@ -138,6 +144,8 @@ services:
     ports:
       - "${USER_SERVICE_HTTP_PORT}:${USER_SERVICE_HTTP_PORT}"
       - "${USER_SERVICE_GRPC_PORT}:${USER_SERVICE_GRPC_PORT}"
+    depends_on:
+      - message-queue
 
   parkinglot-service:
     image: ${DOCKER_HUB_ID}/parkinglot-service:${PARKING_LOT_SERVICE_VERSION}
@@ -148,3 +156,5 @@ services:
     ports:
       - "${PARKING_LOT_SERVICE_HTTP_PORT}:${PARKING_LOT_SERVICE_HTTP_PORT}"
       - "${PARKING_LOT_SERVICE_GRPC_PORT}:${PARKING_LOT_SERVICE_GRPC_PORT}"
+    depends_on:
+      - message-queue
