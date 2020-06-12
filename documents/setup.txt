@@ -1,0 +1,108 @@
+Document's name:    Saigon Parking Project Setup Guide
+Author:             Huynh Thanh Binh
+Last updated:       Fri, Jun 12th, 2020
+========================================================================================================================
+
+All necessary setup files are provided in Saigon Parking Project's private Google Drive. Please do NOT share anything outside
+
+Step 00: Download all necessary things: ( dependencies / libraries / tools / plugins / project )
+
+    1. Download all tools + setup + settings from Google Drive.
+
+                            username: saigonparkingmap
+                            password: 0506122076
+
+    2. Clone Saigon Parking project from private repository:
+
+                            https://github.com/huynhthanhbinh/saigonparking
+
+Step 01: Setup JAVA
+
+    1. Install Java 8 included JDK 1.8 + JRE 1.8 (using jdk-8u241-windows-x64.exe)
+    2. Add JAVA_HOME variable (path to JDK folder) to environment variables
+    3. Add %JAVA_HOME%\bin (path to JDK bin folder) to PATH in environment variables
+
+Step 02: Setup MAVEN
+
+    1. Unzip Maven setup file into Program File folder (using apache-maven-3.6.3-bin.zip)
+    2. Add M2_HOME variable (path to recent unzipped folder) to environment variables
+    3. Add %M2_HOME%\bin (path to MVN bin folder) to PATH in environment variables
+
+Step 04: Check if set up environment is success or not
+
+    1. Open terminal/command line
+    2. Tap java -version (if the command line show java's version -> setup java is success !)
+    3. Tap  mvn -version (if the command line show maven's version -> setup maven is success !)
+
+Step 05: Install IDE:
+
+    1. Install IntelliJ IDEA IDE (Ultimate version is recommended, using student's email to register)
+    2. Remove previous project setting (if exists)
+    2. Import current project setting into IntelliJ IDE (please using IntelliJ_Settings.jar provided)
+    3. Start IntelliJ IDEA IDE and start to install plugins as the following step
+
+Step 06: Install IDE must-have plugins: (please install all of these following plugins)
+
+    1. SonarLint
+    2. Grep Console
+    3. Save Actions
+    4. Spring Assistant
+    5. Jpa Support
+    6. Protobuf Support
+    7. MapStruct Support
+    8. Lombok
+
+Step 07: Setup Save Actions plugin:
+
+    1. Open File -> Settings -> Other Settings -> Save Actions
+    2. Please select all options as mentioned below
+        2.1.  Activate save actions on save
+        2.2.  Activate save actions on shortcut (Ctrl + Shift + S): please using this shortcut key on saving code
+        2.3.  Optimize imports
+        2.4.  Reformat file
+        2.5.  Add missing @Override annotations
+        2.6.  Add blocks to if/while/for statements
+        2.7.  Remove unnecessary this to fields and methods
+        2.8.  Remove final from private method
+        2.9.  Remove unnecessary final to local variable or parameter
+        2.10. Remove explicit generic type for diamond
+        2.11. Remove unused suppress warning annotations
+        2.12. Remove unnecessary semicolons
+    3. Click Apply to save these settings then click OK to close
+
+Step 08: Open project
+
+    0. Right click on saigonparking folder -> Select "Open Folder as IntelliJ IDEA Project"
+    1. Project is now open
+    2. Wait for IDE to index project, install missing dependencies(libraries)
+    3. Select right version of Maven !!! (> 3.5)
+        3.1. Open File -> Settings
+        3.2. Tap "Maven" -> Maven Settings will be shown on the right side
+        3.3. Select Maven Home Directory (for eg. C:/Program Files/Apache/apache-maven-3.6.1)
+        3.4. Click Apply to save these settings then click OK to close
+    4. Project will be shown as modules (folder icon with small square blue marker)
+    5. If modules are not shown in the left panel or any pom has red-underline as errors, please do as followings steps:
+        5.1. Open the parent pom (saigonparking's pom) in the IDE
+        5.2. As the pom has been shown on the editor, please right-click on the editor
+        5.3. Select Maven -> Reimport
+        5.4. Modules will be shown and all red-underline in any pom file must be disappeared ! Otherwise, contact me !
+    6. Finish opening project for the 1st time ! Congrats !
+    7. If IntelliJ IDE throw error on building or project file structure missing .iml file on any module, please do:
+        7.1. Run terminal in ROOT folder (saigonparking folder)
+        7.2. $ mvn idea:idea (for generating IntelliJ IDEA project files)
+        7.3. $ mvn clean install (for cleaning all previous built source)
+        7.4. $ mvn clean package (for rebuilt & package project as new)
+    
+Step 09: Understand project components / project structure
+
+    Inside project folder, you will see these folder:
+        0. .github              : contains setup for Github Workflow
+        1. api                  : contains all APIs
+        2. common               : contains COMMON module, each service needs to import this
+        3. dev                  : contains all setup for dev environment
+        4. documents            : contains all documents of backend
+        5. emulator             : contains EMULATOR module
+        6. gateway              : contains GATEWAY module
+        7. proxy                : contains PROXY module
+        8. queue                : contains QUEUE module
+        9. service              : contains all SERVICE

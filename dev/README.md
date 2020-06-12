@@ -12,7 +12,7 @@ Written by: Huynh Thanh Binh (bht) in May 20th, 2020<br/>
     <br/>&emsp;&emsp; $ docker-compose rm
     
 <h4>Another frequently used command</h4>
-(Can be found in resources folder, file commands.txt)
+(Can be found in documents folder, file commands.txt)
 
 <h4>Project's architecture</h4>
 ![](architecture.png)

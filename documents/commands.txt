@@ -1,9 +1,11 @@
 Document's name:    Saigon Parking Project Frequently-Use Commands
 Author:             Huynh Thanh Binh
-Last updated:       Mon, May 25th, 2020
+Last updated:       Fri, Jun 12th, 2020
 ========================================================================================================================
 
-$ git push -f origin HEAD^:master --> undo last push/commit
+$ git push -f origin HEAD^:master --> undo last push
+$ git reset --soft HEAD~1 --> undo last commit: soft
+$ git reset --hard HEAD~1 --> undo last commit: hard
 $ git repack -a -d --depth=250 --window=250
 $ git push origin --force --all
 
