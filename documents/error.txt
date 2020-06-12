@@ -1,8 +1,8 @@
 Document's name:    Saigon Parking Project Error Code
 Author:             Huynh Thanh Binh
-Last updated:       Tue, Jun 09th, 2020
+Last updated:       Fri, Jun 12th, 2020
 ========================================================================================================================
-SPE#00000   | Unregistered error
+SPE#00000   | Error which not been assigned error code yet
 SPE#00001   | Token is expired
 SPE#00002   | Token signature is wrong
 SPE#00003   | Token format is wrong
@@ -18,3 +18,4 @@ SPE#00012   | Wrong user role
 SPE#00013   | Wrong password
 SPE#00014   | Username and user Id is not of the same person
 SPE#00015   | Permission Denied (for example service for admin only)
+SPE#00016   | Concurrent update exception

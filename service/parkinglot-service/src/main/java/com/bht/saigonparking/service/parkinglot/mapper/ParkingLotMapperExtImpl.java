@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotInformation;
-import com.bht.saigonparking.common.exception.ConcurrentUpdateException;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotInformationEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
@@ -54,12 +53,7 @@ public final class ParkingLotMapperExtImpl implements ParkingLotMapperExt {
         if (!isAboutToCreate) {    // update parkingLotEntity
             parkingLotEntity = parkingLotRepository.getById(parkingLotId);
             parkingLotInformationEntity = parkingLotEntity.getParkingLotInformationEntity();
-
-            if (parkingLotEntity.getVersion() != parkingLot.getVersion()
-                    || parkingLotInformationEntity.getVersion() != parkingLotInformation.getVersion()) {
-                String message = "Parking-lot has just been updated by another tx, please refresh and try again to update";
-                throw new ConcurrentUpdateException(message);
-            }
+            parkingLotEntity.setVersion(parkingLot.getVersion());
 
         } else {                    // create parkingLotEntity
             parkingLotEntity = new ParkingLotEntity();

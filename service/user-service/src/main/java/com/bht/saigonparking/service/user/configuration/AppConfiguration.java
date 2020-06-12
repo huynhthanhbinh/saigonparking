@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -69,6 +70,7 @@ public class AppConfiguration {
                 .put(DataIntegrityViolationException.class, "SPE#00009")
                 .put(UsernameNotMatchException.class, "SPE#00014")
                 .put(PermissionDeniedException.class, "SPE#00015")
+                .put(ObjectOptimisticLockingFailureException.class, "SPE#00016")
                 .build());
     }
 }

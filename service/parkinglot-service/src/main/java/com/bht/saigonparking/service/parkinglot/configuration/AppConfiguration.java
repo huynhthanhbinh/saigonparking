@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.bht.saigonparking.common.annotation.InheritedComponent;
@@ -59,6 +60,7 @@ public class AppConfiguration {
                 .put(EntityNotFoundException.class, "SPE#00008")
                 .put(DataIntegrityViolationException.class, "SPE#00009")
                 .put(PermissionDeniedException.class, "SPE#00015")
+                .put(ObjectOptimisticLockingFailureException.class, "SPE#00016")
                 .build());
     }
 }
