@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Wed, Jun 03rd, 2020
+Last updated:       Fri, Jun 12th, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -170,3 +170,6 @@ Last updated:       Wed, Jun 03rd, 2020
 
 57. gRPC: Should not call onComplete after onError
         https://github.com/scalapb/ScalaPB/issues/71
+
+58. How can I configure log4j to not print the exception stacktrace?
+        https://stackoverflow.com/questions/348582/how-can-i-configure-log4j-to-not-print-the-exception-stacktrace
