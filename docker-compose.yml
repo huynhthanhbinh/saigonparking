@@ -5,6 +5,17 @@ networks:
     driver: bridge
 
 services:
+  service-discovery:
+    image: ${DOCKER_HUB_ID}/discovery:${SERVICE_DISCOVERY_VERSION}
+    networks:
+      - saigonparking-service
+    environment:
+      TZ: ${TIMEZONE}
+    ports:
+      - "${SERVICE_DISCOVERY_DNS_PORT}:${SERVICE_DISCOVERY_DNS_PORT}"
+      - "${SERVICE_DISCOVERY_HTTP_PORT}:${SERVICE_DISCOVERY_HTTP_PORT}"
+      - "${SERVICE_DISCOVERY_GRPC_PORT}:${SERVICE_DISCOVERY_GRPC_PORT}"
+
   message-queue:
     image: ${DOCKER_HUB_ID}/queue:${MESSAGE_QUEUE_VERSION}
     networks:
@@ -24,10 +35,11 @@ services:
     environment:
       TZ: ${TIMEZONE}
     ports:
-      - "${MAIL_SERVICE_HTTP_PORT}:${MAIL_SERVICE_HTTP_PORT}"
+      #- "${MAIL_SERVICE_HTTP_PORT}:${MAIL_SERVICE_HTTP_PORT}"
       - "${MAIL_SERVICE_GRPC_PORT}:${MAIL_SERVICE_GRPC_PORT}"
     depends_on:
       - message-queue
+      - service-discovery
 
   auth-service:
     image: ${DOCKER_HUB_ID}/auth-service:${AUTH_SERVICE_VERSION}
@@ -36,10 +48,11 @@ services:
     environment:
       TZ: ${TIMEZONE}
     ports:
-      - "${AUTH_SERVICE_HTTP_PORT}:${AUTH_SERVICE_HTTP_PORT}"
+      #- "${AUTH_SERVICE_HTTP_PORT}:${AUTH_SERVICE_HTTP_PORT}"
       - "${AUTH_SERVICE_GRPC_PORT}:${AUTH_SERVICE_GRPC_PORT}"
     depends_on:
       - message-queue
+      - service-discovery
 
   user-service:
     image: ${DOCKER_HUB_ID}/user-service:${USER_SERVICE_VERSION}
@@ -48,10 +61,11 @@ services:
     environment:
       TZ: ${TIMEZONE}
     ports:
-      - "${USER_SERVICE_HTTP_PORT}:${USER_SERVICE_HTTP_PORT}"
+      #- "${USER_SERVICE_HTTP_PORT}:${USER_SERVICE_HTTP_PORT}"
       - "${USER_SERVICE_GRPC_PORT}:${USER_SERVICE_GRPC_PORT}"
     depends_on:
       - message-queue
+      - service-discovery
 
   parkinglot-service:
     image: ${DOCKER_HUB_ID}/parkinglot-service:${PARKING_LOT_SERVICE_VERSION}
@@ -60,7 +74,8 @@ services:
     environment:
       TZ: ${TIMEZONE}
     ports:
-      - "${PARKING_LOT_SERVICE_HTTP_PORT}:${PARKING_LOT_SERVICE_HTTP_PORT}"
+      #- "${PARKING_LOT_SERVICE_HTTP_PORT}:${PARKING_LOT_SERVICE_HTTP_PORT}"
       - "${PARKING_LOT_SERVICE_GRPC_PORT}:${PARKING_LOT_SERVICE_GRPC_PORT}"
     depends_on:
       - message-queue
+      - service-discovery

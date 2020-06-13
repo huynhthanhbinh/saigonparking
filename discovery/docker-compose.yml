@@ -1,0 +1,16 @@
+version: '3'
+networks:
+  saigonparking-discovery:
+    driver: bridge
+
+services:
+  service-discovery:
+    image: ${DOCKER_HUB_ID}/discovery:${SERVICE_DISCOVERY_VERSION}
+    networks:
+      - saigonparking-discovery
+    environment:
+      TZ: ${TIMEZONE}
+    ports:
+      - "${SERVICE_DISCOVERY_DNS_PORT}:${SERVICE_DISCOVERY_DNS_PORT}"
+      - "${SERVICE_DISCOVERY_HTTP_PORT}:${SERVICE_DISCOVERY_HTTP_PORT}"
+      - "${SERVICE_DISCOVERY_GRPC_PORT}:${SERVICE_DISCOVERY_GRPC_PORT}"

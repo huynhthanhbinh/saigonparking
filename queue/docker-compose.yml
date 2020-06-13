@@ -1,14 +1,14 @@
 version: '3'
 
 networks:
-  saigonparking:
+  saigonparking-queue:
     driver: bridge
 
 services:
   message-queue:
     image: ${DOCKER_HUB_ID}/queue:${MESSAGE_QUEUE_VERSION}
     networks:
-      - saigonparking
+      - saigonparking-queue
     environment:
       TZ: ${TIMEZONE}
       RABBITMQ_CONFIG_FILE:                 ${RABBITMQ_CONFIG_FILE}
