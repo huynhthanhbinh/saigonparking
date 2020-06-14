@@ -19,3 +19,4 @@ SPE#00013   | Wrong password
 SPE#00014   | Username and user Id is not of the same person
 SPE#00015   | Permission Denied (for example service for admin only)
 SPE#00016   | Concurrent update exception
+SPE#00017   | Service unavailable

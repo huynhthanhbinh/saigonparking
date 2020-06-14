@@ -1,5 +1,6 @@
 package com.bht.saigonparking.service.user.configuration;
 
+import javax.naming.ServiceUnavailableException;
 import javax.persistence.EntityNotFoundException;
 
 import org.lognet.springboot.grpc.GRpcGlobalInterceptor;
@@ -30,7 +31,7 @@ import com.google.common.collect.ImmutableMap;
  */
 @Configuration
 @EnableTransactionManagement
-@Import({ChannelConfiguration.class, MessageQueueConfiguration.class})
+@Import(MessageQueueConfiguration.class)
 @ComponentScan(basePackages = AppConfiguration.BASE_PACKAGE,
         includeFilters = @ComponentScan.Filter(InheritedComponent.class))
 public class AppConfiguration {
@@ -71,6 +72,7 @@ public class AppConfiguration {
                 .put(UsernameNotMatchException.class, "SPE#00014")
                 .put(PermissionDeniedException.class, "SPE#00015")
                 .put(ObjectOptimisticLockingFailureException.class, "SPE#00016")
+                .put(ServiceUnavailableException.class, "SPE#00017")
                 .build());
     }
 }

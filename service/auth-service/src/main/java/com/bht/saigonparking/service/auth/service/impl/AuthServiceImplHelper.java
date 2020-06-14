@@ -13,6 +13,7 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.apache.logging.log4j.Level;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.util.Pair;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -21,30 +22,34 @@ import com.bht.saigonparking.api.grpc.mail.MailRequest;
 import com.bht.saigonparking.api.grpc.mail.MailRequestType;
 import com.bht.saigonparking.api.grpc.user.UpdateUserLastSignInRequest;
 import com.bht.saigonparking.api.grpc.user.User;
-import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
 import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
 import com.bht.saigonparking.common.exception.InvalidRefreshTokenException;
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.auth.entity.UserTokenEntity;
 import com.bht.saigonparking.service.auth.repository.UserTokenRepository;
+import com.bht.saigonparking.service.auth.service.ConnectionService;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 
+import io.grpc.ManagedChannel;
 import io.grpc.stub.StreamObserver;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 /**
  *
  * @author bht
  */
 @Service
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthServiceImplHelper {
 
+    private final ConnectionService connectionService;
     private final SaigonParkingAuthentication authentication;
     private final UserTokenRepository userTokenRepository;
     private final RabbitTemplate rabbitTemplate;
-    private final UserServiceGrpc.UserServiceStub userServiceStub;
+
+    @Value("${service.user.id}")
+    private String userServiceId;
 
     void updateUserLastSignIn(@NotNull Long userId) {
         rabbitTemplate.convertAndSend(USER_TOPIC_ROUTING_KEY, UpdateUserLastSignInRequest.newBuilder()
@@ -54,7 +59,9 @@ public class AuthServiceImplHelper {
     }
 
     void activateUserWithId(@NotNull Long userId) {
-        userServiceStub.activateUser(Int64Value.of(userId), new StreamObserver<Empty>() {
+        ManagedChannel channel = connectionService.createChannelOfService(userServiceId);
+
+        connectionService.getUserServiceStub(channel).activateUser(Int64Value.of(userId), new StreamObserver<Empty>() {
             @Override
             public void onNext(Empty empty) {
                 LoggingUtil.log(Level.INFO, "SERVICE", "Success",
@@ -71,6 +78,8 @@ public class AuthServiceImplHelper {
                 // finish request
             }
         });
+
+        channel.shutdown();
     }
 
     void sendMail(@NotNull MailRequestType type,

@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
+import javax.naming.ServiceUnavailableException;
 import javax.persistence.EntityNotFoundException;
 
 import org.apache.logging.log4j.Level;
@@ -102,6 +103,7 @@ public final class AuthServiceInterceptor implements ServerInterceptor {
                 .put(UsernameNotMatchException.class, "SPE#00014")
                 .put(PermissionDeniedException.class, "SPE#00015")
                 .put(ObjectOptimisticLockingFailureException.class, "SPE#00016")
+                .put(ServiceUnavailableException.class, "SPE#00017")
                 .build();
     }
 

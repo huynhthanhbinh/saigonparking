@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.util.Pair;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
@@ -19,18 +20,19 @@ import com.bht.saigonparking.api.grpc.auth.RegisterRequest;
 import com.bht.saigonparking.api.grpc.user.Customer;
 import com.bht.saigonparking.api.grpc.user.User;
 import com.bht.saigonparking.api.grpc.user.UserRole;
-import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
 import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
 import com.bht.saigonparking.common.exception.UserAlreadyActivatedException;
 import com.bht.saigonparking.common.exception.UserNotActivatedException;
 import com.bht.saigonparking.common.exception.WrongPasswordException;
 import com.bht.saigonparking.common.exception.WrongUserRoleException;
 import com.bht.saigonparking.service.auth.service.AuthService;
+import com.bht.saigonparking.service.auth.service.ConnectionService;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
 
 import io.grpc.Context;
-import lombok.AllArgsConstructor;
+import io.grpc.ManagedChannel;
+import lombok.RequiredArgsConstructor;
 
 /**
  *
@@ -38,19 +40,25 @@ import lombok.AllArgsConstructor;
  */
 @Service
 @Transactional
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthServiceImpl implements AuthService {
 
+    private final ConnectionService connectionService;
     private final SaigonParkingAuthentication authentication;
     private final AuthServiceImplHelper authServiceImplHelper;
-    private final UserServiceGrpc.UserServiceBlockingStub userServiceBlockingStub;
+
+    @Value("${service.user.id}")
+    private String userServiceId;
 
     @Override
     public Pair<String, String> validateLogin(@NotEmpty String username,
                                               @NotEmpty String password,
                                               @NotNull UserRole userRole) {
 
-        User user = userServiceBlockingStub.getUserByUsername(StringValue.of(username));
+        ManagedChannel channel = connectionService.createChannelOfService(userServiceId);
+        User user = connectionService.getUserServiceBlockingStub(channel).getUserByUsername(StringValue.of(username));
+        channel.shutdown();
+
         if (user.getRole().equals(userRole)) {
             if (Boolean.TRUE.equals(user.getIsActivated())) {
                 if (BCrypt.checkpw(password, user.getPassword())) {
@@ -78,19 +86,25 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String registerUser(@NotNull RegisterRequest request) {
+
+        ManagedChannel channel = connectionService.createChannelOfService(userServiceId);
+
         UserRole userRole = UserRole.CUSTOMER;
-        Long userId = userServiceBlockingStub.createCustomer(Customer.newBuilder()
-                .setUserInfo(User.newBuilder()
-                        .setUsername(request.getUsername())
-                        .setPassword(request.getPassword())
-                        .setEmail(request.getEmail())
-                        .setRole(userRole)
+        Long userId = connectionService.getUserServiceBlockingStub(channel)
+                .createCustomer(Customer.newBuilder()
+                        .setUserInfo(User.newBuilder()
+                                .setUsername(request.getUsername())
+                                .setPassword(request.getPassword())
+                                .setEmail(request.getEmail())
+                                .setRole(userRole)
+                                .build())
+                        .setFirstName(request.getFirstName())
+                        .setLastName(request.getLastName())
+                        .setPhone(request.getPhone())
                         .build())
-                .setFirstName(request.getFirstName())
-                .setLastName(request.getLastName())
-                .setPhone(request.getPhone())
-                .build())
                 .getValue();
+
+        channel.shutdown();
 
         String activateAccountToken = authentication.generateActivateAccountToken(userId, userRole.toString()).getSecond();
         authServiceImplHelper.sendMail(ACTIVATE_ACCOUNT, request.getEmail(), request.getUsername(), activateAccountToken);
@@ -100,7 +114,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String sendResetPasswordEmail(@NotEmpty String username) {
-        User user = userServiceBlockingStub.getUserByUsername(StringValue.of(username));
+
+        ManagedChannel channel = connectionService.createChannelOfService(userServiceId);
+
+        User user = connectionService.getUserServiceBlockingStub(channel).getUserByUsername(StringValue.of(username));
+        channel.shutdown();
 
         /* Only send reset password email if user is already activated !!! */
         if (!user.getIsActivated()) {
@@ -115,7 +133,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String sendActivateAccountEmail(@NotEmpty String username) {
-        User user = userServiceBlockingStub.getUserByUsername(StringValue.of(username));
+
+        ManagedChannel channel = connectionService.createChannelOfService(userServiceId);
+
+        User user = connectionService.getUserServiceBlockingStub(channel).getUserByUsername(StringValue.of(username));
+        channel.shutdown();
 
         /* Only send activate email if user is not activated yet !!! */
         if (user.getIsActivated()) {
@@ -134,7 +156,15 @@ public class AuthServiceImpl implements AuthService {
                                                            @NotEmpty String currentTokenId,
                                                            boolean currentIsRefreshToken) {
 
-        User user = userServiceBlockingStub.getUserById(Int64Value.of(userId));
+        ManagedChannel channel = connectionService.createChannelOfService(userServiceId);
+
+        User user = connectionService.getUserServiceBlockingStub(channel).getUserById(Int64Value.of(userId));
+        channel.shutdown();
+
+        /* Only generateNewToken if user is already activated !!! */
+        if (!user.getIsActivated()) {
+            throw new UserNotActivatedException();
+        }
 
         return authServiceImplHelper.generateNewToken(user, currentExp, currentTokenId, currentIsRefreshToken);
     }
@@ -145,7 +175,15 @@ public class AuthServiceImpl implements AuthService {
                                                              @NotEmpty String currentTokenId,
                                                              boolean currentIsRefreshToken) {
 
-        User user = userServiceBlockingStub.getUserById(Int64Value.of(userId));
+        ManagedChannel channel = connectionService.createChannelOfService(userServiceId);
+
+        User user = connectionService.getUserServiceBlockingStub(channel).getUserById(Int64Value.of(userId));
+        channel.shutdown();
+
+        /* Only activate if user is not activated yet !!! */
+        if (user.getIsActivated()) {
+            throw new UserAlreadyActivatedException();
+        }
 
         /* Asynchronously activate user */
         Context context = Context.current().fork();

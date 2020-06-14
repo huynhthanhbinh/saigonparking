@@ -1,5 +1,6 @@
 package com.bht.saigonparking.service.parkinglot.configuration;
 
+import javax.naming.ServiceUnavailableException;
 import javax.persistence.EntityNotFoundException;
 
 import org.lognet.springboot.grpc.GRpcGlobalInterceptor;
@@ -26,7 +27,7 @@ import com.google.common.collect.ImmutableMap;
  */
 @Configuration
 @EnableTransactionManagement
-@Import({AwsConfiguration.class, ChannelConfiguration.class})
+@Import(AwsConfiguration.class)
 @ComponentScan(basePackages = AppConfiguration.BASE_PACKAGE,
         includeFilters = @ComponentScan.Filter(InheritedComponent.class))
 public class AppConfiguration {
@@ -61,6 +62,7 @@ public class AppConfiguration {
                 .put(DataIntegrityViolationException.class, "SPE#00009")
                 .put(PermissionDeniedException.class, "SPE#00015")
                 .put(ObjectOptimisticLockingFailureException.class, "SPE#00016")
+                .put(ServiceUnavailableException.class, "SPE#00017")
                 .build());
     }
 }

@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Sun, Jun 14th, 2020
+Last updated:       Mon, Jun 15th, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -203,3 +203,9 @@ Last updated:       Sun, Jun 14th, 2020
 
 68. Service Discovery in Microservice
         https://medium.com/@jamesemyn/service-discovery-in-microsrvice-cbd54afb94f3
+
+69. Consul dns round robin and ping - CANNOT
+        https://stackoverflow.com/questions/47794649/consul-dns-round-robin-and-ping
+
+70. Omitting one Setter/Getter in Lombok
+        https://stackoverflow.com/questions/7994119/omitting-one-setter-getter-in-lombok
