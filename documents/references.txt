@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Fri, Jun 12th, 2020
+Last updated:       Sun, Jun 14th, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -179,3 +179,21 @@ Last updated:       Fri, Jun 12th, 2020
 
 60. Remove “Using default security password” on Spring Boot
         https://stackoverflow.com/questions/30761253/remove-using-default-security-password-on-spring-boot
+
+61. Spring Boot without the web server
+        https://stackoverflow.com/questions/26105061/spring-boot-without-the-web-server
+
+62. Set specific IP addresses to docker containers created with docker-compose (static IPv4)
+        https://blog.alejandrocelaya.com/2017/04/21/set-specific-ip-addresses-to-docker-containers-created-with-docker-compose/
+
+63. Setting the default active profile in Spring-boot
+        https://stackoverflow.com/questions/37700352/setting-the-default-active-profile-in-spring-boot
+
+64. Consul DNS Interface
+        https://www.consul.io/docs/agent/dns.html
+
+65. Running the official consul docker image
+        https://stackoverflow.com/questions/38466587/running-the-official-consul-docker-image
+
+66. How to Configure Consul in a Production Environment on Ubuntu 14.04
+        https://www.digitalocean.com/community/tutorials/how-to-configure-consul-in-a-production-environment-on-ubuntu-14-04
