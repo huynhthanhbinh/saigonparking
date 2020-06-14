@@ -3,7 +3,6 @@ services:
   - name: mail-service
     protocol: grpc
     host: grpc-saigon-parking-mail-service.service.saigonparking-dc.consul
-    port: 6666
     plugins:
       - name: rate-limiting
         config:
@@ -58,7 +57,6 @@ services:
   - name: auth-service
     protocol: grpc
     host: grpc-saigon-parking-auth-service.service.saigonparking-dc.consul
-    port: 7777
     plugins:
       - name: rate-limiting
         config:
@@ -113,7 +111,6 @@ services:
   - name: user-service
     protocol: grpc
     host: grpc-saigon-parking-user-service.service.saigonparking-dc.consul
-    port: 8888
     plugins:
       - name: rate-limiting
         config:
@@ -168,7 +165,6 @@ services:
   - name: parkinglot-service
     protocol: grpc
     host: grpc-saigon-parking-parkinglot-service.service.saigonparking-dc.consul
-    port: 9999
     plugins:
       - name: rate-limiting
         config:
