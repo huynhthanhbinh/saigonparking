@@ -197,3 +197,9 @@ Last updated:       Sun, Jun 14th, 2020
 
 66. How to Configure Consul in a Production Environment on Ubuntu 14.04
         https://www.digitalocean.com/community/tutorials/how-to-configure-consul-in-a-production-environment-on-ubuntu-14-04
+
+67. 10 Antipatterns các lập trình viên cần phải tránh
+        https://viblo.asia/p/10-antipatterns-cac-lap-trinh-vien-can-phai-tranh-1Je5EdOGlnL
+
+68. Service Discovery in Microservice
+        https://medium.com/@jamesemyn/service-discovery-in-microsrvice-cbd54afb94f3

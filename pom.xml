@@ -15,11 +15,9 @@
         <module>gateway</module>
         <module>queue</module>
         <module>discovery</module>
-
         <module>api</module>
         <module>common</module>
         <module>service</module>
-
         <module>emulator</module>
     </modules>
 

@@ -7,14 +7,13 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import com.bht.saigonparking.api.grpc.auth.AuthServiceGrpc;
-import com.bht.saigonparking.api.grpc.auth.ValidateRequest;
 import com.bht.saigonparking.api.grpc.auth.ValidateResponse;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotInformation;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
 import com.bht.saigonparking.api.grpc.user.Customer;
-import com.bht.saigonparking.api.grpc.user.UserRole;
 import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
 import com.bht.saigonparking.emulator.configuration.SpringApplicationContext;
+import com.google.protobuf.Int64Value;
 
 import io.grpc.StatusRuntimeException;
 import lombok.extern.log4j.Log4j2;
@@ -60,19 +59,21 @@ public class Emulator extends SpringBootServletInitializer {
 //                    .setPageNumber(1)
 //                    .build()));
 
-            log.info("Start calling API");
-            validateResponse = authServiceBlockingStub.validateUser(ValidateRequest.newBuilder()
-                    .setUsername("htbinh")
-                    .setPassword("htbinh789")
-                    .setRole(UserRole.CUSTOMER)
-                    .build());
-            log.info("End calling API");
-            log.info("\n" + validateResponse);
-
 //            log.info("Start calling API");
-//            parkingLotInformation = parkingLotServiceBlockingStub.getParkingLotById(Int64Value.of(1)).getInformation();
+//            validateResponse = authServiceBlockingStub.validateUser(ValidateRequest.newBuilder()
+//                    .setUsername("htbinh")
+//                    .setPassword("htbinh789")
+//                    .setRole(UserRole.CUSTOMER)
+//                    .build());
 //            log.info("End calling API");
-//            log.info("\n" + parkingLotInformation);
+//            log.info("\n" + validateResponse);
+
+            for (int i = 0; i < 30; i++) {
+                log.info("Start calling API");
+                parkingLotInformation = parkingLotServiceBlockingStub.getParkingLotById(Int64Value.of(1)).getInformation();
+                log.info("End calling API");
+                log.info("\n" + parkingLotInformation);
+            }
 
 //            log.info("Start calling API");
 //            customer = userServiceBlockingStub.getCustomerById(Int64Value.of(4));

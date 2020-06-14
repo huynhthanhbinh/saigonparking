@@ -25,17 +25,7 @@
     <dependencies>
         <dependency>
             <groupId>com.bht.saigonparking</groupId>
-            <artifactId>auth-api</artifactId>
-            <version>${revision}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.bht.saigonparking</groupId>
-            <artifactId>user-api</artifactId>
-            <version>${revision}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.bht.saigonparking</groupId>
-            <artifactId>parkinglot-api</artifactId>
+            <artifactId>official-api</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>
