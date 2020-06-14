@@ -3,12 +3,16 @@ version: '3'
 networks:
   saigonparking:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
 
 services:
   proxy:
     image: ${DOCKER_HUB_ID}/proxy:${PROXY_VERSION}
     networks:
-      - saigonparking
+      saigonparking:
+        ipv4_address: 172.28.1.1
     environment:
       TZ: ${TIMEZONE}
     ports:
@@ -19,9 +23,11 @@ services:
   gateway:
     image: ${DOCKER_HUB_ID}/gateway:${GATEWAY_VERSION}
     networks:
-      - saigonparking
+      saigonparking:
+        ipv4_address: 172.28.1.2
     environment:
       TZ:                       ${TIMEZONE}
+      KONG_DNS_RESOLVER:        ${KONG_DNS_RESOLVER}
       KONG_LOG_LEVEL:           ${KONG_LOG_LEVEL}
       KONG_DATABASE:            ${KONG_DATABASE}
       KONG_SSL_CERT:            ${KONG_SSL_CERT_PATH}
@@ -48,7 +54,8 @@ services:
   #  gateway-grpc:
   #    image: ${DOCKER_HUB_ID}/gateway:${GATEWAY_VERSION}
   #    networks:
-  #      - saigonparking
+  #      saigonparking
+  #        ipv4_address: 172.28.1.3
   #    environment:
   #      TZ:                       ${TIMEZONE}
   #      KONG_LOG_LEVEL:           ${KONG_LOG_LEVEL}
@@ -75,7 +82,8 @@ services:
   #  gateway-http:
   #    image: ${DOCKER_HUB_ID}/gateway:${GATEWAY_VERSION}
   #    networks:
-  #      - saigonparking
+  #      saigonparking
+  #        ipv4_address: 172.28.1.4
   #    environment:
   #      TZ:                       ${TIMEZONE}
   #      KONG_LOG_LEVEL:           ${KONG_LOG_LEVEL}
@@ -102,7 +110,8 @@ services:
   service-discovery:
     image: ${DOCKER_HUB_ID}/discovery:${SERVICE_DISCOVERY_VERSION}
     networks:
-      - saigonparking
+      saigonparking:
+        ipv4_address: 172.28.1.5
     environment:
       TZ: ${TIMEZONE}
     ports:
@@ -115,7 +124,8 @@ services:
   message-queue:
     image: ${DOCKER_HUB_ID}/queue:${MESSAGE_QUEUE_VERSION}
     networks:
-      - saigonparking
+      saigonparking:
+        ipv4_address: 172.28.1.6
     environment:
       TZ: ${TIMEZONE}
       RABBITMQ_CONFIG_FILE:                 ${RABBITMQ_CONFIG_FILE}
@@ -130,51 +140,71 @@ services:
   mail-service:
     image: ${DOCKER_HUB_ID}/mail-service:${MAIL_SERVICE_VERSION}
     networks:
-      - saigonparking
+      saigonparking:
+        ipv4_address: 172.28.1.7
     environment:
-      TZ: ${TIMEZONE}
+      TZ:           ${TIMEZONE}
+      SERVICE_HOST: ${MAIL_SERVICE_HOST}
     ports:
-      - #"${MAIL_SERVICE_HTTP_PORT}:${MAIL_SERVICE_HTTP_PORT}"
+      - "${MAIL_SERVICE_HTTP_PORT}:${MAIL_SERVICE_HTTP_PORT}"
       - "${MAIL_SERVICE_GRPC_PORT}:${MAIL_SERVICE_GRPC_PORT}"
     depends_on:
+      - message-queue
+      - service-discovery
+    links:
       - message-queue
       - service-discovery
 
   auth-service:
     image: ${DOCKER_HUB_ID}/auth-service:${AUTH_SERVICE_VERSION}
     networks:
-      - saigonparking
+      saigonparking:
+        ipv4_address: 172.28.1.8
     environment:
-      TZ: ${TIMEZONE}
+      TZ:           ${TIMEZONE}
+      SERVICE_HOST: ${AUTH_SERVICE_HOST}
     ports:
-      - #"${AUTH_SERVICE_HTTP_PORT}:${AUTH_SERVICE_HTTP_PORT}"
+      - "${AUTH_SERVICE_HTTP_PORT}:${AUTH_SERVICE_HTTP_PORT}"
       - "${AUTH_SERVICE_GRPC_PORT}:${AUTH_SERVICE_GRPC_PORT}"
     depends_on:
+      - message-queue
+      - service-discovery
+    links:
       - message-queue
       - service-discovery
 
   user-service:
     image: ${DOCKER_HUB_ID}/user-service:${USER_SERVICE_VERSION}
     networks:
-      - saigonparking
+      saigonparking:
+        ipv4_address: 172.28.1.9
     environment:
-      TZ: ${TIMEZONE}
+      TZ:           ${TIMEZONE}
+      SERVICE_HOST: ${USER_SERVICE_HOST}
     ports:
-      - #"${USER_SERVICE_HTTP_PORT}:${USER_SERVICE_HTTP_PORT}"
+      - "${USER_SERVICE_HTTP_PORT}:${USER_SERVICE_HTTP_PORT}"
       - "${USER_SERVICE_GRPC_PORT}:${USER_SERVICE_GRPC_PORT}"
     depends_on:
+      - message-queue
+      - service-discovery
+    links:
       - message-queue
       - service-discovery
 
   parkinglot-service:
     image: ${DOCKER_HUB_ID}/parkinglot-service:${PARKING_LOT_SERVICE_VERSION}
     networks:
-      - saigonparking
+      saigonparking:
+        ipv4_address: 172.28.1.10
     environment:
-      TZ: ${TIMEZONE}
+      TZ:           ${TIMEZONE}
+      SERVICE_HOST: ${PARKING_LOT_SERVICE_HOST}
     ports:
-      - #"${PARKING_LOT_SERVICE_HTTP_PORT}:${PARKING_LOT_SERVICE_HTTP_PORT}"
+      - "${PARKING_LOT_SERVICE_HTTP_PORT}:${PARKING_LOT_SERVICE_HTTP_PORT}"
       - "${PARKING_LOT_SERVICE_GRPC_PORT}:${PARKING_LOT_SERVICE_GRPC_PORT}"
     depends_on:
+      - message-queue
+      - service-discovery
+    links:
       - message-queue
       - service-discovery

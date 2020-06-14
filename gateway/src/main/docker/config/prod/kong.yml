@@ -2,7 +2,7 @@ _format_version: "1.1"
 services:
   - name: mail-service
     protocol: grpc
-    host: saigonparkingservice
+    host: grpc-saigon-parking-mail-service.service.dc1.consul
     port: 6666
     routes:
       - name: mail-grpc
@@ -18,7 +18,7 @@ services:
 
   - name: auth-service
     protocol: grpc
-    host: saigonparkingservice
+    host: grpc-saigon-parking-auth-service.service.dc1.consul
     port: 7777
     routes:
       - name: auth-grpc
@@ -34,7 +34,7 @@ services:
 
   - name: user-service
     protocol: grpc
-    host: saigonparkingservice
+    host: grpc-saigon-parking-user-service.service.dc1.consul
     port: 8888
     routes:
       - name: user-grpc
@@ -50,7 +50,7 @@ services:
 
   - name: parkinglot-service
     protocol: grpc
-    host: saigonparkingservice
+    host: grpc-saigon-parking-parkinglot-service.service.dc1.consul
     port: 9999
     routes:
       - name: parkinglot-grpc

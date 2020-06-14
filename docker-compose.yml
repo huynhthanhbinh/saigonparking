@@ -1,10 +1,12 @@
 version: '3'
 
 networks:
+
   saigonparking-service:
     driver: bridge
 
 services:
+
   service-discovery:
     image: ${DOCKER_HUB_ID}/discovery:${SERVICE_DISCOVERY_VERSION}
     networks:
@@ -33,11 +35,15 @@ services:
     networks:
       - saigonparking-service
     environment:
-      TZ: ${TIMEZONE}
+      TZ:           ${TIMEZONE}
+      SERVICE_HOST: ${MAIL_SERVICE_HOST}
     ports:
       #- "${MAIL_SERVICE_HTTP_PORT}:${MAIL_SERVICE_HTTP_PORT}"
       - "${MAIL_SERVICE_GRPC_PORT}:${MAIL_SERVICE_GRPC_PORT}"
     depends_on:
+      - message-queue
+      - service-discovery
+    links:
       - message-queue
       - service-discovery
 
@@ -46,11 +52,15 @@ services:
     networks:
       - saigonparking-service
     environment:
-      TZ: ${TIMEZONE}
+      TZ:           ${TIMEZONE}
+      SERVICE_HOST: ${AUTH_SERVICE_HOST}
     ports:
       #- "${AUTH_SERVICE_HTTP_PORT}:${AUTH_SERVICE_HTTP_PORT}"
       - "${AUTH_SERVICE_GRPC_PORT}:${AUTH_SERVICE_GRPC_PORT}"
     depends_on:
+      - message-queue
+      - service-discovery
+    links:
       - message-queue
       - service-discovery
 
@@ -59,11 +69,15 @@ services:
     networks:
       - saigonparking-service
     environment:
-      TZ: ${TIMEZONE}
+      TZ:           ${TIMEZONE}
+      SERVICE_HOST: ${USER_SERVICE_HOST}
     ports:
       #- "${USER_SERVICE_HTTP_PORT}:${USER_SERVICE_HTTP_PORT}"
       - "${USER_SERVICE_GRPC_PORT}:${USER_SERVICE_GRPC_PORT}"
     depends_on:
+      - message-queue
+      - service-discovery
+    links:
       - message-queue
       - service-discovery
 
@@ -72,10 +86,14 @@ services:
     networks:
       - saigonparking-service
     environment:
-      TZ: ${TIMEZONE}
+      TZ:           ${TIMEZONE}
+      SERVICE_HOST: ${PARKING_LOT_SERVICE_HOST}
     ports:
       #- "${PARKING_LOT_SERVICE_HTTP_PORT}:${PARKING_LOT_SERVICE_HTTP_PORT}"
       - "${PARKING_LOT_SERVICE_GRPC_PORT}:${PARKING_LOT_SERVICE_GRPC_PORT}"
     depends_on:
+      - message-queue
+      - service-discovery
+    links:
       - message-queue
       - service-discovery

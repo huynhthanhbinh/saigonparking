@@ -32,6 +32,7 @@ services:
       - saigonparking-gateway
     environment:
       TZ:                       ${TIMEZONE}
+      KONG_DNS_RESOLVER:        ${KONG_DNS_RESOLVER}
       KONG_LOG_LEVEL:           ${KONG_LOG_LEVEL}
       KONG_DATABASE:            ${KONG_DATABASE}
       KONG_SSL_CERT:            ${KONG_SSL_CERT_PATH}
