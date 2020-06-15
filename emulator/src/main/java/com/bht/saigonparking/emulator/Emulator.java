@@ -60,16 +60,16 @@ public class Emulator extends SpringBootServletInitializer {
 //                    .setPageNumber(1)
 //                    .build()));
             for (int i = 0; i < 30; i++) {
-                log.info("Start calling API");
+//                log.info("Start calling API");
                 validateResponse = authServiceBlockingStub.validateUser(ValidateRequest.newBuilder()
                         .setUsername("htbinh")
                         .setPassword("htbinh789")
                         .setRole(UserRole.CUSTOMER)
                         .build());
                 log.info("End calling API");
-                log.info("\n" + validateResponse);
+//                log.info("\n" + validateResponse);
             }
-            
+
 //            log.info("Start calling API");
 //            parkingLotInformation = parkingLotServiceBlockingStub.getParkingLotById(Int64Value.of(1)).getInformation();
 //            log.info("End calling API");

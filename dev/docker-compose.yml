@@ -147,8 +147,8 @@ services:
       SERVICE_ID:   ${MAIL_SERVICE_ID}
       SERVICE_HOST: ${MAIL_SERVICE_HOST}
       SERVICE_PORT: ${MAIL_SERVICE_PORT}
-    #    ports:
-    #      - "${MAIL_SERVICE_PORT}:${MAIL_SERVICE_PORT}"
+      GATEWAY_HOST: ${GATEWAY_HOST}
+      GATEWAY_PORT: ${GATEWAY_PORT}
     depends_on:
       - message-queue
       - service-discovery
@@ -166,8 +166,8 @@ services:
       SERVICE_ID:   ${AUTH_SERVICE_ID}
       SERVICE_HOST: ${AUTH_SERVICE_HOST}
       SERVICE_PORT: ${AUTH_SERVICE_PORT}
-    #    ports:
-    #      - "${AUTH_SERVICE_PORT}:${AUTH_SERVICE_PORT}"
+      GATEWAY_HOST: ${GATEWAY_HOST}
+      GATEWAY_PORT: ${GATEWAY_PORT}
     depends_on:
       - message-queue
       - service-discovery
@@ -175,7 +175,7 @@ services:
       - message-queue
       - service-discovery
 
-  user-service-1:
+  user-service:
     image: ${DOCKER_HUB_ID}/user-service:${USER_SERVICE_VERSION}
     networks:
       saigonparking:
@@ -185,8 +185,8 @@ services:
       SERVICE_ID:   ${USER_SERVICE_ID}
       SERVICE_HOST: ${USER_SERVICE_HOST}
       SERVICE_PORT: ${USER_SERVICE_PORT}
-    #    ports:
-    #      - "${USER_SERVICE_PORT}:${USER_SERVICE_PORT}"
+      GATEWAY_HOST: ${GATEWAY_HOST}
+      GATEWAY_PORT: ${GATEWAY_PORT}
     depends_on:
       - message-queue
       - service-discovery
@@ -194,56 +194,18 @@ services:
       - message-queue
       - service-discovery
 
-  parkinglot-service-1:
+  parkinglot-service:
     image: ${DOCKER_HUB_ID}/parkinglot-service:${PARKING_LOT_SERVICE_VERSION}
     networks:
       saigonparking:
         ipv4_address: 172.28.1.10
     environment:
       TZ:           ${TIMEZONE}
-      SERVICE_ID:   ${PARKING_LOT_SERVICE_1_ID}
-      SERVICE_HOST: ${PARKING_LOT_SERVICE_1_HOST}
-      SERVICE_PORT: ${PARKING_LOT_SERVICE_1_PORT}
-    #ports:
-    #  - "${PARKING_LOT_SERVICE_1_PORT}:${PARKING_LOT_SERVICE_1_PORT}"
-    depends_on:
-      - message-queue
-      - service-discovery
-    links:
-      - message-queue
-      - service-discovery
-
-  parkinglot-service-2:
-    image: ${DOCKER_HUB_ID}/parkinglot-service:${PARKING_LOT_SERVICE_VERSION}
-    networks:
-      saigonparking:
-        ipv4_address: 172.28.1.11
-    environment:
-      TZ:           ${TIMEZONE}
-      SERVICE_ID:   ${PARKING_LOT_SERVICE_2_ID}
-      SERVICE_HOST: ${PARKING_LOT_SERVICE_2_HOST}
-      SERVICE_PORT: ${PARKING_LOT_SERVICE_2_PORT}
-    #ports:
-    #  - "${PARKING_LOT_SERVICE_2_PORT}:${PARKING_LOT_SERVICE_2_PORT}"
-    depends_on:
-      - message-queue
-      - service-discovery
-    links:
-      - message-queue
-      - service-discovery
-
-  parkinglot-service-3:
-    image: ${DOCKER_HUB_ID}/parkinglot-service:${PARKING_LOT_SERVICE_VERSION}
-    networks:
-      saigonparking:
-        ipv4_address: 172.28.1.12
-    environment:
-      TZ:           ${TIMEZONE}
-      SERVICE_ID:   ${PARKING_LOT_SERVICE_3_ID}
-      SERVICE_HOST: ${PARKING_LOT_SERVICE_3_HOST}
-      SERVICE_PORT: ${PARKING_LOT_SERVICE_3_PORT}
-    #ports:
-    #  - "${PARKING_LOT_SERVICE_3_PORT}:${PARKING_LOT_SERVICE_3_PORT}"
+      SERVICE_ID:   ${PARKING_LOT_SERVICE_ID}
+      SERVICE_HOST: ${PARKING_LOT_SERVICE_HOST}
+      SERVICE_PORT: ${PARKING_LOT_SERVICE_PORT}
+      GATEWAY_HOST: ${GATEWAY_HOST}
+      GATEWAY_PORT: ${GATEWAY_PORT}
     depends_on:
       - message-queue
       - service-discovery

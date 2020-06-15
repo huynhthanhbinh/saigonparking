@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Mon, Jun 15th, 2020
+Last updated:       Tue, Jun 16th, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -209,3 +209,9 @@ Last updated:       Mon, Jun 15th, 2020
 
 70. Omitting one Setter/Getter in Lombok
         https://stackoverflow.com/questions/7994119/omitting-one-setter-getter-in-lombok
+
+71. Service Mesh VS API Gateway VS Message Queue - when to use what?
+        https://arcentry.com/blog/api-gateway-vs-service-mesh-vs-message-queue/
+
+72. Microservices internal communication through API Gateway
+        https://stackoverflow.com/questions/53545963/internal-communication-microservices-through-api-gateway
