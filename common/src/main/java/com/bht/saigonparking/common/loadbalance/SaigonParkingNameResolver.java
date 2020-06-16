@@ -51,7 +51,7 @@ public final class SaigonParkingNameResolver extends NameResolver {
     }
 
     @Override
-    public void start(Listener listener) {
+    public void start(Listener2 listener) {
         this.listener = listener;
         loadServiceInstances();
     }

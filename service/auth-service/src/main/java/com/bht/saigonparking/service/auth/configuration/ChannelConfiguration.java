@@ -14,7 +14,7 @@ import com.bht.saigonparking.common.interceptor.SaigonParkingClientInterceptor;
 import com.bht.saigonparking.common.loadbalance.SaigonParkingNameResolverProvider;
 
 import io.grpc.ManagedChannel;
-import io.grpc.netty.NettyChannelBuilder;
+import io.grpc.ManagedChannelBuilder;
 import lombok.AllArgsConstructor;
 
 /**
@@ -51,8 +51,8 @@ public final class ChannelConfiguration {
                                          @Value("${connection.max-inbound-metadata-size}") int maxInBoundMetadataSize,
                                          @Value("${connection.load-balancing-policy}") String loadBalancingPolicy,
                                          @Qualifier("userResolver") SaigonParkingNameResolverProvider nameResolverProvider) {
-        return NettyChannelBuilder
-                .forAddress(host, port)                                         // build channel to server with server's address
+        return ManagedChannelBuilder
+                .forTarget("consul://" + host + ":" + port)                     // build channel to server with server's address
                 .keepAliveWithoutCalls(false)                                   // Close channel when client has already received response
                 .idleTimeout(timeout, TimeUnit.MILLISECONDS)                    // 10000 milliseconds / 1000 = 10 seconds --> request time-out
                 .maxInboundMetadataSize(maxInBoundMetadataSize * 1024 * 1024)   // 2KB * 1024 = 2MB --> max message header size
