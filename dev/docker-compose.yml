@@ -147,8 +147,6 @@ services:
       SERVICE_ID:   ${MAIL_SERVICE_ID}
       SERVICE_HOST: ${MAIL_SERVICE_HOST}
       SERVICE_PORT: ${MAIL_SERVICE_PORT}
-      GATEWAY_HOST: ${GATEWAY_HOST}
-      GATEWAY_PORT: ${GATEWAY_PORT}
     depends_on:
       - message-queue
       - service-discovery
@@ -166,8 +164,6 @@ services:
       SERVICE_ID:   ${AUTH_SERVICE_ID}
       SERVICE_HOST: ${AUTH_SERVICE_HOST}
       SERVICE_PORT: ${AUTH_SERVICE_PORT}
-      GATEWAY_HOST: ${GATEWAY_HOST}
-      GATEWAY_PORT: ${GATEWAY_PORT}
     depends_on:
       - message-queue
       - service-discovery
@@ -185,8 +181,6 @@ services:
       SERVICE_ID:   ${USER_SERVICE_ID}
       SERVICE_HOST: ${USER_SERVICE_HOST}
       SERVICE_PORT: ${USER_SERVICE_PORT}
-      GATEWAY_HOST: ${GATEWAY_HOST}
-      GATEWAY_PORT: ${GATEWAY_PORT}
     depends_on:
       - message-queue
       - service-discovery
@@ -204,8 +198,6 @@ services:
       SERVICE_ID:   ${PARKING_LOT_SERVICE_ID}
       SERVICE_HOST: ${PARKING_LOT_SERVICE_HOST}
       SERVICE_PORT: ${PARKING_LOT_SERVICE_PORT}
-      GATEWAY_HOST: ${GATEWAY_HOST}
-      GATEWAY_PORT: ${GATEWAY_PORT}
     depends_on:
       - message-queue
       - service-discovery
