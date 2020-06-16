@@ -215,3 +215,6 @@ Last updated:       Tue, Jun 16th, 2020
 
 72. Microservices internal communication through API Gateway
         https://stackoverflow.com/questions/53545963/internal-communication-microservices-through-api-gateway
+
+73. HowTo: gRPC Java Client Side Load Balancing using Consul
+        https://medium.com/@mykidong/howto-grpc-java-client-side-load-balancing-using-consul-8f729668d3f8
