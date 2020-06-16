@@ -16,7 +16,6 @@ public final class SaigonParkingNameResolverProvider extends NameResolverProvide
 
     private final String serviceId;
     private final DiscoveryClient discoveryClient;
-    private final int pauseInSeconds;
 
     @Override
     protected boolean isAvailable() {
@@ -35,6 +34,6 @@ public final class SaigonParkingNameResolverProvider extends NameResolverProvide
 
     @Override
     public NameResolver newNameResolver(URI targetUri, NameResolver.Args args) {
-        return new SaigonParkingNameResolver(discoveryClient, targetUri, serviceId, pauseInSeconds);
+        return new SaigonParkingNameResolver(discoveryClient, targetUri, serviceId);
     }
 }

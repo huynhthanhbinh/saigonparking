@@ -33,16 +33,10 @@ public final class SaigonParkingNameResolver extends NameResolver {
 
     public SaigonParkingNameResolver(DiscoveryClient discoveryClient,
                                      URI consulURI,
-                                     String serviceId,
-                                     int pauseInSeconds) {
-
+                                     String serviceId) {
         this.consulURI = consulURI;
         this.serviceId = serviceId;
         this.discoveryClient = discoveryClient;
-
-        /* run connection check timer */
-        ConnectionCheckTimer connectionCheckTimer = new ConnectionCheckTimer(this, pauseInSeconds);
-        connectionCheckTimer.runTimer();
     }
 
     @Override
@@ -61,7 +55,7 @@ public final class SaigonParkingNameResolver extends NameResolver {
         // implement shutdown...
     }
 
-    void loadServiceInstances() {
+    private void loadServiceInstances() {
 
         List<EquivalentAddressGroup> addressList = new ArrayList<>();
         serviceInstances = discoveryClient.getInstances(serviceId);

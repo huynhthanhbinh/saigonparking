@@ -67,17 +67,35 @@ services:
       - message-queue
       - service-discovery
 
-  user-service:
+  user-service-1:
     image: ${DOCKER_HUB_ID}/user-service:${USER_SERVICE_VERSION}
     networks:
       - saigonparking-service
     environment:
       TZ:           ${TIMEZONE}
-      SERVICE_ID:   ${USER_SERVICE_ID}
-      SERVICE_HOST: ${USER_SERVICE_HOST}
-      SERVICE_PORT: ${USER_SERVICE_PORT}
+      SERVICE_ID:   ${USER_SERVICE_1_ID}
+      SERVICE_HOST: ${USER_SERVICE_1_HOST}
+      SERVICE_PORT: ${USER_SERVICE_1_PORT}
     ports:
-      - "${USER_SERVICE_PORT}:${USER_SERVICE_PORT}"
+      - "${USER_SERVICE_1_PORT}:${USER_SERVICE_1_PORT}"
+    depends_on:
+      - message-queue
+      - service-discovery
+    links:
+      - message-queue
+      - service-discovery
+
+  user-service-2:
+    image: ${DOCKER_HUB_ID}/user-service:${USER_SERVICE_VERSION}
+    networks:
+      - saigonparking-service
+    environment:
+      TZ:           ${TIMEZONE}
+      SERVICE_ID:   ${USER_SERVICE_2_ID}
+      SERVICE_HOST: ${USER_SERVICE_2_HOST}
+      SERVICE_PORT: ${USER_SERVICE_2_PORT}
+    ports:
+      - "${USER_SERVICE_2_PORT}:${USER_SERVICE_2_PORT}"
     depends_on:
       - message-queue
       - service-discovery
@@ -114,24 +132,6 @@ services:
       SERVICE_PORT: ${PARKING_LOT_SERVICE_2_PORT}
     ports:
       - "${PARKING_LOT_SERVICE_2_PORT}:${PARKING_LOT_SERVICE_2_PORT}"
-    depends_on:
-      - message-queue
-      - service-discovery
-    links:
-      - message-queue
-      - service-discovery
-
-  parkinglot-service-3:
-    image: ${DOCKER_HUB_ID}/parkinglot-service:${PARKING_LOT_SERVICE_VERSION}
-    networks:
-      - saigonparking-service
-    environment:
-      TZ:           ${TIMEZONE}
-      SERVICE_ID:   ${PARKING_LOT_SERVICE_3_ID}
-      SERVICE_HOST: ${PARKING_LOT_SERVICE_3_HOST}
-      SERVICE_PORT: ${PARKING_LOT_SERVICE_3_PORT}
-    ports:
-      - "${PARKING_LOT_SERVICE_3_PORT}:${PARKING_LOT_SERVICE_3_PORT}"
     depends_on:
       - message-queue
       - service-discovery

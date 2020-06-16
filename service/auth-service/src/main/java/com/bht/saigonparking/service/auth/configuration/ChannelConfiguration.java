@@ -29,9 +29,8 @@ public final class ChannelConfiguration {
 
     @Bean("userResolver")
     public SaigonParkingNameResolverProvider userServiceNameResolverProvider(@Value("${connection.user-service.id}") String serviceId,
-                                                                             @Value("${connection.refresh-period-in-seconds}") int refreshPeriod,
                                                                              @Autowired DiscoveryClient discoveryClient) {
-        return new SaigonParkingNameResolverProvider(serviceId, discoveryClient, refreshPeriod);
+        return new SaigonParkingNameResolverProvider(serviceId, discoveryClient);
     }
 
 
@@ -51,6 +50,7 @@ public final class ChannelConfiguration {
                                          @Value("${connection.max-inbound-metadata-size}") int maxInBoundMetadataSize,
                                          @Value("${connection.load-balancing-policy}") String loadBalancingPolicy,
                                          @Qualifier("userResolver") SaigonParkingNameResolverProvider nameResolverProvider) {
+
         return ManagedChannelBuilder
                 .forTarget("consul://" + host + ":" + port)                     // build channel to server with server's address
                 .keepAliveWithoutCalls(false)                                   // Close channel when client has already received response
