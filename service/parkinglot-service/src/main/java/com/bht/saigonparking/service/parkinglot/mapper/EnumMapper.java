@@ -3,6 +3,8 @@ package com.bht.saigonparking.service.parkinglot.mapper;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.EntityNotFoundException;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.mapstruct.Mapper;
@@ -14,6 +16,10 @@ import org.springframework.stereotype.Component;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
 import com.bht.saigonparking.common.base.BaseBean;
 import com.bht.saigonparking.service.parkinglot.configuration.AppConfiguration;
+import com.bht.saigonparking.service.parkinglot.entity.ParkingLotTypeEntity;
+import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotTypeRepository;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 import lombok.Setter;
 
@@ -42,23 +48,45 @@ import lombok.Setter;
         nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
 public abstract class EnumMapper implements BaseBean {
 
+    private ParkingLotTypeRepository parkingLotTypeRepository;
+    private static final BiMap<ParkingLotTypeEntity, ParkingLotType> PARKING_LOT_TYPE_BI_MAP = HashBiMap.create();
     private static final Map<Long, ParkingLotType> PARKING_LOT_TYPE_MAP = new HashMap<>();
 
     @Override
     public void initialize() {
+        initParkingLotTypeBiMap();
         initParkingLotTypeMap();
     }
+
+    @Named("toParkingLotType")
+    public ParkingLotType toParkingLotType(@NotNull ParkingLotTypeEntity parkingLotTypeEntity) {
+        return PARKING_LOT_TYPE_BI_MAP.get(parkingLotTypeEntity);
+    }
+
+    @Named("toParkingLotTypeEntity")
+    public ParkingLotTypeEntity toParkingLotTypeEntity(@NotNull ParkingLotType parkingLotType) {
+        return PARKING_LOT_TYPE_BI_MAP.inverse().get(parkingLotType);
+    }
+
 
     @Named("toParkingLotTypeFromId")
     public ParkingLotType toParkingLotType(@NotNull Long parkingLotTypeId) {
         return PARKING_LOT_TYPE_MAP.get(parkingLotTypeId);
     }
 
-    // initialize ======================================================================================================
+    private void initParkingLotTypeBiMap() {
+        PARKING_LOT_TYPE_BI_MAP.put(getParkingLotTypeByType("TƯ NHÂN"), ParkingLotType.PRIVATE);
+        PARKING_LOT_TYPE_BI_MAP.put(getParkingLotTypeByType("TÒA NHÀ"), ParkingLotType.BUILDING);
+        PARKING_LOT_TYPE_BI_MAP.put(getParkingLotTypeByType("LÒNG ĐƯỜNG"), ParkingLotType.STREET);
+    }
 
     private void initParkingLotTypeMap() {
-        PARKING_LOT_TYPE_MAP.put(1L, ParkingLotType.PRIVATE);
-        PARKING_LOT_TYPE_MAP.put(2L, ParkingLotType.BUILDING);
-        PARKING_LOT_TYPE_MAP.put(3L, ParkingLotType.STREET);
+        PARKING_LOT_TYPE_MAP.put(PARKING_LOT_TYPE_BI_MAP.inverse().get(ParkingLotType.PRIVATE).getId(), ParkingLotType.PRIVATE);
+        PARKING_LOT_TYPE_MAP.put(PARKING_LOT_TYPE_BI_MAP.inverse().get(ParkingLotType.BUILDING).getId(), ParkingLotType.BUILDING);
+        PARKING_LOT_TYPE_MAP.put(PARKING_LOT_TYPE_BI_MAP.inverse().get(ParkingLotType.STREET).getId(), ParkingLotType.STREET);
+    }
+
+    private ParkingLotTypeEntity getParkingLotTypeByType(@NotEmpty String type) {
+        return parkingLotTypeRepository.findByType(type).orElseThrow(EntityNotFoundException::new);
     }
 }
