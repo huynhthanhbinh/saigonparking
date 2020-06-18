@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Tue, Jun 16th, 2020
+Last updated:       Fri, Jun 19th, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -218,3 +218,9 @@ Last updated:       Tue, Jun 16th, 2020
 
 73. HowTo: gRPC Java Client Side Load Balancing using Consul
         https://medium.com/@mykidong/howto-grpc-java-client-side-load-balancing-using-consul-8f729668d3f8
+
+74. Criteria Queries Using JPA Metamodel
+        https://www.baeldung.com/hibernate-criteria-queries-metamodel
+
+75. How can I do a JOIN FETCH in criteria api
+        https://discourse.hibernate.org/t/how-can-i-do-a-join-fetch-in-criteria-api/846/2
