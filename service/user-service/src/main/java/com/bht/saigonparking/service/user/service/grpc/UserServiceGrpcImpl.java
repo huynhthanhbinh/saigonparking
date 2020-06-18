@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.bht.saigonparking.api.grpc.user.CountAllUserRequest;
 import com.bht.saigonparking.api.grpc.user.Customer;
 import com.bht.saigonparking.api.grpc.user.GetAllUserRequest;
 import com.bht.saigonparking.api.grpc.user.GetAllUserResponse;
@@ -52,7 +53,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
     private final SaigonParkingServerInterceptor serverInterceptor;
 
     @Override
-    public void countAll(Empty request, StreamObserver<Int64Value> responseObserver) {
+    public void countAllUser(CountAllUserRequest request, StreamObserver<Int64Value> responseObserver) {
         try {
             if (!serverInterceptor.getRoleContext().get().equals("ADMIN")) {
                 throw new PermissionDeniedException();

@@ -9,10 +9,11 @@ import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
 
 enum UserRole {
-    CUSTOMER = 0;
-    PARKING_LOT_EMPLOYEE = 1;
-    GOVERNMENT_EMPLOYEE = 2;
-    ADMIN = 3;
+    ALL = 0;
+    CUSTOMER = 1;
+    PARKING_LOT_EMPLOYEE = 2;
+    GOVERNMENT_EMPLOYEE = 3;
+    ADMIN = 4;
 }
 
 message User {
@@ -49,9 +50,18 @@ message UpdateUserLastSignInRequest {
     int64 timeInMillis = 2;
 }
 
+message CountAllUserRequest {
+    string keyword = 1; /* ignore this field if you want to get all - default: "" */
+    UserRole userRole = 2; /* ignore this field if you want to get all - default: ALL */
+    bool inactivatedOnly = 3; /* ignore this field if you want to get all - default: false */
+}
+
 message GetAllUserRequest {
     int32 nRow = 1;
     int32 pageNumber = 2;
+    string keyword = 3; /* ignore this field if you want to get all - default: "" */
+    UserRole userRole = 4; /* ignore this field if you want to get all - default: ALL */
+    bool inactivatedOnly = 5; /* ignore this field if you want to get all - default: false */
 }
 
 message GetAllUserResponse {
@@ -62,8 +72,11 @@ service UserService {
 
     /** PUBLIC - ADMIN ONLY
      * use-case: get all users
-     *  + request: empty value
-     *  + response: number of user currently in the DBs
+     *  + request: CountAllUserRequest, you need to provide 3 params
+     *      ++ keyword: keyword maybe in username or email - ignore this field if you want to get all not by keyword
+     *      ++ userRole: role of user you want to find - ignore this field if you want to get all role
+     *      ++ inactivatedOnly: whether you want to get only inactivated user - ignore this field if you want to get all
+     *  + response: number of user currently in the DBs satisfy your conditions
      *
      * For front-end team:
      *  + show total number of user (nRow) in the UI
@@ -73,16 +86,19 @@ service UserService {
      *
      * Eg. 123 user, you want to show in each page 10 user
      * so that there will be 123 / 10 = 12.3 ==> ceil(12.3) = 13 pages */
-    rpc countAll (google.protobuf.Empty) returns (google.protobuf.Int64Value);
+    rpc countAllUser (CountAllUserRequest) returns (google.protobuf.Int64Value);
 
     /** PUBLIC - ADMIN ONLY
      * use-case: get all users
-     *  + request: GetAllUserRequest: you need to provide 2 params:
+     *  + request: GetAllUserRequest: you need to provide 5 params:
      *      ++ nRow: number of rows you want to show per page (max: 20)
      *      ++ pageNumber: page you want to get
-     *  + response: GetAllUserResponse: it will be a user list (with nRow result max)
+     *      ++ keyword: keyword maybe in username or email - ignore this field if you want to get all not by keyword
+     *      ++ userRole: role of user you want to find - ignore this field if you want to get all role
+     *      ++ inactivatedOnly: whether you want to get only inactivated user - ignore this field if you want to get all
+     *  + response: GetAllUserResponse: it will be a user list (with nRow result max) satisfy your conditions
      *
-     * Eg. You request for page 1 with 10 rows,
+     * Eg. You request for page 1 with 10 rows, getAll
      * ==> you will get User from ID 1 to ID 10 (if no one had been deleted) */
     rpc getAllUser (GetAllUserRequest) returns (GetAllUserResponse);
 
