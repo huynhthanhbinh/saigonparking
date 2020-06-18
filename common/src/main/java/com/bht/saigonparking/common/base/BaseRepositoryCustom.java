@@ -45,4 +45,8 @@ public abstract class BaseRepositoryCustom {
      */
     @PersistenceContext
     protected EntityManager entityManager;
+
+    protected String convertKeyword(String keyword) {
+        return "%" + keyword + "%";
+    }
 }
