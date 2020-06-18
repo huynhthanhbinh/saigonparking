@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.bht.saigonparking.api.grpc.parkinglot.CountAllParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.GetAllParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.GetAllParkingLotResponse;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
@@ -51,7 +52,7 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
     private final SaigonParkingServerInterceptor serverInterceptor;
 
     @Override
-    public void countAll(Empty request, StreamObserver<Int64Value> responseObserver) {
+    public void countAllParkingLot(CountAllParkingLotRequest request, StreamObserver<Int64Value> responseObserver) {
         try {
             if (!serverInterceptor.getRoleContext().get().equals("ADMIN")) {
                 throw new PermissionDeniedException();

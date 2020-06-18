@@ -8,9 +8,10 @@ import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
 
 enum ParkingLotType {
-    BUILDING = 0;
-    PRIVATE = 1;
-    STREET = 2;
+    ALL = 0;
+    BUILDING = 1;
+    PRIVATE = 2;
+    STREET = 3;
 }
 
 message ParkingLotResult {
@@ -100,9 +101,18 @@ message ParkingLotResultList {
     repeated ParkingLotResult parkingLotResult = 1;
 }
 
+message CountAllParkingLotRequest {
+    string keyword = 1; /* ignore this field if you want to get all - default: "" */
+    ParkingLotType parkingLotType = 2; /* ignore this field if you want to get all - default: ALL */
+    bool availableOnly = 3; /* ignore this field if you want to get all - default: false */
+}
+
 message GetAllParkingLotRequest {
     int32 nRow = 1;
     int32 pageNumber = 2;
+    string keyword = 3; /* ignore this field if you want to get all - default: "" */
+    ParkingLotType parkingLotType = 4; /* ignore this field if you want to get all - default: ALL */
+    bool availableOnly = 5; /* ignore this field if you want to get all - default: false */
 }
 
 message GetAllParkingLotResponse {
@@ -117,7 +127,10 @@ service ParkingLotService {
 
     /** PUBLIC - ADMIN ONLY
      * use-case: get all parking-lots
-     *  + request: empty value
+     *  + request: CountAllParkingLotRequest, you need to provide 3 params
+     *      ++ keyword: keyword maybe in name or address or phone - ignore this field if you want to get all not by keyword
+     *      ++ parkingLotType: type of parking lot you want to find - ignore this field if you want to get all type
+     *      ++ availableOnly: whether you want to get only available parking lot - ignore this field if you want to get all
      *  + response: number of parking-lot currently in the DBs
      *
      * For front-end team:
@@ -128,16 +141,19 @@ service ParkingLotService {
      *
      * Eg. 123 parking-lot, you want to show in each page 10 parking-lot
      * so that there will be 123 / 10 = 12.3 ==> ceil(12.3) = 13 pages */
-    rpc countAll (google.protobuf.Empty) returns (google.protobuf.Int64Value);
+    rpc countAllParkingLot (CountAllParkingLotRequest) returns (google.protobuf.Int64Value);
 
     /** PUBLIC - ADMIN ONLY
      * use-case: get all parking-lots
-     *  + request: GetAllParkingLotRequest: you need to provide 2 params:
+     *  + request: GetAllParkingLotRequest: you need to provide 5 params:
      *      ++ nRow: number of rows you want to show per page (max: 20)
      *      ++ pageNumber: page you want to get
+     *      ++ keyword: keyword maybe in name or address or phone - ignore this field if you want to get all not by keyword
+     *      ++ parkingLotType: type of parking lot you want to find - ignore this field if you want to get all type
+     *      ++ availableOnly: whether you want to get only available parking lot - ignore this field if you want to get all
      *  + response: GetAllParkingLotResponse: it will be a parking-lot list (with nRow result max)
      *
-     * Eg. You request for page 1 with 10 rows,
+     * Eg. You request for page 1 with 10 rows, getAll
      * ==> you will get ParkingLot from ID 1 to ID 10 (if no one had been deleted) */
     rpc getAllParkingLot (GetAllParkingLotRequest) returns (GetAllParkingLotResponse);
 
