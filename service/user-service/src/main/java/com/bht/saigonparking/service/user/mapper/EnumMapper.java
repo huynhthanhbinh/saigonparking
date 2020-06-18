@@ -1,6 +1,7 @@
 package com.bht.saigonparking.service.user.mapper;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.mapstruct.Mapper;
@@ -23,7 +24,6 @@ import lombok.Setter;
  *
  * this class is self-customized mapper for all enums, include:
  *      + UserRole:       4 role --> ADMIN, CUSTOMER, PARKING_LOT_EMPLOYEE, GOVERNMENT_EMPLOYEE
- *      + ParkingLotType: 3 type --> PRIVATE, BUILDING, STREET
  *
  * for using repository inside Component class,
  * we need to {@code @Autowired} it by Spring Dependency Injection
@@ -63,13 +63,13 @@ public abstract class EnumMapper implements BaseBean {
     }
 
     private void initUserRoleBiMap() {
-        USER_ROLE_BI_MAP.put(getUserRoleById(1L), UserRole.ADMIN);
-        USER_ROLE_BI_MAP.put(getUserRoleById(2L), UserRole.CUSTOMER);
-        USER_ROLE_BI_MAP.put(getUserRoleById(3L), UserRole.PARKING_LOT_EMPLOYEE);
-        USER_ROLE_BI_MAP.put(getUserRoleById(4L), UserRole.GOVERNMENT_EMPLOYEE);
+        USER_ROLE_BI_MAP.put(getUserRoleByRoleName("ADMIN"), UserRole.ADMIN);
+        USER_ROLE_BI_MAP.put(getUserRoleByRoleName("CUSTOMER"), UserRole.CUSTOMER);
+        USER_ROLE_BI_MAP.put(getUserRoleByRoleName("PARKING_LOT_EMPLOYEE"), UserRole.PARKING_LOT_EMPLOYEE);
+        USER_ROLE_BI_MAP.put(getUserRoleByRoleName("GOVERNMENT"), UserRole.GOVERNMENT_EMPLOYEE);
     }
 
-    private UserRoleEntity getUserRoleById(@NotNull Long id) {
-        return userRoleRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    private UserRoleEntity getUserRoleByRoleName(@NotEmpty String role) {
+        return userRoleRepository.findByRole(role).orElseThrow(EntityNotFoundException::new);
     }
 }
