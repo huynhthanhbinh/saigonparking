@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.mapstruct.Mapper;
@@ -74,18 +75,18 @@ public abstract class EnumMapper implements BaseBean {
     }
 
     private void initParkingLotTypeBiMap() {
-        PARKING_LOT_TYPE_BI_MAP.put(getParkingLotTypeById(1L), ParkingLotType.PRIVATE);
-        PARKING_LOT_TYPE_BI_MAP.put(getParkingLotTypeById(2L), ParkingLotType.BUILDING);
-        PARKING_LOT_TYPE_BI_MAP.put(getParkingLotTypeById(3L), ParkingLotType.STREET);
+        PARKING_LOT_TYPE_BI_MAP.put(getParkingLotTypeByType("TƯ NHÂN"), ParkingLotType.PRIVATE);
+        PARKING_LOT_TYPE_BI_MAP.put(getParkingLotTypeByType("TÒA NHÀ"), ParkingLotType.BUILDING);
+        PARKING_LOT_TYPE_BI_MAP.put(getParkingLotTypeByType("LÒNG ĐƯỜNG"), ParkingLotType.STREET);
     }
 
     private void initParkingLotTypeMap() {
-        PARKING_LOT_TYPE_MAP.put(1L, ParkingLotType.PRIVATE);
-        PARKING_LOT_TYPE_MAP.put(2L, ParkingLotType.BUILDING);
-        PARKING_LOT_TYPE_MAP.put(3L, ParkingLotType.STREET);
+        PARKING_LOT_TYPE_MAP.put(PARKING_LOT_TYPE_BI_MAP.inverse().get(ParkingLotType.PRIVATE).getId(), ParkingLotType.PRIVATE);
+        PARKING_LOT_TYPE_MAP.put(PARKING_LOT_TYPE_BI_MAP.inverse().get(ParkingLotType.BUILDING).getId(), ParkingLotType.BUILDING);
+        PARKING_LOT_TYPE_MAP.put(PARKING_LOT_TYPE_BI_MAP.inverse().get(ParkingLotType.STREET).getId(), ParkingLotType.STREET);
     }
 
-    private ParkingLotTypeEntity getParkingLotTypeById(@NotNull Long id) {
-        return parkingLotTypeRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    private ParkingLotTypeEntity getParkingLotTypeByType(@NotEmpty String type) {
+        return parkingLotTypeRepository.findByType(type).orElseThrow(EntityNotFoundException::new);
     }
 }
