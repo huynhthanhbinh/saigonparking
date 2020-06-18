@@ -72,6 +72,8 @@ public class UserRepositoryCustomImpl extends BaseRepositoryCustom implements Us
         CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
         Root<UserEntity> root = query.from(UserEntity.class);
 
+        root.fetch(UserEntity_.USER_ROLE_ENTITY);
+
         return entityManager.createQuery(query
                 .select(criteriaBuilder.count(root))
                 .where(criteriaBuilder.equal(root.get(UserEntity_.userRoleEntity), userRoleEntity)))
@@ -102,6 +104,8 @@ public class UserRepositoryCustomImpl extends BaseRepositoryCustom implements Us
         CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
         Root<UserEntity> root = query.from(UserEntity.class);
 
+        root.fetch(UserEntity_.USER_ROLE_ENTITY);
+
         return entityManager.createQuery(query
                 .select(criteriaBuilder.count(root))
                 .where(criteriaBuilder.and(
@@ -116,6 +120,8 @@ public class UserRepositoryCustomImpl extends BaseRepositoryCustom implements Us
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
         Root<UserEntity> root = query.from(UserEntity.class);
+
+        root.fetch(UserEntity_.USER_ROLE_ENTITY);
 
         return entityManager.createQuery(query
                 .select(criteriaBuilder.count(root))
@@ -133,6 +139,8 @@ public class UserRepositoryCustomImpl extends BaseRepositoryCustom implements Us
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
         Root<UserEntity> root = query.from(UserEntity.class);
+
+        root.fetch(UserEntity_.USER_ROLE_ENTITY);
 
         return entityManager.createQuery(query
                 .select(criteriaBuilder.count(root))
