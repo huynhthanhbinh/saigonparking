@@ -1,6 +1,5 @@
 package com.bht.saigonparking.service.user.repository.custom.impl;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.TypedQuery;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.bht.saigonparking.common.base.BaseRepositoryCustom;
 import com.bht.saigonparking.service.user.entity.UserEntity;
+import com.bht.saigonparking.service.user.entity.UserEntity_;
 import com.bht.saigonparking.service.user.entity.UserRoleEntity;
 import com.bht.saigonparking.service.user.repository.custom.UserRepositoryCustom;
 
@@ -39,37 +39,110 @@ public class UserRepositoryCustomImpl extends BaseRepositoryCustom implements Us
 
     @Override
     public Long countAll(@NotNull Boolean isActivated) {
-        return null;
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
+        Root<UserEntity> root = query.from(UserEntity.class);
+
+        return entityManager.createQuery(query
+                .select(criteriaBuilder.count(root))
+                .where(criteriaBuilder.equal(root.get(UserEntity_.isActivated), isActivated)))
+                .getSingleResult();
     }
 
     @Override
     public Long countAll(@NotEmpty String keyword) {
-        return null;
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
+        Root<UserEntity> root = query.from(UserEntity.class);
+
+        return entityManager.createQuery(query
+                .select(criteriaBuilder.count(root))
+                .where(criteriaBuilder.or(
+                        criteriaBuilder.like(root.get(UserEntity_.username), convertKeyword(keyword)),
+                        criteriaBuilder.like(root.get(UserEntity_.email), convertKeyword(keyword)))))
+                .getSingleResult();
     }
 
     @Override
     public Long countAll(@NotNull UserRoleEntity userRoleEntity) {
-        return null;
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
+        Root<UserEntity> root = query.from(UserEntity.class);
+
+        return entityManager.createQuery(query
+                .select(criteriaBuilder.count(root))
+                .where(criteriaBuilder.equal(root.get(UserEntity_.userRoleEntity), userRoleEntity)))
+                .getSingleResult();
     }
 
     @Override
     public Long countAll(@NotEmpty String keyword, @NotNull Boolean isActivated) {
-        return null;
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
+        Root<UserEntity> root = query.from(UserEntity.class);
+
+        return entityManager.createQuery(query
+                .select(criteriaBuilder.count(root))
+                .where(criteriaBuilder.and(
+                        criteriaBuilder.equal(root.get(UserEntity_.isActivated), isActivated),
+                        criteriaBuilder.or(
+                                criteriaBuilder.like(root.get(UserEntity_.username), convertKeyword(keyword)),
+                                criteriaBuilder.like(root.get(UserEntity_.email), convertKeyword(keyword))))))
+                .getSingleResult();
     }
 
     @Override
     public Long countAll(@NotNull UserRoleEntity userRoleEntity, @NotNull Boolean isActivated) {
-        return null;
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
+        Root<UserEntity> root = query.from(UserEntity.class);
+
+        return entityManager.createQuery(query
+                .select(criteriaBuilder.count(root))
+                .where(criteriaBuilder.and(
+                        criteriaBuilder.equal(root.get(UserEntity_.isActivated), isActivated),
+                        criteriaBuilder.equal(root.get(UserEntity_.userRoleEntity), userRoleEntity))))
+                .getSingleResult();
     }
 
     @Override
     public Long countAll(@NotEmpty String keyword, @NotNull UserRoleEntity userRoleEntity) {
-        return null;
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
+        Root<UserEntity> root = query.from(UserEntity.class);
+
+        return entityManager.createQuery(query
+                .select(criteriaBuilder.count(root))
+                .where(criteriaBuilder.and(
+                        criteriaBuilder.equal(root.get(UserEntity_.userRoleEntity), userRoleEntity),
+                        criteriaBuilder.or(
+                                criteriaBuilder.like(root.get(UserEntity_.username), convertKeyword(keyword)),
+                                criteriaBuilder.like(root.get(UserEntity_.email), convertKeyword(keyword))))))
+                .getSingleResult();
     }
 
     @Override
     public Long countAll(@NotEmpty String keyword, @NotNull UserRoleEntity userRoleEntity, @NotNull Boolean isActivated) {
-        return null;
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
+        Root<UserEntity> root = query.from(UserEntity.class);
+
+        return entityManager.createQuery(query
+                .select(criteriaBuilder.count(root))
+                .where(criteriaBuilder.and(
+                        criteriaBuilder.equal(root.get(UserEntity_.isActivated), isActivated),
+                        criteriaBuilder.equal(root.get(UserEntity_.userRoleEntity), userRoleEntity),
+                        criteriaBuilder.or(
+                                criteriaBuilder.like(root.get(UserEntity_.username), convertKeyword(keyword)),
+                                criteriaBuilder.like(root.get(UserEntity_.email), convertKeyword(keyword))))))
+                .getSingleResult();
     }
 
     @Override
@@ -79,7 +152,7 @@ public class UserRepositoryCustomImpl extends BaseRepositoryCustom implements Us
         CriteriaQuery<UserEntity> query = criteriaBuilder.createQuery(UserEntity.class);
 
         Root<UserEntity> root = query.from(UserEntity.class);
-        root.fetch("userRoleEntity");
+        root.fetch(UserEntity_.USER_ROLE_ENTITY);
 
         TypedQuery<UserEntity> getAllQuery = entityManager
                 .createQuery(query
@@ -94,36 +167,165 @@ public class UserRepositoryCustomImpl extends BaseRepositoryCustom implements Us
 
     @Override
     public List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotNull Boolean isActivated) {
-        return Collections.emptyList();
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<UserEntity> query = criteriaBuilder.createQuery(UserEntity.class);
+
+        Root<UserEntity> root = query.from(UserEntity.class);
+        root.fetch(UserEntity_.USER_ROLE_ENTITY);
+
+        TypedQuery<UserEntity> getAllQuery = entityManager
+                .createQuery(query
+                        .select(root)
+                        .where(criteriaBuilder.equal(root.get(UserEntity_.isActivated), isActivated))
+                        .orderBy(criteriaBuilder.asc(root)));
+
+        getAllQuery.setMaxResults(nRow);
+        getAllQuery.setFirstResult(nRow * (pageNumber - 1));
+
+        return getAllQuery.getResultList();
     }
 
     @Override
     public List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotEmpty String keyword) {
-        return Collections.emptyList();
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<UserEntity> query = criteriaBuilder.createQuery(UserEntity.class);
+
+        Root<UserEntity> root = query.from(UserEntity.class);
+        root.fetch(UserEntity_.USER_ROLE_ENTITY);
+
+        TypedQuery<UserEntity> getAllQuery = entityManager
+                .createQuery(query
+                        .select(root)
+                        .where(criteriaBuilder.or(
+                                criteriaBuilder.like(root.get(UserEntity_.username), convertKeyword(keyword)),
+                                criteriaBuilder.like(root.get(UserEntity_.email), convertKeyword(keyword))))
+                        .orderBy(criteriaBuilder.asc(root)));
+
+        getAllQuery.setMaxResults(nRow);
+        getAllQuery.setFirstResult(nRow * (pageNumber - 1));
+
+        return getAllQuery.getResultList();
     }
 
     @Override
     public List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotNull UserRoleEntity userRoleEntity) {
-        return Collections.emptyList();
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<UserEntity> query = criteriaBuilder.createQuery(UserEntity.class);
+
+        Root<UserEntity> root = query.from(UserEntity.class);
+        root.fetch(UserEntity_.USER_ROLE_ENTITY);
+
+        TypedQuery<UserEntity> getAllQuery = entityManager
+                .createQuery(query
+                        .select(root)
+                        .where(criteriaBuilder.equal(root.get(UserEntity_.userRoleEntity), userRoleEntity))
+                        .orderBy(criteriaBuilder.asc(root)));
+
+        getAllQuery.setMaxResults(nRow);
+        getAllQuery.setFirstResult(nRow * (pageNumber - 1));
+
+        return getAllQuery.getResultList();
     }
 
     @Override
     public List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotEmpty String keyword, @NotNull Boolean isActivated) {
-        return Collections.emptyList();
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<UserEntity> query = criteriaBuilder.createQuery(UserEntity.class);
+
+        Root<UserEntity> root = query.from(UserEntity.class);
+        root.fetch(UserEntity_.USER_ROLE_ENTITY);
+
+        TypedQuery<UserEntity> getAllQuery = entityManager
+                .createQuery(query
+                        .select(root)
+                        .where(criteriaBuilder.and(
+                                criteriaBuilder.equal(root.get(UserEntity_.isActivated), isActivated),
+                                criteriaBuilder.or(
+                                        criteriaBuilder.like(root.get(UserEntity_.username), convertKeyword(keyword)),
+                                        criteriaBuilder.like(root.get(UserEntity_.email), convertKeyword(keyword)))))
+                        .orderBy(criteriaBuilder.asc(root)));
+
+        getAllQuery.setMaxResults(nRow);
+        getAllQuery.setFirstResult(nRow * (pageNumber - 1));
+
+        return getAllQuery.getResultList();
     }
 
     @Override
     public List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotNull UserRoleEntity userRoleEntity, @NotNull Boolean isActivated) {
-        return Collections.emptyList();
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<UserEntity> query = criteriaBuilder.createQuery(UserEntity.class);
+
+        Root<UserEntity> root = query.from(UserEntity.class);
+        root.fetch(UserEntity_.USER_ROLE_ENTITY);
+
+        TypedQuery<UserEntity> getAllQuery = entityManager
+                .createQuery(query
+                        .select(root)
+                        .where(criteriaBuilder.and(
+                                criteriaBuilder.equal(root.get(UserEntity_.isActivated), isActivated),
+                                criteriaBuilder.equal(root.get(UserEntity_.userRoleEntity), userRoleEntity)))
+                        .orderBy(criteriaBuilder.asc(root)));
+
+        getAllQuery.setMaxResults(nRow);
+        getAllQuery.setFirstResult(nRow * (pageNumber - 1));
+
+        return getAllQuery.getResultList();
     }
 
     @Override
     public List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotEmpty String keyword, @NotNull UserRoleEntity userRoleEntity) {
-        return Collections.emptyList();
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<UserEntity> query = criteriaBuilder.createQuery(UserEntity.class);
+
+        Root<UserEntity> root = query.from(UserEntity.class);
+        root.fetch(UserEntity_.USER_ROLE_ENTITY);
+
+        TypedQuery<UserEntity> getAllQuery = entityManager
+                .createQuery(query
+                        .select(root)
+                        .where(criteriaBuilder.and(
+                                criteriaBuilder.equal(root.get(UserEntity_.userRoleEntity), userRoleEntity),
+                                criteriaBuilder.or(
+                                        criteriaBuilder.like(root.get(UserEntity_.username), convertKeyword(keyword)),
+                                        criteriaBuilder.like(root.get(UserEntity_.email), convertKeyword(keyword)))))
+                        .orderBy(criteriaBuilder.asc(root)));
+
+        getAllQuery.setMaxResults(nRow);
+        getAllQuery.setFirstResult(nRow * (pageNumber - 1));
+
+        return getAllQuery.getResultList();
     }
 
     @Override
     public List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotEmpty String keyword, @NotNull UserRoleEntity userRoleEntity, @NotNull Boolean isActivated) {
-        return Collections.emptyList();
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<UserEntity> query = criteriaBuilder.createQuery(UserEntity.class);
+
+        Root<UserEntity> root = query.from(UserEntity.class);
+        root.fetch(UserEntity_.USER_ROLE_ENTITY);
+
+        TypedQuery<UserEntity> getAllQuery = entityManager
+                .createQuery(query
+                        .select(root)
+                        .where(criteriaBuilder.and(
+                                criteriaBuilder.equal(root.get(UserEntity_.isActivated), isActivated),
+                                criteriaBuilder.equal(root.get(UserEntity_.userRoleEntity), userRoleEntity),
+                                criteriaBuilder.or(
+                                        criteriaBuilder.like(root.get(UserEntity_.username), convertKeyword(keyword)),
+                                        criteriaBuilder.like(root.get(UserEntity_.email), convertKeyword(keyword)))))
+                        .orderBy(criteriaBuilder.asc(root)));
+
+        getAllQuery.setMaxResults(nRow);
+        getAllQuery.setFirstResult(nRow * (pageNumber - 1));
+
+        return getAllQuery.getResultList();
     }
 }
