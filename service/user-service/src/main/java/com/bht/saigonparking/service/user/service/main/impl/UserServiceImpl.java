@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bht.saigonparking.service.user.entity.CustomerEntity;
 import com.bht.saigonparking.service.user.entity.ParkingLotEmployeeEntity;
 import com.bht.saigonparking.service.user.entity.UserEntity;
+import com.bht.saigonparking.service.user.entity.UserRoleEntity;
 import com.bht.saigonparking.service.user.repository.core.CustomerRepository;
 import com.bht.saigonparking.service.user.repository.core.ParkingLotEmployeeRepository;
 import com.bht.saigonparking.service.user.repository.core.UserRepository;
@@ -46,8 +47,86 @@ public class UserServiceImpl implements UserService {
     private final ParkingLotEmployeeRepository parkingLotEmployeeRepository;
 
     @Override
-    public Long countAll() {
-        return userRepository.countAll();
+    public Long countAll(@NotEmpty String keyword, boolean inactivatedOnly) {
+
+        if (keyword.isEmpty()) {
+            if (inactivatedOnly) { /* count all inactivated */
+                return userRepository.countAll(false);
+            } else { /* count all */
+                return userRepository.countAll();
+            }
+
+        } else {
+            if (inactivatedOnly) { /* count all with keyword, inactivated */
+                return userRepository.countAll(keyword, false);
+            } else { /* count all with keyword */
+                return userRepository.countAll(keyword);
+            }
+        }
+    }
+
+    @Override
+    public Long countAll(@NotEmpty String keyword, boolean inactivatedOnly, @NotNull UserRoleEntity userRoleEntity) {
+
+        if (keyword.isEmpty()) {
+            if (inactivatedOnly) { /* count all by role, inactivated */
+                return userRepository.countAll(userRoleEntity, false);
+            } else { /* count all by role */
+                return userRepository.countAll(userRoleEntity);
+            }
+
+        } else {
+            if (inactivatedOnly) { /* count all by role, with keyword, inactivated */
+                return userRepository.countAll(keyword, userRoleEntity, false);
+            } else { /* count all by role, with keyword */
+                return userRepository.countAll(keyword, userRoleEntity);
+            }
+        }
+    }
+
+    @Override
+    public List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow,
+                                   @NotNull Integer pageNumber,
+                                   @NotEmpty String keyword,
+                                   boolean inactivatedOnly) {
+
+        if (keyword.isEmpty()) {
+            if (inactivatedOnly) { /* get all inactivated */
+                return userRepository.getAll(nRow, pageNumber, false);
+            } else { /* get all */
+                return userRepository.getAll(nRow, pageNumber);
+            }
+
+        } else {
+            if (inactivatedOnly) { /* get all with keyword, inactivated */
+                return userRepository.getAll(nRow, pageNumber, keyword, false);
+            } else { /* get all with keyword */
+                return userRepository.getAll(nRow, pageNumber, keyword);
+            }
+        }
+    }
+
+    @Override
+    public List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow,
+                                   @NotNull Integer pageNumber,
+                                   @NotEmpty String keyword,
+                                   boolean inactivatedOnly,
+                                   @NotNull UserRoleEntity userRoleEntity) {
+
+        if (keyword.isEmpty()) {
+            if (inactivatedOnly) { /* get all by role, inactivated */
+                return userRepository.getAll(nRow, pageNumber, userRoleEntity, false);
+            } else { /* get all by role */
+                return userRepository.getAll(nRow, pageNumber, userRoleEntity);
+            }
+
+        } else {
+            if (inactivatedOnly) { /* get all by role, with keyword, inactivated */
+                return userRepository.getAll(nRow, pageNumber, keyword, userRoleEntity, false);
+            } else { /* get all by role, with keyword */
+                return userRepository.getAll(nRow, pageNumber, keyword, userRoleEntity);
+            }
+        }
     }
 
     @Override
@@ -78,11 +157,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public ParkingLotEmployeeEntity getParkingLotEmployeeByUsername(@NotEmpty String username) {
         return parkingLotEmployeeRepository.getByUsername(username).orElseThrow(EntityNotFoundException::new);
-    }
-
-    @Override
-    public List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber) {
-        return userRepository.getAll(nRow, pageNumber);
     }
 
     @Override

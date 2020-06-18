@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import com.bht.saigonparking.service.user.entity.CustomerEntity;
 import com.bht.saigonparking.service.user.entity.ParkingLotEmployeeEntity;
 import com.bht.saigonparking.service.user.entity.UserEntity;
+import com.bht.saigonparking.service.user.entity.UserRoleEntity;
 
 /**
  *
@@ -16,7 +17,20 @@ import com.bht.saigonparking.service.user.entity.UserEntity;
  */
 public interface UserService {
 
-    Long countAll();
+    Long countAll(@NotEmpty String keyword, boolean inactivatedOnly);
+
+    Long countAll(@NotEmpty String keyword, boolean inactivatedOnly, @NotNull UserRoleEntity userRoleEntity);
+
+    List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow,
+                            @NotNull Integer pageNumber,
+                            @NotEmpty String keyword,
+                            boolean inactivatedOnly);
+
+    List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow,
+                            @NotNull Integer pageNumber,
+                            @NotEmpty String keyword,
+                            boolean inactivatedOnly,
+                            @NotNull UserRoleEntity userRoleEntity);
 
     UserEntity getUserById(@NotNull Long id);
 
@@ -29,8 +43,6 @@ public interface UserService {
     ParkingLotEmployeeEntity getParkingLotEmployeeById(@NotNull Long id);
 
     ParkingLotEmployeeEntity getParkingLotEmployeeByUsername(@NotEmpty String username);
-
-    List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber);
 
     Long createCustomer(@NotNull CustomerEntity customerEntity);
 

@@ -1,5 +1,6 @@
 package com.bht.saigonparking.service.user.repository.custom.impl;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.TypedQuery;
@@ -7,12 +8,14 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.validation.constraints.Max;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Repository;
 
 import com.bht.saigonparking.common.base.BaseRepositoryCustom;
 import com.bht.saigonparking.service.user.entity.UserEntity;
+import com.bht.saigonparking.service.user.entity.UserRoleEntity;
 import com.bht.saigonparking.service.user.repository.custom.UserRepositoryCustom;
 
 /**
@@ -35,6 +38,41 @@ public class UserRepositoryCustomImpl extends BaseRepositoryCustom implements Us
     }
 
     @Override
+    public Long countAll(@NotNull Boolean isActivated) {
+        return null;
+    }
+
+    @Override
+    public Long countAll(@NotEmpty String keyword) {
+        return null;
+    }
+
+    @Override
+    public Long countAll(@NotNull UserRoleEntity userRoleEntity) {
+        return null;
+    }
+
+    @Override
+    public Long countAll(@NotEmpty String keyword, @NotNull Boolean isActivated) {
+        return null;
+    }
+
+    @Override
+    public Long countAll(@NotNull UserRoleEntity userRoleEntity, @NotNull Boolean isActivated) {
+        return null;
+    }
+
+    @Override
+    public Long countAll(@NotEmpty String keyword, @NotNull UserRoleEntity userRoleEntity) {
+        return null;
+    }
+
+    @Override
+    public Long countAll(@NotEmpty String keyword, @NotNull UserRoleEntity userRoleEntity, @NotNull Boolean isActivated) {
+        return null;
+    }
+
+    @Override
     public List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber) {
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -52,5 +90,40 @@ public class UserRepositoryCustomImpl extends BaseRepositoryCustom implements Us
         getAllQuery.setFirstResult(nRow * (pageNumber - 1));
 
         return getAllQuery.getResultList();
+    }
+
+    @Override
+    public List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotNull Boolean isActivated) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotEmpty String keyword) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotNull UserRoleEntity userRoleEntity) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotEmpty String keyword, @NotNull Boolean isActivated) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotNull UserRoleEntity userRoleEntity, @NotNull Boolean isActivated) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotEmpty String keyword, @NotNull UserRoleEntity userRoleEntity) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotEmpty String keyword, @NotNull UserRoleEntity userRoleEntity, @NotNull Boolean isActivated) {
+        return Collections.emptyList();
     }
 }

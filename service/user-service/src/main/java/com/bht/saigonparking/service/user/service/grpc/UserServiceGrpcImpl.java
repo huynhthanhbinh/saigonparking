@@ -13,6 +13,7 @@ import com.bht.saigonparking.api.grpc.user.GetAllUserResponse;
 import com.bht.saigonparking.api.grpc.user.ParkingLotEmployee;
 import com.bht.saigonparking.api.grpc.user.UpdatePasswordRequest;
 import com.bht.saigonparking.api.grpc.user.User;
+import com.bht.saigonparking.api.grpc.user.UserRole;
 import com.bht.saigonparking.api.grpc.user.UserServiceGrpc.UserServiceImplBase;
 import com.bht.saigonparking.common.exception.PermissionDeniedException;
 import com.bht.saigonparking.common.exception.UsernameNotMatchException;
@@ -21,6 +22,7 @@ import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.user.entity.CustomerEntity;
 import com.bht.saigonparking.service.user.entity.ParkingLotEmployeeEntity;
 import com.bht.saigonparking.service.user.entity.UserEntity;
+import com.bht.saigonparking.service.user.mapper.EnumMapper;
 import com.bht.saigonparking.service.user.mapper.UserMapper;
 import com.bht.saigonparking.service.user.mapper.UserMapperExt;
 import com.bht.saigonparking.service.user.service.main.UserService;
@@ -50,6 +52,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
     private final UserService userService;
     private final UserMapper userMapper;
     private final UserMapperExt userMapperExt;
+    private final EnumMapper enumMapper;
     private final SaigonParkingServerInterceptor serverInterceptor;
 
     @Override
@@ -59,7 +62,14 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
                 throw new PermissionDeniedException();
             }
 
-            Long count = userService.countAll();
+            Long count;
+
+            if (request.getUserRole().equals(UserRole.ALL)) {
+                count = userService.countAll(request.getKeyword(), request.getInactivatedOnly());
+
+            } else {
+                count = userService.countAll(request.getKeyword(), request.getInactivatedOnly(), enumMapper.toUserRoleEntity(request.getUserRole()));
+            }
 
             responseObserver.onNext(Int64Value.of(count));
             responseObserver.onCompleted();
@@ -82,8 +92,16 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
                 throw new PermissionDeniedException();
             }
 
-            List<User> userList = userMapper.toUserList(userService
-                    .getAll(request.getNRow(), request.getPageNumber()));
+            List<User> userList;
+
+            if (request.getUserRole().equals(UserRole.ALL)) {
+                userList = userMapper.toUserList(userService
+                        .getAll(request.getNRow(), request.getPageNumber(), request.getKeyword(), request.getInactivatedOnly()));
+
+            } else {
+                userList = userMapper.toUserList(userService
+                        .getAll(request.getNRow(), request.getPageNumber(), request.getKeyword(), request.getInactivatedOnly(), enumMapper.toUserRoleEntity(request.getUserRole())));
+            }
 
             responseObserver.onNext(GetAllUserResponse.newBuilder().addAllUser(userList).build());
             responseObserver.onCompleted();
