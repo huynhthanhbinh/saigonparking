@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bht.saigonparking.api.grpc.parkinglot.DeleteParkingLotNotification;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
+import com.bht.saigonparking.service.parkinglot.entity.ParkingLotTypeEntity;
 import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotLimitRepository;
 import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotRepository;
 import com.bht.saigonparking.service.parkinglot.service.main.ParkingLotService;
@@ -46,8 +47,86 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     private final ParkingLotLimitRepository parkingLotLimitRepository;
 
     @Override
-    public Long countAll() {
-        return parkingLotRepository.countAll();
+    public Long countAll(@NotEmpty String keyword, boolean isAvailableOnly) {
+
+        if (keyword.isEmpty()) {
+            if (isAvailableOnly) { /* count all available */
+                return parkingLotRepository.countAll(true);
+            } else { /* count all */
+                return parkingLotRepository.countAll();
+            }
+
+        } else {
+            if (isAvailableOnly) { /* count all with keyword, available */
+                return parkingLotRepository.countAll(keyword, true);
+            } else { /* count all with keyword */
+                return parkingLotRepository.countAll(keyword);
+            }
+        }
+    }
+
+    @Override
+    public Long countAll(@NotEmpty String keyword, boolean isAvailableOnly, @NotNull ParkingLotTypeEntity parkingLotTypeEntity) {
+
+        if (keyword.isEmpty()) {
+            if (isAvailableOnly) { /* count all by type, available */
+                return parkingLotRepository.countAll(parkingLotTypeEntity, true);
+            } else { /* count all by type */
+                return parkingLotRepository.countAll(parkingLotTypeEntity);
+            }
+
+        } else {
+            if (isAvailableOnly) { /* count all by type, with keyword, available */
+                return parkingLotRepository.countAll(keyword, parkingLotTypeEntity, true);
+            } else { /* count all by type, with keyword */
+                return parkingLotRepository.countAll(keyword, parkingLotTypeEntity);
+            }
+        }
+    }
+
+    @Override
+    public List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow,
+                                         @NotNull Integer pageNumber,
+                                         @NotEmpty String keyword,
+                                         boolean isAvailableOnly) {
+
+        if (keyword.isEmpty()) {
+            if (isAvailableOnly) { /* get all available */
+                return parkingLotRepository.getAll(nRow, pageNumber, true);
+            } else { /* get all */
+                return parkingLotRepository.getAll(nRow, pageNumber);
+            }
+
+        } else {
+            if (isAvailableOnly) { /* get all with keyword, available */
+                return parkingLotRepository.getAll(nRow, pageNumber, keyword, true);
+            } else { /* get all with keyword */
+                return parkingLotRepository.getAll(nRow, pageNumber, keyword);
+            }
+        }
+    }
+
+    @Override
+    public List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow,
+                                         @NotNull Integer pageNumber,
+                                         @NotEmpty String keyword,
+                                         boolean isAvailableOnly,
+                                         @NotNull ParkingLotTypeEntity parkingLotTypeEntity) {
+
+        if (keyword.isEmpty()) {
+            if (isAvailableOnly) { /* get all by type, available */
+                return parkingLotRepository.getAll(nRow, pageNumber, parkingLotTypeEntity, true);
+            } else { /* get all by type */
+                return parkingLotRepository.getAll(nRow, pageNumber, parkingLotTypeEntity);
+            }
+
+        } else {
+            if (isAvailableOnly) { /* get all by type, with keyword, available */
+                return parkingLotRepository.getAll(nRow, pageNumber, keyword, parkingLotTypeEntity, true);
+            } else { /* get all by type, with keyword */
+                return parkingLotRepository.getAll(nRow, pageNumber, keyword, parkingLotTypeEntity);
+            }
+        }
     }
 
     @Override
@@ -58,11 +137,6 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     @Override
     public ParkingLotLimitEntity getParkingLotLimitById(@NotNull Long id) {
         return parkingLotLimitRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-    }
-
-    @Override
-    public List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber) {
-        return parkingLotRepository.getAll(nRow, pageNumber);
     }
 
     @Override

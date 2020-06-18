@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
+import com.bht.saigonparking.service.parkinglot.entity.ParkingLotTypeEntity;
 
 /**
  *
@@ -16,13 +17,25 @@ import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
  */
 public interface ParkingLotService {
 
-    Long countAll();
+    Long countAll(@NotEmpty String keyword, boolean isAvailableOnly);
+
+    Long countAll(@NotEmpty String keyword, boolean isAvailableOnly, @NotNull ParkingLotTypeEntity parkingLotTypeEntity);
+
+    List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow,
+                                  @NotNull Integer pageNumber,
+                                  @NotEmpty String keyword,
+                                  boolean isAvailableOnly);
+
+    List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow,
+                                  @NotNull Integer pageNumber,
+                                  @NotEmpty String keyword,
+                                  boolean isAvailableOnly,
+                                  @NotNull ParkingLotTypeEntity parkingLotTypeEntity);
+
 
     ParkingLotEntity getParkingLotById(@NotNull Long id);
 
     ParkingLotLimitEntity getParkingLotLimitById(@NotNull Long id);
-
-    List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber);
 
     Boolean checkAvailability(@NotNull Long parkingLotId);
 

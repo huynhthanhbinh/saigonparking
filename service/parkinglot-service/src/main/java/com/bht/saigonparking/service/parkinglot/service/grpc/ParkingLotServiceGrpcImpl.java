@@ -15,11 +15,13 @@ import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotLimit;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResult;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResultList;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc.ParkingLotServiceImplBase;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
 import com.bht.saigonparking.api.grpc.parkinglot.ScanningByRadiusRequest;
 import com.bht.saigonparking.common.exception.PermissionDeniedException;
 import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
+import com.bht.saigonparking.service.parkinglot.mapper.EnumMapper;
 import com.bht.saigonparking.service.parkinglot.mapper.ParkingLotMapper;
 import com.bht.saigonparking.service.parkinglot.mapper.ParkingLotMapperExt;
 import com.bht.saigonparking.service.parkinglot.service.main.ParkingLotService;
@@ -49,6 +51,7 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
     private final ParkingLotService parkingLotService;
     private final ParkingLotMapper parkingLotMapper;
     private final ParkingLotMapperExt parkingLotMapperExt;
+    private final EnumMapper enumMapper;
     private final SaigonParkingServerInterceptor serverInterceptor;
 
     @Override
@@ -58,7 +61,15 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
                 throw new PermissionDeniedException();
             }
 
-            Long count = parkingLotService.countAll();
+            Long count;
+
+            if (request.getParkingLotType().equals(ParkingLotType.ALL)) {
+                count = parkingLotService.countAll(request.getKeyword(), request.getAvailableOnly());
+
+            } else {
+                count = parkingLotService.countAll(request.getKeyword(), request.getAvailableOnly(),
+                        enumMapper.toParkingLotTypeEntity(request.getParkingLotType()));
+            }
 
             responseObserver.onNext(Int64Value.of(count));
             responseObserver.onCompleted();
@@ -81,8 +92,17 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
                 throw new PermissionDeniedException();
             }
 
-            List<ParkingLot> parkingLotList = parkingLotMapper.toParkingLotList(parkingLotService
-                    .getAll(request.getNRow(), request.getPageNumber()));
+            List<ParkingLot> parkingLotList;
+
+            if (request.getParkingLotType().equals(ParkingLotType.ALL)) {
+                parkingLotList = parkingLotMapper.toParkingLotList(parkingLotService
+                        .getAll(request.getNRow(), request.getPageNumber(), request.getKeyword(), request.getAvailableOnly()));
+
+            } else {
+                parkingLotList = parkingLotMapper.toParkingLotList(parkingLotService
+                        .getAll(request.getNRow(), request.getPageNumber(), request.getKeyword(), request.getAvailableOnly(),
+                                enumMapper.toParkingLotTypeEntity(request.getParkingLotType())));
+            }
 
             responseObserver.onNext(GetAllParkingLotResponse.newBuilder().addAllParkingLot(parkingLotList).build());
             responseObserver.onCompleted();
