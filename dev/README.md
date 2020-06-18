@@ -15,4 +15,4 @@ Written by: Huynh Thanh Binh (bht) in May 20th, 2020<br/>
 (Can be found in documents folder, file commands.txt)
 
 <h4>Project's architecture</h4>
-![](architecture.png)
+![](../documents/architecture.png)
