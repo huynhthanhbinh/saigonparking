@@ -236,3 +236,6 @@ Last updated:       Fri, Jun 19th, 2020
 
 79. How to fetch today's date in CriteriaBuilder in hibernate
         https://stackoverflow.com/questions/53879792/how-to-fetch-todays-date-in-criteriabuilder-in-hibernate
+
+80. The data types time and datetime are incompatible in the greater than or equal to operator -> sendTimeAsDateTime=f‌a‌lse
+        https://stackoverflow.com/questions/38954422/the-data-types-time-and-datetime-are-incompatible-in-the-greater-than-or-equal-t
