@@ -17,26 +17,26 @@ public interface ParkingLotRepositoryCustom {
 
     Long countAll();
 
-    Long countAll(@NotNull Boolean isAvailable);
+    Long countAll(boolean isAvailable);
 
     Long countAll(@NotEmpty String keyword);
 
     Long countAll(@NotNull ParkingLotTypeEntity parkingLotTypeEntity);
 
-    Long countAll(@NotEmpty String keyword, @NotNull Boolean isAvailable);
+    Long countAll(@NotEmpty String keyword, boolean isAvailable);
 
-    Long countAll(@NotNull ParkingLotTypeEntity parkingLotTypeEntity, @NotNull Boolean isAvailable);
+    Long countAll(@NotNull ParkingLotTypeEntity parkingLotTypeEntity, boolean isAvailable);
 
     Long countAll(@NotEmpty String keyword, @NotNull ParkingLotTypeEntity parkingLotTypeEntity);
 
-    Long countAll(@NotEmpty String keyword, @NotNull ParkingLotTypeEntity parkingLotTypeEntity, @NotNull Boolean isAvailable);
+    Long countAll(@NotEmpty String keyword, @NotNull ParkingLotTypeEntity parkingLotTypeEntity, boolean isAvailable);
 
     List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow,
                                   @NotNull Integer pageNumber);
 
     List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow,
                                   @NotNull Integer pageNumber,
-                                  @NotNull Boolean isAvailable);
+                                  boolean isAvailable);
 
     List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow,
                                   @NotNull Integer pageNumber,
@@ -49,12 +49,12 @@ public interface ParkingLotRepositoryCustom {
     List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow,
                                   @NotNull Integer pageNumber,
                                   @NotEmpty String keyword,
-                                  @NotNull Boolean isAvailable);
+                                  boolean isAvailable);
 
     List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow,
                                   @NotNull Integer pageNumber,
                                   @NotNull ParkingLotTypeEntity parkingLotTypeEntity,
-                                  @NotNull Boolean isAvailable);
+                                  boolean isAvailable);
 
     List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow,
                                   @NotNull Integer pageNumber,
@@ -65,5 +65,5 @@ public interface ParkingLotRepositoryCustom {
                                   @NotNull Integer pageNumber,
                                   @NotEmpty String keyword,
                                   @NotNull ParkingLotTypeEntity parkingLotTypeEntity,
-                                  @NotNull Boolean isAvailable);
+                                  boolean isAvailable);
 }

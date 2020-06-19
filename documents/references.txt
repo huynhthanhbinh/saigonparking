@@ -224,3 +224,15 @@ Last updated:       Fri, Jun 19th, 2020
 
 75. How can I do a JOIN FETCH in criteria api
         https://discourse.hibernate.org/t/how-can-i-do-a-join-fetch-in-criteria-api/846/2
+
+76. Query specified join fetching, but the owner of the fetched association was not present in the select list
+        https://stackoverflow.com/questions/12459779/query-specified-join-fetching-but-the-owner-of-the-fetched-association-was-not
+
+77. Count results from joining a table based on a condition with Criteria API
+        https://stackoverflow.com/questions/52362104/count-results-from-joining-a-table-based-on-a-condition-with-criteria-api
+
+78. Add CriteriaBuilder.between(Date) to Predicate?
+        https://stackoverflow.com/questions/41806152/add-criteriabuilder-betweendate-to-predicate
+
+79. How to fetch today's date in CriteriaBuilder in hibernate
+        https://stackoverflow.com/questions/53879792/how-to-fetch-todays-date-in-criteriabuilder-in-hibernate

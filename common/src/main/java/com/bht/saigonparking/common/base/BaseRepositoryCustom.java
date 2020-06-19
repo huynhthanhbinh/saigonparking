@@ -2,6 +2,7 @@ package com.bht.saigonparking.common.base;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
 
 /**
  *
@@ -23,7 +24,7 @@ import javax.persistence.PersistenceContext;
  *
  * @author bht
  */
-public abstract class BaseRepositoryCustom {
+public abstract class BaseRepositoryCustom implements BaseBean {
 
     /**
      *
@@ -45,6 +46,13 @@ public abstract class BaseRepositoryCustom {
      */
     @PersistenceContext
     protected EntityManager entityManager;
+
+    protected CriteriaBuilder criteriaBuilder;
+
+    @Override
+    public void initialize() {
+        criteriaBuilder = entityManager.getCriteriaBuilder();
+    }
 
     protected String convertKeyword(String keyword) {
         return "%" + keyword + "%";

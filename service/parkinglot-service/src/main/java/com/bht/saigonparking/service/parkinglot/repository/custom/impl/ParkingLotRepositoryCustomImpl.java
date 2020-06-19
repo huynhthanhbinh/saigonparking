@@ -3,10 +3,10 @@ package com.bht.saigonparking.service.parkinglot.repository.custom.impl;
 import java.util.List;
 
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Fetch;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Root;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Repository;
 
+import com.bht.saigonparking.common.base.BaseEntity_;
 import com.bht.saigonparking.common.base.BaseRepositoryCustom;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity_;
@@ -33,7 +34,6 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
     @Override
     public Long countAll() {
 
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
 
@@ -43,153 +43,173 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
     }
 
     @Override
-    public Long countAll(@NotNull Boolean isAvailable) {
+    public Long countAll(boolean isAvailable) {
 
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
 
         return entityManager.createQuery(query
                 .select(criteriaBuilder.count(root))
-                .where(criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), isAvailable)))
+                .where(isAvailable
+                        ? criteriaBuilder.and(
+                        criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), true),
+                        criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                        criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime()))
+                        : criteriaBuilder.or(
+                        criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), false),
+                        criteriaBuilder.lessThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                        criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime()))))
                 .getSingleResult();
     }
 
     @Override
     public Long countAll(@NotEmpty String keyword) {
 
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
 
-        Fetch<ParkingLotEntity, ParkingLotInformationEntity> parkingLotInformationEntityFetch = root
-                .fetch(ParkingLotEntity_.PARKING_LOT_INFORMATION_ENTITY);
-        Join<ParkingLotEntity, ParkingLotInformationEntity> parkingLotInformationEntityJoin =
-                (Join<ParkingLotEntity, ParkingLotInformationEntity>) parkingLotInformationEntityFetch;
+        Join<ParkingLotEntity, ParkingLotInformationEntity> parkingLotInformationEntityJoin = root
+                .join(ParkingLotEntity_.parkingLotInformationEntity, JoinType.LEFT);
 
         return entityManager.createQuery(query
                 .select(criteriaBuilder.count(root))
                 .where(criteriaBuilder.or(
-                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.NAME), convertKeyword(keyword)),
-                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.ADDRESS), convertKeyword(keyword)),
-                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.PHONE), convertKeyword(keyword)))))
+                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.name), convertKeyword(keyword)),
+                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.address), convertKeyword(keyword)),
+                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.phone), convertKeyword(keyword)))))
                 .getSingleResult();
     }
 
     @Override
     public Long countAll(@NotNull ParkingLotTypeEntity parkingLotTypeEntity) {
 
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
 
-        root.fetch(ParkingLotEntity_.PARKING_LOT_TYPE_ENTITY);
+        Join<ParkingLotEntity, ParkingLotTypeEntity> parkingLotTypeEntityJoin = root
+                .join(ParkingLotEntity_.parkingLotTypeEntity, JoinType.LEFT);
 
         return entityManager.createQuery(query
                 .select(criteriaBuilder.count(root))
-                .where(criteriaBuilder.equal(root.get(ParkingLotEntity_.parkingLotTypeEntity), parkingLotTypeEntity)))
+                .where(criteriaBuilder.equal(parkingLotTypeEntityJoin.get(BaseEntity_.id), parkingLotTypeEntity.getId())))
                 .getSingleResult();
     }
 
     @Override
-    public Long countAll(@NotEmpty String keyword, @NotNull Boolean isAvailable) {
+    public Long countAll(@NotEmpty String keyword, boolean isAvailable) {
 
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
 
-        Fetch<ParkingLotEntity, ParkingLotInformationEntity> parkingLotInformationEntityFetch = root
-                .fetch(ParkingLotEntity_.PARKING_LOT_INFORMATION_ENTITY);
-        Join<ParkingLotEntity, ParkingLotInformationEntity> parkingLotInformationEntityJoin =
-                (Join<ParkingLotEntity, ParkingLotInformationEntity>) parkingLotInformationEntityFetch;
+        Join<ParkingLotEntity, ParkingLotInformationEntity> parkingLotInformationEntityJoin = root
+                .join(ParkingLotEntity_.parkingLotInformationEntity, JoinType.LEFT);
 
         return entityManager.createQuery(query
                 .select(criteriaBuilder.count(root))
                 .where(criteriaBuilder.and(
-                        criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), isAvailable),
+                        isAvailable
+                                ? criteriaBuilder.and(
+                                criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), true),
+                                criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                                criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime()))
+                                : criteriaBuilder.or(
+                                criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), false),
+                                criteriaBuilder.lessThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                                criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime())),
                         criteriaBuilder.or(
-                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.NAME), convertKeyword(keyword)),
-                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.ADDRESS), convertKeyword(keyword)),
-                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.PHONE), convertKeyword(keyword))))))
+                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.name), convertKeyword(keyword)),
+                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.address), convertKeyword(keyword)),
+                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.phone), convertKeyword(keyword))))))
                 .getSingleResult();
     }
 
     @Override
-    public Long countAll(@NotNull ParkingLotTypeEntity parkingLotTypeEntity, @NotNull Boolean isAvailable) {
+    public Long countAll(@NotNull ParkingLotTypeEntity parkingLotTypeEntity, boolean isAvailable) {
 
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
 
-        root.fetch(ParkingLotEntity_.PARKING_LOT_TYPE_ENTITY);
+        Join<ParkingLotEntity, ParkingLotTypeEntity> parkingLotTypeEntityJoin = root
+                .join(ParkingLotEntity_.parkingLotTypeEntity, JoinType.LEFT);
 
         return entityManager.createQuery(query
                 .select(criteriaBuilder.count(root))
                 .where(criteriaBuilder.and(
-                        criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), isAvailable),
-                        criteriaBuilder.equal(root.get(ParkingLotEntity_.parkingLotTypeEntity), parkingLotTypeEntity))))
+                        criteriaBuilder.equal(parkingLotTypeEntityJoin.get(BaseEntity_.id), parkingLotTypeEntity.getId()),
+                        isAvailable
+                                ? criteriaBuilder.and(
+                                criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), true),
+                                criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                                criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime()))
+                                : criteriaBuilder.or(
+                                criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), false),
+                                criteriaBuilder.lessThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                                criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime())))))
                 .getSingleResult();
     }
 
     @Override
     public Long countAll(@NotEmpty String keyword, @NotNull ParkingLotTypeEntity parkingLotTypeEntity) {
 
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
 
-        root.fetch(ParkingLotEntity_.PARKING_LOT_TYPE_ENTITY);
-        Fetch<ParkingLotEntity, ParkingLotInformationEntity> parkingLotInformationEntityFetch = root
-                .fetch(ParkingLotEntity_.PARKING_LOT_INFORMATION_ENTITY);
-        Join<ParkingLotEntity, ParkingLotInformationEntity> parkingLotInformationEntityJoin =
-                (Join<ParkingLotEntity, ParkingLotInformationEntity>) parkingLotInformationEntityFetch;
+        Join<ParkingLotEntity, ParkingLotTypeEntity> parkingLotTypeEntityJoin = root
+                .join(ParkingLotEntity_.parkingLotTypeEntity, JoinType.LEFT);
+        Join<ParkingLotEntity, ParkingLotInformationEntity> parkingLotInformationEntityJoin = root
+                .join(ParkingLotEntity_.parkingLotInformationEntity, JoinType.LEFT);
 
         return entityManager.createQuery(query
                 .select(criteriaBuilder.count(root))
                 .where(criteriaBuilder.and(
-                        criteriaBuilder.equal(root.get(ParkingLotEntity_.parkingLotTypeEntity), parkingLotTypeEntity),
+                        criteriaBuilder.equal(parkingLotTypeEntityJoin.get(BaseEntity_.id), parkingLotTypeEntity.getId()),
                         criteriaBuilder.or(
-                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.NAME), convertKeyword(keyword)),
-                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.ADDRESS), convertKeyword(keyword)),
-                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.PHONE), convertKeyword(keyword))))))
+                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.name), convertKeyword(keyword)),
+                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.address), convertKeyword(keyword)),
+                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.phone), convertKeyword(keyword))))))
                 .getSingleResult();
     }
 
     @Override
-    public Long countAll(@NotEmpty String keyword, @NotNull ParkingLotTypeEntity parkingLotTypeEntity, @NotNull Boolean isAvailable) {
+    public Long countAll(@NotEmpty String keyword, @NotNull ParkingLotTypeEntity parkingLotTypeEntity, boolean isAvailable) {
 
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
 
-        root.fetch(ParkingLotEntity_.PARKING_LOT_TYPE_ENTITY);
-        Fetch<ParkingLotEntity, ParkingLotInformationEntity> parkingLotInformationEntityFetch = root
-                .fetch(ParkingLotEntity_.PARKING_LOT_INFORMATION_ENTITY);
-        Join<ParkingLotEntity, ParkingLotInformationEntity> parkingLotInformationEntityJoin =
-                (Join<ParkingLotEntity, ParkingLotInformationEntity>) parkingLotInformationEntityFetch;
+        Join<ParkingLotEntity, ParkingLotTypeEntity> parkingLotTypeEntityJoin = root
+                .join(ParkingLotEntity_.parkingLotTypeEntity, JoinType.LEFT);
+        Join<ParkingLotEntity, ParkingLotInformationEntity> parkingLotInformationEntityJoin = root
+                .join(ParkingLotEntity_.parkingLotInformationEntity, JoinType.LEFT);
 
         return entityManager.createQuery(query
                 .select(criteriaBuilder.count(root))
                 .where(criteriaBuilder.and(
-                        criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), isAvailable),
-                        criteriaBuilder.equal(root.get(ParkingLotEntity_.parkingLotTypeEntity), parkingLotTypeEntity),
+                        criteriaBuilder.equal(parkingLotTypeEntityJoin.get(BaseEntity_.id), parkingLotTypeEntity.getId()),
+                        isAvailable
+                                ? criteriaBuilder.and(
+                                criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), true),
+                                criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                                criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime()))
+                                : criteriaBuilder.or(
+                                criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), false),
+                                criteriaBuilder.lessThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                                criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime())),
                         criteriaBuilder.or(
-                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.NAME), convertKeyword(keyword)),
-                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.ADDRESS), convertKeyword(keyword)),
-                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.PHONE), convertKeyword(keyword))))))
+                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.name), convertKeyword(keyword)),
+                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.address), convertKeyword(keyword)),
+                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.phone), convertKeyword(keyword))))))
                 .getSingleResult();
     }
 
     @Override
     public List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber) {
 
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<ParkingLotEntity> query = criteriaBuilder.createQuery(ParkingLotEntity.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
 
-        root.fetch(ParkingLotEntity_.PARKING_LOT_TYPE_ENTITY);
-        root.fetch(ParkingLotEntity_.PARKING_LOT_LIMIT_ENTITY);
-        root.fetch(ParkingLotEntity_.PARKING_LOT_INFORMATION_ENTITY);
+        root.fetch(ParkingLotEntity_.parkingLotTypeEntity);
+        root.fetch(ParkingLotEntity_.parkingLotLimitEntity);
+        root.fetch(ParkingLotEntity_.parkingLotInformationEntity);
 
         TypedQuery<ParkingLotEntity> getAllQuery = entityManager
                 .createQuery(query
@@ -203,20 +223,27 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
     }
 
     @Override
-    public List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotNull Boolean isAvailable) {
+    public List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, boolean isAvailable) {
 
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<ParkingLotEntity> query = criteriaBuilder.createQuery(ParkingLotEntity.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
 
-        root.fetch(ParkingLotEntity_.PARKING_LOT_TYPE_ENTITY);
-        root.fetch(ParkingLotEntity_.PARKING_LOT_LIMIT_ENTITY);
-        root.fetch(ParkingLotEntity_.PARKING_LOT_INFORMATION_ENTITY);
+        root.fetch(ParkingLotEntity_.parkingLotTypeEntity);
+        root.fetch(ParkingLotEntity_.parkingLotLimitEntity);
+        root.fetch(ParkingLotEntity_.parkingLotInformationEntity);
 
         TypedQuery<ParkingLotEntity> getAllQuery = entityManager
                 .createQuery(query
                         .select(root)
-                        .where(criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), isAvailable))
+                        .where(isAvailable
+                                ? criteriaBuilder.and(
+                                criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), true),
+                                criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                                criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime()))
+                                : criteriaBuilder.or(
+                                criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), false),
+                                criteriaBuilder.lessThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                                criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime())))
                         .orderBy(criteriaBuilder.asc(root)));
 
         getAllQuery.setMaxResults(nRow);
@@ -228,14 +255,13 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
     @Override
     public List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotEmpty String keyword) {
 
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<ParkingLotEntity> query = criteriaBuilder.createQuery(ParkingLotEntity.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
 
-        root.fetch(ParkingLotEntity_.PARKING_LOT_TYPE_ENTITY);
-        root.fetch(ParkingLotEntity_.PARKING_LOT_LIMIT_ENTITY);
+        root.fetch(ParkingLotEntity_.parkingLotTypeEntity);
+        root.fetch(ParkingLotEntity_.parkingLotLimitEntity);
         Fetch<ParkingLotEntity, ParkingLotInformationEntity> parkingLotInformationEntityFetch = root
-                .fetch(ParkingLotEntity_.PARKING_LOT_INFORMATION_ENTITY);
+                .fetch(ParkingLotEntity_.parkingLotInformationEntity);
         Join<ParkingLotEntity, ParkingLotInformationEntity> parkingLotInformationEntityJoin =
                 (Join<ParkingLotEntity, ParkingLotInformationEntity>) parkingLotInformationEntityFetch;
 
@@ -243,9 +269,9 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
                 .createQuery(query
                         .select(root)
                         .where(criteriaBuilder.or(
-                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.NAME), convertKeyword(keyword)),
-                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.ADDRESS), convertKeyword(keyword)),
-                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.PHONE), convertKeyword(keyword))))
+                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.name), convertKeyword(keyword)),
+                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.address), convertKeyword(keyword)),
+                                criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.phone), convertKeyword(keyword))))
                         .orderBy(criteriaBuilder.asc(root)));
 
         getAllQuery.setMaxResults(nRow);
@@ -257,18 +283,20 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
     @Override
     public List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotNull ParkingLotTypeEntity parkingLotTypeEntity) {
 
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<ParkingLotEntity> query = criteriaBuilder.createQuery(ParkingLotEntity.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
 
-        root.fetch(ParkingLotEntity_.PARKING_LOT_TYPE_ENTITY);
-        root.fetch(ParkingLotEntity_.PARKING_LOT_LIMIT_ENTITY);
-        root.fetch(ParkingLotEntity_.PARKING_LOT_INFORMATION_ENTITY);
+        root.fetch(ParkingLotEntity_.parkingLotLimitEntity);
+        root.fetch(ParkingLotEntity_.parkingLotInformationEntity);
+        Fetch<ParkingLotEntity, ParkingLotTypeEntity> parkingLotTypeEntityFetch = root
+                .fetch(ParkingLotEntity_.parkingLotTypeEntity);
+        Join<ParkingLotEntity, ParkingLotTypeEntity> parkingLotTypeEntityJoin =
+                (Join<ParkingLotEntity, ParkingLotTypeEntity>) parkingLotTypeEntityFetch;
 
         TypedQuery<ParkingLotEntity> getAllQuery = entityManager
                 .createQuery(query
                         .select(root)
-                        .where(criteriaBuilder.equal(root.get(ParkingLotEntity_.parkingLotTypeEntity), parkingLotTypeEntity))
+                        .where(criteriaBuilder.equal(parkingLotTypeEntityJoin.get(BaseEntity_.id), parkingLotTypeEntity.getId()))
                         .orderBy(criteriaBuilder.asc(root)));
 
         getAllQuery.setMaxResults(nRow);
@@ -278,16 +306,15 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
     }
 
     @Override
-    public List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotEmpty String keyword, @NotNull Boolean isAvailable) {
+    public List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotEmpty String keyword, boolean isAvailable) {
 
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<ParkingLotEntity> query = criteriaBuilder.createQuery(ParkingLotEntity.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
 
-        root.fetch(ParkingLotEntity_.PARKING_LOT_TYPE_ENTITY);
-        root.fetch(ParkingLotEntity_.PARKING_LOT_LIMIT_ENTITY);
+        root.fetch(ParkingLotEntity_.parkingLotTypeEntity);
+        root.fetch(ParkingLotEntity_.parkingLotLimitEntity);
         Fetch<ParkingLotEntity, ParkingLotInformationEntity> parkingLotInformationEntityFetch = root
-                .fetch(ParkingLotEntity_.PARKING_LOT_INFORMATION_ENTITY);
+                .fetch(ParkingLotEntity_.parkingLotInformationEntity);
         Join<ParkingLotEntity, ParkingLotInformationEntity> parkingLotInformationEntityJoin =
                 (Join<ParkingLotEntity, ParkingLotInformationEntity>) parkingLotInformationEntityFetch;
 
@@ -295,11 +322,19 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
                 .createQuery(query
                         .select(root)
                         .where(criteriaBuilder.and(
-                                criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), isAvailable),
+                                isAvailable
+                                        ? criteriaBuilder.and(
+                                        criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), true),
+                                        criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                                        criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime()))
+                                        : criteriaBuilder.or(
+                                        criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), false),
+                                        criteriaBuilder.lessThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                                        criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime())),
                                 criteriaBuilder.or(
-                                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.NAME), convertKeyword(keyword)),
-                                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.ADDRESS), convertKeyword(keyword)),
-                                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.PHONE), convertKeyword(keyword)))))
+                                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.name), convertKeyword(keyword)),
+                                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.address), convertKeyword(keyword)),
+                                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.phone), convertKeyword(keyword)))))
                         .orderBy(criteriaBuilder.asc(root)));
 
         getAllQuery.setMaxResults(nRow);
@@ -309,22 +344,32 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
     }
 
     @Override
-    public List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotNull ParkingLotTypeEntity parkingLotTypeEntity, @NotNull Boolean isAvailable) {
+    public List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotNull ParkingLotTypeEntity parkingLotTypeEntity, boolean isAvailable) {
 
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<ParkingLotEntity> query = criteriaBuilder.createQuery(ParkingLotEntity.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
 
-        root.fetch(ParkingLotEntity_.PARKING_LOT_TYPE_ENTITY);
-        root.fetch(ParkingLotEntity_.PARKING_LOT_LIMIT_ENTITY);
-        root.fetch(ParkingLotEntity_.PARKING_LOT_INFORMATION_ENTITY);
+        root.fetch(ParkingLotEntity_.parkingLotLimitEntity);
+        root.fetch(ParkingLotEntity_.parkingLotInformationEntity);
+        Fetch<ParkingLotEntity, ParkingLotTypeEntity> parkingLotTypeEntityFetch = root
+                .fetch(ParkingLotEntity_.parkingLotTypeEntity);
+        Join<ParkingLotEntity, ParkingLotTypeEntity> parkingLotTypeEntityJoin =
+                (Join<ParkingLotEntity, ParkingLotTypeEntity>) parkingLotTypeEntityFetch;
 
         TypedQuery<ParkingLotEntity> getAllQuery = entityManager
                 .createQuery(query
                         .select(root)
                         .where(criteriaBuilder.and(
-                                criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), isAvailable),
-                                criteriaBuilder.equal(root.get(ParkingLotEntity_.parkingLotTypeEntity), parkingLotTypeEntity)))
+                                criteriaBuilder.equal(parkingLotTypeEntityJoin.get(BaseEntity_.id), parkingLotTypeEntity.getId()),
+                                isAvailable
+                                        ? criteriaBuilder.and(
+                                        criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), true),
+                                        criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                                        criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime()))
+                                        : criteriaBuilder.or(
+                                        criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), false),
+                                        criteriaBuilder.lessThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                                        criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime()))))
                         .orderBy(criteriaBuilder.asc(root)));
 
         getAllQuery.setMaxResults(nRow);
@@ -336,14 +381,16 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
     @Override
     public List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotEmpty String keyword, @NotNull ParkingLotTypeEntity parkingLotTypeEntity) {
 
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<ParkingLotEntity> query = criteriaBuilder.createQuery(ParkingLotEntity.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
 
-        root.fetch(ParkingLotEntity_.PARKING_LOT_TYPE_ENTITY);
-        root.fetch(ParkingLotEntity_.PARKING_LOT_LIMIT_ENTITY);
+        root.fetch(ParkingLotEntity_.parkingLotLimitEntity);
+        Fetch<ParkingLotEntity, ParkingLotTypeEntity> parkingLotTypeEntityFetch = root
+                .fetch(ParkingLotEntity_.parkingLotTypeEntity);
+        Join<ParkingLotEntity, ParkingLotTypeEntity> parkingLotTypeEntityJoin =
+                (Join<ParkingLotEntity, ParkingLotTypeEntity>) parkingLotTypeEntityFetch;
         Fetch<ParkingLotEntity, ParkingLotInformationEntity> parkingLotInformationEntityFetch = root
-                .fetch(ParkingLotEntity_.PARKING_LOT_INFORMATION_ENTITY);
+                .fetch(ParkingLotEntity_.parkingLotInformationEntity);
         Join<ParkingLotEntity, ParkingLotInformationEntity> parkingLotInformationEntityJoin =
                 (Join<ParkingLotEntity, ParkingLotInformationEntity>) parkingLotInformationEntityFetch;
 
@@ -351,11 +398,11 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
                 .createQuery(query
                         .select(root)
                         .where(criteriaBuilder.and(
-                                criteriaBuilder.equal(root.get(ParkingLotEntity_.parkingLotTypeEntity), parkingLotTypeEntity),
+                                criteriaBuilder.equal(parkingLotTypeEntityJoin.get(BaseEntity_.id), parkingLotTypeEntity.getId()),
                                 criteriaBuilder.or(
-                                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.NAME), convertKeyword(keyword)),
-                                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.ADDRESS), convertKeyword(keyword)),
-                                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.PHONE), convertKeyword(keyword)))))
+                                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.name), convertKeyword(keyword)),
+                                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.address), convertKeyword(keyword)),
+                                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.phone), convertKeyword(keyword)))))
                         .orderBy(criteriaBuilder.asc(root)));
 
         getAllQuery.setMaxResults(nRow);
@@ -365,30 +412,39 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
     }
 
     @Override
-    public List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotEmpty String keyword, @NotNull ParkingLotTypeEntity parkingLotTypeEntity, @NotNull Boolean isAvailable) {
+    public List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow, @NotNull Integer pageNumber, @NotEmpty String keyword, @NotNull ParkingLotTypeEntity parkingLotTypeEntity, boolean isAvailable) {
 
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<ParkingLotEntity> query = criteriaBuilder.createQuery(ParkingLotEntity.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
 
-        root.fetch(ParkingLotEntity_.PARKING_LOT_TYPE_ENTITY);
-        root.fetch(ParkingLotEntity_.PARKING_LOT_LIMIT_ENTITY);
+        root.fetch(ParkingLotEntity_.parkingLotLimitEntity);
+        Fetch<ParkingLotEntity, ParkingLotTypeEntity> parkingLotTypeEntityFetch = root
+                .fetch(ParkingLotEntity_.parkingLotTypeEntity);
+        Join<ParkingLotEntity, ParkingLotTypeEntity> parkingLotTypeEntityJoin =
+                (Join<ParkingLotEntity, ParkingLotTypeEntity>) parkingLotTypeEntityFetch;
         Fetch<ParkingLotEntity, ParkingLotInformationEntity> parkingLotInformationEntityFetch = root
-                .fetch(ParkingLotEntity_.PARKING_LOT_INFORMATION_ENTITY);
+                .fetch(ParkingLotEntity_.parkingLotInformationEntity);
         Join<ParkingLotEntity, ParkingLotInformationEntity> parkingLotInformationEntityJoin =
                 (Join<ParkingLotEntity, ParkingLotInformationEntity>) parkingLotInformationEntityFetch;
-
 
         TypedQuery<ParkingLotEntity> getAllQuery = entityManager
                 .createQuery(query
                         .select(root)
                         .where(criteriaBuilder.and(
-                                criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), isAvailable),
-                                criteriaBuilder.equal(root.get(ParkingLotEntity_.parkingLotTypeEntity), parkingLotTypeEntity),
+                                criteriaBuilder.equal(parkingLotTypeEntityJoin.get(BaseEntity_.id), parkingLotTypeEntity.getId()),
+                                isAvailable
+                                        ? criteriaBuilder.and(
+                                        criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), true),
+                                        criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                                        criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime()))
+                                        : criteriaBuilder.or(
+                                        criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), false),
+                                        criteriaBuilder.lessThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                                        criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime())),
                                 criteriaBuilder.or(
-                                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.NAME), convertKeyword(keyword)),
-                                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.ADDRESS), convertKeyword(keyword)),
-                                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.PHONE), convertKeyword(keyword)))))
+                                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.name), convertKeyword(keyword)),
+                                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.address), convertKeyword(keyword)),
+                                        criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.phone), convertKeyword(keyword)))))
                         .orderBy(criteriaBuilder.asc(root)));
 
         getAllQuery.setMaxResults(nRow);
