@@ -1,5 +1,7 @@
 package com.bht.saigonparking.service.parkinglot.repository.custom.impl;
 
+import java.sql.Time;
+import java.time.LocalTime;
 import java.util.List;
 
 import javax.persistence.TypedQuery;
@@ -47,18 +49,19 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
 
         CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
+        Time currentTime = Time.valueOf(LocalTime.now());
 
         return entityManager.createQuery(query
                 .select(criteriaBuilder.count(root))
                 .where(isAvailable
                         ? criteriaBuilder.and(
                         criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), true),
-                        criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
-                        criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime()))
+                        criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), currentTime),
+                        criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), currentTime))
                         : criteriaBuilder.or(
                         criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), false),
-                        criteriaBuilder.lessThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
-                        criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime()))))
+                        criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                        criteriaBuilder.lessThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime()))))
                 .getSingleResult();
     }
 
@@ -100,6 +103,7 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
 
         CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
+        Time currentTime = Time.valueOf(LocalTime.now());
 
         Join<ParkingLotEntity, ParkingLotInformationEntity> parkingLotInformationEntityJoin = root
                 .join(ParkingLotEntity_.parkingLotInformationEntity, JoinType.LEFT);
@@ -110,12 +114,12 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
                         isAvailable
                                 ? criteriaBuilder.and(
                                 criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), true),
-                                criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
-                                criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime()))
+                                criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), currentTime),
+                                criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), currentTime))
                                 : criteriaBuilder.or(
                                 criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), false),
-                                criteriaBuilder.lessThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
-                                criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime())),
+                                criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                                criteriaBuilder.lessThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime())),
                         criteriaBuilder.or(
                                 criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.name), convertKeyword(keyword)),
                                 criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.address), convertKeyword(keyword)),
@@ -128,6 +132,7 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
 
         CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
+        Time currentTime = Time.valueOf(LocalTime.now());
 
         Join<ParkingLotEntity, ParkingLotTypeEntity> parkingLotTypeEntityJoin = root
                 .join(ParkingLotEntity_.parkingLotTypeEntity, JoinType.LEFT);
@@ -139,12 +144,12 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
                         isAvailable
                                 ? criteriaBuilder.and(
                                 criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), true),
-                                criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
-                                criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime()))
+                                criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), currentTime),
+                                criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), currentTime))
                                 : criteriaBuilder.or(
                                 criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), false),
-                                criteriaBuilder.lessThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
-                                criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime())))))
+                                criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                                criteriaBuilder.lessThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime())))))
                 .getSingleResult();
     }
 
@@ -175,6 +180,7 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
 
         CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
+        Time currentTime = Time.valueOf(LocalTime.now());
 
         Join<ParkingLotEntity, ParkingLotTypeEntity> parkingLotTypeEntityJoin = root
                 .join(ParkingLotEntity_.parkingLotTypeEntity, JoinType.LEFT);
@@ -188,12 +194,12 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
                         isAvailable
                                 ? criteriaBuilder.and(
                                 criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), true),
-                                criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
-                                criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime()))
+                                criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), currentTime),
+                                criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), currentTime))
                                 : criteriaBuilder.or(
                                 criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), false),
-                                criteriaBuilder.lessThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
-                                criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime())),
+                                criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                                criteriaBuilder.lessThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime())),
                         criteriaBuilder.or(
                                 criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.name), convertKeyword(keyword)),
                                 criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.address), convertKeyword(keyword)),
@@ -227,6 +233,7 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
 
         CriteriaQuery<ParkingLotEntity> query = criteriaBuilder.createQuery(ParkingLotEntity.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
+        Time currentTime = Time.valueOf(LocalTime.now());
 
         root.fetch(ParkingLotEntity_.parkingLotTypeEntity);
         root.fetch(ParkingLotEntity_.parkingLotLimitEntity);
@@ -238,12 +245,12 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
                         .where(isAvailable
                                 ? criteriaBuilder.and(
                                 criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), true),
-                                criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
-                                criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime()))
+                                criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), currentTime),
+                                criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), currentTime))
                                 : criteriaBuilder.or(
                                 criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), false),
-                                criteriaBuilder.lessThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
-                                criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime())))
+                                criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                                criteriaBuilder.lessThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime())))
                         .orderBy(criteriaBuilder.asc(root)));
 
         getAllQuery.setMaxResults(nRow);
@@ -310,6 +317,7 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
 
         CriteriaQuery<ParkingLotEntity> query = criteriaBuilder.createQuery(ParkingLotEntity.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
+        Time currentTime = Time.valueOf(LocalTime.now());
 
         root.fetch(ParkingLotEntity_.parkingLotTypeEntity);
         root.fetch(ParkingLotEntity_.parkingLotLimitEntity);
@@ -325,12 +333,12 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
                                 isAvailable
                                         ? criteriaBuilder.and(
                                         criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), true),
-                                        criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
-                                        criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime()))
+                                        criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), currentTime),
+                                        criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), currentTime))
                                         : criteriaBuilder.or(
                                         criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), false),
-                                        criteriaBuilder.lessThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
-                                        criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime())),
+                                        criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                                        criteriaBuilder.lessThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime())),
                                 criteriaBuilder.or(
                                         criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.name), convertKeyword(keyword)),
                                         criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.address), convertKeyword(keyword)),
@@ -348,6 +356,7 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
 
         CriteriaQuery<ParkingLotEntity> query = criteriaBuilder.createQuery(ParkingLotEntity.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
+        Time currentTime = Time.valueOf(LocalTime.now());
 
         root.fetch(ParkingLotEntity_.parkingLotLimitEntity);
         root.fetch(ParkingLotEntity_.parkingLotInformationEntity);
@@ -364,12 +373,12 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
                                 isAvailable
                                         ? criteriaBuilder.and(
                                         criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), true),
-                                        criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
-                                        criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime()))
+                                        criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), currentTime),
+                                        criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), currentTime))
                                         : criteriaBuilder.or(
                                         criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), false),
-                                        criteriaBuilder.lessThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
-                                        criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime()))))
+                                        criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                                        criteriaBuilder.lessThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime()))))
                         .orderBy(criteriaBuilder.asc(root)));
 
         getAllQuery.setMaxResults(nRow);
@@ -416,6 +425,7 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
 
         CriteriaQuery<ParkingLotEntity> query = criteriaBuilder.createQuery(ParkingLotEntity.class);
         Root<ParkingLotEntity> root = query.from(ParkingLotEntity.class);
+        Time currentTime = Time.valueOf(LocalTime.now());
 
         root.fetch(ParkingLotEntity_.parkingLotLimitEntity);
         Fetch<ParkingLotEntity, ParkingLotTypeEntity> parkingLotTypeEntityFetch = root
@@ -435,12 +445,12 @@ public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom impleme
                                 isAvailable
                                         ? criteriaBuilder.and(
                                         criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), true),
-                                        criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
-                                        criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime()))
+                                        criteriaBuilder.lessThanOrEqualTo(root.get(ParkingLotEntity_.openingHour), currentTime),
+                                        criteriaBuilder.greaterThanOrEqualTo(root.get(ParkingLotEntity_.closingHour), currentTime))
                                         : criteriaBuilder.or(
                                         criteriaBuilder.equal(root.get(ParkingLotEntity_.isAvailable), false),
-                                        criteriaBuilder.lessThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
-                                        criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime())),
+                                        criteriaBuilder.greaterThan(root.get(ParkingLotEntity_.openingHour), criteriaBuilder.currentTime()),
+                                        criteriaBuilder.lessThan(root.get(ParkingLotEntity_.closingHour), criteriaBuilder.currentTime())),
                                 criteriaBuilder.or(
                                         criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.name), convertKeyword(keyword)),
                                         criteriaBuilder.like(parkingLotInformationEntityJoin.get(ParkingLotInformationEntity_.address), convertKeyword(keyword)),
