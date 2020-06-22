@@ -17,7 +17,6 @@ import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResultList;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc.ParkingLotServiceImplBase;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
 import com.bht.saigonparking.api.grpc.parkinglot.ScanningByRadiusRequest;
-import com.bht.saigonparking.common.exception.PermissionDeniedException;
 import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
@@ -57,9 +56,7 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
     @Override
     public void countAllParkingLot(CountAllParkingLotRequest request, StreamObserver<Int64Value> responseObserver) {
         try {
-            if (!serverInterceptor.getRoleContext().get().equals("ADMIN")) {
-                throw new PermissionDeniedException();
-            }
+            serverInterceptor.validateAdmin();
 
             Long count;
 
@@ -88,9 +85,7 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
     @Override
     public void getAllParkingLot(GetAllParkingLotRequest request, StreamObserver<GetAllParkingLotResponse> responseObserver) {
         try {
-            if (!serverInterceptor.getRoleContext().get().equals("ADMIN")) {
-                throw new PermissionDeniedException();
-            }
+            serverInterceptor.validateAdmin();
 
             List<ParkingLot> parkingLotList;
 
@@ -273,9 +268,7 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
     @Override
     public void deleteParkingLotById(Int64Value request, StreamObserver<Empty> responseObserver) {
         try {
-            if (!serverInterceptor.getRoleContext().get().equals("ADMIN")) {
-                throw new PermissionDeniedException();
-            }
+            serverInterceptor.validateAdmin();
 
             parkingLotService.deleteParkingLotById(request.getValue());
 

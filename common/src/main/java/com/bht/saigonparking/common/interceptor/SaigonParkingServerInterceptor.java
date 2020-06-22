@@ -6,6 +6,8 @@ import static com.bht.saigonparking.common.constant.SaigonParkingTransactionalMe
 import java.util.Collections;
 import java.util.Map;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.logging.log4j.Level;
 
 import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
@@ -13,6 +15,8 @@ import com.bht.saigonparking.common.auth.SaigonParkingAuthenticationImpl;
 import com.bht.saigonparking.common.auth.SaigonParkingTokenBody;
 import com.bht.saigonparking.common.auth.SaigonParkingTokenType;
 import com.bht.saigonparking.common.exception.MissingTokenException;
+import com.bht.saigonparking.common.exception.PermissionDeniedException;
+import com.bht.saigonparking.common.exception.UsernameNotMatchException;
 import com.bht.saigonparking.common.exception.WrongTokenTypeException;
 import com.bht.saigonparking.common.util.LoggingUtil;
 
@@ -142,5 +146,17 @@ public final class SaigonParkingServerInterceptor implements ServerInterceptor {
                 wrappedServerCall,
                 metadata,
                 serverCallHandler);
+    }
+
+    public void validateAdmin() {
+        if (!roleContext.get().equals("ADMIN")) {
+            throw new PermissionDeniedException();
+        }
+    }
+
+    public void validateUser(@NotNull Long userEntityId) {
+        if (!userIdContext.get().equals(userEntityId)) {
+            throw new UsernameNotMatchException();
+        }
     }
 }
