@@ -1,3 +1,4 @@
+.git/
 .idea/
 target/
 log/
@@ -7,3 +8,5 @@ log/
 *.iml
 *.ipr
 *.iws
+*.mdf
+*.ldf

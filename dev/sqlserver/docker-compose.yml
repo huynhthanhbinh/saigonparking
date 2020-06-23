@@ -1,0 +1,20 @@
+version: '3'
+networks:
+  saigonparking-database-test:
+    driver: bridge
+
+services:
+  saigonparking-database:
+    image: mcr.microsoft.com/mssql/server:2017-CU20-ubuntu-16.04
+    networks:
+      - saigonparking-database-test
+    environment:
+      TZ:                 ${TIMEZONE}
+      ACCEPT_EULA:        ${ACCEPT_EULA}
+      MSSQL_PID:          ${MSSQL_PID}
+      MSSQL_TCP_PORT:     ${MSSQL_TCP_PORT}
+      MSSQL_SA_PASSWORD:  ${MSSQL_SA_PASSWORD}
+    ports:
+      - "${MSSQL_TCP_PORT}:${MSSQL_TCP_PORT}"
+    volumes:
+      - ../database:/var/opt/mssql/data
