@@ -10,7 +10,6 @@ import com.bht.saigonparking.api.grpc.user.CountAllUserRequest;
 import com.bht.saigonparking.api.grpc.user.Customer;
 import com.bht.saigonparking.api.grpc.user.GetAllUserRequest;
 import com.bht.saigonparking.api.grpc.user.GetAllUserResponse;
-import com.bht.saigonparking.api.grpc.user.ParkingLotEmployee;
 import com.bht.saigonparking.api.grpc.user.UpdatePasswordRequest;
 import com.bht.saigonparking.api.grpc.user.User;
 import com.bht.saigonparking.api.grpc.user.UserRole;
@@ -18,7 +17,6 @@ import com.bht.saigonparking.api.grpc.user.UserServiceGrpc.UserServiceImplBase;
 import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.user.entity.CustomerEntity;
-import com.bht.saigonparking.service.user.entity.ParkingLotEmployeeEntity;
 import com.bht.saigonparking.service.user.entity.UserEntity;
 import com.bht.saigonparking.service.user.mapper.EnumMapper;
 import com.bht.saigonparking.service.user.mapper.UserMapper;
@@ -209,53 +207,6 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
     }
 
     @Override
-    public void getParkingLotEmployeeById(Int64Value request, StreamObserver<ParkingLotEmployee> responseObserver) {
-        try {
-            serverInterceptor.validateAdmin();
-
-            ParkingLotEmployee parkingLotEmployee = userMapper.toParkingLotEmployee(userService
-                    .getParkingLotEmployeeById(request.getValue()));
-
-            responseObserver.onNext(parkingLotEmployee);
-            responseObserver.onCompleted();
-
-            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("getParkingLotEmployeeById(%d)", request.getValue()));
-
-        } catch (Exception exception) {
-
-            responseObserver.onError(exception);
-
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
-            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                    String.format("getParkingLotEmployeeById(%d)", request.getValue()));
-        }
-    }
-
-    @Override
-    public void getParkingLotEmployeeByUsername(StringValue request, StreamObserver<ParkingLotEmployee> responseObserver) {
-        try {
-            ParkingLotEmployeeEntity parkingLotEmployeeEntity = userService.getParkingLotEmployeeByUsername(request.getValue());
-
-            serverInterceptor.validateUser(parkingLotEmployeeEntity.getId());
-
-            responseObserver.onNext(userMapper.toParkingLotEmployee(parkingLotEmployeeEntity));
-            responseObserver.onCompleted();
-
-            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("getParkingLotEmployeeByUsername(%s)", request.getValue()));
-
-        } catch (Exception exception) {
-
-            responseObserver.onError(exception);
-
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
-            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                    String.format("getParkingLotEmployeeByUsername(%s)", request.getValue()));
-        }
-    }
-
-    @Override
     public void createCustomer(Customer request, StreamObserver<Int64Value> responseObserver) {
         try {
             serverInterceptor.validateAdmin();
@@ -372,6 +323,29 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("deactivateUserWithId(%d)", request.getValue()));
+        }
+    }
+
+    @Override
+    public void deleteUserById(Int64Value request, StreamObserver<Empty> responseObserver) {
+        try {
+            serverInterceptor.validateAdmin();
+
+            userService.deleteUserById(request.getValue());
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("deleteUserById(%d)", request.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("deleteUserById(%d)", request.getValue()));
         }
     }
 }

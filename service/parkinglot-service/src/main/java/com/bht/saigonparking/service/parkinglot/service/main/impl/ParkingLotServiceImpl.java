@@ -3,6 +3,7 @@ package com.bht.saigonparking.service.parkinglot.service.main.impl;
 import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.PARKING_LOT_ROUTING_KEY;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.Tuple;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bht.saigonparking.api.grpc.parkinglot.DeleteParkingLotNotification;
+import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEmployeeEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotTypeEntity;
@@ -162,10 +164,15 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     @Override
     public void deleteParkingLotById(@NotNull Long id) {
         ParkingLotEntity parkingLotEntity = getParkingLotById(id);
+        List<Long> employeeIdList = parkingLotEntity.getParkingLotEmployeeEntitySet().stream()
+                .map(ParkingLotEmployeeEntity::getUserId)
+                .collect(Collectors.toList());
+
         parkingLotRepository.delete(parkingLotEntity);
 
         rabbitTemplate.convertAndSend(PARKING_LOT_ROUTING_KEY, DeleteParkingLotNotification.newBuilder()
                 .setParkingLotId(id)
+                .addAllEmployeeId(employeeIdList)
                 .build());
     }
 }

@@ -35,11 +35,6 @@ message Customer {
     string lastUpdated = 5;
 }
 
-message ParkingLotEmployee {
-    User userInfo = 1;
-    int64 parkingLotId = 2;
-}
-
 message UpdatePasswordRequest {
     string username = 1;
     string newPassword = 2;
@@ -127,18 +122,6 @@ service UserService {
     rpc getCustomerByUsername (google.protobuf.StringValue) returns (Customer);
 
     /** PRIVATE
-     * use-case: get employee account information
-     *  + request: employee's ID
-     *  + response: employee object if succeed, otherwise, throw exception */
-    rpc getParkingLotEmployeeById (google.protobuf.Int64Value) returns (ParkingLotEmployee);
-
-    /** PUBLIC
-     * use-case: get employee account information
-     *  + request: employee's username
-     *  + response: employee object if succeed, otherwise, throw exception */
-    rpc getParkingLotEmployeeByUsername (google.protobuf.StringValue) returns (ParkingLotEmployee);
-
-    /** PRIVATE
     * use-case: create user, CUSTOMER type (will be called by AuthService)
     *  + request: Customer object
     *  + response: user ID if succeed, otherwise, throw exception */
@@ -170,4 +153,10 @@ service UserService {
      *  + request: user ID
      *  + response: empty value if succeed, otherwise, throw exception */
     rpc deactivateUser (google.protobuf.Int64Value) returns (google.protobuf.Empty);
+
+    /** PRIVATE
+     * use-case: delete user (will be called by ADMIN or INTERNAL service)
+     *  + request: user ID
+     *  + response: empty value if succeed, otherwise, throw exception */
+    rpc deleteUserById (google.protobuf.Int64Value) returns (google.protobuf.Empty);
 }

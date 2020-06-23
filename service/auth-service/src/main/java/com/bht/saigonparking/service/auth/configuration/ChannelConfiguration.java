@@ -42,7 +42,7 @@ public final class ChannelConfiguration {
      *      .newStub(channel)          --> nonblocking/asynchronous stub
      *      .newBlockingStub(channel)  --> blocking/synchronous stub
      */
-    @Bean
+    @Bean("userChannel")
     public ManagedChannel managedChannel(@Value("${spring.cloud.consul.host}") String host,
                                          @Value("${spring.cloud.consul.port}") int port,
                                          @Value("${connection.idle-timeout}") int timeout,
@@ -67,14 +67,14 @@ public final class ChannelConfiguration {
 
     /* asynchronous user service stub */
     @Bean
-    public UserServiceGrpc.UserServiceStub userServiceStub(@Autowired ManagedChannel channel) {
+    public UserServiceGrpc.UserServiceStub userServiceStub(@Qualifier("userChannel") ManagedChannel channel) {
         return UserServiceGrpc.newStub(channel);
     }
 
 
     /* synchronous user service stub */
     @Bean
-    public UserServiceGrpc.UserServiceBlockingStub userServiceBlockingStub(@Autowired ManagedChannel channel) {
+    public UserServiceGrpc.UserServiceBlockingStub userServiceBlockingStub(@Qualifier("userChannel") ManagedChannel channel) {
         return UserServiceGrpc.newBlockingStub(channel);
     }
 }

@@ -43,15 +43,15 @@ public final class MessageQueueConfiguration {
     @RabbitListener(queues = {PARKING_LOT_QUEUE_NAME})
     public void consumeMessageFromParkingLotTopic(DeleteParkingLotNotification notification) {
         try {
-            userService.deleteParkingLotEmployeeByParkingLotId(notification.getParkingLotId());
+            userService.deleteMultiUserById(notification.getEmployeeIdList());
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("deleteParkingLotEmployeeByParkingLotId(%d)", notification.getParkingLotId()));
+                    String.format("deleteParkingLotEmployeesByParkingLotId(%d)", notification.getParkingLotId()));
 
         } catch (Exception exception) {
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                    String.format("deleteParkingLotEmployeeByParkingLotId(%d)", notification.getParkingLotId()));
+                    String.format("deleteParkingLotEmployeesByParkingLotId(%d)", notification.getParkingLotId()));
         }
     }
 }

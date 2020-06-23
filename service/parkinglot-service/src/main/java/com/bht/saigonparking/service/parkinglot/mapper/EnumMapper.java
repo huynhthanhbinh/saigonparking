@@ -75,9 +75,9 @@ public abstract class EnumMapper implements BaseBean {
     }
 
     private void initParkingLotTypeBiMap() {
-        PARKING_LOT_TYPE_BI_MAP.put(getParkingLotTypeByType("TƯ NHÂN"), ParkingLotType.PRIVATE);
-        PARKING_LOT_TYPE_BI_MAP.put(getParkingLotTypeByType("TÒA NHÀ"), ParkingLotType.BUILDING);
-        PARKING_LOT_TYPE_BI_MAP.put(getParkingLotTypeByType("LÒNG ĐƯỜNG"), ParkingLotType.STREET);
+        PARKING_LOT_TYPE_BI_MAP.put(getParkingLotTypeByType("PRIVATE"), ParkingLotType.PRIVATE);
+        PARKING_LOT_TYPE_BI_MAP.put(getParkingLotTypeByType("BUILDING"), ParkingLotType.BUILDING);
+        PARKING_LOT_TYPE_BI_MAP.put(getParkingLotTypeByType("STREET"), ParkingLotType.STREET);
     }
 
     private void initParkingLotTypeMap() {

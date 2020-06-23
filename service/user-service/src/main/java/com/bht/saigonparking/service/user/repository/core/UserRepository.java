@@ -1,5 +1,6 @@
 package com.bht.saigonparking.service.user.repository.core;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.constraints.NotEmpty;
@@ -28,4 +29,16 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>, UserRep
             "JOIN FETCH U.userRoleEntity UR " +
             "WHERE U.username = ?1")
     Optional<UserEntity> getByUsername(@NotEmpty String username);
+
+
+    /**
+     *
+     * self-implement getAll method
+     * in order to prevent N+1 problem
+     */
+    @Query("SELECT U " +
+            "FROM UserEntity U " +
+            "JOIN FETCH U.userRoleEntity UR " +
+            "WHERE U.id IN ?1")
+    List<UserEntity> getAll(@NotEmpty List<Long> userIdList);
 }

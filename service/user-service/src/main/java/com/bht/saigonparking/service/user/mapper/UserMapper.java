@@ -12,11 +12,9 @@ import org.mapstruct.NullValueMappingStrategy;
 import org.springframework.stereotype.Component;
 
 import com.bht.saigonparking.api.grpc.user.Customer;
-import com.bht.saigonparking.api.grpc.user.ParkingLotEmployee;
 import com.bht.saigonparking.api.grpc.user.User;
 import com.bht.saigonparking.service.user.configuration.AppConfiguration;
 import com.bht.saigonparking.service.user.entity.CustomerEntity;
-import com.bht.saigonparking.service.user.entity.ParkingLotEmployeeEntity;
 import com.bht.saigonparking.service.user.entity.UserEntity;
 
 /**
@@ -69,10 +67,4 @@ public interface UserMapper {
     @Mapping(target = "phone", source = "phone", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "lastUpdated", source = "lastUpdated", qualifiedByName = "toTimestampString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     Customer toCustomerWithoutUserInfo(@NotNull CustomerEntity customerEntity);
-
-
-    @Named("toParkingLotEmployee")
-    @Mapping(target = "userInfo", source = "parkingLotEmployeeEntity", qualifiedByName = "toUser", defaultExpression = "java(customizedMapper.DEFAULT_USER)")
-    @Mapping(target = "parkingLotId", source = "parkingLotId", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
-    ParkingLotEmployee toParkingLotEmployee(@NotNull ParkingLotEmployeeEntity parkingLotEmployeeEntity);
 }

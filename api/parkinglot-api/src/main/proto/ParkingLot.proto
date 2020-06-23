@@ -121,6 +121,7 @@ message GetAllParkingLotResponse {
 
 message DeleteParkingLotNotification {
     int64 parkingLotId = 1;
+    repeated int64 employeeId = 2;
 }
 
 service ParkingLotService {

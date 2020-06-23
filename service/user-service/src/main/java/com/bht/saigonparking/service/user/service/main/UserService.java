@@ -7,7 +7,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.bht.saigonparking.service.user.entity.CustomerEntity;
-import com.bht.saigonparking.service.user.entity.ParkingLotEmployeeEntity;
 import com.bht.saigonparking.service.user.entity.UserEntity;
 import com.bht.saigonparking.service.user.entity.UserRoleEntity;
 
@@ -20,6 +19,8 @@ public interface UserService {
     Long countAll(@NotEmpty String keyword, boolean inactivatedOnly);
 
     Long countAll(@NotEmpty String keyword, boolean inactivatedOnly, @NotNull UserRoleEntity userRoleEntity);
+
+    List<UserEntity> getAll(@NotNull List<Long> userIdList);
 
     List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow,
                             @NotNull Integer pageNumber,
@@ -40,10 +41,6 @@ public interface UserService {
 
     CustomerEntity getCustomerByUsername(@NotEmpty String username);
 
-    ParkingLotEmployeeEntity getParkingLotEmployeeById(@NotNull Long id);
-
-    ParkingLotEmployeeEntity getParkingLotEmployeeByUsername(@NotEmpty String username);
-
     Long createCustomer(@NotNull CustomerEntity customerEntity);
 
     void updateCustomer(@NotNull CustomerEntity customerEntity);
@@ -56,5 +53,7 @@ public interface UserService {
 
     void updateUserPassword(@NotNull UserEntity userEntity, @NotEmpty String newPassword);
 
-    void deleteParkingLotEmployeeByParkingLotId(@NotNull Long parkingLotId);
+    void deleteUserById(@NotNull Long userId);
+
+    void deleteMultiUserById(@NotNull List<Long> userIdList);
 }

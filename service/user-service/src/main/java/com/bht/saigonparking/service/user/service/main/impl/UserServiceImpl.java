@@ -1,6 +1,7 @@
 package com.bht.saigonparking.service.user.service.main.impl;
 
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
@@ -14,11 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bht.saigonparking.service.user.entity.CustomerEntity;
-import com.bht.saigonparking.service.user.entity.ParkingLotEmployeeEntity;
 import com.bht.saigonparking.service.user.entity.UserEntity;
 import com.bht.saigonparking.service.user.entity.UserRoleEntity;
 import com.bht.saigonparking.service.user.repository.core.CustomerRepository;
-import com.bht.saigonparking.service.user.repository.core.ParkingLotEmployeeRepository;
 import com.bht.saigonparking.service.user.repository.core.UserRepository;
 import com.bht.saigonparking.service.user.service.main.UserService;
 
@@ -44,7 +43,6 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final CustomerRepository customerRepository;
-    private final ParkingLotEmployeeRepository parkingLotEmployeeRepository;
 
     @Override
     public Long countAll(@NotEmpty String keyword, boolean inactivatedOnly) {
@@ -82,6 +80,13 @@ public class UserServiceImpl implements UserService {
                 return userRepository.countAll(keyword, userRoleEntity);
             }
         }
+    }
+
+    @Override
+    public List<UserEntity> getAll(@NotNull List<Long> userIdList) {
+        return userIdList.isEmpty()
+                ? Collections.emptyList()
+                : userRepository.getAll(userIdList);
     }
 
     @Override
@@ -150,16 +155,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ParkingLotEmployeeEntity getParkingLotEmployeeById(@NotNull Long id) {
-        return parkingLotEmployeeRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-    }
-
-    @Override
-    public ParkingLotEmployeeEntity getParkingLotEmployeeByUsername(@NotEmpty String username) {
-        return parkingLotEmployeeRepository.getByUsername(username).orElseThrow(EntityNotFoundException::new);
-    }
-
-    @Override
     public Long createCustomer(@NotNull CustomerEntity customerEntity) {
         CustomerEntity result = customerRepository.saveAndFlush(customerEntity);
         return result.getId();
@@ -198,9 +193,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteParkingLotEmployeeByParkingLotId(@NotNull Long parkingLotId) {
-        ParkingLotEmployeeEntity parkingLotEmployeeEntity = parkingLotEmployeeRepository
-                .getByParkingLotId(parkingLotId).orElseThrow(EntityNotFoundException::new);
-        parkingLotEmployeeRepository.delete(parkingLotEmployeeEntity);
+    public void deleteUserById(@NotNull Long userId) {
+        userRepository.delete(getUserById(userId));
+    }
+
+    @Override
+    public void deleteMultiUserById(@NotNull List<Long> userIdList) {
+        userRepository.deleteAll(getAll(userIdList));
     }
 }

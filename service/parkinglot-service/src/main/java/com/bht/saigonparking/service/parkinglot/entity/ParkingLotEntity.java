@@ -78,4 +78,9 @@ public final class ParkingLotEntity extends BaseEntity {
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "parkingLotEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ParkingLotRatingEntity> parkingLotRatingEntitySet;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "parkingLotEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ParkingLotEmployeeEntity> parkingLotEmployeeEntitySet;
 }
