@@ -1,16 +1,12 @@
 package com.bht.saigonparking.common.exception;
 
+import com.bht.saigonparking.common.base.BaseRuntimeException;
+
 /**
  *
  * This exception will be thrown if user is not activated yet
  *
  * @author bht
  */
-public final class UserNotActivatedException extends RuntimeException {
-
-    /* Disable print out stack trace */
-    @Override
-    public synchronized Throwable fillInStackTrace() {
-        return this;
-    }
+public final class UserNotActivatedException extends BaseRuntimeException {
 }
