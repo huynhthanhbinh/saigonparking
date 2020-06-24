@@ -1,9 +1,0 @@
--- noinspection SqlResolveForFile
--- @author: bht
-
-USE [AUTH]
-GO
-
-ALTER TABLE [USER_TOKEN]
-    ADD CONSTRAINT [DF_USER_TOKEN_VERSION] DEFAULT ((1)) FOR [VERSION]
-GO
