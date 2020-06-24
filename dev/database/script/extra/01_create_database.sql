@@ -1,3 +1,5 @@
+-- noinspection SqlNoDataSourceInspectionForFile
+-- noinspection SqlDialectInspectionForFile
 -- noinspection SqlResolveForFile
 -- @author: bht
 

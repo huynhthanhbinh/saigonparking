@@ -17,4 +17,4 @@ services:
     ports:
       - "${MSSQL_TCP_PORT}:${MSSQL_TCP_PORT}"
     volumes:
-      - ../database:/var/opt/mssql/data
+      - ../database:/home
