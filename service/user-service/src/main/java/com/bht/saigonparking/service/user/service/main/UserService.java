@@ -1,6 +1,8 @@
 package com.bht.saigonparking.service.user.service.main;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
@@ -20,7 +22,7 @@ public interface UserService {
 
     Long countAll(@NotEmpty String keyword, boolean inactivatedOnly, @NotNull UserRoleEntity userRoleEntity);
 
-    List<UserEntity> getAll(@NotNull List<Long> userIdList);
+    List<UserEntity> getAll(@NotNull Set<Long> userIdSet);
 
     List<UserEntity> getAll(@NotNull @Max(20L) Integer nRow,
                             @NotNull Integer pageNumber,
@@ -55,5 +57,7 @@ public interface UserService {
 
     void deleteUserById(@NotNull Long userId);
 
-    void deleteMultiUserById(@NotNull List<Long> userIdList);
+    void deleteMultiUserById(@NotNull Set<Long> userIdSet);
+
+    Map<Long, String> mapToUsernameList(@NotNull Set<Long> userIdList);
 }

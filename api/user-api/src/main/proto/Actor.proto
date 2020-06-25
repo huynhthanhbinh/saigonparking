@@ -67,6 +67,14 @@ message DeleteMultiUserByIdRequest {
     repeated int64 userId = 1;
 }
 
+message MapToUsernameListRequest {
+    repeated int64 userId = 1;
+}
+
+message MapToUsernameListResponse {
+    map<int64, string> usernameMap = 1;
+}
+
 service UserService {
 
     /** PUBLIC - ADMIN ONLY
@@ -124,6 +132,12 @@ service UserService {
      *  + request: customer's username
      *  + response: customer object if succeed, otherwise, throw exception */
     rpc getCustomerByUsername (google.protobuf.StringValue) returns (Customer);
+
+    /** PRIVATE
+    * use-case: map user id list from ratings/suggestions to username list
+    *  + request: userId list/set
+    *  + response: username List, otherwise, throw exception */
+    rpc mapToUsernameList (MapToUsernameListRequest) returns (MapToUsernameListResponse);
 
     /** PRIVATE
     * use-case: create user, CUSTOMER type (will be called by AuthService)

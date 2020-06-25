@@ -1,5 +1,6 @@
 package com.bht.saigonparking.service.user.service.grpc;
 
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.logging.log4j.Level;
@@ -11,6 +12,8 @@ import com.bht.saigonparking.api.grpc.user.Customer;
 import com.bht.saigonparking.api.grpc.user.DeleteMultiUserByIdRequest;
 import com.bht.saigonparking.api.grpc.user.GetAllUserRequest;
 import com.bht.saigonparking.api.grpc.user.GetAllUserResponse;
+import com.bht.saigonparking.api.grpc.user.MapToUsernameListRequest;
+import com.bht.saigonparking.api.grpc.user.MapToUsernameListResponse;
 import com.bht.saigonparking.api.grpc.user.UpdatePasswordRequest;
 import com.bht.saigonparking.api.grpc.user.User;
 import com.bht.saigonparking.api.grpc.user.UserRole;
@@ -208,6 +211,29 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
     }
 
     @Override
+    public void mapToUsernameList(MapToUsernameListRequest request, StreamObserver<MapToUsernameListResponse> responseObserver) {
+        try {
+            serverInterceptor.validateAdmin();
+
+            MapToUsernameListResponse mapToUsernameListResponse = MapToUsernameListResponse.newBuilder()
+                    .putAllUsernameMap(userService.mapToUsernameList(new HashSet<>(request.getUserIdList())))
+                    .build();
+
+            responseObserver.onNext(mapToUsernameListResponse);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success", "mapToUsernameList()");
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL", "mapToUsernameList()");
+        }
+    }
+
+    @Override
     public void createCustomer(Customer request, StreamObserver<Int64Value> responseObserver) {
         try {
             serverInterceptor.validateAdmin();
@@ -355,7 +381,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
         try {
             serverInterceptor.validateAdmin();
 
-            userService.deleteMultiUserById(request.getUserIdList());
+            userService.deleteMultiUserById(new HashSet<>(request.getUserIdList()));
 
             responseObserver.onNext(Empty.getDefaultInstance());
             responseObserver.onCompleted();

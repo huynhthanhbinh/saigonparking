@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Fri, Jun 19th, 2020
+Last updated:       Thu, Jun 25th, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -239,3 +239,18 @@ Last updated:       Fri, Jun 19th, 2020
 
 80. The data types time and datetime are incompatible in the greater than or equal to operator -> sendTimeAsDateTime=f‌a‌lse
         https://stackoverflow.com/questions/38954422/the-data-types-time-and-datetime-are-incompatible-in-the-greater-than-or-equal-t
+
+81. Consul health check --> (gRPC + interval) check --> service needs to self-implement GRPC Health Checking Protocol
+        https://www.consul.io/docs/agent/checks
+
+82. GRPC Health Checking Protocol --> client query the server’s health status by calling the Check method, and a deadline should be set on the rpc
+        https://github.com/grpc/grpc/blob/master/doc/health-checking.md
+
+83. How to model HashMap/Dictionary in the ProtoBuf efficiently
+        https://stackoverflow.com/questions/32187278/how-to-model-hashmap-dictionary-in-the-protobuf-efficiently
+
+84. Protocol Buffers Documents - Maps/Dictionaries
+        https://developers.google.com/protocol-buffers/docs/proto#maps
+
+85. How to Convert List to Map in Java
+        https://www.baeldung.com/java-list-to-map

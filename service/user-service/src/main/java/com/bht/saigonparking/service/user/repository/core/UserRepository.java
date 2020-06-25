@@ -2,6 +2,7 @@ package com.bht.saigonparking.service.user.repository.core;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -40,5 +41,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>, UserRep
             "FROM UserEntity U " +
             "JOIN FETCH U.userRoleEntity UR " +
             "WHERE U.id IN ?1")
-    List<UserEntity> getAll(@NotEmpty List<Long> userIdList);
+    List<UserEntity> getAll(@NotEmpty Set<Long> userIdSet);
 }

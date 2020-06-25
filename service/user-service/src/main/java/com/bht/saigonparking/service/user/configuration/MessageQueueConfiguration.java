@@ -3,6 +3,7 @@ package com.bht.saigonparking.service.user.configuration;
 import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.PARKING_LOT_QUEUE_NAME;
 import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.USER_QUEUE_NAME;
 
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -50,7 +51,7 @@ public class MessageQueueConfiguration {
     public void consumeMessageFromParkingLotTopic(DeleteParkingLotNotification notification) {
         try {
             notification.getInfoList().forEach(info -> {
-                userService.deleteMultiUserById(info.getEmployeeIdList());
+                userService.deleteMultiUserById(new HashSet<>(info.getEmployeeIdList()));
                 LoggingUtil.log(Level.INFO, "SERVICE", "Success",
                         String.format("deleteParkingLotEmployeesByParkingLotId(%d)", info.getParkingLotId()));
             });

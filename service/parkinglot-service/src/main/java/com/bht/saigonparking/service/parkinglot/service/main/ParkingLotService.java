@@ -2,6 +2,7 @@ package com.bht.saigonparking.service.parkinglot.service.main;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.Tuple;
 import javax.validation.constraints.Max;
@@ -35,7 +36,7 @@ public interface ParkingLotService {
 
     Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId, @NotNull @Range(min = 1L, max = 5L) Integer rating);
 
-    List<ParkingLotEntity> getAll(@NotNull List<Long> parkingLotIdList);
+    List<ParkingLotEntity> getAll(@NotNull Set<Long> parkingLotIdSet);
 
     List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow,
                                   @NotNull Integer pageNumber,
@@ -85,5 +86,5 @@ public interface ParkingLotService {
 
     void deleteParkingLotById(@NotNull Long id);
 
-    void deleteMultiParkingLotById(@NotNull List<Long> parkingLotIdList);
+    void deleteMultiParkingLotById(@NotNull Set<Long> parkingLotIdSet);
 }

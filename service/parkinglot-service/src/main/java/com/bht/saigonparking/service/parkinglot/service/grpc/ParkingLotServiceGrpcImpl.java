@@ -1,5 +1,6 @@
 package com.bht.saigonparking.service.parkinglot.service.grpc;
 
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.logging.log4j.Level;
@@ -294,7 +295,7 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
         try {
             serverInterceptor.validateAdmin();
 
-            parkingLotService.deleteMultiParkingLotById(request.getParkingLotIdList());
+            parkingLotService.deleteMultiParkingLotById(new HashSet<>(request.getParkingLotIdList()));
 
             responseObserver.onNext(Empty.getDefaultInstance());
             responseObserver.onCompleted();

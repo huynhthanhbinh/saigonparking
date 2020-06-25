@@ -1,6 +1,7 @@
 package com.bht.saigonparking.service.parkinglot.repository.core;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Tuple;
 import javax.validation.constraints.NotEmpty;
@@ -45,7 +46,7 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Lo
             "JOIN FETCH P.parkingLotLimitEntity PLL " +
             "JOIN FETCH P.parkingLotInformationEntity PLI " +
             "WHERE P.id IN ?1")
-    List<ParkingLotEntity> getAll(@NotEmpty List<Long> parkingLotIdList);
+    List<ParkingLotEntity> getAll(@NotEmpty Set<Long> parkingLotIdList);
 
 
     @Query("SELECT FUNCTION('dbo.CHECK_AVAILABILITY', P.id) " +

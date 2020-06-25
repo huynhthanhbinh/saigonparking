@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
@@ -115,10 +116,10 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     }
 
     @Override
-    public List<ParkingLotEntity> getAll(@NotNull List<Long> parkingLotIdList) {
-        return parkingLotIdList.isEmpty()
+    public List<ParkingLotEntity> getAll(@NotNull Set<Long> parkingLotIdSet) {
+        return parkingLotIdSet.isEmpty()
                 ? Collections.emptyList()
-                : parkingLotRepository.getAll(parkingLotIdList);
+                : parkingLotRepository.getAll(parkingLotIdSet);
     }
 
     @Override
@@ -249,22 +250,27 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     }
 
     @Override
-    public void deleteMultiParkingLotById(@NotNull List<Long> parkingLotIdList) {
-        List<ParkingLotEntity> parkingLotEntityList = getAll(parkingLotIdList);
-        List<ParkingLotEmployeeInfo> parkingLotEmployeeInfoList = new ArrayList<>();
+    public void deleteMultiParkingLotById(@NotNull Set<Long> parkingLotIdSet) {
+        if (!parkingLotIdSet.isEmpty()) {
+            List<ParkingLotEntity> parkingLotEntityList = getAll(parkingLotIdSet);
+            if (!parkingLotEntityList.isEmpty()) {
 
-        parkingLotEntityList.forEach(parkingLotEntity -> parkingLotEmployeeInfoList
-                .add(ParkingLotEmployeeInfo.newBuilder()
-                        .setParkingLotId(parkingLotEntity.getId())
-                        .addAllEmployeeId(parkingLotEntity.getParkingLotEmployeeEntitySet().stream()
-                                .map(ParkingLotEmployeeEntity::getUserId)
-                                .collect(Collectors.toList()))
-                        .build()));
+                List<ParkingLotEmployeeInfo> parkingLotEmployeeInfoList = new ArrayList<>();
 
-        parkingLotRepository.deleteAll(parkingLotEntityList);
+                parkingLotEntityList.forEach(parkingLotEntity -> parkingLotEmployeeInfoList
+                        .add(ParkingLotEmployeeInfo.newBuilder()
+                                .setParkingLotId(parkingLotEntity.getId())
+                                .addAllEmployeeId(parkingLotEntity.getParkingLotEmployeeEntitySet().stream()
+                                        .map(ParkingLotEmployeeEntity::getUserId)
+                                        .collect(Collectors.toList()))
+                                .build()));
 
-        rabbitTemplate.convertAndSend(PARKING_LOT_ROUTING_KEY, DeleteParkingLotNotification.newBuilder()
-                .addAllInfo(parkingLotEmployeeInfoList)
-                .build());
+                parkingLotRepository.deleteAll(parkingLotEntityList);
+
+                rabbitTemplate.convertAndSend(PARKING_LOT_ROUTING_KEY, DeleteParkingLotNotification.newBuilder()
+                        .addAllInfo(parkingLotEmployeeInfoList)
+                        .build());
+            }
+        }
     }
 }

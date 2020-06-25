@@ -3,6 +3,9 @@ package com.bht.saigonparking.service.user.service.main.impl;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.Max;
@@ -14,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bht.saigonparking.common.base.BaseEntity;
 import com.bht.saigonparking.service.user.entity.CustomerEntity;
 import com.bht.saigonparking.service.user.entity.UserEntity;
 import com.bht.saigonparking.service.user.entity.UserRoleEntity;
@@ -83,10 +87,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserEntity> getAll(@NotNull List<Long> userIdList) {
-        return userIdList.isEmpty()
+    public List<UserEntity> getAll(@NotNull Set<Long> userIdSet) {
+        return userIdSet.isEmpty()
                 ? Collections.emptyList()
-                : userRepository.getAll(userIdList);
+                : userRepository.getAll(userIdSet);
     }
 
     @Override
@@ -198,7 +202,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteMultiUserById(@NotNull List<Long> userIdList) {
-        userRepository.deleteAll(getAll(userIdList));
+    public void deleteMultiUserById(@NotNull Set<Long> userIdSet) {
+        if (!userIdSet.isEmpty()) {
+            List<UserEntity> userEntityList = getAll(userIdSet);
+            if (!userEntityList.isEmpty()) {
+                userRepository.deleteAll(userEntityList);
+            }
+        }
+    }
+
+    @Override
+    public Map<Long, String> mapToUsernameList(@NotNull Set<Long> userIdSet) {
+        List<UserEntity> userEntityList = getAll(userIdSet);
+        return userEntityList.isEmpty()
+                ? Collections.emptyMap()
+                : userEntityList.stream().collect(Collectors.toMap(BaseEntity::getId, UserEntity::getUsername));
     }
 }
