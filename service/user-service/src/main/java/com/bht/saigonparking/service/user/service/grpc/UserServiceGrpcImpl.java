@@ -216,7 +216,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
             serverInterceptor.validateAdmin();
 
             MapToUsernameListResponse mapToUsernameListResponse = MapToUsernameListResponse.newBuilder()
-                    .putAllUsernameMap(userService.mapToUsernameList(new HashSet<>(request.getUserIdList())))
+                    .putAllUsername(userService.mapToUsernameList(new HashSet<>(request.getUserIdList())))
                     .build();
 
             responseObserver.onNext(mapToUsernameListResponse);

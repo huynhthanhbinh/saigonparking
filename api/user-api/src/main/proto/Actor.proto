@@ -72,7 +72,7 @@ message MapToUsernameListRequest {
 }
 
 message MapToUsernameListResponse {
-    map<int64, string> usernameMap = 1;
+    map<int64, string> username = 1;
 }
 
 service UserService {

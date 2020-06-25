@@ -1,5 +1,7 @@
 package com.bht.saigonparking.emulator;
 
+import java.util.Arrays;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -16,6 +18,7 @@ import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
 import com.bht.saigonparking.api.grpc.user.CountAllUserRequest;
 import com.bht.saigonparking.api.grpc.user.Customer;
 import com.bht.saigonparking.api.grpc.user.GetAllUserRequest;
+import com.bht.saigonparking.api.grpc.user.MapToUsernameListRequest;
 import com.bht.saigonparking.api.grpc.user.UserRole;
 import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
 import com.bht.saigonparking.emulator.configuration.SpringApplicationContext;
@@ -56,6 +59,9 @@ public class Emulator extends SpringBootServletInitializer {
         ValidateResponse validateResponse;
 
         try {
+            System.out.println("\n\n" + userServiceBlockingStub.mapToUsernameList(MapToUsernameListRequest.newBuilder()
+                    .addAllUserId(Arrays.asList(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L, 11L, 12L)).build())
+                    .getUsernameMap() + "\n\n");
 
             System.out.println("\n\n" + parkingLotServiceBlockingStub.countAllParkingLot(CountAllParkingLotRequest.newBuilder()
                     .setParkingLotType(ParkingLotType.BUILDING)
