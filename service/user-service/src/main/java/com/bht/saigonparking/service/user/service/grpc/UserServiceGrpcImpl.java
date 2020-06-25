@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bht.saigonparking.api.grpc.user.CountAllUserRequest;
 import com.bht.saigonparking.api.grpc.user.Customer;
+import com.bht.saigonparking.api.grpc.user.DeleteMultiUserByIdRequest;
 import com.bht.saigonparking.api.grpc.user.GetAllUserRequest;
 import com.bht.saigonparking.api.grpc.user.GetAllUserResponse;
 import com.bht.saigonparking.api.grpc.user.UpdatePasswordRequest;
@@ -346,6 +347,29 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("deleteUserById(%d)", request.getValue()));
+        }
+    }
+
+    @Override
+    public void deleteMultiUserById(DeleteMultiUserByIdRequest request, StreamObserver<Empty> responseObserver) {
+        try {
+            serverInterceptor.validateAdmin();
+
+            userService.deleteMultiUserById(request.getUserIdList());
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("deleteMultiUserById(%s)", request.getUserIdList()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("deleteMultiUserById(%s)", request.getUserIdList()));
         }
     }
 }

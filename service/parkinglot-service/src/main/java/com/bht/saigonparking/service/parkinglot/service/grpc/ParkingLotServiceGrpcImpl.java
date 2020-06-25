@@ -7,6 +7,7 @@ import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bht.saigonparking.api.grpc.parkinglot.CountAllParkingLotRequest;
+import com.bht.saigonparking.api.grpc.parkinglot.DeleteMultiParkingLotByIdRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.GetAllParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.GetAllParkingLotResponse;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
@@ -285,6 +286,29 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("deleteParkingLotById(%d)", request.getValue()));
+        }
+    }
+
+    @Override
+    public void deleteMultiParkingLotById(DeleteMultiParkingLotByIdRequest request, StreamObserver<Empty> responseObserver) {
+        try {
+            serverInterceptor.validateAdmin();
+
+            parkingLotService.deleteMultiParkingLotById(request.getParkingLotIdList());
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("deleteMultiParkingLotById(%s)", request.getParkingLotIdList()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("deleteMultiParkingLotById(%s)", request.getParkingLotIdList()));
         }
     }
 }

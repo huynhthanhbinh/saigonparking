@@ -63,6 +63,10 @@ message GetAllUserResponse {
     repeated User user = 1;
 }
 
+message DeleteMultiUserByIdRequest {
+    repeated int64 userId = 1;
+}
+
 service UserService {
 
     /** PUBLIC - ADMIN ONLY
@@ -159,4 +163,10 @@ service UserService {
      *  + request: user ID
      *  + response: empty value if succeed, otherwise, throw exception */
     rpc deleteUserById (google.protobuf.Int64Value) returns (google.protobuf.Empty);
+
+    /** PRIVATE
+     * use-case: delete multi user (will be called by ADMIN or INTERNAL service)
+     *  + request: user ID list
+     *  + response: empty value if succeed, otherwise, throw exception */
+    rpc deleteMultiUserById (DeleteMultiUserByIdRequest) returns (google.protobuf.Empty);
 }

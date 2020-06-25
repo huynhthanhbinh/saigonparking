@@ -128,6 +128,10 @@ message DeleteParkingLotNotification {
     repeated ParkingLotEmployeeInfo info = 1;
 }
 
+message DeleteMultiParkingLotByIdRequest {
+    repeated int64 parkingLotId = 1;
+}
+
 service ParkingLotService {
 
     /** PUBLIC - ADMIN ONLY
@@ -196,6 +200,15 @@ service ParkingLotService {
 
     /** PRIVATE
      * use-case: Admin delete 1 parking-lot
+     *  + request: parking-lot ID list
+     *  + response: empty value if succeed, otherwise, throw exception
      * note that: delete parking-lot also delete correspondent parking-lot-employee */
     rpc deleteParkingLotById (google.protobuf.Int64Value) returns (google.protobuf.Empty);
+
+    /** PRIVATE
+     * use-case: Admin delete multi parking-lot
+     *  + request: parking-lot ID list
+     *  + response: empty value if succeed, otherwise, throw exception
+     * note that: delete parking-lot also delete correspondent parking-lot-employee */
+    rpc deleteMultiParkingLotById (DeleteMultiParkingLotByIdRequest) returns (google.protobuf.Empty);
 }

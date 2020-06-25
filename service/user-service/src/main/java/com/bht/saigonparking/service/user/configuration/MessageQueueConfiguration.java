@@ -3,6 +3,8 @@ package com.bht.saigonparking.service.user.configuration;
 import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.PARKING_LOT_QUEUE_NAME;
 import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.USER_QUEUE_NAME;
 
+import java.util.stream.Collectors;
+
 import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.Level;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bht.saigonparking.api.grpc.parkinglot.DeleteParkingLotNotification;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotEmployeeInfo;
 import com.bht.saigonparking.api.grpc.user.UpdateUserLastSignInRequest;
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.user.service.main.UserService;
@@ -54,7 +57,9 @@ public class MessageQueueConfiguration {
         } catch (Exception exception) {
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
-            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL", "deleteParkingLotEmployees");
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("deleteParkingLotEmployeesByParkingLotId(%s)",
+                            notification.getInfoList().stream().map(ParkingLotEmployeeInfo::getParkingLotId).collect(Collectors.toList())));
         }
     }
 }
