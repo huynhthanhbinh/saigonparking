@@ -27,7 +27,7 @@ import com.google.common.collect.ImmutableMap;
  */
 @Configuration
 @EnableTransactionManagement
-@Import(AwsConfiguration.class)
+@Import({AwsConfiguration.class, ChannelConfiguration.class})
 @ComponentScan(basePackages = AppConfiguration.BASE_PACKAGE,
         includeFilters = @ComponentScan.Filter(InheritedComponent.class))
 public class AppConfiguration {
