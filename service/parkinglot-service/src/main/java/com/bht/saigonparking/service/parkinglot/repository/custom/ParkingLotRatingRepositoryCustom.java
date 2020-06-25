@@ -15,6 +15,11 @@ import com.bht.saigonparking.service.parkinglot.entity.ParkingLotRatingEntity;
  */
 public interface ParkingLotRatingRepositoryCustom {
 
+    Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId);
+
+    Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId,
+                                     @NotNull @Range(min = 1L, max = 5L) Integer rating);
+
     List<ParkingLotRatingEntity> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
                                                            boolean sortLastUpdatedAsc,
                                                            @NotNull @Max(20L) Integer nRow,
