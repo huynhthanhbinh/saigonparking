@@ -3,10 +3,12 @@ package com.bht.saigonparking.service.user.configuration;
 import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.PARKING_LOT_QUEUE_NAME;
 import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.USER_QUEUE_NAME;
 
+import javax.transaction.Transactional;
+
 import org.apache.logging.log4j.Level;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import com.bht.saigonparking.api.grpc.parkinglot.DeleteParkingLotNotification;
 import com.bht.saigonparking.api.grpc.user.UpdateUserLastSignInRequest;
@@ -19,9 +21,10 @@ import lombok.AllArgsConstructor;
  *
  * @author bht
  */
-@Component
+@Service
+@Transactional
 @AllArgsConstructor(onConstructor = @__(@Autowired))
-public final class MessageQueueConfiguration {
+public class MessageQueueConfiguration {
 
     private final UserService userService;
 
@@ -43,15 +46,15 @@ public final class MessageQueueConfiguration {
     @RabbitListener(queues = {PARKING_LOT_QUEUE_NAME})
     public void consumeMessageFromParkingLotTopic(DeleteParkingLotNotification notification) {
         try {
-            userService.deleteMultiUserById(notification.getEmployeeIdList());
-            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("deleteParkingLotEmployeesByParkingLotId(%d)", notification.getParkingLotId()));
-
+            notification.getInfoList().forEach(info -> {
+                userService.deleteMultiUserById(info.getEmployeeIdList());
+                LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                        String.format("deleteParkingLotEmployeesByParkingLotId(%d)", info.getParkingLotId()));
+            });
         } catch (Exception exception) {
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
-            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                    String.format("deleteParkingLotEmployeesByParkingLotId(%d)", notification.getParkingLotId()));
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL", "deleteParkingLotEmployees");
         }
     }
 }

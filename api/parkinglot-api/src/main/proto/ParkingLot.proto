@@ -119,9 +119,13 @@ message GetAllParkingLotResponse {
     repeated ParkingLot parkingLot = 1;
 }
 
-message DeleteParkingLotNotification {
+message ParkingLotEmployeeInfo {
     int64 parkingLotId = 1;
     repeated int64 employeeId = 2;
+}
+
+message DeleteParkingLotNotification {
+    repeated ParkingLotEmployeeInfo info = 1;
 }
 
 service ParkingLotService {

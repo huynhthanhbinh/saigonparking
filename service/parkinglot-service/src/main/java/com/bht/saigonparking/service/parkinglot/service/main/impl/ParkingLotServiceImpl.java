@@ -2,7 +2,10 @@ package com.bht.saigonparking.service.parkinglot.service.main.impl;
 
 import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.PARKING_LOT_ROUTING_KEY;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
@@ -11,15 +14,19 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.Range;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bht.saigonparking.api.grpc.parkinglot.DeleteParkingLotNotification;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotEmployeeInfo;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEmployeeEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
+import com.bht.saigonparking.service.parkinglot.entity.ParkingLotInformationEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
+import com.bht.saigonparking.service.parkinglot.entity.ParkingLotRatingEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotTypeEntity;
 import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotLimitRepository;
 import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotRepository;
@@ -87,6 +94,34 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     }
 
     @Override
+    public Long countAllHasRatings() {
+        return null;
+    }
+
+    @Override
+    public Long countAllHasRatings(@NotNull @Range(max = 5L) Integer lowerBound,
+                                   @NotNull @Range(max = 5L) Integer upperBound) {
+        return null;
+    }
+
+    @Override
+    public Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId) {
+        return null;
+    }
+
+    @Override
+    public Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId, @NotNull @Range(min = 1L, max = 5L) Integer rating) {
+        return null;
+    }
+
+    @Override
+    public List<ParkingLotEntity> getAll(@NotNull List<Long> parkingLotIdList) {
+        return parkingLotIdList.isEmpty()
+                ? Collections.emptyList()
+                : parkingLotRepository.getAll(parkingLotIdList);
+    }
+
+    @Override
     public List<ParkingLotEntity> getAll(@NotNull @Max(20L) Integer nRow,
                                          @NotNull Integer pageNumber,
                                          @NotEmpty String keyword,
@@ -132,6 +167,34 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     }
 
     @Override
+    public List<ParkingLotInformationEntity> getAllHasRatings(boolean sortRatingAsc) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<ParkingLotInformationEntity> getAllHasRatings(@NotNull @Range(max = 5L) Integer lowerBound,
+                                                              @NotNull @Range(max = 5L) Integer upperBound,
+                                                              boolean sortRatingAsc) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public Map<ParkingLotRatingEntity, String> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
+                                                                         boolean sortLastUpdatedAsc,
+                                                                         @NotNull @Max(20L) Integer nRow,
+                                                                         @NotNull Integer pageNumber) {
+        return null;
+    }
+
+    @Override
+    public Map<ParkingLotRatingEntity, String> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
+                                                                         @NotNull @Range(min = 1L, max = 5L) Integer rating,
+                                                                         boolean sortLastUpdatedAsc, @NotNull @Max(20L) Integer nRow,
+                                                                         @NotNull Integer pageNumber) {
+        return null;
+    }
+
+    @Override
     public ParkingLotEntity getParkingLotById(@NotNull Long id) {
         return parkingLotRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
@@ -152,12 +215,18 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     }
 
     @Override
-    public List<Tuple> getTopParkingLotInRegionOrderByDistanceWithoutName(@NotNull Double lat, @NotNull Double lng, @NotNull Integer radius, @NotNull Integer nResult) {
+    public List<Tuple> getTopParkingLotInRegionOrderByDistanceWithoutName(@NotNull Double lat,
+                                                                          @NotNull Double lng,
+                                                                          @NotNull Integer radius,
+                                                                          @NotNull Integer nResult) {
         return parkingLotRepository.getTopParkingLotInRegionOrderByDistanceWithoutName(lat, lng, radius, nResult);
     }
 
     @Override
-    public List<Tuple> getTopParkingLotInRegionOrderByDistanceWithName(@NotNull Double lat, @NotNull Double lng, @NotNull Integer radius, @NotNull Integer nResult) {
+    public List<Tuple> getTopParkingLotInRegionOrderByDistanceWithName(@NotNull Double lat,
+                                                                       @NotNull Double lng,
+                                                                       @NotNull Integer radius,
+                                                                       @NotNull Integer nResult) {
         return parkingLotRepository.getTopParkingLotInRegionOrderByDistanceWithName(lat, lng, radius, nResult);
     }
 
@@ -171,8 +240,31 @@ public class ParkingLotServiceImpl implements ParkingLotService {
         parkingLotRepository.delete(parkingLotEntity);
 
         rabbitTemplate.convertAndSend(PARKING_LOT_ROUTING_KEY, DeleteParkingLotNotification.newBuilder()
-                .setParkingLotId(id)
-                .addAllEmployeeId(employeeIdList)
+                .addAllInfo(Collections
+                        .singletonList(ParkingLotEmployeeInfo.newBuilder()
+                                .setParkingLotId(id)
+                                .addAllEmployeeId(employeeIdList)
+                                .build()))
+                .build());
+    }
+
+    @Override
+    public void deleteMultiParkingLotById(@NotNull List<Long> parkingLotIdList) {
+        List<ParkingLotEntity> parkingLotEntityList = getAll(parkingLotIdList);
+        List<ParkingLotEmployeeInfo> parkingLotEmployeeInfoList = new ArrayList<>();
+
+        parkingLotEntityList.forEach(parkingLotEntity -> parkingLotEmployeeInfoList
+                .add(ParkingLotEmployeeInfo.newBuilder()
+                        .setParkingLotId(parkingLotEntity.getId())
+                        .addAllEmployeeId(parkingLotEntity.getParkingLotEmployeeEntitySet().stream()
+                                .map(ParkingLotEmployeeEntity::getUserId)
+                                .collect(Collectors.toList()))
+                        .build()));
+
+        parkingLotRepository.deleteAll(parkingLotEntityList);
+
+        rabbitTemplate.convertAndSend(PARKING_LOT_ROUTING_KEY, DeleteParkingLotNotification.newBuilder()
+                .addAllInfo(parkingLotEmployeeInfoList)
                 .build());
     }
 }

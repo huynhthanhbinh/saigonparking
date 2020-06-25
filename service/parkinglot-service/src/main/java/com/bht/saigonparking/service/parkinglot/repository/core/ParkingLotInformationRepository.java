@@ -7,13 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotInformationEntity;
+import com.bht.saigonparking.service.parkinglot.repository.custom.ParkingLotInformationRepositoryCustom;
 
 /**
  *
  * @author bht
  */
 @Repository
-public interface ParkingLotInformationRepository extends JpaRepository<ParkingLotInformationEntity, Long> {
+public interface ParkingLotInformationRepository extends JpaRepository<ParkingLotInformationEntity, Long>, ParkingLotInformationRepositoryCustom {
 
     /**
      *

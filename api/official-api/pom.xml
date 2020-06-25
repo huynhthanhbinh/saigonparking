@@ -39,7 +39,7 @@
     </dependencies>
 
     <build>
-        <finalName>${project.release.classifier}-${artifactId}</finalName>
+        <finalName>${project.release.classifier}-${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
