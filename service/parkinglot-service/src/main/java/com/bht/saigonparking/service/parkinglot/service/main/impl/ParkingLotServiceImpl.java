@@ -23,13 +23,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bht.saigonparking.api.grpc.parkinglot.DeleteParkingLotNotification;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotEmployeeInfo;
+import com.bht.saigonparking.api.grpc.user.MapToUsernameListRequest;
+import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEmployeeEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotInformationEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotRatingEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotTypeEntity;
+import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotInformationRepository;
 import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotLimitRepository;
+import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotRatingRepository;
 import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotRepository;
 import com.bht.saigonparking.service.parkinglot.service.main.ParkingLotService;
 
@@ -55,6 +59,9 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     private final RabbitTemplate rabbitTemplate;
     private final ParkingLotRepository parkingLotRepository;
     private final ParkingLotLimitRepository parkingLotLimitRepository;
+    private final ParkingLotRatingRepository parkingLotRatingRepository;
+    private final ParkingLotInformationRepository parkingLotInformationRepository;
+    private final UserServiceGrpc.UserServiceBlockingStub userServiceBlockingStub;
 
     @Override
     public Long countAll(@NotEmpty String keyword, boolean isAvailableOnly) {
@@ -96,23 +103,35 @@ public class ParkingLotServiceImpl implements ParkingLotService {
 
     @Override
     public Long countAllHasRatings() {
-        return null;
+        return parkingLotInformationRepository.countAllHasRatings();
     }
 
     @Override
     public Long countAllHasRatings(@NotNull @Range(max = 5L) Integer lowerBound,
                                    @NotNull @Range(max = 5L) Integer upperBound) {
-        return null;
+
+        if (lowerBound.equals(upperBound) && lowerBound.equals(0)) {
+            return countAllHasRatings();
+        }
+        if (lowerBound.equals(upperBound) || lowerBound.compareTo(upperBound) < 0) {
+            return parkingLotInformationRepository.countAllHasRatings(lowerBound, upperBound);
+        }
+        return 0L;
     }
 
     @Override
     public Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId) {
-        return null;
+        return parkingLotRatingRepository.countAllRatingsOfParkingLot(parkingLotId);
     }
 
     @Override
-    public Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId, @NotNull @Range(min = 1L, max = 5L) Integer rating) {
-        return null;
+    public Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId,
+                                            @NotNull @Range(max = 5L) Integer rating) {
+
+        if (rating.equals(0)) {
+            return countAllRatingsOfParkingLot(parkingLotId);
+        }
+        return parkingLotRatingRepository.countAllRatingsOfParkingLot(parkingLotId, rating);
     }
 
     @Override
@@ -171,7 +190,8 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     public List<ParkingLotInformationEntity> getAllHasRatings(boolean sortRatingAsc,
                                                               @NotNull @Max(20L) Integer nRow,
                                                               @NotNull Integer pageNumber) {
-        return Collections.emptyList();
+
+        return parkingLotInformationRepository.getAllHasRatings(sortRatingAsc, nRow, pageNumber);
     }
 
     @Override
@@ -180,6 +200,13 @@ public class ParkingLotServiceImpl implements ParkingLotService {
                                                               boolean sortRatingAsc,
                                                               @NotNull @Max(20L) Integer nRow,
                                                               @NotNull Integer pageNumber) {
+
+        if (lowerBound.equals(upperBound) && lowerBound.equals(0)) {
+            return getAllHasRatings(sortRatingAsc, nRow, pageNumber);
+        }
+        if (lowerBound.equals(upperBound) || lowerBound.compareTo(upperBound) < 0) {
+            return parkingLotInformationRepository.getAllHasRatings(lowerBound, upperBound, sortRatingAsc, nRow, pageNumber);
+        }
         return Collections.emptyList();
     }
 
@@ -188,15 +215,41 @@ public class ParkingLotServiceImpl implements ParkingLotService {
                                                                          boolean sortLastUpdatedAsc,
                                                                          @NotNull @Max(20L) Integer nRow,
                                                                          @NotNull Integer pageNumber) {
-        return null;
+        List<ParkingLotRatingEntity> parkingLotRatingEntityList = parkingLotRatingRepository
+                .getAllRatingsOfParkingLot(parkingLotId, sortLastUpdatedAsc, nRow, pageNumber);
+
+        Map<Long, String> usernameMap = userServiceBlockingStub.mapToUsernameList(MapToUsernameListRequest.newBuilder()
+                .addAllUserId(new ArrayList<>(parkingLotRatingEntityList).stream()
+                        .map(ParkingLotRatingEntity::getCustomerId).collect(Collectors.toSet()))
+                .build())
+                .getUsernameMap();
+
+        return parkingLotRatingEntityList.stream().collect(Collectors
+                .toMap(parkingLotRatingEntity -> parkingLotRatingEntity,
+                        parkingLotRatingEntity -> usernameMap.get(parkingLotRatingEntity.getCustomerId())));
     }
 
     @Override
     public Map<ParkingLotRatingEntity, String> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
-                                                                         @NotNull @Range(min = 1L, max = 5L) Integer rating,
-                                                                         boolean sortLastUpdatedAsc, @NotNull @Max(20L) Integer nRow,
+                                                                         @NotNull @Range(max = 5L) Integer rating,
+                                                                         boolean sortLastUpdatedAsc,
+                                                                         @NotNull @Max(20L) Integer nRow,
                                                                          @NotNull Integer pageNumber) {
-        return null;
+        if (!rating.equals(0)) {
+            List<ParkingLotRatingEntity> parkingLotRatingEntityList = parkingLotRatingRepository
+                    .getAllRatingsOfParkingLot(parkingLotId, rating, sortLastUpdatedAsc, nRow, pageNumber);
+
+            Map<Long, String> usernameMap = userServiceBlockingStub.mapToUsernameList(MapToUsernameListRequest.newBuilder()
+                    .addAllUserId(new ArrayList<>(parkingLotRatingEntityList).stream()
+                            .map(ParkingLotRatingEntity::getCustomerId).collect(Collectors.toSet()))
+                    .build())
+                    .getUsernameMap();
+
+            return parkingLotRatingEntityList.stream().collect(Collectors
+                    .toMap(parkingLotRatingEntity -> parkingLotRatingEntity,
+                            parkingLotRatingEntity -> usernameMap.get(parkingLotRatingEntity.getCustomerId())));
+        }
+        return getAllRatingsOfParkingLot(parkingLotId, sortLastUpdatedAsc, nRow, pageNumber);
     }
 
     @Override

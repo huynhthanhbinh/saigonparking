@@ -34,7 +34,7 @@ public interface ParkingLotService {
 
     Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId);
 
-    Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId, @NotNull @Range(min = 1L, max = 5L) Integer rating);
+    Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId, @NotNull @Range(max = 5L) Integer rating);
 
     List<ParkingLotEntity> getAll(@NotNull Set<Long> parkingLotIdSet);
 
@@ -65,7 +65,7 @@ public interface ParkingLotService {
                                                                   @NotNull Integer pageNumber);
 
     Map<ParkingLotRatingEntity, String> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
-                                                                  @NotNull @Range(min = 1L, max = 5L) Integer rating,
+                                                                  @NotNull @Range(max = 5L) Integer rating,
                                                                   boolean sortLastUpdatedAsc,
                                                                   @NotNull @Max(20L) Integer nRow,
                                                                   @NotNull Integer pageNumber);
