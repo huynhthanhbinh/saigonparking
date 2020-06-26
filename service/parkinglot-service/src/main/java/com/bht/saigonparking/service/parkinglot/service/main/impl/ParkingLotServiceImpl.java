@@ -219,7 +219,7 @@ public class ParkingLotServiceImpl implements ParkingLotService {
                 .getAllRatingsOfParkingLot(parkingLotId, sortLastUpdatedAsc, nRow, pageNumber);
 
         Map<Long, String> usernameMap = userServiceBlockingStub.mapToUsernameList(MapToUsernameListRequest.newBuilder()
-                .addAllUserId(new ArrayList<>(parkingLotRatingEntityList).stream()
+                .addAllUserId(parkingLotRatingEntityList.stream()
                         .map(ParkingLotRatingEntity::getCustomerId).collect(Collectors.toSet()))
                 .build())
                 .getUsernameMap();
@@ -240,7 +240,7 @@ public class ParkingLotServiceImpl implements ParkingLotService {
                     .getAllRatingsOfParkingLot(parkingLotId, rating, sortLastUpdatedAsc, nRow, pageNumber);
 
             Map<Long, String> usernameMap = userServiceBlockingStub.mapToUsernameList(MapToUsernameListRequest.newBuilder()
-                    .addAllUserId(new ArrayList<>(parkingLotRatingEntityList).stream()
+                    .addAllUserId(parkingLotRatingEntityList.stream()
                             .map(ParkingLotRatingEntity::getCustomerId).collect(Collectors.toSet()))
                     .build())
                     .getUsernameMap();
