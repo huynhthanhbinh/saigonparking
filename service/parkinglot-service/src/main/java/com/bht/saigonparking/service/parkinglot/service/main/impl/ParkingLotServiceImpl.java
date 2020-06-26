@@ -168,14 +168,18 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     }
 
     @Override
-    public List<ParkingLotInformationEntity> getAllHasRatings(boolean sortRatingAsc) {
+    public List<ParkingLotInformationEntity> getAllHasRatings(boolean sortRatingAsc,
+                                                              @NotNull @Max(20L) Integer nRow,
+                                                              @NotNull Integer pageNumber) {
         return Collections.emptyList();
     }
 
     @Override
     public List<ParkingLotInformationEntity> getAllHasRatings(@NotNull @Range(max = 5L) Integer lowerBound,
                                                               @NotNull @Range(max = 5L) Integer upperBound,
-                                                              boolean sortRatingAsc) {
+                                                              boolean sortRatingAsc,
+                                                              @NotNull @Max(20L) Integer nRow,
+                                                              @NotNull Integer pageNumber) {
         return Collections.emptyList();
     }
 

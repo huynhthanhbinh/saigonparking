@@ -7,13 +7,21 @@ import org.apache.logging.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.bht.saigonparking.api.grpc.parkinglot.CountAllParkingLotHasRatingsRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.CountAllParkingLotRequest;
+import com.bht.saigonparking.api.grpc.parkinglot.CountAllRatingsOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.DeleteMultiParkingLotByIdRequest;
+import com.bht.saigonparking.api.grpc.parkinglot.GetAllParkingLotHasRatingsRequest;
+import com.bht.saigonparking.api.grpc.parkinglot.GetAllParkingLotHasRatingsResponse;
 import com.bht.saigonparking.api.grpc.parkinglot.GetAllParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.GetAllParkingLotResponse;
+import com.bht.saigonparking.api.grpc.parkinglot.GetAllRatingsOfParkingLotRequest;
+import com.bht.saigonparking.api.grpc.parkinglot.GetAllRatingsOfParkingLotResponse;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotIdList;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotLimit;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotRating;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotRatingsDetail;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResult;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResultList;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc.ParkingLotServiceImplBase;
@@ -73,14 +81,18 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
             responseObserver.onNext(Int64Value.of(count));
             responseObserver.onCompleted();
 
-            LoggingUtil.log(Level.INFO, "SERVICE", "Success", "countAllParkingLot");
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("countAllParkingLot(%s, %b, %s): %d",
+                            request.getKeyword(), request.getAvailableOnly(), request.getParkingLotType(), count));
 
         } catch (Exception exception) {
 
             responseObserver.onError(exception);
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
-            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL", "countAllParkingLot");
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("countAllParkingLot(%s, %b, %s)",
+                            request.getKeyword(), request.getAvailableOnly(), request.getParkingLotType()));
         }
     }
 
@@ -105,7 +117,8 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("getAllParkingLot(%d, %d)", request.getNRow(), request.getPageNumber()));
+                    String.format("getAllParkingLot(%s, %b, %s, %d, %d)",
+                            request.getKeyword(), request.getAvailableOnly(), request.getParkingLotType(), request.getNRow(), request.getPageNumber()));
 
         } catch (Exception exception) {
 
@@ -113,7 +126,8 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                    String.format("getAllParkingLot(%d, %d)", request.getNRow(), request.getPageNumber()));
+                    String.format("getAllParkingLot(%s, %b, %s, %d, %d)",
+                            request.getKeyword(), request.getAvailableOnly(), request.getParkingLotType(), request.getNRow(), request.getPageNumber()));
         }
     }
 
@@ -310,6 +324,115 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("deleteMultiParkingLotById(%s)", request.getParkingLotIdList()));
+        }
+    }
+
+    @Override
+    public void countAllParkingLotHasRatings(CountAllParkingLotHasRatingsRequest request, StreamObserver<Int64Value> responseObserver) {
+        try {
+            serverInterceptor.validateAdmin();
+
+            Long count = parkingLotService.countAllHasRatings(request.getLowerBoundRating(), request.getUpperBoundRating());
+
+            responseObserver.onNext(Int64Value.of(count));
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("countAllParkingLotHasRatings(%d, %d): %d",
+                            request.getLowerBoundRating(), request.getUpperBoundRating(), count));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("countAllParkingLotHasRatings(%d, %d)", request.getLowerBoundRating(), request.getUpperBoundRating()));
+        }
+    }
+
+    @Override
+    public void getAllParkingLotHasRatings(GetAllParkingLotHasRatingsRequest request, StreamObserver<GetAllParkingLotHasRatingsResponse> responseObserver) {
+        try {
+            serverInterceptor.validateAdmin();
+
+            List<ParkingLotRatingsDetail> parkingLotRatingsDetailList = parkingLotMapper
+                    .toParkingLotRatingsDetailList(parkingLotService
+                            .getAllHasRatings(request.getLowerBoundRating(), request.getUpperBoundRating(),
+                                    request.getSortRatingAsc(), request.getNRow(), request.getPageNumber()));
+
+            GetAllParkingLotHasRatingsResponse getAllParkingLotHasRatingsResponse = GetAllParkingLotHasRatingsResponse.newBuilder()
+                    .addAllDetail(parkingLotRatingsDetailList)
+                    .build();
+
+            responseObserver.onNext(getAllParkingLotHasRatingsResponse);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getAllParkingLotHasRatings(%d, %d, %b, %d, %d)",
+                            request.getLowerBoundRating(), request.getUpperBoundRating(),
+                            request.getSortRatingAsc(), request.getNRow(), request.getPageNumber()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getAllParkingLotHasRatings(%d, %d, %b, %d, %d)",
+                            request.getLowerBoundRating(), request.getUpperBoundRating(),
+                            request.getSortRatingAsc(), request.getNRow(), request.getPageNumber()));
+        }
+    }
+
+    @Override
+    public void countAllRatingsOfParkingLot(CountAllRatingsOfParkingLotRequest request, StreamObserver<Int64Value> responseObserver) {
+        try {
+            Long count = parkingLotService.countAllRatingsOfParkingLot(request.getParkingLotId(), request.getRating());
+
+            responseObserver.onNext(Int64Value.of(count));
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("countAllRatingsOfParkingLot(%d, %d): %d", request.getParkingLotId(), request.getRating(), count));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("countAllRatingsOfParkingLot(%d, %d)", request.getParkingLotId(), request.getRating()));
+        }
+    }
+
+    @Override
+    public void getAllRatingsOfParkingLot(GetAllRatingsOfParkingLotRequest request, StreamObserver<GetAllRatingsOfParkingLotResponse> responseObserver) {
+        try {
+            List<ParkingLotRating> parkingLotRatingList = parkingLotMapper
+                    .toParkingLotRatingList(parkingLotService
+                            .getAllRatingsOfParkingLot(request.getParkingLotId(), request.getRating(),
+                                    request.getSortLastUpdatedAsc(), request.getNRow(), request.getPageNumber()));
+
+            GetAllRatingsOfParkingLotResponse getAllRatingsOfParkingLotResponse = GetAllRatingsOfParkingLotResponse.newBuilder()
+                    .addAllRating(parkingLotRatingList)
+                    .build();
+
+            responseObserver.onNext(getAllRatingsOfParkingLotResponse);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getAllRatingsOfParkingLot(%d, %d, %b, %d, %d)", request.getParkingLotId(), request.getRating(),
+                            request.getSortLastUpdatedAsc(), request.getNRow(), request.getPageNumber()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getAllRatingsOfParkingLot(%d, %d, %b, %d, %d)", request.getParkingLotId(), request.getRating(),
+                            request.getSortLastUpdatedAsc(), request.getNRow(), request.getPageNumber()));
         }
     }
 }

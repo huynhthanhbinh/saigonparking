@@ -49,11 +49,15 @@ public interface ParkingLotService {
                                   boolean isAvailableOnly,
                                   @NotNull ParkingLotTypeEntity parkingLotTypeEntity);
 
-    List<ParkingLotInformationEntity> getAllHasRatings(boolean sortRatingAsc);
+    List<ParkingLotInformationEntity> getAllHasRatings(boolean sortRatingAsc,
+                                                       @NotNull @Max(20L) Integer nRow,
+                                                       @NotNull Integer pageNumber);
 
     List<ParkingLotInformationEntity> getAllHasRatings(@NotNull @Range(max = 5L) Integer lowerBound,
                                                        @NotNull @Range(max = 5L) Integer upperBound,
-                                                       boolean sortRatingAsc);
+                                                       boolean sortRatingAsc,
+                                                       @NotNull @Max(20L) Integer nRow,
+                                                       @NotNull Integer pageNumber);
 
     Map<ParkingLotRatingEntity, String> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
                                                                   boolean sortLastUpdatedAsc,
