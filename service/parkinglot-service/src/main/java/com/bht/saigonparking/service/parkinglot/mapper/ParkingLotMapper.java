@@ -2,6 +2,7 @@ package com.bht.saigonparking.service.parkinglot.mapper;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.persistence.Tuple;
@@ -15,10 +16,13 @@ import org.springframework.stereotype.Component;
 
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotInformation;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotRating;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotRatingsDetail;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResult;
 import com.bht.saigonparking.service.parkinglot.configuration.AppConfiguration;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotInformationEntity;
+import com.bht.saigonparking.service.parkinglot.entity.ParkingLotRatingEntity;
 
 /**
  *
@@ -108,6 +112,23 @@ public interface ParkingLotMapper {
     ParkingLot toParkingLotIgnoreImage(@NotNull ParkingLotEntity parkingLotEntity);
 
 
+    @Named("toParkingLotRatingsDetail")
+    @Mapping(target = "parkingLotId", source = "id", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
+    @Mapping(target = "parkingLotName", source = "name", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    @Mapping(target = "NRating", source = "NRating", defaultExpression = "java(customizedMapper.DEFAULT_INT_VALUE)")
+    @Mapping(target = "ratingAverage", source = "ratingAverage", defaultExpression = "java(customizedMapper.DEFAULT_DOUBLE_VALUE)")
+    ParkingLotRatingsDetail toParkingLotRatingsDetail(@NotNull ParkingLotInformationEntity parkingLotInformationEntity);
+
+
+    @Named("toParkingLotRating")
+    @Mapping(target = "ratingId", source = "key.id", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
+    @Mapping(target = "username", source = "value", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    @Mapping(target = "rating", source = "key.rating", defaultExpression = "java(customizedMapper.DEFAULT_INT_VALUE)")
+    @Mapping(target = "comment", source = "key.comment", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    @Mapping(target = "lastUpdated", source = "key.lastUpdated", qualifiedByName = "toTimestampString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    ParkingLotRating toParkingLotRating(@NotNull Map.Entry<ParkingLotRatingEntity, String> parkingLotRatingEntityEntry);
+
+
     @Named("toParkingLotResultListWithoutName")
     default List<ParkingLotResult> toParkingLotResultListWithoutName(@NotNull List<Tuple> parkingLotWithoutNameTupleList) {
         return parkingLotWithoutNameTupleList.stream().map(this::toParkingLotResultWithoutName).collect(Collectors.toList());
@@ -123,5 +144,17 @@ public interface ParkingLotMapper {
     @Named("toParkingLotList")
     default List<ParkingLot> toParkingLotList(@NotNull List<ParkingLotEntity> parkingLotEntityList) {
         return parkingLotEntityList.stream().map(this::toParkingLotIgnoreImage).collect(Collectors.toList());
+    }
+
+
+    @Named("toParkingLotRatingsDetailList")
+    default List<ParkingLotRatingsDetail> toParkingLotRatingsDetailList(@NotNull List<ParkingLotInformationEntity> parkingLotInformationEntityList) {
+        return parkingLotInformationEntityList.stream().map(this::toParkingLotRatingsDetail).collect(Collectors.toList());
+    }
+
+
+    @Named("toParkingLotRatingList")
+    default List<ParkingLotRating> toParkingLotRatingList(@NotNull Map<ParkingLotRatingEntity, String> parkingLotRatingEntityUsernameMap) {
+        return parkingLotRatingEntityUsernameMap.entrySet().stream().map(this::toParkingLotRating).collect(Collectors.toList());
     }
 }

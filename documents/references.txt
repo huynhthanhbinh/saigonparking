@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Thu, Jun 25th, 2020
+Last updated:       Fri, Jun 26th, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -254,3 +254,6 @@ Last updated:       Thu, Jun 25th, 2020
 
 85. How to Convert List to Map in Java
         https://www.baeldung.com/java-list-to-map
+
+86. Java Map Interface --> a map (a dictionary) doesn't allow duplicate keys, but it can have duplicate values !!!
+        https://www.javatpoint.com/java-map

@@ -257,7 +257,7 @@ service ParkingLotService {
     rpc getAllParkingLotHasRatings (GetAllParkingLotHasRatingsRequest) returns (GetAllParkingLotHasRatingsResponse);
 
     /** PUBLIC
-     * use-case: get all of a specific parking-lot
+     * use-case: get all ratings of a specific parking-lot
      *  + request: CountAllParkingLotRequest, you need to provide 3 params
      *      ++ parkingLotId: compulsory field, you need to provide an exact parking-lot id
      *      ++ rating: target rating, optional, ignore this field if you want to get all ratings of parking lot only
@@ -265,7 +265,7 @@ service ParkingLotService {
     rpc countAllRatingsOfParkingLot (CountAllRatingsOfParkingLotRequest) returns (google.protobuf.Int64Value);
 
     /** PUBLIC
-     * use-case: get all of a specific parking-lot
+     * use-case: get all ratings of a specific parking-lot
      *  + request: GetAllParkingLotRequest: you need to provide 5 params:
      *      ++ parkingLotId: compulsory field, you need to provide an exact parking-lot id
      *      ++ rating: target rating, optional, ignore this field if you want to get all ratings of parking lot only
