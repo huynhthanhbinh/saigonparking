@@ -157,6 +157,10 @@ message GetAllRatingsOfParkingLotResponse {
     repeated ParkingLotRating rating = 1; /* is a parking-lot rating list */
 }
 
+message ParkingLotRatingCountGroupByRating {
+    map<int32, int64> ratingCount = 1; /* is a map of <rating, count> with rating is key & count is value */
+}
+
 service ParkingLotService {
 
     /** PUBLIC - ADMIN ONLY
@@ -274,4 +278,15 @@ service ParkingLotService {
      *      ++ pageNumber: page you want to get
      *  + response: GetAllRatingsOfParkingLotResponse: it will be a list of ratings, satisfied the conditions (with nRow result max) */
     rpc getAllRatingsOfParkingLot (GetAllRatingsOfParkingLotRequest) returns (GetAllRatingsOfParkingLotResponse);
+
+    /** PUBLIC
+     * use-case: show parking lot rating count group by rating.
+     * For example: a map such as { 2=9, 3=12, 4=27 } will be shown as:
+     *      9  * *
+     *      12 * * *
+     *      27 * * * *
+     *      Total: 48 ratings, rating-average = 3.375
+     *  + request:  parking lot ID
+     *  + response: a map (or a dictionary) of <rating, count> with rating is key & count is value */
+    rpc getParkingLotRatingCountGroupByRating (google.protobuf.Int64Value) returns (ParkingLotRatingCountGroupByRating);
 }

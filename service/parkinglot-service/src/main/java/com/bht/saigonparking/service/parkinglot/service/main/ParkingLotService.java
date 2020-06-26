@@ -70,6 +70,8 @@ public interface ParkingLotService {
                                                                   @NotNull @Max(20L) Integer nRow,
                                                                   @NotNull Integer pageNumber);
 
+    Map<Integer, Long> getParkingLotRatingCountGroupByRating(@NotNull Long parkingLotId);
+
     ParkingLotEntity getParkingLotById(@NotNull Long id);
 
     ParkingLotLimitEntity getParkingLotLimitById(@NotNull Long id);

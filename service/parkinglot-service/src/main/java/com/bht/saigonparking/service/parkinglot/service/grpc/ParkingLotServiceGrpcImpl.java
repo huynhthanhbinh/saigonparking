@@ -21,6 +21,7 @@ import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotIdList;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotLimit;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotRating;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotRatingCountGroupByRating;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotRatingsDetail;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResult;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResultList;
@@ -433,6 +434,29 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("getAllRatingsOfParkingLot(%d, %d, %b, %d, %d)", request.getParkingLotId(), request.getRating(),
                             request.getSortLastUpdatedAsc(), request.getNRow(), request.getPageNumber()));
+        }
+    }
+
+    @Override
+    public void getParkingLotRatingCountGroupByRating(Int64Value request, StreamObserver<ParkingLotRatingCountGroupByRating> responseObserver) {
+        try {
+            ParkingLotRatingCountGroupByRating ratingCountGroupByRating = ParkingLotRatingCountGroupByRating.newBuilder()
+                    .putAllRatingCount(parkingLotService.getParkingLotRatingCountGroupByRating(request.getValue()))
+                    .build();
+
+            responseObserver.onNext(ratingCountGroupByRating);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getParkingLotRatingCountGroupByRating(%d)", request.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getParkingLotRatingCountGroupByRating(%d)", request.getValue()));
         }
     }
 }

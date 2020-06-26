@@ -1,6 +1,7 @@
 package com.bht.saigonparking.service.parkinglot.repository.custom;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
@@ -30,4 +31,6 @@ public interface ParkingLotRatingRepositoryCustom {
                                                            boolean sortLastUpdatedAsc,
                                                            @NotNull @Max(20L) Integer nRow,
                                                            @NotNull Integer pageNumber);
+
+    Map<Integer, Long> getParkingLotRatingCountGroupByRating(@NotNull Long parkingLotId);
 }

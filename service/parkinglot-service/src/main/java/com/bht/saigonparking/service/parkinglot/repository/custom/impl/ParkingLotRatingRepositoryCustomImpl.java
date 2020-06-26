@@ -1,7 +1,10 @@
 package com.bht.saigonparking.service.parkinglot.repository.custom.impl;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Fetch;
@@ -127,5 +130,24 @@ public class ParkingLotRatingRepositoryCustomImpl extends BaseRepositoryCustom i
         getAllQuery.setFirstResult(nRow * (pageNumber - 1));
 
         return getAllQuery.getResultList();
+    }
+
+    @Override
+    public Map<Integer, Long> getParkingLotRatingCountGroupByRating(@NotNull Long parkingLotId) {
+
+        CriteriaQuery<Tuple> query = criteriaBuilder.createQuery(Tuple.class);
+        Root<ParkingLotRatingEntity> root = query.from(ParkingLotRatingEntity.class);
+
+        Join<ParkingLotRatingEntity, ParkingLotEntity> parkingLotEntityJoin = root
+                .join(ParkingLotRatingEntity_.parkingLotEntity);
+
+        TypedQuery<Tuple> getCountGroupByQuery = entityManager
+                .createQuery(query
+                        .multiselect(root.get(ParkingLotRatingEntity_.rating), criteriaBuilder.count(root))
+                        .where(criteriaBuilder.equal(parkingLotEntityJoin.get(BaseEntity_.id), parkingLotId))
+                        .groupBy(root.get(ParkingLotRatingEntity_.rating)));
+
+        return getCountGroupByQuery.getResultList().stream().collect(Collectors
+                .toMap(record -> record.get(0, Short.class).intValue(), record -> record.get(1, Long.class)));
     }
 }

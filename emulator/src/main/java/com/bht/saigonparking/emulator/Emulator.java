@@ -1,5 +1,7 @@
 package com.bht.saigonparking.emulator;
 
+import java.util.Arrays;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -9,14 +11,22 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import com.bht.saigonparking.api.grpc.auth.AuthServiceGrpc;
 import com.bht.saigonparking.api.grpc.auth.ValidateResponse;
 import com.bht.saigonparking.api.grpc.parkinglot.CountAllParkingLotHasRatingsRequest;
+import com.bht.saigonparking.api.grpc.parkinglot.CountAllParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.CountAllRatingsOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.GetAllParkingLotHasRatingsRequest;
+import com.bht.saigonparking.api.grpc.parkinglot.GetAllParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.GetAllRatingsOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotInformation;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
+import com.bht.saigonparking.api.grpc.user.CountAllUserRequest;
 import com.bht.saigonparking.api.grpc.user.Customer;
+import com.bht.saigonparking.api.grpc.user.GetAllUserRequest;
+import com.bht.saigonparking.api.grpc.user.MapToUsernameListRequest;
+import com.bht.saigonparking.api.grpc.user.UserRole;
 import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
 import com.bht.saigonparking.emulator.configuration.SpringApplicationContext;
+import com.google.protobuf.Int64Value;
 
 import io.grpc.StatusRuntimeException;
 import lombok.extern.log4j.Log4j2;
@@ -80,37 +90,39 @@ public class Emulator extends SpringBootServletInitializer {
                     .setPageNumber(1)
                     .build()));
 
-//            System.out.println("\n\n" + userServiceBlockingStub.mapToUsernameList(MapToUsernameListRequest.newBuilder()
-//                    .addAllUserId(Arrays.asList(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L, 11L, 12L)).build())
-//                    .getUsernameMap() + "\n\n");
-//
-//            System.out.println("\n\n" + parkingLotServiceBlockingStub.countAllParkingLot(CountAllParkingLotRequest.newBuilder()
-//                    .setParkingLotType(ParkingLotType.BUILDING)
-//                    .setKeyword("Chung")
-//                    .setAvailableOnly(true)
-//                    .build()) + "\n\n");
-//
-//            System.out.println(parkingLotServiceBlockingStub.getAllParkingLot(GetAllParkingLotRequest.newBuilder()
-//                    .setParkingLotType(ParkingLotType.BUILDING)
-//                    .setKeyword("Chung")
-//                    .setAvailableOnly(true)
-//                    .setNRow(5)
-//                    .setPageNumber(1)
-//                    .build()));
-//
-//            System.out.println("\n\n" + userServiceBlockingStub.countAllUser(CountAllUserRequest.newBuilder()
-//                    .setUserRole(UserRole.CUSTOMER)
-//                    .setKeyword("tb")
-//                    .setInactivatedOnly(true)
-//                    .build()) + "\n\n");
-//
-//            System.out.println(userServiceBlockingStub.getAllUser(GetAllUserRequest.newBuilder()
-//                    .setUserRole(UserRole.CUSTOMER)
-//                    .setKeyword("tb")
-//                    .setInactivatedOnly(true)
-//                    .setNRow(5)
-//                    .setPageNumber(1)
-//                    .build()));
+            System.out.println("\n\n" + userServiceBlockingStub.mapToUsernameList(MapToUsernameListRequest.newBuilder()
+                    .addAllUserId(Arrays.asList(-2L, -1L, 0L, 1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L, 11L, 12L)).build())
+                    .getUsernameMap() + "\n\n");
+
+            System.out.println(parkingLotServiceBlockingStub.getParkingLotRatingCountGroupByRating(Int64Value.of(109)));
+
+            System.out.println("\n\n" + parkingLotServiceBlockingStub.countAllParkingLot(CountAllParkingLotRequest.newBuilder()
+                    .setParkingLotType(ParkingLotType.BUILDING)
+                    .setKeyword("Chung")
+                    .setAvailableOnly(true)
+                    .build()) + "\n\n");
+
+            System.out.println(parkingLotServiceBlockingStub.getAllParkingLot(GetAllParkingLotRequest.newBuilder()
+                    .setParkingLotType(ParkingLotType.BUILDING)
+                    .setKeyword("Chung")
+                    .setAvailableOnly(true)
+                    .setNRow(5)
+                    .setPageNumber(1)
+                    .build()));
+
+            System.out.println("\n\n" + userServiceBlockingStub.countAllUser(CountAllUserRequest.newBuilder()
+                    .setUserRole(UserRole.CUSTOMER)
+                    .setKeyword("tb")
+                    .setInactivatedOnly(false)
+                    .build()) + "\n\n");
+
+            System.out.println(userServiceBlockingStub.getAllUser(GetAllUserRequest.newBuilder()
+                    .setUserRole(UserRole.CUSTOMER)
+                    .setKeyword("tb")
+                    .setInactivatedOnly(false)
+                    .setNRow(5)
+                    .setPageNumber(1)
+                    .build()));
 
 //            for (int i = 0; i < 30; i++) {
 //                log.info("Start calling API");

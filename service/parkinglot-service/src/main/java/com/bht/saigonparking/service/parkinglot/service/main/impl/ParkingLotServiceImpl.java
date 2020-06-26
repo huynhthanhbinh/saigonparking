@@ -253,6 +253,11 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     }
 
     @Override
+    public Map<Integer, Long> getParkingLotRatingCountGroupByRating(@NotNull Long parkingLotId) {
+        return parkingLotRatingRepository.getParkingLotRatingCountGroupByRating(parkingLotId);
+    }
+
+    @Override
     public ParkingLotEntity getParkingLotById(@NotNull Long id) {
         return parkingLotRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
