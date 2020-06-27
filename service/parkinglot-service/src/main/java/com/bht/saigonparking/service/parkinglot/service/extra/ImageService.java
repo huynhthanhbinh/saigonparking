@@ -1,7 +1,5 @@
 package com.bht.saigonparking.service.parkinglot.service.extra;
 
-import java.io.IOException;
-
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -37,10 +35,10 @@ public interface ImageService {
         }
     }
 
-    byte[] getImage(@NotEmpty String pathFromGalleryDir, @NotNull ImageExtension fileExtension) throws IOException;
+    byte[] getImage(@NotEmpty String pathFromGalleryDir, @NotNull ImageExtension fileExtension);
 
 
-    void saveImage(byte[] imageData, @NotEmpty String pathFromGalleryDir, @NotNull ImageExtension fileExtension) throws IOException;
+    void saveImage(byte[] imageData, @NotEmpty String pathFromGalleryDir, @NotNull ImageExtension fileExtension);
 
 
     void deleteImage(@NotEmpty String pathFromGalleryDir, @NotNull ImageExtension fileExtension);

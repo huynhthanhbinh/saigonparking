@@ -1,6 +1,5 @@
 package com.bht.saigonparking.service.parkinglot.mapper;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -70,7 +69,7 @@ public interface ParkingLotMapper {
     @Mapping(target = "numberOfRating", source = "NRating", defaultExpression = "java(customizedMapper.DEFAULT_SHORT_VALUE)")
     @Mapping(target = "imageData", source = "id", qualifiedByName = "toEncodedParkingLotImage", defaultExpression = "java(customizedMapper.DEFAULT_BYTE_STRING_VALUE)")
     @Mapping(target = "version", source = "version", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
-    ParkingLotInformation toParkingLotInformation(@NotNull ParkingLotInformationEntity parkingLotInformationEntity) throws IOException;
+    ParkingLotInformation toParkingLotInformation(@NotNull ParkingLotInformationEntity parkingLotInformationEntity);
 
 
     @Named("toParkingLotInformationIgnoreImage")

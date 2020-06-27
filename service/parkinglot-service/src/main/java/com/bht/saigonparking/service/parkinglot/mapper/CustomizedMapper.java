@@ -1,6 +1,5 @@
 package com.bht.saigonparking.service.parkinglot.mapper;
 
-import java.io.IOException;
 import java.sql.Time;
 import java.sql.Timestamp;
 
@@ -27,11 +26,9 @@ import lombok.Setter;
  * Mapper for the others & default object of each type
  *
  * Note that customized class and all of
- * its attributes, its methods are declared as non-public
+ * its attributes, its methods should be declared as non-public
  * in order to hide this class and its methods, its attributes
  * from outside of mapper package
- *
- * It is expected to be seen only by mapper class
  *
  * @author bht
  */
@@ -76,7 +73,7 @@ public abstract class CustomizedMapper {
     }
 
     @Named("toEncodedParkingLotImage")
-    public ByteString toEncodedParkingLotImage(@NotNull Integer parkingLotId) throws IOException {
+    public ByteString toEncodedParkingLotImage(@NotNull Integer parkingLotId) {
         return ImageUtil.encodeImage(imageService.getImage(
                 "plot" + parkingLotId, ImageService.ImageExtension.JPG));
     }

@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.amazonaws.AmazonServiceException;
+import com.amazonaws.AmazonClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.bht.saigonparking.common.util.LoggingUtil;
@@ -45,41 +45,38 @@ public class S3ServiceImpl implements S3Service {
 
     @Override
     public InputStream getFile(@NotEmpty String filePath, boolean warnOnFail) {
-        InputStream inputStream = null;
-        try {
-            inputStream = amazonS3Client.getObject(bucketName, filePath).getObjectContent();
+        try (InputStream inputStream = amazonS3Client.getObject(bucketName, filePath).getObjectContent()) {
 
-            LoggingUtil.log(Level.DEBUG, "SERVICE", "Success",
-                    String.format("getS3File(\"%s\")", filePath));
+            LoggingUtil.log(Level.DEBUG, "SERVICE", "Success", String.format("getS3File(\"%s\")", filePath));
 
-        } catch (AmazonServiceException exception) {
+            return inputStream;
+
+        } catch (AmazonClientException | IOException exception) {
 
             if (warnOnFail) {
                 LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
-                LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                        String.format("getS3File(\"%s\")", filePath));
+                LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL", String.format("getS3File(\"%s\")", filePath));
             }
+
+            return null;
         }
-        return inputStream;
     }
 
     @Override
-    public void saveFile(byte[] fileData, @NotEmpty String filePath, boolean warnOnFail) throws IOException {
+    public void saveFile(byte[] fileData, @NotEmpty String filePath, boolean warnOnFail) {
         try (InputStream inputStream = ByteSource.wrap(fileData).openStream()) {
 
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(fileData.length);
             amazonS3Client.putObject(bucketName, filePath, inputStream, metadata);
 
-            LoggingUtil.log(Level.DEBUG, "SERVICE", "Success",
-                    String.format("saveS3File(\"%s\")", filePath));
+            LoggingUtil.log(Level.DEBUG, "SERVICE", "Success", String.format("saveS3File(\"%s\")", filePath));
 
-        } catch (AmazonServiceException exception) {
+        } catch (AmazonClientException | IOException exception) {
 
             if (warnOnFail) {
                 LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
-                LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                        String.format("saveS3File(\"%s\")", filePath));
+                LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL", String.format("saveS3File(\"%s\")", filePath));
             }
         }
     }
@@ -89,15 +86,13 @@ public class S3ServiceImpl implements S3Service {
         try {
             amazonS3Client.deleteObject(bucketName, filePath);
 
-            LoggingUtil.log(Level.DEBUG, "SERVICE", "Success",
-                    String.format("deleteS3File(\"%s\")", filePath));
+            LoggingUtil.log(Level.DEBUG, "SERVICE", "Success", String.format("deleteS3File(\"%s\")", filePath));
 
-        } catch (AmazonServiceException exception) {
+        } catch (AmazonClientException exception) {
 
             if (warnOnFail) {
                 LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
-                LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                        String.format("deleteS3File(\"%s\")", filePath));
+                LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL", String.format("deleteS3File(\"%s\")", filePath));
             }
         }
     }

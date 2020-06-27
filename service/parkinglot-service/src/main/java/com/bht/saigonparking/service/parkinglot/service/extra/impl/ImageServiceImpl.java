@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bht.saigonparking.service.parkinglot.service.extra.ImageService;
 import com.bht.saigonparking.service.parkinglot.service.extra.S3Service;
 import com.google.common.io.ByteStreams;
+import com.google.protobuf.Internal;
 
 import lombok.AllArgsConstructor;
 
@@ -42,13 +43,17 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public byte[] getImage(@NotEmpty String pathFromGalleryDir, @NotNull ImageService.ImageExtension fileExtension) throws IOException {
-        InputStream inputStream = s3Service.getFile(toImagePath(pathFromGalleryDir, fileExtension), false);
-        return (inputStream != null) ? ByteStreams.toByteArray(inputStream) : null;
+    public byte[] getImage(@NotEmpty String pathFromGalleryDir, @NotNull ImageService.ImageExtension fileExtension) {
+        try (InputStream inputStream = s3Service.getFile(toImagePath(pathFromGalleryDir, fileExtension), false)) {
+            return (inputStream != null) ? ByteStreams.toByteArray(inputStream) : Internal.EMPTY_BYTE_ARRAY;
+
+        } catch (IOException e) {
+            return Internal.EMPTY_BYTE_ARRAY;
+        }
     }
 
     @Override
-    public void saveImage(byte[] imageData, @NotEmpty String pathFromGalleryDir, @NotNull ImageService.ImageExtension fileExtension) throws IOException {
+    public void saveImage(byte[] imageData, @NotEmpty String pathFromGalleryDir, @NotNull ImageService.ImageExtension fileExtension) {
         if (imageData != null && imageData.length > 0) {
             s3Service.saveFile(imageData, toImagePath(pathFromGalleryDir, fileExtension), true);
         }
