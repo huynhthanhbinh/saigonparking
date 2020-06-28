@@ -5,21 +5,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.persistence.Tuple;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Root;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Range;
 import org.springframework.stereotype.Repository;
 
-import com.bht.saigonparking.common.base.BaseEntity_;
 import com.bht.saigonparking.common.base.BaseRepositoryCustom;
-import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
-import com.bht.saigonparking.service.parkinglot.entity.ParkingLotRatingEntity;
-import com.bht.saigonparking.service.parkinglot.entity.ParkingLotRatingEntity_;
 import com.bht.saigonparking.service.parkinglot.repository.custom.ParkingLotRatingRepositoryCustom;
 
 /**
@@ -98,19 +90,15 @@ public class ParkingLotRatingRepositoryCustomImpl extends BaseRepositoryCustom i
     @Override
     public Map<Integer, Long> getParkingLotRatingCountGroupByRating(@NotNull Long parkingLotId) {
 
-        CriteriaQuery<Tuple> query = criteriaBuilder.createQuery(Tuple.class);
-        Root<ParkingLotRatingEntity> root = query.from(ParkingLotRatingEntity.class);
+        String getCountGroupByQuery = "SELECT PR.rating, COUNT(PR.id) " +
+                "FROM ParkingLotRatingEntity PR " +
+                "WHERE PR.parkingLotEntity.id = :parkingLotId " +
+                "GROUP BY PR.rating ";
 
-        Join<ParkingLotRatingEntity, ParkingLotEntity> parkingLotEntityJoin = root
-                .join(ParkingLotRatingEntity_.parkingLotEntity);
-
-        TypedQuery<Tuple> getCountGroupByQuery = entityManager
-                .createQuery(query
-                        .multiselect(root.get(ParkingLotRatingEntity_.rating), criteriaBuilder.count(root))
-                        .where(criteriaBuilder.equal(parkingLotEntityJoin.get(BaseEntity_.id), parkingLotId))
-                        .groupBy(root.get(ParkingLotRatingEntity_.rating)));
-
-        return getCountGroupByQuery.getResultList().stream().collect(Collectors
-                .toMap(record -> record.get(0, Short.class).intValue(), record -> record.get(1, Long.class)));
+        return entityManager.createQuery(getCountGroupByQuery, Tuple.class)
+                .setParameter("parkingLotId", parkingLotId)
+                .getResultList().stream()
+                .collect(Collectors
+                        .toMap(record -> record.get(0, Short.class).intValue(), record -> record.get(1, Long.class)));
     }
 }
