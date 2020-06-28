@@ -27,7 +27,6 @@ import com.bht.saigonparking.api.grpc.user.MapToUsernameListRequest;
 import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEmployeeEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
-import com.bht.saigonparking.service.parkinglot.entity.ParkingLotInformationEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotTypeEntity;
 import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotInformationRepository;
@@ -186,19 +185,19 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     }
 
     @Override
-    public List<ParkingLotInformationEntity> getAllHasRatings(boolean sortRatingAsc,
-                                                              @NotNull @Max(20L) Integer nRow,
-                                                              @NotNull Integer pageNumber) {
+    public List<Tuple> getAllHasRatings(boolean sortRatingAsc,
+                                        @NotNull @Max(20L) Integer nRow,
+                                        @NotNull Integer pageNumber) {
 
         return parkingLotInformationRepository.getAllHasRatings(sortRatingAsc, nRow, pageNumber);
     }
 
     @Override
-    public List<ParkingLotInformationEntity> getAllHasRatings(@NotNull @Range(max = 5L) Integer lowerBound,
-                                                              @NotNull @Range(max = 5L) Integer upperBound,
-                                                              boolean sortRatingAsc,
-                                                              @NotNull @Max(20L) Integer nRow,
-                                                              @NotNull Integer pageNumber) {
+    public List<Tuple> getAllHasRatings(@NotNull @Range(max = 5L) Integer lowerBound,
+                                        @NotNull @Range(max = 5L) Integer upperBound,
+                                        boolean sortRatingAsc,
+                                        @NotNull @Max(20L) Integer nRow,
+                                        @NotNull Integer pageNumber) {
 
         if (lowerBound.equals(upperBound) && lowerBound.equals(0)) {
             return getAllHasRatings(sortRatingAsc, nRow, pageNumber);

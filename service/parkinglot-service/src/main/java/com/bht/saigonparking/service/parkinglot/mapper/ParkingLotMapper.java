@@ -111,11 +111,11 @@ public interface ParkingLotMapper {
 
 
     @Named("toParkingLotRatingsDetail")
-    @Mapping(target = "parkingLotId", source = "id", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
-    @Mapping(target = "parkingLotName", source = "name", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
-    @Mapping(target = "NRating", source = "NRating", defaultExpression = "java(customizedMapper.DEFAULT_INT_VALUE)")
-    @Mapping(target = "ratingAverage", source = "ratingAverage", defaultExpression = "java(customizedMapper.DEFAULT_DOUBLE_VALUE)")
-    ParkingLotRatingsDetail toParkingLotRatingsDetail(@NotNull ParkingLotInformationEntity parkingLotInformationEntity);
+    @Mapping(target = "parkingLotId", expression = "java(parkingLotInformationTuple.get(0, Long.class))")
+    @Mapping(target = "parkingLotName", expression = "java(parkingLotInformationTuple.get(1, String.class))")
+    @Mapping(target = "NRating", expression = "java(parkingLotInformationTuple.get(2, Short.class).intValue())")
+    @Mapping(target = "ratingAverage", expression = "java(parkingLotInformationTuple.get(3, Double.class))")
+    ParkingLotRatingsDetail toParkingLotRatingsDetail(@NotNull Tuple parkingLotInformationTuple);
 
 
     @Named("toParkingLotRating")
@@ -146,8 +146,8 @@ public interface ParkingLotMapper {
 
 
     @Named("toParkingLotRatingsDetailList")
-    default List<ParkingLotRatingsDetail> toParkingLotRatingsDetailList(@NotNull List<ParkingLotInformationEntity> parkingLotInformationEntityList) {
-        return parkingLotInformationEntityList.stream().map(this::toParkingLotRatingsDetail).collect(Collectors.toList());
+    default List<ParkingLotRatingsDetail> toParkingLotRatingsDetailList(@NotNull List<Tuple> parkingLotInformationTupleList) {
+        return parkingLotInformationTupleList.stream().map(this::toParkingLotRatingsDetail).collect(Collectors.toList());
     }
 
 

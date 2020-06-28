@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Range;
 
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
-import com.bht.saigonparking.service.parkinglot.entity.ParkingLotInformationEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotTypeEntity;
 
@@ -48,15 +47,15 @@ public interface ParkingLotService {
                                   boolean isAvailableOnly,
                                   @NotNull ParkingLotTypeEntity parkingLotTypeEntity);
 
-    List<ParkingLotInformationEntity> getAllHasRatings(boolean sortRatingAsc,
-                                                       @NotNull @Max(20L) Integer nRow,
-                                                       @NotNull Integer pageNumber);
+    List<Tuple> getAllHasRatings(boolean sortRatingAsc,
+                                 @NotNull @Max(20L) Integer nRow,
+                                 @NotNull Integer pageNumber);
 
-    List<ParkingLotInformationEntity> getAllHasRatings(@NotNull @Range(max = 5L) Integer lowerBound,
-                                                       @NotNull @Range(max = 5L) Integer upperBound,
-                                                       boolean sortRatingAsc,
-                                                       @NotNull @Max(20L) Integer nRow,
-                                                       @NotNull Integer pageNumber);
+    List<Tuple> getAllHasRatings(@NotNull @Range(max = 5L) Integer lowerBound,
+                                 @NotNull @Range(max = 5L) Integer upperBound,
+                                 boolean sortRatingAsc,
+                                 @NotNull @Max(20L) Integer nRow,
+                                 @NotNull Integer pageNumber);
 
     Map<Tuple, String> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
                                                  boolean sortLastUpdatedAsc,
