@@ -63,7 +63,7 @@
     </developers>
 
     <properties>
-        <revision>v2.1</revision> <!-- version of project -->
+        <revision>v2.1.1</revision> <!-- version of project -->
         <java.version>1.8</java.version> <!-- version of java (jdk) -->
 
         <project.docker.hub-id>saigonparkingmap</project.docker.hub-id>
@@ -88,8 +88,8 @@
         <springframework.version>5.2.4.RELEASE</springframework.version>
 
         <javax.version>4.0.1</javax.version>
-        <java-jwt.version>0.11.1</java-jwt.version>
-        <hibernate.version>5.4.17.Final</hibernate.version>
+        <java-jwt.version>0.11.2</java-jwt.version>
+        <hibernate.version>5.4.18.Final</hibernate.version>
         <mssql-jdbc.version>8.2.2.jre8</mssql-jdbc.version>
 
         <aws.version>1.11.786</aws.version>
