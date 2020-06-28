@@ -32,15 +32,12 @@ public class ParkingLotRatingRepositoryCustomImpl extends BaseRepositoryCustom i
     @Override
     public Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId) {
 
-        CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
-        Root<ParkingLotRatingEntity> root = query.from(ParkingLotRatingEntity.class);
+        String countAllQuery = "SELECT COUNT(PR.id) " +
+                "FROM ParkingLotRatingEntity PR " +
+                "WHERE PR.parkingLotEntity.id = :parkingLotId ";
 
-        Join<ParkingLotRatingEntity, ParkingLotEntity> parkingLotEntityJoin = root
-                .join(ParkingLotRatingEntity_.parkingLotEntity);
-
-        return entityManager.createQuery(query
-                .select(criteriaBuilder.count(root))
-                .where(criteriaBuilder.equal(parkingLotEntityJoin.get(BaseEntity_.id), parkingLotId)))
+        return entityManager.createQuery(countAllQuery, Long.class)
+                .setParameter("parkingLotId", parkingLotId)
                 .getSingleResult();
     }
 
@@ -48,17 +45,14 @@ public class ParkingLotRatingRepositoryCustomImpl extends BaseRepositoryCustom i
     public Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId,
                                             @NotNull @Range(min = 1L, max = 5L) Integer rating) {
 
-        CriteriaQuery<Long> query = criteriaBuilder.createQuery(Long.class);
-        Root<ParkingLotRatingEntity> root = query.from(ParkingLotRatingEntity.class);
+        String countAllQuery = "SELECT COUNT(PR.id) " +
+                "FROM ParkingLotRatingEntity PR " +
+                "WHERE PR.parkingLotEntity.id = :parkingLotId " +
+                "AND PR.rating = :rating ";
 
-        Join<ParkingLotRatingEntity, ParkingLotEntity> parkingLotEntityJoin = root
-                .join(ParkingLotRatingEntity_.parkingLotEntity);
-
-        return entityManager.createQuery(query
-                .select(criteriaBuilder.count(root))
-                .where(criteriaBuilder.and(
-                        criteriaBuilder.equal(parkingLotEntityJoin.get(BaseEntity_.id), parkingLotId),
-                        criteriaBuilder.equal(root.get(ParkingLotRatingEntity_.rating), rating))))
+        return entityManager.createQuery(countAllQuery, Long.class)
+                .setParameter("parkingLotId", parkingLotId)
+                .setParameter("rating", rating.shortValue())
                 .getSingleResult();
     }
 
