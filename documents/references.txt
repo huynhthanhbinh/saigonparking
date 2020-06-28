@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Fri, Jun 26th, 2020
+Last updated:       Sun, Jun 28th, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -257,3 +257,12 @@ Last updated:       Fri, Jun 26th, 2020
 
 86. Java Map Interface --> a map (a dictionary) doesn't allow duplicate keys, but it can have duplicate values !!!
         https://www.javatpoint.com/java-map
+
+87. EntityManager query by JoinColumn
+        https://stackoverflow.com/questions/12907921/entitymanager-query-by-joincolumn
+
+88. JPA/Hibernate Bidirectional Lazy Loading Done Right
+        https://medium.com/monstar-lab-bangladesh-engineering/jpa-hibernate-bidirectional-lazy-loading-done-right-65eda6426d64
+
+89. Hibernate @NotNull vs @Column(nullable = false)
+        https://www.baeldung.com/hibernate-notnull-vs-nullable
