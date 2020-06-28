@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Fetch;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.validation.constraints.Max;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Repository;
 import com.bht.saigonparking.common.base.BaseEntity_;
 import com.bht.saigonparking.common.base.BaseRepositoryCustom;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
-import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity_;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotRatingEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotRatingEntity_;
 import com.bht.saigonparking.service.parkinglot.repository.custom.ParkingLotRatingRepositoryCustom;
@@ -29,7 +27,6 @@ import com.bht.saigonparking.service.parkinglot.repository.custom.ParkingLotRati
  * @author bht
  */
 @Repository
-@SuppressWarnings("unchecked")
 public class ParkingLotRatingRepositoryCustomImpl extends BaseRepositoryCustom implements ParkingLotRatingRepositoryCustom {
 
     @Override
@@ -66,70 +63,42 @@ public class ParkingLotRatingRepositoryCustomImpl extends BaseRepositoryCustom i
     }
 
     @Override
-    public List<ParkingLotRatingEntity> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
-                                                                  boolean sortLastUpdatedAsc,
-                                                                  @NotNull @Max(20L) Integer nRow,
-                                                                  @NotNull Integer pageNumber) {
+    public List<Tuple> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
+                                                 boolean sortLastUpdatedAsc,
+                                                 @NotNull @Max(20L) Integer nRow,
+                                                 @NotNull Integer pageNumber) {
 
-        CriteriaQuery<ParkingLotRatingEntity> query = criteriaBuilder.createQuery(ParkingLotRatingEntity.class);
-        Root<ParkingLotRatingEntity> root = query.from(ParkingLotRatingEntity.class);
+        String getAllQuery = "SELECT PR.id, PR.parkingLotEntity.id, PR.customerId, PR.rating, PR.comment, PR.lastUpdated " +
+                "FROM ParkingLotRatingEntity PR " +
+                "WHERE PR.parkingLotEntity.id = :parkingLotId " +
+                "ORDER BY PR.lastUpdated " + (sortLastUpdatedAsc ? " ASC " : " DESC ");
 
-        Fetch<ParkingLotRatingEntity, ParkingLotEntity> parkingLotEntityFetch = root
-                .fetch(ParkingLotRatingEntity_.parkingLotEntity);
-        Join<ParkingLotRatingEntity, ParkingLotEntity> parkingLotEntityJoin =
-                (Join<ParkingLotRatingEntity, ParkingLotEntity>) parkingLotEntityFetch;
-
-        parkingLotEntityFetch.fetch(ParkingLotEntity_.parkingLotTypeEntity);
-        parkingLotEntityFetch.fetch(ParkingLotEntity_.parkingLotLimitEntity);
-        parkingLotEntityFetch.fetch(ParkingLotEntity_.parkingLotInformationEntity);
-
-        TypedQuery<ParkingLotRatingEntity> getAllQuery = entityManager
-                .createQuery(query
-                        .select(root)
-                        .where(criteriaBuilder.equal(parkingLotEntityJoin.get(BaseEntity_.id), parkingLotId))
-                        .orderBy(sortLastUpdatedAsc
-                                ? criteriaBuilder.asc(root.get(ParkingLotRatingEntity_.lastUpdated))
-                                : criteriaBuilder.desc(root.get(ParkingLotRatingEntity_.lastUpdated))));
-
-        getAllQuery.setMaxResults(nRow);
-        getAllQuery.setFirstResult(nRow * (pageNumber - 1));
-
-        return getAllQuery.getResultList();
+        return entityManager.createQuery(getAllQuery, Tuple.class)
+                .setParameter("parkingLotId", parkingLotId)
+                .setMaxResults(nRow)
+                .setFirstResult(nRow * (pageNumber - 1))
+                .getResultList();
     }
 
     @Override
-    public List<ParkingLotRatingEntity> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
-                                                                  @NotNull @Range(min = 1L, max = 5L) Integer rating,
-                                                                  boolean sortLastUpdatedAsc,
-                                                                  @NotNull @Max(20L) Integer nRow,
-                                                                  @NotNull Integer pageNumber) {
+    public List<Tuple> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
+                                                 @NotNull @Range(min = 1L, max = 5L) Integer rating,
+                                                 boolean sortLastUpdatedAsc,
+                                                 @NotNull @Max(20L) Integer nRow,
+                                                 @NotNull Integer pageNumber) {
 
-        CriteriaQuery<ParkingLotRatingEntity> query = criteriaBuilder.createQuery(ParkingLotRatingEntity.class);
-        Root<ParkingLotRatingEntity> root = query.from(ParkingLotRatingEntity.class);
+        String getAllQuery = "SELECT PR.id, PR.parkingLotEntity.id, PR.customerId, PR.rating, PR.comment, PR.lastUpdated " +
+                "FROM ParkingLotRatingEntity PR " +
+                "WHERE PR.parkingLotEntity.id = :parkingLotId " +
+                "AND PR.rating = :rating " +
+                "ORDER BY PR.lastUpdated " + (sortLastUpdatedAsc ? " ASC " : " DESC ");
 
-        Fetch<ParkingLotRatingEntity, ParkingLotEntity> parkingLotEntityFetch = root
-                .fetch(ParkingLotRatingEntity_.parkingLotEntity);
-        Join<ParkingLotRatingEntity, ParkingLotEntity> parkingLotEntityJoin =
-                (Join<ParkingLotRatingEntity, ParkingLotEntity>) parkingLotEntityFetch;
-
-        parkingLotEntityFetch.fetch(ParkingLotEntity_.parkingLotTypeEntity);
-        parkingLotEntityFetch.fetch(ParkingLotEntity_.parkingLotLimitEntity);
-        parkingLotEntityFetch.fetch(ParkingLotEntity_.parkingLotInformationEntity);
-
-        TypedQuery<ParkingLotRatingEntity> getAllQuery = entityManager
-                .createQuery(query
-                        .select(root)
-                        .where(criteriaBuilder.and(
-                                criteriaBuilder.equal(parkingLotEntityJoin.get(BaseEntity_.id), parkingLotId),
-                                criteriaBuilder.equal(root.get(ParkingLotRatingEntity_.rating), rating)))
-                        .orderBy(sortLastUpdatedAsc
-                                ? criteriaBuilder.asc(root.get(ParkingLotRatingEntity_.lastUpdated))
-                                : criteriaBuilder.desc(root.get(ParkingLotRatingEntity_.lastUpdated))));
-
-        getAllQuery.setMaxResults(nRow);
-        getAllQuery.setFirstResult(nRow * (pageNumber - 1));
-
-        return getAllQuery.getResultList();
+        return entityManager.createQuery(getAllQuery, Tuple.class)
+                .setParameter("parkingLotId", parkingLotId)
+                .setParameter("rating", rating.shortValue())
+                .setMaxResults(nRow)
+                .setFirstResult(nRow * (pageNumber - 1))
+                .getResultList();
     }
 
     @Override

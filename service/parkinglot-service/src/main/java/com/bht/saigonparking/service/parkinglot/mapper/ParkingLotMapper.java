@@ -21,7 +21,6 @@ import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResult;
 import com.bht.saigonparking.service.parkinglot.configuration.AppConfiguration;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotInformationEntity;
-import com.bht.saigonparking.service.parkinglot.entity.ParkingLotRatingEntity;
 
 /**
  *
@@ -120,12 +119,12 @@ public interface ParkingLotMapper {
 
 
     @Named("toParkingLotRating")
-    @Mapping(target = "ratingId", source = "key.id", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
+    @Mapping(target = "ratingId", expression = "java(parkingLotRatingTupleEntry.getKey().get(0, Long.class))")
     @Mapping(target = "username", source = "value", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
-    @Mapping(target = "rating", source = "key.rating", defaultExpression = "java(customizedMapper.DEFAULT_INT_VALUE)")
-    @Mapping(target = "comment", source = "key.comment", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
-    @Mapping(target = "lastUpdated", source = "key.lastUpdated", qualifiedByName = "toTimestampString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
-    ParkingLotRating toParkingLotRating(@NotNull Map.Entry<ParkingLotRatingEntity, String> parkingLotRatingEntityEntry);
+    @Mapping(target = "rating", expression = "java(parkingLotRatingTupleEntry.getKey().get(3, Short.class).intValue())")
+    @Mapping(target = "comment", expression = "java(parkingLotRatingTupleEntry.getKey().get(4, String.class))")
+    @Mapping(target = "lastUpdated", expression = "java(customizedMapper.toTimestampString(parkingLotRatingTupleEntry.getKey().get(5, java.sql.Timestamp.class)))")
+    ParkingLotRating toParkingLotRating(@NotNull Map.Entry<Tuple, String> parkingLotRatingTupleEntry);
 
 
     @Named("toParkingLotResultListWithoutName")
@@ -153,7 +152,7 @@ public interface ParkingLotMapper {
 
 
     @Named("toParkingLotRatingList")
-    default List<ParkingLotRating> toParkingLotRatingList(@NotNull Map<ParkingLotRatingEntity, String> parkingLotRatingEntityUsernameMap) {
-        return parkingLotRatingEntityUsernameMap.entrySet().stream().map(this::toParkingLotRating).collect(Collectors.toList());
+    default List<ParkingLotRating> toParkingLotRatingList(@NotNull Map<Tuple, String> parkingLotRatingTupleUsernameMap) {
+        return parkingLotRatingTupleUsernameMap.entrySet().stream().map(this::toParkingLotRating).collect(Collectors.toList());
     }
 }

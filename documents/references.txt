@@ -266,3 +266,6 @@ Last updated:       Sun, Jun 28th, 2020
 
 89. Hibernate @NotNull vs @Column(nullable = false)
         https://www.baeldung.com/hibernate-notnull-vs-nullable
+
+90. The best way to use a Hibernate ResultTransformer --> Query.setResultTransformer(ResultTransformer) has been deprecated since Hibernate 5.2
+        https://vladmihalcea.com/hibernate-resulttransformer/

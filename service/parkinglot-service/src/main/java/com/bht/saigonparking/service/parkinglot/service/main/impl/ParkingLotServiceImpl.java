@@ -29,7 +29,6 @@ import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEmployeeEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotInformationEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
-import com.bht.saigonparking.service.parkinglot.entity.ParkingLotRatingEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotTypeEntity;
 import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotInformationRepository;
 import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotLimitRepository;
@@ -211,43 +210,43 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     }
 
     @Override
-    public Map<ParkingLotRatingEntity, String> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
-                                                                         boolean sortLastUpdatedAsc,
-                                                                         @NotNull @Max(20L) Integer nRow,
-                                                                         @NotNull Integer pageNumber) {
-        List<ParkingLotRatingEntity> parkingLotRatingEntityList = parkingLotRatingRepository
+    public Map<Tuple, String> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
+                                                        boolean sortLastUpdatedAsc,
+                                                        @NotNull @Max(20L) Integer nRow,
+                                                        @NotNull Integer pageNumber) {
+        List<Tuple> parkingLotRatingTupleList = parkingLotRatingRepository
                 .getAllRatingsOfParkingLot(parkingLotId, sortLastUpdatedAsc, nRow, pageNumber);
 
         Map<Long, String> usernameMap = userServiceBlockingStub.mapToUsernameList(MapToUsernameListRequest.newBuilder()
-                .addAllUserId(parkingLotRatingEntityList.stream()
-                        .map(ParkingLotRatingEntity::getCustomerId).collect(Collectors.toSet()))
+                .addAllUserId(parkingLotRatingTupleList.stream()
+                        .map(tuple -> tuple.get(2, Long.class)).collect(Collectors.toSet()))
                 .build())
                 .getUsernameMap();
 
-        return parkingLotRatingEntityList.stream().collect(Collectors
-                .toMap(parkingLotRatingEntity -> parkingLotRatingEntity,
-                        parkingLotRatingEntity -> usernameMap.get(parkingLotRatingEntity.getCustomerId())));
+        return parkingLotRatingTupleList.stream().collect(Collectors
+                .toMap(parkingLotRatingTuple -> parkingLotRatingTuple,
+                        parkingLotRatingTuple -> usernameMap.get(parkingLotRatingTuple.get(2, Long.class))));
     }
 
     @Override
-    public Map<ParkingLotRatingEntity, String> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
-                                                                         @NotNull @Range(max = 5L) Integer rating,
-                                                                         boolean sortLastUpdatedAsc,
-                                                                         @NotNull @Max(20L) Integer nRow,
-                                                                         @NotNull Integer pageNumber) {
+    public Map<Tuple, String> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
+                                                        @NotNull @Range(max = 5L) Integer rating,
+                                                        boolean sortLastUpdatedAsc,
+                                                        @NotNull @Max(20L) Integer nRow,
+                                                        @NotNull Integer pageNumber) {
         if (!rating.equals(0)) {
-            List<ParkingLotRatingEntity> parkingLotRatingEntityList = parkingLotRatingRepository
+            List<Tuple> parkingLotRatingTupleList = parkingLotRatingRepository
                     .getAllRatingsOfParkingLot(parkingLotId, rating, sortLastUpdatedAsc, nRow, pageNumber);
 
             Map<Long, String> usernameMap = userServiceBlockingStub.mapToUsernameList(MapToUsernameListRequest.newBuilder()
-                    .addAllUserId(parkingLotRatingEntityList.stream()
-                            .map(ParkingLotRatingEntity::getCustomerId).collect(Collectors.toSet()))
+                    .addAllUserId(parkingLotRatingTupleList.stream()
+                            .map(tuple -> tuple.get(2, Long.class)).collect(Collectors.toSet()))
                     .build())
                     .getUsernameMap();
 
-            return parkingLotRatingEntityList.stream().collect(Collectors
-                    .toMap(parkingLotRatingEntity -> parkingLotRatingEntity,
-                            parkingLotRatingEntity -> usernameMap.get(parkingLotRatingEntity.getCustomerId())));
+            return parkingLotRatingTupleList.stream().collect(Collectors
+                    .toMap(parkingLotRatingTuple -> parkingLotRatingTuple,
+                            parkingLotRatingTuple -> usernameMap.get(parkingLotRatingTuple.get(2, Long.class))));
         }
         return getAllRatingsOfParkingLot(parkingLotId, sortLastUpdatedAsc, nRow, pageNumber);
     }

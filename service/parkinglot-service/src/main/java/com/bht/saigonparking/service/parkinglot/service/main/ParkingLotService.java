@@ -14,7 +14,6 @@ import org.hibernate.validator.constraints.Range;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotInformationEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
-import com.bht.saigonparking.service.parkinglot.entity.ParkingLotRatingEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotTypeEntity;
 
 /**
@@ -59,16 +58,16 @@ public interface ParkingLotService {
                                                        @NotNull @Max(20L) Integer nRow,
                                                        @NotNull Integer pageNumber);
 
-    Map<ParkingLotRatingEntity, String> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
-                                                                  boolean sortLastUpdatedAsc,
-                                                                  @NotNull @Max(20L) Integer nRow,
-                                                                  @NotNull Integer pageNumber);
+    Map<Tuple, String> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
+                                                 boolean sortLastUpdatedAsc,
+                                                 @NotNull @Max(20L) Integer nRow,
+                                                 @NotNull Integer pageNumber);
 
-    Map<ParkingLotRatingEntity, String> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
-                                                                  @NotNull @Range(max = 5L) Integer rating,
-                                                                  boolean sortLastUpdatedAsc,
-                                                                  @NotNull @Max(20L) Integer nRow,
-                                                                  @NotNull Integer pageNumber);
+    Map<Tuple, String> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
+                                                 @NotNull @Range(max = 5L) Integer rating,
+                                                 boolean sortLastUpdatedAsc,
+                                                 @NotNull @Max(20L) Integer nRow,
+                                                 @NotNull Integer pageNumber);
 
     Map<Integer, Long> getParkingLotRatingCountGroupByRating(@NotNull Long parkingLotId);
 
