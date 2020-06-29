@@ -22,6 +22,8 @@ jobs:
         run: mvn -B clean --file pom.xml -e
       - name: Build with Maven
         run: mvn -B package --file pom.xml -e
+      - name: Check Docker version
+        run: docker --version
       - name: Build Docker images
         run: mvn -B docker:build --file pom.xml -e
   deploy-saigonparking:
