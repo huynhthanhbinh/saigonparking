@@ -1,7 +1,7 @@
 # This workflow will build a Java project with Maven
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
-name: SaigonParking - Java CI with Maven
+# @author bht
+name: SaigonParking - Java CI/CD with Maven Github Workflows
 
 on:
   push:
@@ -12,21 +12,59 @@ on:
       - '*'
 
 jobs:
-  build-saigonparking:
-    runs-on: ubuntu-latest
+  build-and-deploy:
+    runs-on: ubuntu-16.04
+    continue-on-error: false
+    env:
+      SAIGONPARKING_VERSION: v2.1.1
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 1.8
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      - name: Check project version
+        run: echo $SAIGONPARKING_VERSION
       - name: Clean with Maven
         run: mvn -B clean --file pom.xml -e
       - name: Build with Maven
         run: mvn -B package --file pom.xml -e
-      - name: Check Docker version
-        run: docker --version
-      - name: Docker login
+      - name: Login Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-      - name: Build Docker images
-        run: mvn -B docker:build --file pom.xml -e
+
+      - name: Build parkinglot-service image
+        run: cd service/parkinglot-service/target/docker && docker build --rm -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/parkinglot-service:$SAIGONPARKING_VERSION .
+      - name: Build user-service image
+        run: cd service/user-service/target/docker && docker build --rm -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/user-service:$SAIGONPARKING_VERSION .
+      - name: Build auth-service image
+        run: cd service/auth-service/target/docker && docker build --rm -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/auth-service:$SAIGONPARKING_VERSION .
+      - name: Build mail-service image
+        run: cd service/mail-service/target/docker && docker build --rm -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/mail-service:$SAIGONPARKING_VERSION .
+      - name: Build message-queue image
+        run: cd queue/target/docker && docker build --rm -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/queue:$SAIGONPARKING_VERSION .
+      - name: Build service-discovery image
+        run: cd discovery/target/docker && docker build --rm -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/discovery:$SAIGONPARKING_VERSION .
+      - name: Build api-gateway image
+        run: cd gateway/target/docker && docker build --rm -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/gateway:$SAIGONPARKING_VERSION .
+      - name: Build web-proxy image
+        run: cd proxy/target/docker && docker build --rm -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/proxy:$SAIGONPARKING_VERSION .
+
+      - name: Check Docker images
+        run: docker images
+
+      - name: Push parkinglot-service image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/parkinglot-service:$SAIGONPARKING_VERSION
+      - name: Push user-service image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/user-service:$SAIGONPARKING_VERSION
+      - name: Push auth-service image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/auth-service:$SAIGONPARKING_VERSION
+      - name: Push mail-service image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/mail-service:$SAIGONPARKING_VERSION
+      - name: Push message-queue image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/queue:$SAIGONPARKING_VERSION
+      - name: Push service-discovery image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/discovery:$SAIGONPARKING_VERSION
+      - name: Push api-gateway image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/gateway:$SAIGONPARKING_VERSION
+      - name: Push web-proxy image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/proxy:$SAIGONPARKING_VERSION

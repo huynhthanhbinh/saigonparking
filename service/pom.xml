@@ -2,6 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>service</artifactId>
@@ -78,7 +79,7 @@
                             <mainClass>${start-class}</mainClass>
                             <finalName>${project.artifactId}</finalName>
                             <classifier>${project.release.classifier}</classifier>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
+                            <outputDirectory>${project.build.directory}/docker</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -165,14 +166,10 @@
                     <imageName>${project.docker.hub-id}/${project.build.finalName}:${project.version}</imageName>
                     <dockerHost>http://localhost:2375</dockerHost>
                     <dockerDirectory>${project.build.directory}/docker</dockerDirectory>
-                    <buildArgs>
-                        <HUB_ID>${project.docker.hub-id}</HUB_ID>
-                        <JAR_FILE>${project.package.name}</JAR_FILE>
-                    </buildArgs>
                     <resources>
                         <resource>
                             <targetPath>/</targetPath>
-                            <directory>${project.build.directory}</directory>
+                            <directory>${project.build.directory}/docker</directory>
                             <include>${project.package.name}</include>
                         </resource>
                     </resources>
