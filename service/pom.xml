@@ -21,6 +21,7 @@
         <module>mail-service</module>
         <module>user-service</module>
         <module>parkinglot-service</module>
+        <module>contact-service</module>
     </modules>
 
     <properties>
