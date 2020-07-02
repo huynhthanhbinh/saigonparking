@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Sun, Jun 28th, 2020
+Last updated:       Thu, Jul 2nd, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -165,6 +165,9 @@ Last updated:       Sun, Jun 28th, 2020
 54. EXCEPTION HANDLING AND ERROR PROPAGATION IN GRPC JAVA
         https://sultanov.dev/blog/exception-handling-in-grpc-java-server/
 
+55. Các kỹ sư Eureka đã tối ưu ứng dụng chat sử dụng gRPC như thế nào
+        https://techtalk.vn/cac-ky-su-eureka-da-toi-uu-ung-dung-chat-su-dung-grpc-nhu-the-nao.html
+
 56. How can I remove a commit on GitHub?
         https://stackoverflow.com/questions/448919/how-can-i-remove-a-commit-on-github
 
@@ -269,3 +272,9 @@ Last updated:       Sun, Jun 28th, 2020
 
 90. The best way to use a Hibernate ResultTransformer --> Query.setResultTransformer(ResultTransformer) has been deprecated since Hibernate 5.2
         https://vladmihalcea.com/hibernate-resulttransformer/
+
+91. Spring Boot + Websocket Example
+        https://www.devglan.com/spring-boot/spring-boot-websocket-example
+
+92. Create a Spring boot + Angular WebSocket using SockJS and Stomp
+        https://medium.com/@haseeamarathunga/create-a-spring-boot-angular-websocket-using-sockjs-and-stomp-cb339f766a98
