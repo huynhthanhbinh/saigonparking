@@ -1,4 +1,4 @@
-package com.bht.saigonparking.service.contact.handler;
+package com.bht.saigonparking.emulator.handler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import com.bht.saigonparking.common.util.LoggingUtil;
+import com.bht.saigonparking.emulator.util.LoggingUtil;
 
 import lombok.Getter;
 
@@ -32,7 +32,7 @@ public final class WebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionEstablished(@NonNull WebSocketSession session) throws Exception {
         super.afterConnectionEstablished(session);
         LoggingUtil.log(Level.INFO, LOGGING_KEY, "afterConnectionEstablished", session.getAttributes().toString());
-        session.sendMessage(new TextMessage("Hello Client"));
+        session.sendMessage(new TextMessage("Hello Server"));
     }
 
     @Override

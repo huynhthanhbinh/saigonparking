@@ -22,7 +22,7 @@ public final class WebSocketConfiguration implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(@NonNull WebSocketHandlerRegistry webSocketHandlerRegistry) {
         webSocketHandlerRegistry
-                .addHandler(webSocketHandler, "/contact")
+                .addHandler(webSocketHandler, "/")
                 .setAllowedOrigins("*");
     }
 }
