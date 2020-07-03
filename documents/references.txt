@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Fri, Jul 3rd, 2020
+Last updated:       Sat, Jul 4th, 2020
 ========================================================================================================================
 
 01. gRPC error handling:
@@ -296,3 +296,6 @@ Last updated:       Fri, Jul 3rd, 2020
 
 98. Spring Websocket Client (Without STOMP) – Example
         https://idodevjobs.wordpress.com/2019/02/07/spring-websocket-client-without-stomp-example/
+
+99. Path Parameters in WebSocketConfigurer addHandler in Spring
+        https://stackoverflow.com/questions/49378759/path-parameters-in-websocketconfigurer-addhandler-in-spring
