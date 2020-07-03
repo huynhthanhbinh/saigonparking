@@ -1,7 +1,7 @@
 package com.bht.saigonparking.service.contact.handler;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.logging.log4j.Level;
 import org.springframework.lang.NonNull;
@@ -13,6 +13,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.bht.saigonparking.common.util.LoggingUtil;
+import com.bht.saigonparking.service.contact.configuration.WebSocketHandshakeInterceptor;
 
 import lombok.Getter;
 
@@ -26,36 +27,38 @@ public final class WebSocketHandler extends TextWebSocketHandler {
     private static final String LOGGING_KEY = "WebSocketHandler";
 
     @Getter
-    private final List<WebSocketSession> sessionList = new ArrayList<>();
+    private final Map<Long, WebSocketSession> userSessionMap = new HashMap<>(); /* is a map of <userId, session> */
 
     @Override
-    public void afterConnectionEstablished(@NonNull WebSocketSession session) throws Exception {
-        super.afterConnectionEstablished(session);
-        LoggingUtil.log(Level.INFO, LOGGING_KEY, "afterConnectionEstablished", session.getAttributes().toString());
-        session.sendMessage(new TextMessage("Hello Client"));
+    public void afterConnectionEstablished(@NonNull WebSocketSession session) {
+        Long userId = getUserIdFromSession(session);
+        userSessionMap.put(userId, session);
+        LoggingUtil.log(Level.INFO, LOGGING_KEY, "connectionEstablishedWithUser", userId.toString());
     }
 
     @Override
-    public void afterConnectionClosed(@NonNull WebSocketSession session, @NonNull CloseStatus status) throws Exception {
-        super.afterConnectionClosed(session, status);
-        LoggingUtil.log(Level.INFO, LOGGING_KEY, "afterConnectionClosed", session.getAttributes().toString());
+    public void afterConnectionClosed(@NonNull WebSocketSession session, @NonNull CloseStatus status) {
+        Long userId = getUserIdFromSession(session);
+        LoggingUtil.log(Level.INFO, LOGGING_KEY, "connectionClosedFromUser", userId.toString());
     }
 
     @Override
-    protected void handleTextMessage(@NonNull WebSocketSession session, @NonNull TextMessage message) throws Exception {
-        super.handleTextMessage(session, message);
+    protected void handleTextMessage(@NonNull WebSocketSession session, @NonNull TextMessage message) {
         LoggingUtil.log(Level.INFO, LOGGING_KEY, "handleTextMessage", message.getPayload());
     }
 
     @Override
-    protected void handlePongMessage(@NonNull WebSocketSession session, @NonNull PongMessage message) throws Exception {
-        super.handlePongMessage(session, message);
+    protected void handlePongMessage(@NonNull WebSocketSession session, @NonNull PongMessage message) {
         LoggingUtil.log(Level.INFO, LOGGING_KEY, "handlePongMessage", message.getPayload().toString());
     }
 
     @Override
-    public void handleTransportError(@NonNull WebSocketSession session, @NonNull Throwable exception) throws Exception {
-        super.handleTransportError(session, exception);
-        LoggingUtil.log(Level.INFO, LOGGING_KEY, "handleTransportError", session.getAttributes().toString());
+    public void handleTransportError(@NonNull WebSocketSession session, @NonNull Throwable exception) {
+        Long userId = getUserIdFromSession(session);
+        LoggingUtil.log(Level.INFO, LOGGING_KEY, "transportErrorFromSessionOfUser", userId.toString());
+    }
+
+    private Long getUserIdFromSession(@NonNull WebSocketSession webSocketSession) {
+        return (Long) webSocketSession.getAttributes().get(WebSocketHandshakeInterceptor.SAIGON_PARKING_USER_KEY);
     }
 }

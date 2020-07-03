@@ -2,6 +2,7 @@ package com.bht.saigonparking.emulator;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.boot.SpringApplication;
@@ -44,6 +45,7 @@ public class Emulator extends SpringBootServletInitializer {
     private static void runTest() throws ExecutionException, InterruptedException, IOException {
         TextWebSocketHandler webSocketHandler = SpringApplicationContext.getBean(WebSocketHandler.class);
         WebSocketHttpHeaders webSocketHttpHeaders = new WebSocketHttpHeaders();
+        webSocketHttpHeaders.put("Authorization", Collections.singletonList("Bearer htbinh.305.1998"));
 
         WebSocketClient webSocketClient = new StandardWebSocketClient();
         WebSocketSession webSocketSession = webSocketClient

@@ -18,11 +18,13 @@ import lombok.RequiredArgsConstructor;
 public final class WebSocketConfiguration implements WebSocketConfigurer {
 
     private final WebSocketHandler webSocketHandler;
+    private final WebSocketHandshakeInterceptor webSocketHandshakeInterceptor;
 
     @Override
     public void registerWebSocketHandlers(@NonNull WebSocketHandlerRegistry webSocketHandlerRegistry) {
         webSocketHandlerRegistry
                 .addHandler(webSocketHandler, "/")
+                .addInterceptors(webSocketHandshakeInterceptor)
                 .setAllowedOrigins("*");
     }
 }
