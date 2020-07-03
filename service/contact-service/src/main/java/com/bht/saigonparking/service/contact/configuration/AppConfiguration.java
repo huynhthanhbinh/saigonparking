@@ -12,7 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
 
 import com.bht.saigonparking.common.annotation.InheritedComponent;
 import com.bht.saigonparking.common.exception.PermissionDeniedException;
@@ -29,8 +29,8 @@ import com.google.common.collect.ImmutableMap;
  * @author bht
  */
 @Configuration
+@EnableWebSocket
 @EnableTransactionManagement
-@EnableWebSocketMessageBroker
 @Import(WebSocketConfiguration.class)
 @ComponentScan(basePackages = AppConfiguration.BASE_PACKAGE, includeFilters = @ComponentScan.Filter(InheritedComponent.class))
 public class AppConfiguration {

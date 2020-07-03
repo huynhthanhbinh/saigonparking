@@ -19,6 +19,8 @@
         <module>user-api</module>
         <module>auth-api</module>
         <module>mail-api</module>
+        <module>contact-api</module>
+
         <module>official-api</module>
     </modules>
 

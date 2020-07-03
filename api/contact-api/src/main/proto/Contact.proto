@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package com.bht.saigonparking.api.grpc.contact;
+//option java_generic_services = true;
+option java_multiple_files = true;
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+
+message SaigonParkingMessage {
+    string type = 1;
+    string content = 2;
+    string sender = 3;
+}

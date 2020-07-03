@@ -17,6 +17,11 @@
 
     <dependencies>
         <dependency>
+            <artifactId>contact-api</artifactId>
+            <groupId>com.bht.saigonparking</groupId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
             <artifactId>mail-api</artifactId>
             <groupId>com.bht.saigonparking</groupId>
             <version>${revision}</version>
@@ -45,6 +50,20 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
+                    <execution>
+                        <id>unpack-shared-resources-contact</id>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                            <includeArtifactIds>contact-api</includeArtifactIds>
+                            <includeGroupIds>com.bht.saigonparking</includeGroupIds>
+                            <excludeTransitive>true</excludeTransitive>
+                            <includes>**/*.proto, **/*.class</includes>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>unpack-shared-resources-mail</id>
                         <goals>

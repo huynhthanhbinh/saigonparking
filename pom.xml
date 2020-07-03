@@ -92,12 +92,12 @@
         <hibernate.version>5.4.18.Final</hibernate.version>
         <mssql-jdbc.version>8.2.2.jre8</mssql-jdbc.version>
 
-        <aws.version>1.11.786</aws.version>
         <grpc.version>1.30.0</grpc.version>
         <protobuf.version>3.12.0</protobuf.version>
         <grpc-spring-boot-starter.version>3.5.5</grpc-spring-boot-starter.version>
         <netty-tcnative-boringssl.version>2.0.30.Final</netty-tcnative-boringssl.version>
 
+        <aws.version>1.11.786</aws.version>
         <junit.version>4.13</junit.version>
         <log4j.version>2.13.3</log4j.version>
         <lombok.version>1.18.12</lombok.version>
