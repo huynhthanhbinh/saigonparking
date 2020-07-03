@@ -6,6 +6,7 @@ import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 import com.bht.saigonparking.service.contact.handler.WebSocketHandler;
+import com.bht.saigonparking.service.contact.interceptor.WebSocketHandshakeInterceptor;
 
 import lombok.RequiredArgsConstructor;
 

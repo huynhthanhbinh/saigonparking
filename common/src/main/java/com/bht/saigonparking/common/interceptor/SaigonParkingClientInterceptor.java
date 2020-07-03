@@ -38,6 +38,7 @@ public final class SaigonParkingClientInterceptor implements ClientInterceptor {
     public static final Long INTERNAL_CODE_USER_SERVICE = 165305061220760002L;
     public static final Long INTERNAL_CODE_PARKING_LOT_SERVICE = 165305061220760003L;
     public static final Long INTERNAL_CODE_MAIL_SERVICE = 165305061220760004L;
+    public static final Long INTERNAL_CODE_CONTACT_SERVICE = 165305061220760005L;
 
     @Override
     public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(MethodDescriptor<ReqT, RespT> methodDescriptor,

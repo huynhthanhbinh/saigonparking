@@ -32,6 +32,9 @@ import lombok.extern.log4j.Log4j2;
 @SuppressWarnings("all")
 public class Emulator extends SpringBootServletInitializer {
 
+    private static final String SAMPLE_TOKEN_CUSTOMER = "eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiIyOTIwMzczOTE3OTY1NDQ5Mzg4QDE1OTM3ODQwNzY4MjYiLCJpc3MiOiJ3d3cuc2FpZ29ucGFya2luZy53dGYiLCJyb2xlIjoiQ1VTVE9NRVIiLCJmYWMiOjE1OCwiY2xhc3NpZmljYXRpb24iOiJBQ0NFU1NfVE9LRU4iLCJzdWIiOiIyOTIwMzczOTE3OTY1NDQ5Mzg4IiwiaWF0IjoxNTkzNzg0MDc2LCJleHAiOjIzMTk1NDQwNzZ9.Hf0iUOFva2ToExAZXi6jcIzMpWBbideNGOnzHLtpu1uJs3J9HQF8CZrxKKMCbK0rQ-5j3yg_Ovm8flqMSXZRnA";
+    private static final String SAMPLE_TOKEN_EMPLOYEE = "eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiIyNTAzNDU2NTMyNTg4NDQ0ODcyQDE1OTM3ODQyNzc2ODciLCJpc3MiOiJ3d3cuc2FpZ29ucGFya2luZy53dGYiLCJyb2xlIjoiUEFSS0lOR19MT1RfRU1QTE9ZRUUiLCJmYWMiOjgwNSwiY2xhc3NpZmljYXRpb24iOiJBQ0NFU1NfVE9LRU4iLCJzdWIiOiIyNTAzNDU2NTMyNTg4NDQ0ODcyIiwiaWF0IjoxNTkzNzg0Mjc3LCJleHAiOjIzMTk1NDQyNzd9.s2uE7fHIiAhjgsO5Oz9Gl4fIOXdC2Va8NjHS06x9q5V7laBCdOHF9CyaCaP34fZdLGxRj4xxqGWOS4hJIGDrPg";
+
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
         return builder.sources(Emulator.class);
@@ -45,7 +48,7 @@ public class Emulator extends SpringBootServletInitializer {
     private static void runTest() throws ExecutionException, InterruptedException, IOException {
         TextWebSocketHandler webSocketHandler = SpringApplicationContext.getBean(WebSocketHandler.class);
         WebSocketHttpHeaders webSocketHttpHeaders = new WebSocketHttpHeaders();
-        webSocketHttpHeaders.put("Authorization", Collections.singletonList("Bearer htbinh.305.1998"));
+        webSocketHttpHeaders.put("Authorization", Collections.singletonList(SAMPLE_TOKEN_CUSTOMER));
 
         WebSocketClient webSocketClient = new StandardWebSocketClient();
         WebSocketSession webSocketSession = webSocketClient

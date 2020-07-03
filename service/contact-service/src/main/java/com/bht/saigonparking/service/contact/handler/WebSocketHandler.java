@@ -13,7 +13,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.bht.saigonparking.common.util.LoggingUtil;
-import com.bht.saigonparking.service.contact.configuration.WebSocketHandshakeInterceptor;
+import com.bht.saigonparking.service.contact.interceptor.WebSocketHandshakeInterceptor;
 
 import lombok.Getter;
 

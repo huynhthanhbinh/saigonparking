@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 
 import com.bht.saigonparking.common.annotation.InheritedComponent;
+import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
+import com.bht.saigonparking.common.auth.SaigonParkingAuthenticationImpl;
 import com.bht.saigonparking.common.exception.PermissionDeniedException;
 import com.bht.saigonparking.common.exception.UsernameNotMatchException;
 import com.bht.saigonparking.common.interceptor.SaigonParkingClientInterceptor;
@@ -53,8 +55,13 @@ public class AppConfiguration {
     }
 
     @Bean
+    public SaigonParkingAuthentication saigonParkingBaseAuthentication() {
+        return new SaigonParkingAuthenticationImpl();
+    }
+
+    @Bean
     public SaigonParkingClientInterceptor saigonParkingClientInterceptor() {
-        return new SaigonParkingClientInterceptor(SaigonParkingClientInterceptor.INTERNAL_CODE_USER_SERVICE);
+        return new SaigonParkingClientInterceptor(SaigonParkingClientInterceptor.INTERNAL_CODE_CONTACT_SERVICE);
     }
 
     @Bean
