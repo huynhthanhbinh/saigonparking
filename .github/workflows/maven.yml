@@ -25,6 +25,7 @@ jobs:
           java-version: 1.8
       - name: Check project version
         run: echo $SAIGONPARKING_VERSION
+
       - name: Clean with Maven
         run: mvn -B clean --file pom.xml -e
       - name: Build with Maven
@@ -40,6 +41,8 @@ jobs:
         run: cd service/auth-service/target/docker && docker build --rm -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/auth-service:$SAIGONPARKING_VERSION .
       - name: Build mail-service image
         run: cd service/mail-service/target/docker && docker build --rm -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/mail-service:$SAIGONPARKING_VERSION .
+      - name: Build contact-service image
+        run: cd service/contact-service/target/docker && docker build --rm -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/contact-service:$SAIGONPARKING_VERSION .
       - name: Build message-queue image
         run: cd queue/target/docker && docker build --rm -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/queue:$SAIGONPARKING_VERSION .
       - name: Build service-discovery image
@@ -60,6 +63,8 @@ jobs:
         run: docker push ${{ secrets.DOCKER_USERNAME }}/auth-service:$SAIGONPARKING_VERSION
       - name: Push mail-service image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/mail-service:$SAIGONPARKING_VERSION
+      - name: Push contact-service image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/contact-service:$SAIGONPARKING_VERSION
       - name: Push message-queue image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/queue:$SAIGONPARKING_VERSION
       - name: Push service-discovery image
