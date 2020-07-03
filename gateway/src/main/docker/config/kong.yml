@@ -1,5 +1,20 @@
 _format_version: "1.1"
 services:
+  - name: contact-service-websocket
+    protocol: http
+    host: saigon-parking-contact-service.service.saigonparking-dc.consul
+    routes:
+      - name: contact-http
+        protocols:
+          - http
+        paths:
+          - /contact
+    retries: 3
+    read_timeout: 86400000
+    write_timeout: 86400000
+    connect_timeout: 86400000
+
+
   - name: mail-service
     protocol: grpc
     host: grpc-saigon-parking-mail-service.service.saigonparking-dc.consul
