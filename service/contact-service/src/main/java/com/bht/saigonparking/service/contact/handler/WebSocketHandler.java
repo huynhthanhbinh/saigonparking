@@ -1,5 +1,6 @@
 package com.bht.saigonparking.service.contact.handler;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,10 +31,11 @@ public final class WebSocketHandler extends TextWebSocketHandler {
     private final Map<Long, WebSocketSession> userSessionMap = new HashMap<>(); /* is a map of <userId, session> */
 
     @Override
-    public void afterConnectionEstablished(@NonNull WebSocketSession session) {
+    public void afterConnectionEstablished(@NonNull WebSocketSession session) throws IOException {
         Long userId = getUserIdFromSession(session);
         userSessionMap.put(userId, session);
         LoggingUtil.log(Level.INFO, LOGGING_KEY, "connectionEstablishedWithUser", userId.toString());
+        session.sendMessage(new TextMessage("Connection to Contact service established !"));
     }
 
     @Override
