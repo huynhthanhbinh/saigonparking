@@ -138,3 +138,21 @@ services:
     links:
       - message-queue
       - service-discovery
+
+  contact-service:
+    image: ${DOCKER_HUB_ID}/contact-service:${CONTACT_SERVICE_VERSION}
+    networks:
+      - saigonparking-service
+    environment:
+      TZ:           ${TIMEZONE}
+      SERVICE_ID:   ${CONTACT_SERVICE_ID}
+      SERVICE_HOST: ${CONTACT_SERVICE_HOST}
+      SERVICE_PORT: ${CONTACT_SERVICE_PORT}
+    ports:
+      - "${CONTACT_SERVICE_PORT}:${CONTACT_SERVICE_PORT}"
+    depends_on:
+      - message-queue
+      - service-discovery
+    links:
+      - message-queue
+      - service-discovery
