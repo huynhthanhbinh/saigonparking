@@ -35,7 +35,7 @@ public final class WebSocketHandler extends TextWebSocketHandler {
         Long userId = getUserIdFromSession(session);
         userSessionMap.put(userId, session);
         LoggingUtil.log(Level.INFO, LOGGING_KEY, "connectionEstablishedWithUser", userId.toString());
-        session.sendMessage(new TextMessage("Connection to Contact service established !"));
+        session.sendMessage(new TextMessage("{ \"message\":\"Connection to Contact service established !\" }"));
     }
 
     @Override
@@ -45,7 +45,7 @@ public final class WebSocketHandler extends TextWebSocketHandler {
     }
 
     @Override
-    protected void handleTextMessage(@NonNull WebSocketSession session, @NonNull TextMessage message) {
+    protected void handleTextMessage(@NonNull WebSocketSession session, @NonNull TextMessage message) throws IOException {
         LoggingUtil.log(Level.INFO, LOGGING_KEY, "handleTextMessage", message.getPayload());
     }
 

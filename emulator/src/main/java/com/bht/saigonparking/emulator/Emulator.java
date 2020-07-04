@@ -3,6 +3,8 @@ package com.bht.saigonparking.emulator;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.boot.SpringApplication;
@@ -18,6 +20,10 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.bht.saigonparking.emulator.configuration.SpringApplicationContext;
 import com.bht.saigonparking.emulator.handler.WebSocketHandler;
+import com.neovisionaries.ws.client.WebSocket;
+import com.neovisionaries.ws.client.WebSocketAdapter;
+import com.neovisionaries.ws.client.WebSocketException;
+import com.neovisionaries.ws.client.WebSocketFactory;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -42,14 +48,17 @@ public class Emulator extends SpringBootServletInitializer {
         return builder.sources(Emulator.class);
     }
 
-    public static void main(String[] args) throws ExecutionException, InterruptedException, IOException {
+    public static void main(String[] args) throws ExecutionException, InterruptedException, IOException, WebSocketException {
         SpringApplication.run(Emulator.class, args);
         runTest();
     }
 
-    private static void runTest() throws ExecutionException, InterruptedException, IOException {
-        testAuthWithWebSocketUri();
-        testAuthWithWebSocketWebUri();
+    private static void runTest() throws ExecutionException, InterruptedException, IOException, WebSocketException {
+//        testAuthWithWebSocketUri();
+//        testAuthWithWebSocketWebUri();
+
+        System.out.println("BINH BINH BINH");
+        testNewSocketLibrary();
     }
 
     private static void testAuthWithWebSocketUri() throws ExecutionException, InterruptedException, IOException {
@@ -73,5 +82,27 @@ public class Emulator extends SpringBootServletInitializer {
                 .doHandshake(webSocketHandler, webSocketHttpHeaders, WEB_SOCKET_WEB_LOCAL_URI).get();
 
         webSocketSession.close();
+    }
+
+    private static void testNewSocketLibrary() throws IOException, WebSocketException {
+        WebSocketFactory webSocketFactory = new WebSocketFactory();
+        WebSocket webSocket = webSocketFactory.createSocket(WEB_SOCKET_WEB_LOCAL_URI, 86400000);
+//        webSocket.addHeader("Authorization", SAMPLE_TOKEN_CUSTOMER);
+        webSocket.addListener(new WebSocketAdapter() {
+            @Override
+            public void onTextMessage(WebSocket websocket, String text) throws Exception {
+                System.out.println(text);
+            }
+
+            @Override
+            public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
+                webSocket.sendText("Hello Contact Service 1");
+                webSocket.sendText("Hello Contact Service 2");
+                webSocket.sendText("Hello Contact Service 3");
+            }
+        });
+        webSocket.connect();
+        webSocket.sendText("Hello Contact Service For The First Time");
+//        webSocket.disconnect();
     }
 }

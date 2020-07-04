@@ -9,6 +9,11 @@ services:
           - http
         paths:
           - /contact
+        plugins:
+          - name: response-transformer
+            config:
+              add:
+                headers: ["Upgrade:websocket"]
     retries: 3
     read_timeout: 86400000
     write_timeout: 86400000
