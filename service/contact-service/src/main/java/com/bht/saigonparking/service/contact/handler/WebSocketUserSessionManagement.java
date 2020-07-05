@@ -12,8 +12,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketSession;
 
-import lombok.Getter;
-
 /**
  *
  * @author bht
@@ -21,14 +19,12 @@ import lombok.Getter;
 @Component
 public final class WebSocketUserSessionManagement {
 
-    @Getter
     private final Map<Long, Set<WebSocketSession>> userSessionMap = new HashMap<>(); /* is a map of <userId, session> */
 
     public void addNewUserSession(@NonNull Long userId, @NonNull WebSocketSession webSocketSession) {
 
         if (userSessionMap.containsKey(userId)) {
             userSessionMap.get(userId).add(webSocketSession);
-
         } else {
             userSessionMap.put(userId, Collections.singleton(webSocketSession));
         }
