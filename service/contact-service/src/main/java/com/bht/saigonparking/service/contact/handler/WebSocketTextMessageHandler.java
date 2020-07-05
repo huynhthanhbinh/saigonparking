@@ -37,6 +37,7 @@ public final class WebSocketTextMessageHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(@NonNull WebSocketSession session, @NonNull CloseStatus status) {
         Long userId = webSocketUserSessionManagement.getUserIdFromSession(session);
         LoggingUtil.log(Level.INFO, LOGGING_KEY, "connectionClosedFromUser", userId.toString());
+        webSocketUserSessionManagement.removeUserSession(userId, session);
     }
 
     @Override

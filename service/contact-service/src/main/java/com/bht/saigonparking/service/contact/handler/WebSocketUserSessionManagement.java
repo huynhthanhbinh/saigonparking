@@ -3,8 +3,8 @@ package com.bht.saigonparking.service.contact.handler;
 import static com.bht.saigonparking.service.contact.interceptor.WebSocketInterceptorConstraint.SAIGON_PARKING_USER_KEY;
 import static com.bht.saigonparking.service.contact.interceptor.WebSocketInterceptorConstraint.SAIGON_PARKING_USER_ROLE_KEY;
 
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -25,8 +25,12 @@ public final class WebSocketUserSessionManagement {
 
         if (userSessionMap.containsKey(userId)) {
             userSessionMap.get(userId).add(webSocketSession);
+
         } else {
-            userSessionMap.put(userId, Collections.singleton(webSocketSession));
+
+            Set<WebSocketSession> sessionSet = new HashSet<>();
+            sessionSet.add(webSocketSession);
+            userSessionMap.put(userId, sessionSet);
         }
     }
 

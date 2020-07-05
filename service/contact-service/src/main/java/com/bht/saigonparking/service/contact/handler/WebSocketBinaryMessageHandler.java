@@ -50,6 +50,7 @@ public final class WebSocketBinaryMessageHandler extends BinaryWebSocketHandler 
     public void afterConnectionClosed(@NonNull WebSocketSession session, @NonNull CloseStatus status) {
         Long userId = webSocketUserSessionManagement.getUserIdFromSession(session);
         LoggingUtil.log(Level.INFO, LOGGING_KEY, "connectionClosedFromUser", userId.toString());
+        webSocketUserSessionManagement.removeUserSession(userId, session);
     }
 
     @Override
@@ -63,7 +64,6 @@ public final class WebSocketBinaryMessageHandler extends BinaryWebSocketHandler 
     protected void handleBinaryMessage(@NonNull WebSocketSession session, @NonNull BinaryMessage message) throws Exception {
         Long userId = webSocketUserSessionManagement.getUserIdFromSession(session);
         LoggingUtil.log(Level.INFO, LOGGING_KEY, "handleBinaryMessage", String.format("newBinaryMessageFromUser(%d)", userId));
-
         SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.parseFrom(message.getPayload());
         System.out.println(saigonParkingMessage);
     }

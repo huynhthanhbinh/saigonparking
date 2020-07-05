@@ -84,7 +84,7 @@ public class Emulator extends SpringBootServletInitializer {
         webSocketSession.close();
     }
 
-    private static void testNewSocketLibrary() throws IOException, WebSocketException {
+    private static void testNewSocketLibrary() throws IOException, WebSocketException, InterruptedException {
         WebSocketFactory webSocketFactory = new WebSocketFactory();
         WebSocket webSocket = webSocketFactory.createSocket(WEB_SOCKET_LOCAL_URI, 86400000);
         webSocket.addHeader("Authorization", SAMPLE_TOKEN_CUSTOMER);
@@ -106,6 +106,8 @@ public class Emulator extends SpringBootServletInitializer {
                 .build();
 
         webSocket.sendBinary(saigonParkingMessage.toByteArray());
-//        webSocket.disconnect();
+
+        Thread.sleep(10000);
+        webSocket.disconnect();
     }
 }
