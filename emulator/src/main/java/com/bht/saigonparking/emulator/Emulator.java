@@ -1,10 +1,11 @@
 package com.bht.saigonparking.emulator;
 
+import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.SaigonParkingMessageClassification.CUSTOMER_MESSAGE;
+import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.SaigonParkingMessageType.TEXT_MESSAGE;
+
 import java.io.IOException;
 import java.net.URI;
 import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.boot.SpringApplication;
@@ -18,6 +19,7 @@ import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.bht.saigonparking.emulator.configuration.SpringApplicationContext;
 import com.bht.saigonparking.emulator.handler.WebSocketHandler;
 import com.neovisionaries.ws.client.WebSocket;
@@ -56,8 +58,6 @@ public class Emulator extends SpringBootServletInitializer {
     private static void runTest() throws ExecutionException, InterruptedException, IOException, WebSocketException {
 //        testAuthWithWebSocketUri();
 //        testAuthWithWebSocketWebUri();
-
-        System.out.println("BINH BINH BINH");
         testNewSocketLibrary();
     }
 
@@ -86,23 +86,26 @@ public class Emulator extends SpringBootServletInitializer {
 
     private static void testNewSocketLibrary() throws IOException, WebSocketException {
         WebSocketFactory webSocketFactory = new WebSocketFactory();
-        WebSocket webSocket = webSocketFactory.createSocket(WEB_SOCKET_WEB_LOCAL_URI, 86400000);
-//        webSocket.addHeader("Authorization", SAMPLE_TOKEN_CUSTOMER);
+        WebSocket webSocket = webSocketFactory.createSocket(WEB_SOCKET_LOCAL_URI, 86400000);
+        webSocket.addHeader("Authorization", SAMPLE_TOKEN_CUSTOMER);
         webSocket.addListener(new WebSocketAdapter() {
             @Override
-            public void onTextMessage(WebSocket websocket, String text) throws Exception {
-                System.out.println(text);
-            }
-
-            @Override
-            public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
-                webSocket.sendText("Hello Contact Service 1");
-                webSocket.sendText("Hello Contact Service 2");
-                webSocket.sendText("Hello Contact Service 3");
+            public void onBinaryMessage(WebSocket websocket, byte[] binary) throws Exception {
+                SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.parseFrom(binary);
+                System.out.println(saigonParkingMessage);
             }
         });
         webSocket.connect();
-        webSocket.sendText("Hello Contact Service For The First Time");
+
+        SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.newBuilder()
+                .setClassification(CUSTOMER_MESSAGE)
+                .setType(TEXT_MESSAGE)
+                .setSenderId(4L)
+                .setReceiverId(0)
+                .setContent("Hello Contact Service")
+                .build();
+
+        webSocket.sendBinary(saigonParkingMessage.toByteArray());
 //        webSocket.disconnect();
     }
 }

@@ -5,7 +5,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
-import com.bht.saigonparking.service.contact.handler.WebSocketHandler;
+import com.bht.saigonparking.service.contact.handler.WebSocketBinaryMessageHandler;
+import com.bht.saigonparking.service.contact.handler.WebSocketTextMessageHandler;
 import com.bht.saigonparking.service.contact.interceptor.WebSocketHandshakeInterceptor;
 import com.bht.saigonparking.service.contact.interceptor.WebSocketHandshakeWebInterceptor;
 
@@ -19,7 +20,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public final class WebSocketConfiguration implements WebSocketConfigurer {
 
-    private final WebSocketHandler webSocketHandler;
+    private final WebSocketTextMessageHandler webSocketTextMessageHandler;
+    private final WebSocketBinaryMessageHandler webSocketBinaryMessageHandler;
+
     private final WebSocketHandshakeInterceptor webSocketHandshakeInterceptor;
     private final WebSocketHandshakeWebInterceptor webSocketHandshakeWebInterceptor;
 
@@ -27,12 +30,22 @@ public final class WebSocketConfiguration implements WebSocketConfigurer {
     public void registerWebSocketHandlers(@NonNull WebSocketHandlerRegistry webSocketHandlerRegistry) {
 
         webSocketHandlerRegistry
-                .addHandler(webSocketHandler, "/")
+                .addHandler(webSocketBinaryMessageHandler, "/") /* correspondent to /contact */
                 .addInterceptors(webSocketHandshakeInterceptor)
                 .setAllowedOrigins("*");
 
         webSocketHandlerRegistry
-                .addHandler(webSocketHandler, "/*")
+                .addHandler(webSocketBinaryMessageHandler, "/*") /* correspondent to /contact/web?token=... */
+                .addInterceptors(webSocketHandshakeWebInterceptor)
+                .setAllowedOrigins("*");
+
+        webSocketHandlerRegistry
+                .addHandler(webSocketTextMessageHandler, "/text") /* correspondent to /contact/text */
+                .addInterceptors(webSocketHandshakeInterceptor)
+                .setAllowedOrigins("*");
+
+        webSocketHandlerRegistry
+                .addHandler(webSocketTextMessageHandler, "/text/*") /* correspondent to /contact/text/web?token=... */
                 .addInterceptors(webSocketHandshakeWebInterceptor)
                 .setAllowedOrigins("*");
     }
