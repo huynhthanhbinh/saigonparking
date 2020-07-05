@@ -20,14 +20,14 @@ option java_multiple_files = true;
 message SaigonParkingMessage {
 
     /* classification of message: who send this message ? */
-    enum SaigonParkingMessageClassification {
+    enum Classification {
         SYSTEM_MESSAGE = 0; /* message that sent from system */
         CUSTOMER_MESSAGE = 1; /* message that sent from customer */
         PARKING_LOT_MESSAGE = 2; /* message that sent from parking-lot */
     }
 
     /* type of message, please see each type's content definition below */
-    enum SaigonParkingMessageType {
+    enum Type {
         NOTIFICATION = 0; /* send from system / admin, senderId = 0 */
         TEXT_MESSAGE = 1; /* send from both Customer and ParkingLot: just text message */
         BOOKING_REQUEST = 2; /* send from Customer: request for new booking */
@@ -37,8 +37,8 @@ message SaigonParkingMessage {
         AVAILABILITY_UPDATE = 6; /* send from ParkingLot: update available slot */
     }
 
-    SaigonParkingMessageClassification classification = 1; /* whether message is sent from customer or parking-lot */
-    SaigonParkingMessageType type = 2; /* default TEXT_MESSAGE (chatting) */
+    Classification classification = 1; /* whether message is sent from customer or parking-lot */
+    Type type = 2; /* default TEXT_MESSAGE (chatting) */
     string content = 3; /* can be empty or stringify as JSON, please take a look at each Content definition below */
     int64 senderId = 4; /* sender's user ID */
     int64 receiverId = 5; /* receiver ID: will be UserId if it sent from ParkingLot, otherwise ParkingLotId ! */

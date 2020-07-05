@@ -1,7 +1,7 @@
 package com.bht.saigonparking.emulator;
 
-import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.SaigonParkingMessageClassification.CUSTOMER_MESSAGE;
-import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.SaigonParkingMessageType.TEXT_MESSAGE;
+import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Classification.CUSTOMER_MESSAGE;
+import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Type.TEXT_MESSAGE;
 
 import java.io.IOException;
 import java.net.URI;

@@ -1,7 +1,7 @@
 package com.bht.saigonparking.service.contact.handler;
 
-import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.SaigonParkingMessageClassification.SYSTEM_MESSAGE;
-import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.SaigonParkingMessageType.NOTIFICATION;
+import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Classification.SYSTEM_MESSAGE;
+import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Type.NOTIFICATION;
 
 import java.io.IOException;
 
