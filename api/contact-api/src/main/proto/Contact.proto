@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 package com.bht.saigonparking.api.grpc.contact;
+//option java_generic_services = true;
 option java_multiple_files = true;
 
 import "google/protobuf/wrappers.proto";
@@ -8,11 +9,14 @@ import "google/protobuf/empty.proto";
 
 /* message sent from customer to parking-lot */
 /* message will be initialized as an object then stringify into JSON format */
+/* we will use GSON lib from Google to parse JSON into Java obj and generate JSON from Java obj */
 message CustomerMessage {
 
+    /* type must be noun instead of verb */
     enum CustomerMessageType {
         TEXT_MESSAGE = 0;
         BOOKING_REQUEST = 1;
+        BOOKING_CANCELLATION = 2;
     }
 
     CustomerMessageType type = 1; /* default TEXT */
@@ -25,12 +29,14 @@ message CustomerMessage {
 
 /* message sent from parking-lot to customer */
 /* message will be initialized as an object then stringify into JSON format */
+/* we will use GSON lib from Google to parse JSON into Java obj and generate JSON from Java obj */
 message ParkingLotMessage {
 
+    /* type must be noun instead of verb */
     enum ParkingLotMessageType {
         TEXT_MESSAGE = 0;
-        ACCEPT_BOOKING = 1;
-        REJECT_BOOKING = 2;
+        BOOKING_ACCEPTANCE = 1;
+        BOOKING_REJECT = 2;
     }
 
     ParkingLotMessageType type = 1; /* default TEXT */

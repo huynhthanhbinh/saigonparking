@@ -1,301 +1,304 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Sat, Jul 4th, 2020
+Last updated:       Sun, Jul 5th, 2020
 ========================================================================================================================
 
-01. gRPC error handling:
+001. gRPC error handling:
         https://grpc.io/docs/guides/error/
 
-02. gRPC authentication:
+002. gRPC authentication:
         https://grpc.io/docs/guides/auth/
 
-03. gRPC spring boot starter:
+003. gRPC spring boot starter:
         https://github.com/LogNet/grpc-spring-boot-starter
 
-04. spring + rabbitmq + protobuf:
+004. spring + rabbitmq + protobuf:
         https://acupple.github.io/2016/12/26/spring-rabbitmq-protobuf/
 
-05. limit query result set to top N rows only:
+005. limit query result set to top N rows only:
         https://vladmihalcea.com/sql-query-limit-top-n-rows/
 
-06. MicroServices With AngularJS, Spring Boot, and Kafka:
+006. MicroServices With AngularJS, Spring Boot, and Kafka:
         https://dzone.com/articles/developing-async-microservices-architecture-using
 
-07. Envoy and gRPC-Web: a fresh new alternative to REST:
+007. Envoy and gRPC-Web: a fresh new alternative to REST:
         https://blog.envoyproxy.io/envoy-and-grpc-web-a-fresh-new-alternative-to-rest-6504ce7eb880
 
-08. Compare gRPC-gateway vs gRPC-Web:
+008. Compare gRPC-gateway vs gRPC-Web:
         https://medium.com/zalopay-engineering/grpc-gateway-vs-grpc-web-vn-4d85868a80e2
 
-09. How to inherit properties from a base class entity using @MappedSuperclass with JPA and Hibernate
+009. How to inherit properties from a base class entity using @MappedSuperclass with JPA and Hibernate
         https://vladmihalcea.com/how-to-inherit-properties-from-a-base-class-entity-using-mappedsuperclass-with-jpa-and-hibernate/
 
-10. Lombok @Builder with Inheritance: @SuperBuilder
+010. Lombok @Builder with Inheritance: @SuperBuilder
         https://www.baeldung.com/lombok-builder-inheritance
 
-11. How to implement Equals and HashCode for JPA entities
+011. How to implement Equals and HashCode for JPA entities
         https://vladmihalcea.com/hibernate-facts-equals-and-hashcode/
 
-12. Hibernate: Should I include the 'version' field to hashcode() and equals() methods
+012. Hibernate: Should I include the 'version' field to hashcode() and equals() methods
         https://stackoverflow.com/questions/7373545/hibernate-should-i-include-the-version-field-to-hashcode-and-equals-metho
 
-13. Hibernate tutorial + best practice
+013. Hibernate tutorial + best practice
         https://vladmihalcea.com/tutorials/hibernate/
 
-14. Apache Kafka Tutorial – Door to Gain Expertise in Kafka
+014. Apache Kafka Tutorial – Door to Gain Expertise in Kafka
         https://data-flair.training/blogs/apache-kafka-tutorial/
 
-15. The best way to use SQL functions in JPQL or Criteria API queries with JPA and Hibernate
+015. The best way to use SQL functions in JPQL or Criteria API queries with JPA and Hibernate
         https://vladmihalcea.com/hibernate-sql-function-jpql-criteria-api-query/
 
-16. File Upload Download Delete with Spring boot and Amazon S3
+016. File Upload Download Delete with Spring boot and Amazon S3
         https://medium.com/@ChamithKodikara/file-upload-download-with-spring-boot-and-amazon-s3-24c94b85c600
 
-17. 10 Common Hibernate Mistakes That Cripple Your Performance
+017. 10 Common Hibernate Mistakes That Cripple Your Performance
         https://thoughts-on-java.org/common-hibernate-mistakes-cripple-performance/
 
-18. Where does the @Transactional annotation belong? Service layer or Repository layer ?
+018. Where does the @Transactional annotation belong? Service layer or Repository layer ?
         https://stackoverflow.com/questions/1079114/where-does-the-transactional-annotation-belong
 
-19. Add Custom Functionality to a Spring Data Repository
+019. Add Custom Functionality to a Spring Data Repository
         https://dzone.com/articles/add-custom-functionality-to-a-spring-data-reposito
 
-20. The best way to map a projection query to a DTO (Data Transfer Object) with JPA and Hibernate
+020. The best way to map a projection query to a DTO (Data Transfer Object) with JPA and Hibernate
         https://vladmihalcea.com/the-best-way-to-map-a-projection-query-to-a-dto-with-jpa-and-hibernate/
 
-21. IntelliJ IDEA highlights @Entity class names with “Cannot resolve symbol” in JPQL
+021. IntelliJ IDEA highlights @Entity class names with “Cannot resolve symbol” in JPQL
         https://stackoverflow.com/questions/12420996/intellij-idea-highlights-entity-class-names-with-cannot-resolve-symbol-in-jpq
 
-22. JPA Cannot resolve column/table IntelliJ IDEA
+022. JPA Cannot resolve column/table IntelliJ IDEA
         https://stackoverflow.com/questions/29155350/jpa-cannot-resolve-column-intellij
 
-23. Hibernate N+1 query issue when fetching @OneToOne associations with JPA Criteria and @LazyToOne
+023. Hibernate N+1 query issue when fetching @OneToOne associations with JPA Criteria and @LazyToOne
         https://discourse.hibernate.org/t/hibernate-n-1-query-issue-when-fetching-onetoone-associations-with-jpa-criteria-and-lazytoone/2037
 
-24. The best way to map a @OneToOne relationship with JPA and Hibernate
+024. The best way to map a @OneToOne relationship with JPA and Hibernate
         https://vladmihalcea.com/the-best-way-to-map-a-onetoone-relationship-with-jpa-and-hibernate/
 
-25. How to select rows with no matching entry in another table ?
+025. How to select rows with no matching entry in another table ?
         https://stackoverflow.com/questions/4076098/how-to-select-rows-with-no-matching-entry-in-another-table
 
-26. Difference between LEFT JOIN and LEFT JOIN FETCH in Hibernate? --> prevent from N+1 too --> "FETCH" means load immediately !
+026. Difference between LEFT JOIN and LEFT JOIN FETCH in Hibernate? --> prevent from N+1 too --> "FETCH" means load immediately !
         https://stackoverflow.com/questions/6838574/difference-between-left-join-and-left-join-fetch-in-hibernate
 
-27. Spring Data JPA - Reference Documentation
+027. Spring Data JPA - Reference Documentation
         https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#reference
 
-28. Giới thiệu và cài đặt Kong làm API Gateway cho hệ thống Microservices
+028. Giới thiệu và cài đặt Kong làm API Gateway cho hệ thống Microservices
         https://techtalk.vn/gioi-thieu-va-cai-dat-kong-lam-api-gateway-cho-he-thong-microservices.html
 
-29. How to Manage your gRPC Services with Kong
+029. How to Manage your gRPC Services with Kong
         https://konghq.com/blog/manage-grpc-services-kong/
 
-30. DB Less Kong tutorial
+030. DB Less Kong tutorial
         https://medium.com/@matias_azucas/db-less-kong-tutorial-8cbf8f70b266
 
-31. Linux github desktop
+031. Linux github desktop
         https://github.com/shiftkey/desktop/releases --> download .deb file
 
-32. Google Cloud DNS- Accessing a VM instance using Domain Name
+032. Google Cloud DNS- Accessing a VM instance using Domain Name
         http://www.bytesofgigabytes.com/googlecloud/google-cloud-vm-instance-dns/
 
-33. Enable TCP port 2375 for external connection to Docker - Ubuntu
+033. Enable TCP port 2375 for external connection to Docker - Ubuntu
         https://gist.github.com/styblope/dc55e0ad2a9848f2cc3307d4819d819f
 
-34. gRPC Authorization using Interceptors in Java
+034. gRPC Authorization using Interceptors in Java
         https://kuros.in/grpc/2019/01/grpc-interceptors/
 
-35. Lognet gRPC Spring Boot Starter - Interceptors support
+035. Lognet gRPC Spring Boot Starter - Interceptors support
         https://github.com/LogNet/grpc-spring-boot-starter#interceptors-support
 
-36. How to add a custom header in grpc client?
+036. How to add a custom header in grpc client?
         https://stackoverflow.com/questions/45125601/android-how-to-add-a-custom-header-in-grpc-client
 
-37. gRPC + Postman
+037. gRPC + Postman
         https://medium.com/@jnewmano/grpc-postman-173b62a64341
 
-38. gRPC Web - Add option to set withCredentials to true
+038. gRPC Web - Add option to set withCredentials to true
         https://github.com/grpc/grpc-web/pull/604
 
-39. Authentication with JWT Example - gRPC Java
+039. Authentication with JWT Example - gRPC Java
         https://github.com/grpc/grpc-java/tree/master/examples/example-jwt-auth
 
-40. Ditching REST with gRPC-web and Envoy
+040. Ditching REST with gRPC-web and Envoy
         https://medium.com/swlh/ditching-rest-with-grpc-web-and-envoy-bfaa89a39b32
 
-41. gRPC-Web Hello World Guide
+041. gRPC-Web Hello World Guide
         https://github.com/grpc/grpc-web/tree/master/net/grpc/gateway/examples/helloworld
 
-42. SETTING UP SSL IN ENVOY
+042. SETTING UP SSL IN ENVOY
         https://www.envoyproxy.io/learn/ssl
 
-43. Docker RUN vs CMD vs ENTRYPOINT
+043. Docker RUN vs CMD vs ENTRYPOINT
         https://goinbigdata.com/docker-run-vs-cmd-vs-entrypoint/
 
-44. Java InputStream to Byte Array and ByteBuffer
+044. Java InputStream to Byte Array and ByteBuffer
         https://www.baeldung.com/convert-input-stream-to-array-of-bytes
 
-45. gRPC: Random CANCELLED exception on RPC calls - gRPC Asynchronous Stub Calling
+045. gRPC: Random CANCELLED exception on RPC calls - gRPC Asynchronous Stub Calling
         https://stackoverflow.com/questions/57110811/grpc-random-cancelled-exception-on-rpc-calls
 
-46. Git Bash confuse with Slash '/' when running bash script on Windows - Asked by me =))))
+046. Git Bash confuse with Slash '/' when running bash script on Windows - Asked by me =))))
         https://stackoverflow.com/questions/61907994/git-bash-confuse-with-slash-when-running-bash-script-on-windows
 
-47. Why must I use try catch when I use global exception handling?
+047. Why must I use try catch when I use global exception handling?
         https://stackoverflow.com/questions/25753752/why-must-i-use-try-catch-when-i-use-global-exception-handling
 
-48. User IDs and passwords: Equally important for access security
+048. User IDs and passwords: Equally important for access security
         https://www.techrepublic.com/blog/it-security/user-ids-and-passwords-equally-important-for-access-security/
 
-49. Messaging with Spring AMQP
+049. Messaging with Spring AMQP
         https://www.baeldung.com/spring-amqp
 
-50. RabbitMQ Custom Docker Image with Custom Configuration and Definitions
+050. RabbitMQ Custom Docker Image with Custom Configuration and Definitions
         https://youtu.be/I8QHPfMhqAU
 
-51. Unpacking specific artifacts
+051. Unpacking specific artifacts
         https://maven.apache.org/plugins/maven-dependency-plugin/examples/unpacking-artifacts.html
 
-52. How to Share Resources Across Projects in Maven
+052. How to Share Resources Across Projects in Maven
         https://blog.sonatype.com/2008/04/how-to-share-resources-across-projects-in-maven/
 
-53. SQLServerException: Invalid object name 'hibernate_sequence'
+053. SQLServerException: Invalid object name 'hibernate_sequence'
         https://stackoverflow.com/questions/49037803/sql-server-2016-invalid-object-name-hibernate-sequence
 
-54. EXCEPTION HANDLING AND ERROR PROPAGATION IN GRPC JAVA
+054. EXCEPTION HANDLING AND ERROR PROPAGATION IN GRPC JAVA
         https://sultanov.dev/blog/exception-handling-in-grpc-java-server/
 
-55. Các kỹ sư Eureka đã tối ưu ứng dụng chat sử dụng gRPC như thế nào
-        https://techtalk.vn/cac-ky-su-eureka-da-toi-uu-ung-dung-chat-su-dung-grpc-nhu-the-nao.html
-
-56. How can I remove a commit on GitHub?
+055. How can I remove a commit on GitHub?
         https://stackoverflow.com/questions/448919/how-can-i-remove-a-commit-on-github
 
-57. How can I undo the last commit?
+056. How can I undo the last commit?
         https://www.git-tower.com/learn/git/faq/undo-last-commit
 
-58. gRPC: Should not call onComplete after onError
+057. gRPC: Should not call onComplete after onError
         https://github.com/scalapb/ScalaPB/issues/71
 
-59. How can I configure log4j to not print the exception stacktrace?
+058. How can I configure log4j to not print the exception stacktrace?
         https://stackoverflow.com/questions/348582/how-can-i-configure-log4j-to-not-print-the-exception-stacktrace
 
-60. Remove “Using default security password” on Spring Boot
+059. Remove “Using default security password” on Spring Boot
         https://stackoverflow.com/questions/30761253/remove-using-default-security-password-on-spring-boot
 
-61. Spring Boot without the web server
+060. Spring Boot without the web server
         https://stackoverflow.com/questions/26105061/spring-boot-without-the-web-server
 
-62. Set specific IP addresses to docker containers created with docker-compose (static IPv4)
+061. Set specific IP addresses to docker containers created with docker-compose (static IPv4)
         https://blog.alejandrocelaya.com/2017/04/21/set-specific-ip-addresses-to-docker-containers-created-with-docker-compose/
 
-63. Setting the default active profile in Spring-boot
+062. Setting the default active profile in Spring-boot
         https://stackoverflow.com/questions/37700352/setting-the-default-active-profile-in-spring-boot
 
-64. Consul DNS Interface
+063. Consul DNS Interface
         https://www.consul.io/docs/agent/dns.html
 
-65. Running the official consul docker image
+064. Running the official consul docker image
         https://stackoverflow.com/questions/38466587/running-the-official-consul-docker-image
 
-66. How to Configure Consul in a Production Environment on Ubuntu 14.04
+065. How to Configure Consul in a Production Environment on Ubuntu 14.04
         https://www.digitalocean.com/community/tutorials/how-to-configure-consul-in-a-production-environment-on-ubuntu-14-04
 
-67. 10 Antipatterns các lập trình viên cần phải tránh
+066. 10 Antipatterns các lập trình viên cần phải tránh
         https://viblo.asia/p/10-antipatterns-cac-lap-trinh-vien-can-phai-tranh-1Je5EdOGlnL
 
-68. Service Discovery in Microservice
+067. Service Discovery in Microservice
         https://medium.com/@jamesemyn/service-discovery-in-microsrvice-cbd54afb94f3
 
-69. Consul dns round robin and ping - CANNOT
+068. Consul dns round robin and ping - CANNOT
         https://stackoverflow.com/questions/47794649/consul-dns-round-robin-and-ping
 
-70. Omitting one Setter/Getter in Lombok
+069. Omitting one Setter/Getter in Lombok
         https://stackoverflow.com/questions/7994119/omitting-one-setter-getter-in-lombok
 
-71. Service Mesh VS API Gateway VS Message Queue - when to use what?
+070. Service Mesh VS API Gateway VS Message Queue - when to use what?
         https://arcentry.com/blog/api-gateway-vs-service-mesh-vs-message-queue/
 
-72. Microservices internal communication through API Gateway
+071. Microservices internal communication through API Gateway
         https://stackoverflow.com/questions/53545963/internal-communication-microservices-through-api-gateway
 
-73. HowTo: gRPC Java Client Side Load Balancing using Consul
+072. HowTo: gRPC Java Client Side Load Balancing using Consul
         https://medium.com/@mykidong/howto-grpc-java-client-side-load-balancing-using-consul-8f729668d3f8
 
-74. Criteria Queries Using JPA Metamodel
+073. Criteria Queries Using JPA Metamodel
         https://www.baeldung.com/hibernate-criteria-queries-metamodel
 
-75. How can I do a JOIN FETCH in criteria api
+074. How can I do a JOIN FETCH in criteria api
         https://discourse.hibernate.org/t/how-can-i-do-a-join-fetch-in-criteria-api/846/2
 
-76. Query specified join fetching, but the owner of the fetched association was not present in the select list
+075. Query specified join fetching, but the owner of the fetched association was not present in the select list
         https://stackoverflow.com/questions/12459779/query-specified-join-fetching-but-the-owner-of-the-fetched-association-was-not
 
-77. Count results from joining a table based on a condition with Criteria API
+076. Count results from joining a table based on a condition with Criteria API
         https://stackoverflow.com/questions/52362104/count-results-from-joining-a-table-based-on-a-condition-with-criteria-api
 
-78. Add CriteriaBuilder.between(Date) to Predicate?
+077. Add CriteriaBuilder.between(Date) to Predicate?
         https://stackoverflow.com/questions/41806152/add-criteriabuilder-betweendate-to-predicate
 
-79. How to fetch today's date in CriteriaBuilder in hibernate
+078. How to fetch today's date in CriteriaBuilder in hibernate
         https://stackoverflow.com/questions/53879792/how-to-fetch-todays-date-in-criteriabuilder-in-hibernate
 
-80. The data types time and datetime are incompatible in the greater than or equal to operator -> sendTimeAsDateTime=f‌a‌lse
+079. The data types time and datetime are incompatible in the greater than or equal to operator -> sendTimeAsDateTime=f‌a‌lse
         https://stackoverflow.com/questions/38954422/the-data-types-time-and-datetime-are-incompatible-in-the-greater-than-or-equal-t
 
-81. Consul health check --> (gRPC + interval) check --> service needs to self-implement GRPC Health Checking Protocol
+080. Consul health check --> (gRPC + interval) check --> service needs to self-implement GRPC Health Checking Protocol
         https://www.consul.io/docs/agent/checks
 
-82. GRPC Health Checking Protocol --> client query the server’s health status by calling the Check method, and a deadline should be set on the rpc
+081. GRPC Health Checking Protocol --> client query the server’s health status by calling the Check method, and a deadline should be set on the rpc
         https://github.com/grpc/grpc/blob/master/doc/health-checking.md
 
-83. How to model HashMap/Dictionary in the ProtoBuf efficiently
+082. How to model HashMap/Dictionary in the ProtoBuf efficiently
         https://stackoverflow.com/questions/32187278/how-to-model-hashmap-dictionary-in-the-protobuf-efficiently
 
-84. Protocol Buffers Documents - Maps/Dictionaries
+083. Protocol Buffers Documents - Maps/Dictionaries
         https://developers.google.com/protocol-buffers/docs/proto#maps
 
-85. How to Convert List to Map in Java
+084. How to Convert List to Map in Java
         https://www.baeldung.com/java-list-to-map
 
-86. Java Map Interface --> a map (a dictionary) doesn't allow duplicate keys, but it can have duplicate values !!!
+085. Java Map Interface --> a map (a dictionary) doesn't allow duplicate keys, but it can have duplicate values !!!
         https://www.javatpoint.com/java-map
 
-87. EntityManager query by JoinColumn
+086. EntityManager query by JoinColumn
         https://stackoverflow.com/questions/12907921/entitymanager-query-by-joincolumn
 
-88. JPA/Hibernate Bidirectional Lazy Loading Done Right
+087. JPA/Hibernate Bidirectional Lazy Loading Done Right
         https://medium.com/monstar-lab-bangladesh-engineering/jpa-hibernate-bidirectional-lazy-loading-done-right-65eda6426d64
 
-89. Hibernate @NotNull vs @Column(nullable = false)
+088. Hibernate @NotNull vs @Column(nullable = false)
         https://www.baeldung.com/hibernate-notnull-vs-nullable
 
-90. The best way to use a Hibernate ResultTransformer --> Query.setResultTransformer(ResultTransformer) has been deprecated since Hibernate 5.2
+089. The best way to use a Hibernate ResultTransformer --> Query.setResultTransformer(ResultTransformer) has been deprecated since Hibernate 5.2
         https://vladmihalcea.com/hibernate-resulttransformer/
 
-91. Spring Boot + Websocket Example
+090. Spring Boot + Websocket Example
         https://www.devglan.com/spring-boot/spring-boot-websocket-example
 
-92. Create a Spring boot + Angular WebSocket using SockJS and Stomp
+091. Create a Spring boot + Angular WebSocket using SockJS and Stomp
         https://medium.com/@haseeamarathunga/create-a-spring-boot-angular-websocket-using-sockjs-and-stomp-cb339f766a98
 
-93. Handle the same URL with Spring MVC RequestMappingHandlerMapping and Spring Websocket's ServletWebSocketHandlerRegistry
+092. Handle the same URL with Spring MVC RequestMappingHandlerMapping and Spring Websocket's ServletWebSocketHandlerRegistry
         https://stackoverflow.com/questions/38376316/handle-the-same-url-with-spring-mvc-requestmappinghandlermapping-and-spring-webs
 
-94. Converting Protocol Buffers data to Json and back with Gson Type Adapters
-        https://medium.com/@moijes12/converting-protocol-buffers-data-to-json-and-back-with-gson-type-adapters-22d9f355673
-
-95. Spring Boot + Netty+WebSocket+Protobuf 集成通讯配置
+093. Spring Boot + Netty+WebSocket+Protobuf 集成通讯配置
         https://blog.csdn.net/hxx688/article/details/103417976
 
-96. Spring Boot + WebSocket example without STOMP and SockJs
+094. Spring Boot + WebSocket example without STOMP and SockJs
         https://www.devglan.com/spring-boot/spring-websocket-integration-example-without-stomp
 
-97. Spring 4 websocket without STOMP,socketjs
+095. Spring 4 websocket without STOMP,socketjs
         https://stackoverflow.com/questions/32267015/spring-4-websocket-without-stomp-socketjs
 
-98. Spring Websocket Client (Without STOMP) – Example
+096. Spring Websocket Client (Without STOMP) – Example
         https://idodevjobs.wordpress.com/2019/02/07/spring-websocket-client-without-stomp-example/
 
-99. Path Parameters in WebSocketConfigurer addHandler in Spring
+097. Path Parameters in WebSocketConfigurer addHandler in Spring
         https://stackoverflow.com/questions/49378759/path-parameters-in-websocketconfigurer-addhandler-in-spring
+
+098. Converting Protocol Buffers data to Json and back with Gson Type Adapters
+        https://medium.com/@moijes12/converting-protocol-buffers-data-to-json-and-back-with-gson-type-adapters-22d9f355673
+
+099. GSON - Gson
+        http://tutorials.jenkov.com/java-json/gson.html
+
+100. Các kỹ sư Eureka đã tối ưu ứng dụng chat sử dụng gRPC như thế nào
+        https://techtalk.vn/cac-ky-su-eureka-da-toi-uu-ung-dung-chat-su-dung-grpc-nhu-the-nao.html
