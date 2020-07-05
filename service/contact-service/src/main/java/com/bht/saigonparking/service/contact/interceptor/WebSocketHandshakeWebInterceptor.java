@@ -1,5 +1,8 @@
 package com.bht.saigonparking.service.contact.interceptor;
 
+import static com.bht.saigonparking.service.contact.interceptor.WebSocketInterceptorConstraint.SAIGON_PARKING_USER_KEY;
+import static com.bht.saigonparking.service.contact.interceptor.WebSocketInterceptorConstraint.SAIGON_PARKING_USER_ROLE_KEY;
+
 import java.net.URI;
 import java.util.Map;
 
@@ -13,6 +16,7 @@ import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
 import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
+import com.bht.saigonparking.common.auth.SaigonParkingTokenBody;
 import com.bht.saigonparking.common.exception.MissingTokenException;
 import com.bht.saigonparking.common.util.LoggingUtil;
 
@@ -30,7 +34,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public final class WebSocketHandshakeWebInterceptor extends HttpSessionHandshakeInterceptor {
 
-    public static final String SAIGON_PARKING_USER_KEY = "saigon_parking_user";
     private static final String AUTH_PATH_PREFIX = "web?token=";
     private static final Short AUTH_PATH_PREFIX_LENGTH = 10;
 
@@ -47,8 +50,9 @@ public final class WebSocketHandshakeWebInterceptor extends HttpSessionHandshake
                 throw new MissingTokenException();
             }
 
-            Long userId = authentication.parseJwtToken(accessToken).getUserId();
-            attributes.put(SAIGON_PARKING_USER_KEY, userId);
+            SaigonParkingTokenBody saigonParkingTokenBody = authentication.parseJwtToken(accessToken);
+            attributes.put(SAIGON_PARKING_USER_KEY, saigonParkingTokenBody.getUserId());
+            attributes.put(SAIGON_PARKING_USER_ROLE_KEY, saigonParkingTokenBody.getUserRole());
 
         } catch (ExpiredJwtException expiredJwtException) {
             LoggingUtil.log(Level.ERROR, "WebSocketInterceptor", "Exception", "ExpiredJwtException");

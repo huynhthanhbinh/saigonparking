@@ -1,5 +1,8 @@
 package com.bht.saigonparking.service.contact.handler;
 
+import static com.bht.saigonparking.service.contact.interceptor.WebSocketInterceptorConstraint.SAIGON_PARKING_USER_KEY;
+import static com.bht.saigonparking.service.contact.interceptor.WebSocketInterceptorConstraint.SAIGON_PARKING_USER_ROLE_KEY;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +17,6 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.bht.saigonparking.common.util.LoggingUtil;
-import com.bht.saigonparking.service.contact.interceptor.WebSocketHandshakeInterceptor;
 
 import lombok.Getter;
 
@@ -45,7 +47,7 @@ public final class WebSocketHandler extends TextWebSocketHandler {
     }
 
     @Override
-    protected void handleTextMessage(@NonNull WebSocketSession session, @NonNull TextMessage message) throws IOException {
+    protected void handleTextMessage(@NonNull WebSocketSession session, @NonNull TextMessage message) {
         LoggingUtil.log(Level.INFO, LOGGING_KEY, "handleTextMessage", message.getPayload());
     }
 
@@ -60,7 +62,11 @@ public final class WebSocketHandler extends TextWebSocketHandler {
         LoggingUtil.log(Level.INFO, LOGGING_KEY, "transportErrorFromSessionOfUser", userId.toString());
     }
 
-    private Long getUserIdFromSession(@NonNull WebSocketSession webSocketSession) {
-        return (Long) webSocketSession.getAttributes().get(WebSocketHandshakeInterceptor.SAIGON_PARKING_USER_KEY);
+    public Long getUserIdFromSession(@NonNull WebSocketSession webSocketSession) {
+        return (Long) webSocketSession.getAttributes().get(SAIGON_PARKING_USER_KEY);
+    }
+
+    public String getUserRoleFromSession(@NonNull WebSocketSession webSocketSession) {
+        return (String) webSocketSession.getAttributes().get(SAIGON_PARKING_USER_ROLE_KEY);
     }
 }
