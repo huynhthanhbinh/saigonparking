@@ -270,35 +270,35 @@ Last updated:       Sun, Jul 5th, 2020
 089. The best way to use a Hibernate ResultTransformer --> Query.setResultTransformer(ResultTransformer) has been deprecated since Hibernate 5.2
         https://vladmihalcea.com/hibernate-resulttransformer/
 
-090. Spring Boot + Websocket Example
-        https://www.devglan.com/spring-boot/spring-boot-websocket-example
-
-091. Create a Spring boot + Angular WebSocket using SockJS and Stomp
-        https://medium.com/@haseeamarathunga/create-a-spring-boot-angular-websocket-using-sockjs-and-stomp-cb339f766a98
-
-092. Handle the same URL with Spring MVC RequestMappingHandlerMapping and Spring Websocket's ServletWebSocketHandlerRegistry
+090. Handle the same URL with Spring MVC RequestMappingHandlerMapping and Spring Websocket's ServletWebSocketHandlerRegistry
         https://stackoverflow.com/questions/38376316/handle-the-same-url-with-spring-mvc-requestmappinghandlermapping-and-spring-webs
 
-093. Spring Boot + WebSocket example without STOMP and SockJs
+091. Spring Boot + WebSocket example without STOMP and SockJs
         https://www.devglan.com/spring-boot/spring-websocket-integration-example-without-stomp
 
-094. Spring 4 websocket without STOMP,socketjs
+092. Spring 4 websocket without STOMP,socketjs
         https://stackoverflow.com/questions/32267015/spring-4-websocket-without-stomp-socketjs
 
-095. Spring Websocket Client (Without STOMP) – Example
+093. Spring Websocket Client (Without STOMP) – Example
         https://idodevjobs.wordpress.com/2019/02/07/spring-websocket-client-without-stomp-example/
 
-096. Path Parameters in WebSocketConfigurer addHandler in Spring
+094. Path Parameters in WebSocketConfigurer addHandler in Spring
         https://stackoverflow.com/questions/49378759/path-parameters-in-websocketconfigurer-addhandler-in-spring
 
-097. Converting Protocol Buffers data to Json and back with Gson Type Adapters
+095. Converting Protocol Buffers data to Json and back with Gson Type Adapters
         https://medium.com/@moijes12/converting-protocol-buffers-data-to-json-and-back-with-gson-type-adapters-22d9f355673
 
-098. GSON - Gson
+096. GSON - Gson
         http://tutorials.jenkov.com/java-json/gson.html
 
-099. Protocol Buffer docs - Javascript generated message's methods: toObject(), serializeBinary(), deserializeBinary()
+097. Google Protocol Buffers with WebSockets over HTTPS in Node.js/Express
+        https://medium.com/@ahmadb/google-protocol-buffers-with-websockets-over-https-in-node-js-express-7ea78157394e
+
+098. Protocol Buffer docs - Javascript generated message's methods: toObject(), serializeBinary(), deserializeBinary()
         https://developers.google.com/protocol-buffers/docs/reference/javascript-generated#message
+
+099. Protocol Buffer docs - Java generated message's methods: newBuilder(), parseFrom(), toByteArray()
+        https://developers.google.com/protocol-buffers/docs/reference/java-generated#message
 
 100. Các kỹ sư Eureka đã tối ưu ứng dụng chat sử dụng gRPC như thế nào
         https://techtalk.vn/cac-ky-su-eureka-da-toi-uu-ung-dung-chat-su-dung-grpc-nhu-the-nao.html
