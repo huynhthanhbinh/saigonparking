@@ -28,7 +28,7 @@ public final class WebSocketTextMessageHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionEstablished(@NonNull WebSocketSession session) throws IOException {
         Long userId = webSocketUserSessionManagement.getUserIdFromSession(session);
-        webSocketUserSessionManagement.getUserSessionMap().put(userId, session);
+        webSocketUserSessionManagement.addNewUserSession(userId, session);
         LoggingUtil.log(Level.INFO, LOGGING_KEY, "connectionEstablishedWithUser", userId.toString());
         session.sendMessage(new TextMessage("{ \"notification\":\"Connection to Contact service established !\" }"));
     }
