@@ -40,7 +40,7 @@
   "parameters": [
     {
       "value": {
-        "max-connections": 1000
+        "max-connections": 10000
       },
       "vhost": "/",
       "component": "vhost-limits",
@@ -55,6 +55,15 @@
   ],
   "policies": [],
   "queues": [
+    {
+      "name": "saigonparking.contact",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
     {
       "name": "saigonparking.mail",
       "vhost": "/",
@@ -95,6 +104,14 @@
     }
   ],
   "bindings": [
+    {
+      "source": "saigonparking.exchange",
+      "vhost": "/",
+      "destination": "saigonparking.contact",
+      "destination_type": "queue",
+      "routing_key": "saigonparking.contact.#",
+      "arguments": {}
+    },
     {
       "source": "saigonparking.exchange",
       "vhost": "/",
