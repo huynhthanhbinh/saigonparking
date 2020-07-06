@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Sun, Jul 5th, 2020
+Last updated:       Mon, Jul 6th, 2020
 ========================================================================================================================
 
 001. gRPC error handling:
@@ -305,3 +305,9 @@ Last updated:       Sun, Jul 5th, 2020
 
 101. RabbitMQ same message to each consumer
         https://stackoverflow.com/questions/41160585/rabbitmq-same-message-to-each-consumer
+
+102. Spring Boot + RabbitMQ Tutorial - Configure Listeners to consume messages | JavaInUse
+        https://www.javainuse.com/messaging/rabbitmq/listeners
+
+103. Dynamic Queues on RabbitListener Annotation
+        https://stackoverflow.com/questions/49909859/dynamic-queues-on-rabbitlistener-annotation
