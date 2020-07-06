@@ -15,6 +15,7 @@ import org.springframework.web.socket.handler.BinaryWebSocketHandler;
 
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.bht.saigonparking.common.util.LoggingUtil;
+import com.bht.saigonparking.service.contact.service.ContactService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +29,7 @@ public final class WebSocketBinaryMessageHandler extends BinaryWebSocketHandler 
 
     private static final String LOGGING_KEY = "WebSocketBinaryMessageHandler";
     private final WebSocketUserSessionManagement webSocketUserSessionManagement;
+    private final ContactService contactService;
 
     @Override
     public void afterConnectionEstablished(@NonNull WebSocketSession session) throws IOException {
@@ -65,6 +67,14 @@ public final class WebSocketBinaryMessageHandler extends BinaryWebSocketHandler 
         Long userId = webSocketUserSessionManagement.getUserIdFromSession(session);
         LoggingUtil.log(Level.INFO, LOGGING_KEY, "handleBinaryMessage", String.format("newBinaryMessageFromUser(%d)", userId));
         SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.parseFrom(message.getPayload());
-        System.out.println(saigonParkingMessage);
+
+        if (saigonParkingMessage.getReceiverId() != 0) { /* forward to receiver */
+            contactService.publishMessageToQueue(saigonParkingMessage);
+            System.out.println("BACHMAPDITTHUI");
+
+        } else { /* not forward to receiver */
+            contactService.handleMessageSendToSystem(saigonParkingMessage);
+            System.out.println("BONMAPDITHUI");
+        }
     }
 }

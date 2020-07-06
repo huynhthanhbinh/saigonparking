@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 package com.bht.saigonparking.api.grpc.contact;
+//option java_generic_services = true;
 option java_multiple_files = true;
 
 /** Contact Service will use WebSocket protocol to create a bidirectional communication between client and server (text & binary format)
@@ -40,7 +41,7 @@ message SaigonParkingMessage {
     Classification classification = 1; /* whether message is sent from customer or parking-lot */
     Type type = 2; /* default TEXT_MESSAGE (chatting) */
     string content = 3; /* can be empty or stringify as JSON, please take a look at each Content definition below */
-    int64 senderId = 4; /* sender's user ID */
+    int64 senderId = 4; /* sender's user ID, if sender ID = 0, it means this message is sent from system not from user */
     int64 receiverId = 5; /* receiver ID: will be UserId if it sent from ParkingLot, otherwise ParkingLotId ! */
     string timestamp = 6; /* the time at which the sender sent this message, timestamp-format yyyy-MM-dd hh:mm:ss */
 }
@@ -80,6 +81,7 @@ message BookingRejectContent {
 }
 
 /* content will be stringify as JSON, then it will be assigned into content field in SaigonParkingMessage */
+/* for this message type, receiver will be system (receiver ID = 0)  */
 message AvailabilityUpdateContent {
     int64 parkingLotId = 1;
     int32 newAvailability = 2;

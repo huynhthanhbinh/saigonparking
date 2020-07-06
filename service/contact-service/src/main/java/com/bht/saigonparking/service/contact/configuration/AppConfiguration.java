@@ -33,7 +33,7 @@ import com.google.common.collect.ImmutableMap;
 @Configuration
 @EnableWebSocket
 @EnableTransactionManagement
-@Import(WebSocketConfiguration.class)
+@Import({WebSocketConfiguration.class, MessageQueueConfiguration.class})
 @ComponentScan(basePackages = AppConfiguration.BASE_PACKAGE, includeFilters = @ComponentScan.Filter(InheritedComponent.class))
 public class AppConfiguration {
 

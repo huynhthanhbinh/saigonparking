@@ -101,7 +101,7 @@ public class Emulator extends SpringBootServletInitializer {
                 .setClassification(CUSTOMER_MESSAGE)
                 .setType(TEXT_MESSAGE)
                 .setSenderId(4L)
-                .setReceiverId(0)
+                .setReceiverId(18)
                 .setContent("Hello Contact Service")
                 .build();
 
