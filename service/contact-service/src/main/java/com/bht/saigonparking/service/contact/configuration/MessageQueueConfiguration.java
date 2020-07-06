@@ -2,31 +2,36 @@ package com.bht.saigonparking.service.contact.configuration;
 
 import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.CONTACT_EXCHANGE_NAME;
 
-import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.Declarables;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-import com.bht.saigonparking.service.contact.listener.ContactExchangeMessageListener;
+import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
+import com.bht.saigonparking.service.contact.service.ContactService;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 /**
  *
  * @author bht
  */
 @Component
-@AllArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public final class MessageQueueConfiguration {
 
+    private final ContactService contactService;
+
+    @Value("${spring.cloud.consul.discovery.instance-id}")
+    private String queueName;
+
     @Bean
-    public Queue queue(@Value("${spring.cloud.consul.discovery.instance-id}") String queueName) {
+    public Queue queue() {
         return new Queue(queueName, false, false, true); /* register an auto-delete queue on service start-up */
     }
 
@@ -36,19 +41,12 @@ public final class MessageQueueConfiguration {
     }
 
     @Bean
-    public Binding binding(@Autowired Queue queue, @Autowired FanoutExchange fanoutExchange) {
-        return BindingBuilder.bind(queue).to(fanoutExchange);
+    public Declarables declarables(@Autowired Queue queue, @Autowired FanoutExchange fanoutExchange) {
+        return new Declarables(queue, fanoutExchange, BindingBuilder.bind(queue).to(fanoutExchange));
     }
 
-    @Bean
-    public SimpleMessageListenerContainer container(@Autowired ConnectionFactory connectionFactory,
-                                                    @Autowired ContactExchangeMessageListener contactExchangeMessageListener,
-                                                    @Value("${spring.cloud.consul.discovery.instance-id}") String queueName) {
-
-        SimpleMessageListenerContainer simpleMessageListenerContainer = new SimpleMessageListenerContainer();
-        simpleMessageListenerContainer.setConnectionFactory(connectionFactory);
-        simpleMessageListenerContainer.setQueueNames(queueName);
-        simpleMessageListenerContainer.setMessageListener(contactExchangeMessageListener);
-        return simpleMessageListenerContainer;
+    @RabbitListener(queues = "${spring.cloud.consul.discovery.instance-id}")
+    public void consumeMessageFromContactTopic(SaigonParkingMessage saigonParkingMessage) {
+        contactService.consumeMessageFromQueue(saigonParkingMessage);
     }
 }
