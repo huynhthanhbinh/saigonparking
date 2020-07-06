@@ -302,3 +302,6 @@ Last updated:       Sun, Jul 5th, 2020
 
 100. Các kỹ sư Eureka đã tối ưu ứng dụng chat sử dụng gRPC như thế nào
         https://techtalk.vn/cac-ky-su-eureka-da-toi-uu-ung-dung-chat-su-dung-grpc-nhu-the-nao.html
+
+101. RabbitMQ same message to each consumer
+        https://stackoverflow.com/questions/41160585/rabbitmq-same-message-to-each-consumer

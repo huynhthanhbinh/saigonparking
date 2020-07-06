@@ -56,15 +56,6 @@
   "policies": [],
   "queues": [
     {
-      "name": "saigonparking.contact",
-      "vhost": "/",
-      "durable": true,
-      "auto_delete": false,
-      "arguments": {
-        "x-queue-type": "classic"
-      }
-    },
-    {
       "name": "saigonparking.mail",
       "vhost": "/",
       "durable": true,
@@ -94,9 +85,18 @@
   ],
   "exchanges": [
     {
-      "name": "saigonparking.exchange",
+      "name": "saigonparking-internal.exchange",
       "vhost": "/",
       "type": "topic",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    },
+    {
+      "name": "saigonparking-contact.exchange",
+      "vhost": "/",
+      "type": "fanout",
       "durable": true,
       "auto_delete": false,
       "internal": false,
@@ -105,15 +105,7 @@
   ],
   "bindings": [
     {
-      "source": "saigonparking.exchange",
-      "vhost": "/",
-      "destination": "saigonparking.contact",
-      "destination_type": "queue",
-      "routing_key": "saigonparking.contact.#",
-      "arguments": {}
-    },
-    {
-      "source": "saigonparking.exchange",
+      "source": "saigonparking-internal.exchange",
       "vhost": "/",
       "destination": "saigonparking.mail",
       "destination_type": "queue",
@@ -121,7 +113,7 @@
       "arguments": {}
     },
     {
-      "source": "saigonparking.exchange",
+      "source": "saigonparking-internal.exchange",
       "vhost": "/",
       "destination": "saigonparking.parkinglot",
       "destination_type": "queue",
@@ -129,7 +121,7 @@
       "arguments": {}
     },
     {
-      "source": "saigonparking.exchange",
+      "source": "saigonparking-internal.exchange",
       "vhost": "/",
       "destination": "saigonparking.user",
       "destination_type": "queue",
