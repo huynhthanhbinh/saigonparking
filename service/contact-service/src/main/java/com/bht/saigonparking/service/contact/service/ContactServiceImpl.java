@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
 import com.bht.saigonparking.service.contact.handler.WebSocketUserSessionManagement;
 
 import lombok.AllArgsConstructor;
@@ -24,6 +25,8 @@ public final class ContactServiceImpl implements ContactService {
 
     private final RabbitTemplate rabbitTemplate;
     private final WebSocketUserSessionManagement webSocketUserSessionManagement;
+    private final ParkingLotServiceGrpc.ParkingLotServiceStub parkingLotServiceStub;
+    private final ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
 
     @Override
     public void publishMessageToQueue(@NotNull SaigonParkingMessage saigonParkingMessage) {

@@ -68,13 +68,13 @@ public final class WebSocketBinaryMessageHandler extends BinaryWebSocketHandler 
         LoggingUtil.log(Level.INFO, LOGGING_KEY, "handleBinaryMessage", String.format("newBinaryMessageFromUser(%d)", userId));
         SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.parseFrom(message.getPayload());
 
-        if (saigonParkingMessage.getReceiverId() != 0) { /* forward to receiver */
+        if (saigonParkingMessage.getReceiverId() != 0) {
+            /* receiver's id != 0 --> not send to system --> forward to receiver */
             contactService.publishMessageToQueue(saigonParkingMessage);
-            System.out.println("BACHMAPDITTHUI");
 
-        } else { /* not forward to receiver */
+        } else {
+            /* receiver's id == 0 --> send to system --> not forward to receiver */
             contactService.handleMessageSendToSystem(saigonParkingMessage);
-            System.out.println("BONMAPDITHUI");
         }
     }
 }
