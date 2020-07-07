@@ -19,7 +19,9 @@ import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import com.bht.saigonparking.api.grpc.contact.NotificationContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
+import com.bht.saigonparking.api.grpc.contact.TextMessageContent;
 import com.bht.saigonparking.emulator.configuration.SpringApplicationContext;
 import com.bht.saigonparking.emulator.handler.WebSocketHandler;
 import com.neovisionaries.ws.client.WebSocket;
@@ -93,16 +95,24 @@ public class Emulator extends SpringBootServletInitializer {
             public void onBinaryMessage(WebSocket websocket, byte[] binary) throws Exception {
                 SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.parseFrom(binary);
                 System.out.println(saigonParkingMessage);
+
+                NotificationContent notificationContent = NotificationContent.parseFrom(saigonParkingMessage.getContent());
+                System.out.println(notificationContent);
             }
         });
         webSocket.connect();
+
+        TextMessageContent textMessageContent = TextMessageContent.newBuilder()
+                .setSender("htbinh")
+                .setMessage("Hello Contact Service")
+                .build();
 
         SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.newBuilder()
                 .setClassification(CUSTOMER_MESSAGE)
                 .setType(TEXT_MESSAGE)
                 .setSenderId(4L)
                 .setReceiverId(18)
-                .setContent("Hello Contact Service")
+                .setContent(textMessageContent.toByteString())
                 .build();
 
         webSocket.sendBinary(saigonParkingMessage.toByteArray());

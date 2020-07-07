@@ -163,7 +163,7 @@ message ParkingLotRatingCountGroupByRating {
 
 service ParkingLotService {
 
-    /** PRIVATE - internal use only - will be called by contact-service
+    /** PUBLIC
      * use-case: send message to parking-lot employee, known parking-lot id
      *  + request: parking-lot's ID
      *  + response: parking-lot employee's ID */

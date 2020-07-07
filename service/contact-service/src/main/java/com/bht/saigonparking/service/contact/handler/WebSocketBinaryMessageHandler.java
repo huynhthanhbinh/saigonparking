@@ -13,6 +13,7 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.BinaryWebSocketHandler;
 
+import com.bht.saigonparking.api.grpc.contact.NotificationContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.contact.service.ContactService;
@@ -37,12 +38,16 @@ public final class WebSocketBinaryMessageHandler extends BinaryWebSocketHandler 
         webSocketUserSessionManagement.addNewUserSession(userId, session);
         LoggingUtil.log(Level.INFO, LOGGING_KEY, "connectionEstablishedWithUser", userId.toString());
 
+        NotificationContent notificationContent = NotificationContent.newBuilder()
+                .setNotification("Connection to Contact service established !")
+                .build();
+
         SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.newBuilder()
                 .setClassification(SYSTEM_MESSAGE)
                 .setType(NOTIFICATION)
                 .setSenderId(0)
                 .setReceiverId(userId)
-                .setContent("Connection to Contact service established !")
+                .setContent(notificationContent.toByteString())
                 .build();
 
         session.sendMessage(new BinaryMessage(saigonParkingMessage.toByteArray()));
