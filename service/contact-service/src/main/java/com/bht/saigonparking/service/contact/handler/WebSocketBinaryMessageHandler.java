@@ -71,7 +71,10 @@ public final class WebSocketBinaryMessageHandler extends BinaryWebSocketHandler 
     protected void handleBinaryMessage(@NonNull WebSocketSession session, @NonNull BinaryMessage message) throws Exception {
         Long userId = webSocketUserSessionManagement.getUserIdFromSession(session);
         LoggingUtil.log(Level.INFO, LOGGING_KEY, "handleBinaryMessage", String.format("newBinaryMessageFromUser(%d)", userId));
-        SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.parseFrom(message.getPayload());
+        SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage
+                .newBuilder(SaigonParkingMessage.parseFrom(message.getPayload()))
+                .setSenderId(webSocketUserSessionManagement.getUserIdFromSession(session)) /* attach sender id for receiver to know */
+                .build();
 
         if (saigonParkingMessage.getReceiverId() != 0) {
             /* receiver's id != 0 --> not send to system --> forward to receiver */
