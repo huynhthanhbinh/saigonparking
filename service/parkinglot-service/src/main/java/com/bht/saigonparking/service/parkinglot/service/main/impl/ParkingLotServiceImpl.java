@@ -29,6 +29,7 @@ import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEmployeeEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotTypeEntity;
+import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotEmployeeRepository;
 import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotInformationRepository;
 import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotLimitRepository;
 import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotRatingRepository;
@@ -58,8 +59,14 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     private final ParkingLotRepository parkingLotRepository;
     private final ParkingLotLimitRepository parkingLotLimitRepository;
     private final ParkingLotRatingRepository parkingLotRatingRepository;
+    private final ParkingLotEmployeeRepository parkingLotEmployeeRepository;
     private final ParkingLotInformationRepository parkingLotInformationRepository;
     private final UserServiceGrpc.UserServiceBlockingStub userServiceBlockingStub;
+
+    @Override
+    public Long getParkingLotEmployeeIdOfParkingLot(@NotNull Long parkingLotId) {
+        return parkingLotEmployeeRepository.getParkingLotEmployeeIdOfParkingLot(parkingLotId);
+    }
 
     @Override
     public Long countAll(@NotEmpty String keyword, boolean isAvailableOnly) {

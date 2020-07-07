@@ -65,6 +65,28 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
     private final SaigonParkingServerInterceptor serverInterceptor;
 
     @Override
+    public void getParkingLotEmployeeIdOfParkingLot(Int64Value request, StreamObserver<Int64Value> responseObserver) {
+        try {
+            Int64Value employeeIdResponse = Int64Value.of(parkingLotService
+                    .getParkingLotEmployeeIdOfParkingLot(request.getValue()));
+
+            responseObserver.onNext(employeeIdResponse);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getParkingLotEmployeeIdOfParkingLot(%d)", request.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getParkingLotEmployeeIdOfParkingLot(%d)", request.getValue()));
+        }
+    }
+
+    @Override
     public void countAllParkingLot(CountAllParkingLotRequest request, StreamObserver<Int64Value> responseObserver) {
         try {
             serverInterceptor.validateAdmin();
