@@ -3,14 +3,21 @@ package com.bht.saigonparking.service.contact.service;
 import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.CONTACT_EXCHANGE_NAME;
 import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.CONTACT_ROUTING_KEY;
 
+import java.io.IOException;
+import java.util.Set;
+
 import javax.validation.constraints.NotNull;
 
+import org.apache.logging.log4j.Level;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.BinaryMessage;
+import org.springframework.web.socket.WebSocketSession;
 
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
+import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.contact.handler.WebSocketUserSessionManagement;
 
 import lombok.AllArgsConstructor;
@@ -35,33 +42,27 @@ public final class ContactServiceImpl implements ContactService {
 
     @Override
     public void consumeMessageFromQueue(@NotNull SaigonParkingMessage saigonParkingMessage) {
+        Long receiverId = saigonParkingMessage.getReceiverId();
+        Set<WebSocketSession> userSessionSet = webSocketUserSessionManagement.getAllSessionOfUser(receiverId);
 
-        System.out.println(String.format("%n%n%nReceive message from queue:%n%s%n%n%n", saigonParkingMessage));
+        if (userSessionSet != null) {
+            userSessionSet.forEach(userSession -> {
+                try {
+                    userSession.sendMessage(new BinaryMessage(saigonParkingMessage.toByteArray()));
 
-        switch (saigonParkingMessage.getClassification()) {
-            case CUSTOMER_MESSAGE:
-                handleCustomerMessage(saigonParkingMessage);
-                return;
-            case PARKING_LOT_MESSAGE:
-                handleParkingLotMessage(saigonParkingMessage);
-                return;
-            default:
-                break;
+                } catch (IOException e) {
+                    LoggingUtil.log(Level.ERROR, String.format("forwardMessageToReceiver(%d)", receiverId),
+                            "Exception", e.getMessage());
+                }
+            });
         }
+
+        LoggingUtil.log(Level.ERROR, "SERVICE", String.format("forwardMessageToReceiver(%d)", receiverId),
+                String.format("nSessionOfReceiver: %d", (userSessionSet != null) ? userSessionSet.size() : 0));
     }
 
     @Override
     public void handleMessageSendToSystem(@NotNull SaigonParkingMessage saigonParkingMessage) {
-
-    }
-
-    /* customer send message --> processing and/or forward message to parking-lot */
-    private void handleCustomerMessage(@NotNull SaigonParkingMessage saigonParkingMessage) {
-
-    }
-
-    /* parking-lot send message --> processing and/or forward message to customer */
-    private void handleParkingLotMessage(@NotNull SaigonParkingMessage saigonParkingMessage) {
-
+        // handle message send to system here ...
     }
 }
