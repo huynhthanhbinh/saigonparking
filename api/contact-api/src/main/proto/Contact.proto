@@ -11,7 +11,6 @@ option java_multiple_files = true;
  *      + please use GSON lib from Google to parse JSON into Java obj and generate JSON from Java obj, when processing with text message
  *      + please use SaigonParkingMessage.parseFrom() static method (to parse byte array into protobuf obj) when receiving binary message
  *      + please use toByteArray() method (to generate byte array from protobuf Java obj) when sending binary message
- *
  * for Javascript (web client),
  *      + please init each obj as Protobuf obj, then use toObject() method to convert to JSON obj, when processing with text message
  *      + please use deserializeBinary() method to parse binary message into protobuf Javascript obj, when receiving binary message
@@ -31,10 +30,11 @@ message SaigonParkingMessage {
         TEXT_MESSAGE = 1; /* send from both Customer and ParkingLot (chatting) */
         BOOKING_REQUEST = 2; /* send from Customer: request for new booking */
         BOOKING_CANCELLATION = 3; /* send from Customer: cancel booking request */
-        BOOKING_ACCEPTANCE = 4; /* send from ParkingLot: accept booking request */
-        BOOKING_REJECT = 5; /* send from ParkingLot: reject booking request */
-        AVAILABILITY_UPDATE = 6; /* send from ParkingLot: update available slot */
-        IMAGE = 7; /* everyone can send and receive image */
+        BOOKING_PROCESSING = 4; /* send from system to customer with new bookingId attached */
+        BOOKING_ACCEPTANCE = 5; /* send from ParkingLot: accept booking request */
+        BOOKING_REJECT = 6; /* send from ParkingLot: reject booking request */
+        AVAILABILITY_UPDATE = 7; /* send from ParkingLot: update available slot */
+        IMAGE = 8; /* everyone can send and receive image */
     }
 
     Classification classification = 1; /* whether message is sent from customer or parking-lot */
@@ -47,6 +47,7 @@ message SaigonParkingMessage {
 
 /** Below are each message content's definitions, you have to serialize into binary to send & deserialize into object on receive
  * Example: NotificationContent (message is of type SaigonParkingMessage && message.getType() == Type.NOTIFICATION)
+ *
  * for Android client:
  *      + to get content:   content = NotificationContent.parseFrom(message.getContent())
  *      + to set content:   message.setContent(content.toByteString())
@@ -62,23 +63,33 @@ message TextMessageContent {
     string sender = 2;
 }
 
+/* for customer, do not initialize bookingId, the system will then set bookingId before forward request to parking-lot */
 message BookingRequestContent {
-    string customerName = 1;
-    string customerLicense = 2;
-    double amountOfParkingHour = 3;
+    int64 bookingId = 1;
+    int64 parkingLotId = 2;
+    string customerName = 3;
+    string customerLicense = 4;
+    double amountOfParkingHour = 5;
 }
 
 message BookingCancellationContent {
-    string bookingId = 1;
+    int64 bookingId = 1;
     string reason = 2;
 }
 
+message BookingProcessingContent {
+    int64 bookingId = 1;
+    int64 customerId = 2;
+    int64 parkingLotId = 3;
+}
+
 message BookingAcceptanceContent {
-    string bookingId = 1;
+    int64 bookingId = 1;
 }
 
 message BookingRejectContent {
-    string reason = 1;
+    int64 bookingId = 1;
+    string reason = 2;
 }
 
 /* for this message type, receiver will be system (receiver ID = 0)  */
