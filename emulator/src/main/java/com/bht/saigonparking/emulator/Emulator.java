@@ -1,7 +1,7 @@
 package com.bht.saigonparking.emulator;
 
 import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Classification.CUSTOMER_MESSAGE;
-import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Type.TEXT_MESSAGE;
+import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Type.AVAILABILITY_UPDATE;
 
 import java.io.IOException;
 import java.net.URI;
@@ -19,6 +19,7 @@ import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import com.bht.saigonparking.api.grpc.contact.AvailabilityUpdateContent;
 import com.bht.saigonparking.api.grpc.contact.NotificationContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.bht.saigonparking.api.grpc.contact.TextMessageContent;
@@ -89,7 +90,7 @@ public class Emulator extends SpringBootServletInitializer {
     private static void testNewSocketLibrary() throws IOException, WebSocketException, InterruptedException {
         WebSocketFactory webSocketFactory = new WebSocketFactory();
         WebSocket webSocket = webSocketFactory.createSocket(WEB_SOCKET_LOCAL_URI, 86400000);
-        webSocket.addHeader("Authorization", SAMPLE_TOKEN_CUSTOMER);
+        webSocket.addHeader("Authorization", SAMPLE_TOKEN_EMPLOYEE);
         webSocket.addListener(new WebSocketAdapter() {
             @Override
             public void onBinaryMessage(WebSocket websocket, byte[] binary) throws Exception {
@@ -104,15 +105,20 @@ public class Emulator extends SpringBootServletInitializer {
 
         TextMessageContent textMessageContent = TextMessageContent.newBuilder()
                 .setSender("htbinh")
-                .setMessage("Hello Contact Service")
+                .setMessage("Hello Vu Hai")
+                .build();
+
+        AvailabilityUpdateContent availabilityUpdateContent = AvailabilityUpdateContent.newBuilder()
+                .setParkingLotId(1)
+                .setNewAvailability(27)
                 .build();
 
         SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.newBuilder()
                 .setClassification(CUSTOMER_MESSAGE)
-                .setType(TEXT_MESSAGE)
-                .setSenderId(4L)
-                .setReceiverId(18)
-                .setContent(textMessageContent.toByteString())
+                .setType(AVAILABILITY_UPDATE)
+                .setSenderId(84)
+                .setReceiverId(0)
+                .setContent(availabilityUpdateContent.toByteString())
                 .build();
 
         webSocket.sendBinary(saigonParkingMessage.toByteArray());

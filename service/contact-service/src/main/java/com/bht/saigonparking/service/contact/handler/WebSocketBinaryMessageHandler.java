@@ -82,7 +82,7 @@ public final class WebSocketBinaryMessageHandler extends BinaryWebSocketHandler 
 
         } else {
             /* receiver's id == 0 --> send to system --> not forward to receiver */
-            contactService.handleMessageSendToSystem(saigonParkingMessage);
+            contactService.handleMessageSendToSystem(saigonParkingMessage, session, userId);
         }
     }
 }
