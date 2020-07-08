@@ -11,6 +11,7 @@ option java_multiple_files = true;
  *      + please use GSON lib from Google to parse JSON into Java obj and generate JSON from Java obj, when processing with text message
  *      + please use SaigonParkingMessage.parseFrom() static method (to parse byte array into protobuf obj) when receiving binary message
  *      + please use toByteArray() method (to generate byte array from protobuf Java obj) when sending binary message
+ *
  * for Javascript (web client),
  *      + please init each obj as Protobuf obj, then use toObject() method to convert to JSON obj, when processing with text message
  *      + please use deserializeBinary() method to parse binary message into protobuf Javascript obj, when receiving binary message
@@ -79,8 +80,7 @@ message BookingCancellationContent {
 
 message BookingProcessingContent {
     int64 bookingId = 1;
-    int64 customerId = 2;
-    int64 parkingLotId = 3;
+    int64 parkingLotId = 2;
 }
 
 message BookingAcceptanceContent {
