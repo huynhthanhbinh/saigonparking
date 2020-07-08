@@ -2,18 +2,19 @@ package com.bht.saigonparking.service.contact.configuration;
 
 import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.CONTACT_EXCHANGE_NAME;
 
+import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Declarables;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
-import com.bht.saigonparking.service.contact.service.ContactService;
+import com.bht.saigonparking.service.contact.listener.SaigonParkingQueueMessageListener;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,10 +26,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public final class MessageQueueConfiguration {
 
-    private final ContactService contactService;
+    private final ConnectionFactory connectionFactory;
+    private final SaigonParkingQueueMessageListener saigonParkingQueueMessageListener;
 
     @Value("${spring.cloud.consul.discovery.instance-id}")
     private String queueName;
+
 
     @Bean
     public Queue queue() {
@@ -45,8 +48,13 @@ public final class MessageQueueConfiguration {
         return new Declarables(queue, fanoutExchange, BindingBuilder.bind(queue).to(fanoutExchange));
     }
 
-    @RabbitListener(queues = "${spring.cloud.consul.discovery.instance-id}")
-    public void consumeMessageFromContactTopic(SaigonParkingMessage saigonParkingMessage) {
-        contactService.consumeMessageFromQueue(saigonParkingMessage);
+    @Bean
+    public SimpleMessageListenerContainer simpleMessageListenerContainer() {
+        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.setMessageListener(saigonParkingQueueMessageListener);
+        container.setAcknowledgeMode(AcknowledgeMode.AUTO);
+        container.setQueueNames(queueName);
+        return container;
     }
 }

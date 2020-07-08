@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Wed, Jul 8th, 2020
+Last updated:       Thu, Jul 9th, 2020
 ========================================================================================================================
 
 001. gRPC error handling:
@@ -314,3 +314,9 @@ Last updated:       Wed, Jul 8th, 2020
 
 104. Spring Data JPA @Query (Update Queries With @Modifying, Custom Repositories and the JPA Criteria API, Extending the Existing Repository)
         https://www.baeldung.com/spring-data-jpa-query
+
+105. How to Scale WebSockets
+        https://hackernoon.com/scaling-websockets-9a31497af051
+
+105. Publish/Subscribe - RabbitMQ Java Client --> "Fanout exchange"
+        https://www.rabbitmq.com/tutorials/tutorial-three-java.html
