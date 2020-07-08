@@ -1,5 +1,6 @@
 package com.bht.saigonparking.service.parkinglot.service.grpc;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResultList;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc.ParkingLotServiceImplBase;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
 import com.bht.saigonparking.api.grpc.parkinglot.ScanningByRadiusRequest;
+import com.bht.saigonparking.api.grpc.parkinglot.UpdateParkingLotAvailabilityRequest;
 import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
@@ -479,6 +481,29 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("getParkingLotRatingCountGroupByRating(%d)", request.getValue()));
+        }
+    }
+
+    @Override
+    public void updateParkingLotAvailability(UpdateParkingLotAvailabilityRequest request, StreamObserver<Empty> responseObserver) {
+        try {
+            serverInterceptor.validateUserRole(Arrays.asList("PARKING_LOT_EMPLOYEE", "ADMIN"));
+
+            parkingLotService.updateAvailability((short) request.getNewAvailability(), request.getParkingLotId());
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("updateParkingLotAvailability(%d): %d", request.getParkingLotId(), request.getNewAvailability()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("updateParkingLotAvailability(%d): %d", request.getParkingLotId(), request.getNewAvailability()));
         }
     }
 }

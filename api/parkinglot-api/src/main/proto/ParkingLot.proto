@@ -161,6 +161,11 @@ message ParkingLotRatingCountGroupByRating {
     map<int32, int64> ratingCount = 1; /* is a map of <rating, count> with rating is key & count is value */
 }
 
+message UpdateParkingLotAvailabilityRequest {
+    int64 parkingLotId = 1;
+    int32 newAvailability = 2;
+}
+
 service ParkingLotService {
 
     /** PUBLIC
@@ -295,4 +300,12 @@ service ParkingLotService {
      *  + request:  parking lot ID
      *  + response: a map (or a dictionary) of <rating, count> with rating is key & count is value */
     rpc getParkingLotRatingCountGroupByRating (google.protobuf.Int64Value) returns (ParkingLotRatingCountGroupByRating);
+
+    /** PUBLIC - for admin & parkingLot only
+     * use-case: update current available slots of parking slot
+     *  + request: UpdateParkingLotAvailabilityRequest, you need to provide 2 arguments:
+     *      ++ parkingLotId: id of parking-lot to be updated
+     *      ++ newAvailability: new available slots of parking-lot
+     *  + response: Empty value if succeed, otherwise, throw exception */
+    rpc updateParkingLotAvailability (UpdateParkingLotAvailabilityRequest) returns (google.protobuf.Empty);
 }

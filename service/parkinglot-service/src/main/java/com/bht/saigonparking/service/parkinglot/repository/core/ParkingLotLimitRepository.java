@@ -3,6 +3,7 @@ package com.bht.saigonparking.service.parkinglot.repository.core;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -27,4 +28,11 @@ public interface ParkingLotLimitRepository extends JpaRepository<ParkingLotLimit
             "JOIN FETCH PL.parkingLotInformationEntity PLI " +
             "WHERE PLL.id = ?1")
     ParkingLotLimitEntity getById(@NotNull Long id);
+
+
+    @Modifying
+    @Query("UPDATE ParkingLotLimitEntity PLL " +
+            "SET PLL.availableSlot = ?1, PLL.version = PLL.version + 1 " +
+            "WHERE PLL.availableSlot <> ?1 AND PLL.parkingLotEntity.id = ?2")
+    void updateAvailability(@NotNull Short newAvailability, @NotNull Long parkingLotId);
 }

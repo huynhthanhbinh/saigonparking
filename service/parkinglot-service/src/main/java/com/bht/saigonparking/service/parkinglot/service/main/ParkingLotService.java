@@ -93,4 +93,6 @@ public interface ParkingLotService {
     void deleteParkingLotById(@NotNull Long id);
 
     void deleteMultiParkingLotById(@NotNull Set<Long> parkingLotIdSet);
+
+    void updateAvailability(@NotNull Short newAvailability, @NotNull Long parkingLotId);
 }

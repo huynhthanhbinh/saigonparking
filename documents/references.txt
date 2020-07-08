@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Mon, Jul 6th, 2020
+Last updated:       Wed, Jul 8th, 2020
 ========================================================================================================================
 
 001. gRPC error handling:
@@ -311,3 +311,6 @@ Last updated:       Mon, Jul 6th, 2020
 
 103. Dynamic Queues on RabbitListener Annotation
         https://stackoverflow.com/questions/49909859/dynamic-queues-on-rabbitlistener-annotation
+
+104. Spring Data JPA @Query (Update Queries With @Modifying, Custom Repositories and the JPA Criteria API, Extending the Existing Repository)
+        https://www.baeldung.com/spring-data-jpa-query

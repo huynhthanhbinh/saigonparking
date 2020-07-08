@@ -340,4 +340,9 @@ public class ParkingLotServiceImpl implements ParkingLotService {
             }
         }
     }
+
+    @Override
+    public void updateAvailability(@NotNull Short newAvailability, @NotNull Long parkingLotId) {
+        parkingLotLimitRepository.updateAvailability(newAvailability, parkingLotId);
+    }
 }
