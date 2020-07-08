@@ -4,8 +4,10 @@ import static com.bht.saigonparking.common.constant.SaigonParkingTransactionalMe
 import static com.bht.saigonparking.common.constant.SaigonParkingTransactionalMetadata.INTERNAL_KEY_NAME;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.apache.logging.log4j.Level;
@@ -157,6 +159,12 @@ public final class SaigonParkingServerInterceptor implements ServerInterceptor {
     public void validateUser(@NotNull Long userEntityId) {
         if (!userIdContext.get().equals(userEntityId)) {
             throw new UsernameNotMatchException();
+        }
+    }
+
+    public void validateUserRole(@NotEmpty List<String> acceptedRoles) {
+        if (!acceptedRoles.contains(roleContext.get())) {
+            throw new PermissionDeniedException();
         }
     }
 }
