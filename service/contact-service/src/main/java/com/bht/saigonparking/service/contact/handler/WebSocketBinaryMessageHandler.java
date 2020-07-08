@@ -73,7 +73,7 @@ public final class WebSocketBinaryMessageHandler extends BinaryWebSocketHandler 
         LoggingUtil.log(Level.INFO, LOGGING_KEY, "handleBinaryMessage", String.format("newBinaryMessageFromUser(%d)", userId));
         SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage
                 .newBuilder(SaigonParkingMessage.parseFrom(message.getPayload()))
-                .setSenderId(webSocketUserSessionManagement.getUserIdFromSession(session)) /* attach sender id for receiver to know */
+                .setSenderId(userId) /* attach sender id for receiver to know */
                 .build();
 
         if (saigonParkingMessage.getReceiverId() != 0) {
