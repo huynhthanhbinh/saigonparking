@@ -4,6 +4,8 @@ import javax.naming.ServiceUnavailableException;
 import javax.persistence.EntityNotFoundException;
 
 import org.lognet.springboot.grpc.GRpcGlobalInterceptor;
+import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.amqp.support.converter.SimpleMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -52,6 +54,11 @@ public class AppConfiguration {
     @Bean
     public ProtobufHttpMessageConverter protobufHttpMessageConverter() {
         return new ProtobufHttpMessageConverter();
+    }
+
+    @Bean
+    public MessageConverter messageConverter() {
+        return new SimpleMessageConverter();
     }
 
     @Bean
