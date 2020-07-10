@@ -6,6 +6,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
 import com.bht.saigonparking.common.base.BaseEntity;
@@ -26,6 +28,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @SuperBuilder
+@NaturalIdCache
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
@@ -38,6 +41,7 @@ public final class ParkingLotEmployeeEntity extends BaseEntity {
     @JoinColumn(name = "[PARKING_LOT_ID]", referencedColumnName = "[ID]", nullable = false, updatable = false)
     private ParkingLotEntity parkingLotEntity;
 
+    @NaturalId
     @Column(name = "[USER_ID]", nullable = false, updatable = false, unique = true)
     private Long userId;
 }

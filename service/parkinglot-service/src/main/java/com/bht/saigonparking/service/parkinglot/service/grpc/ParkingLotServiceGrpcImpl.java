@@ -67,16 +67,18 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
     private final SaigonParkingServerInterceptor serverInterceptor;
 
     @Override
-    public void getParkingLotEmployeeIdOfParkingLot(Int64Value request, StreamObserver<Int64Value> responseObserver) {
+    public void getParkingLotIdByParkingLotEmployeeId(Int64Value request, StreamObserver<Int64Value> responseObserver) {
         try {
-            Int64Value employeeIdResponse = Int64Value.of(parkingLotService
-                    .getParkingLotEmployeeIdOfParkingLot(request.getValue()));
+            serverInterceptor.validateAdmin();
 
-            responseObserver.onNext(employeeIdResponse);
+            Int64Value parkingLotIdResponse = Int64Value.of(parkingLotService
+                    .getParkingLotIdByParkingLotEmployeeId(request.getValue()));
+
+            responseObserver.onNext(parkingLotIdResponse);
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("getParkingLotEmployeeIdOfParkingLot(%d)", request.getValue()));
+                    String.format("getParkingLotIdByParkingLotEmployeeId(%d)", request.getValue()));
 
         } catch (Exception exception) {
 
@@ -84,7 +86,7 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                    String.format("getParkingLotEmployeeIdOfParkingLot(%d)", request.getValue()));
+                    String.format("getParkingLotIdByParkingLotEmployeeId(%d)", request.getValue()));
         }
     }
 

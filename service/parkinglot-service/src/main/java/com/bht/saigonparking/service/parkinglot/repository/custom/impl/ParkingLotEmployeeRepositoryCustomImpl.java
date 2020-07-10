@@ -15,14 +15,14 @@ import com.bht.saigonparking.service.parkinglot.repository.custom.ParkingLotEmpl
 public class ParkingLotEmployeeRepositoryCustomImpl extends BaseRepositoryCustom implements ParkingLotEmployeeRepositoryCustom {
 
     @Override
-    public Long getParkingLotEmployeeIdOfParkingLot(@NotNull Long parkingLotId) {
+    public Long getParkingLotIdByParkingLotEmployeeId(@NotNull Long parkingLotEmployeeId) {
 
-        String query = "SELECT PLE.userId " +
+        String query = "SELECT PLE.parkingLotEntity.id " +
                 "FROM ParkingLotEmployeeEntity PLE " +
-                "WHERE PLE.parkingLotEntity.id = :parkingLotId";
+                "WHERE PLE.userId = :parkingLotEmployeeId";
 
         return entityManager.createQuery(query, Long.class)
-                .setParameter("parkingLotId", parkingLotId)
+                .setParameter("parkingLotEmployeeId", parkingLotEmployeeId)
                 .getSingleResult();
     }
 }

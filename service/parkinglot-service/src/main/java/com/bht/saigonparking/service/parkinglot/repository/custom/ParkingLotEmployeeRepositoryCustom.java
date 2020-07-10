@@ -8,5 +8,5 @@ import javax.validation.constraints.NotNull;
  */
 public interface ParkingLotEmployeeRepositoryCustom {
 
-    Long getParkingLotEmployeeIdOfParkingLot(@NotNull Long parkingLotId);
+    Long getParkingLotIdByParkingLotEmployeeId(@NotNull Long parkingLotEmployeeId);
 }

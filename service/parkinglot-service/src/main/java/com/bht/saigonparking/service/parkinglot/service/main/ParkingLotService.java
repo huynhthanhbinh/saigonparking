@@ -21,7 +21,7 @@ import com.bht.saigonparking.service.parkinglot.entity.ParkingLotTypeEntity;
  */
 public interface ParkingLotService {
 
-    Long getParkingLotEmployeeIdOfParkingLot(@NotNull Long parkingLotId);
+    Long getParkingLotIdByParkingLotEmployeeId(@NotNull Long parkingLotEmployeeId);
 
     Long countAll(@NotEmpty String keyword, boolean isAvailableOnly);
 

@@ -64,8 +64,8 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     private final UserServiceGrpc.UserServiceBlockingStub userServiceBlockingStub;
 
     @Override
-    public Long getParkingLotEmployeeIdOfParkingLot(@NotNull Long parkingLotId) {
-        return parkingLotEmployeeRepository.getParkingLotEmployeeIdOfParkingLot(parkingLotId);
+    public Long getParkingLotIdByParkingLotEmployeeId(@NotNull Long parkingLotEmployeeId) {
+        return parkingLotEmployeeRepository.getParkingLotIdByParkingLotEmployeeId(parkingLotEmployeeId);
     }
 
     @Override

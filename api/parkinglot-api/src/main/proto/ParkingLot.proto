@@ -170,9 +170,9 @@ service ParkingLotService {
 
     /** PUBLIC
      * use-case: send message to parking-lot employee, known parking-lot id
-     *  + request: parking-lot's ID
-     *  + response: parking-lot employee's ID */
-    rpc getParkingLotEmployeeIdOfParkingLot (google.protobuf.Int64Value) returns (google.protobuf.Int64Value);
+     *  + request: parking-lot employee's ID
+     *  + response: parking-lot's ID */
+    rpc getParkingLotIdByParkingLotEmployeeId (google.protobuf.Int64Value) returns (google.protobuf.Int64Value);
 
     /** PUBLIC - ADMIN ONLY
      * use-case: get all parking-lots
