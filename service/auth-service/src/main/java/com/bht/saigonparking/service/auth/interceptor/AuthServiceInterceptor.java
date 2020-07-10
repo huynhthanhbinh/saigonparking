@@ -13,6 +13,7 @@ import javax.persistence.EntityNotFoundException;
 import org.apache.logging.log4j.Level;
 import org.lognet.springboot.grpc.GRpcGlobalInterceptor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 
 import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
@@ -104,6 +105,7 @@ public final class AuthServiceInterceptor implements ServerInterceptor {
                 .put(PermissionDeniedException.class, "SPE#00015")
                 .put(ObjectOptimisticLockingFailureException.class, "SPE#00016")
                 .put(ServiceUnavailableException.class, "SPE#00017")
+                .put(EmptyResultDataAccessException.class, "SPE#00018")
                 .build();
     }
 

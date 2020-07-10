@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project Error Code
 Author:             Huynh Thanh Binh
-Last updated:       Fri, Jun 12th, 2020
+Last updated:       Fri, Jul 10th, 2020
 ========================================================================================================================
 SPE#00000   | Error which not been assigned error code yet
 SPE#00001   | Token is expired
@@ -20,3 +20,4 @@ SPE#00014   | Username and user Id is not of the same person
 SPE#00015   | Permission Denied (for example service for admin only)
 SPE#00016   | Concurrent update exception
 SPE#00017   | Service unavailable
+SPE#00018   | EmptyResultDataAccessException, no result found

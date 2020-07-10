@@ -9,6 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -73,6 +74,7 @@ public class AppConfiguration {
                 .put(PermissionDeniedException.class, "SPE#00015")
                 .put(ObjectOptimisticLockingFailureException.class, "SPE#00016")
                 .put(ServiceUnavailableException.class, "SPE#00017")
+                .put(EmptyResultDataAccessException.class, "SPE#00018")
                 .build());
     }
 }
