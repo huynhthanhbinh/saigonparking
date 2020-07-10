@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Thu, Jul 9th, 2020
+Last updated:       Fri, Jul 10th, 2020
 ========================================================================================================================
 
 001. gRPC error handling:
@@ -320,3 +320,6 @@ Last updated:       Thu, Jul 9th, 2020
 
 105. Publish/Subscribe - RabbitMQ Java Client --> "Fanout exchange"
         https://www.rabbitmq.com/tutorials/tutorial-three-java.html
+
+106. Dynamic addition of queues to a rabbit listener at runtime
+        https://stackoverflow.com/questions/54094994/dynamic-addition-of-queues-to-a-rabbit-listener-at-runtime

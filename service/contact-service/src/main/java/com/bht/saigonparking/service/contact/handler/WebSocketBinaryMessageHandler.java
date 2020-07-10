@@ -17,6 +17,7 @@ import com.bht.saigonparking.api.grpc.contact.NotificationContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.contact.service.ContactService;
+import com.bht.saigonparking.service.contact.service.QueueService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +32,7 @@ public final class WebSocketBinaryMessageHandler extends BinaryWebSocketHandler 
     private static final String LOGGING_KEY = "WebSocketBinaryMessageHandler";
     private final WebSocketUserSessionManagement webSocketUserSessionManagement;
     private final ContactService contactService;
+    private final QueueService queueService;
 
     @Override
     public void afterConnectionEstablished(@NonNull WebSocketSession session) throws IOException {
@@ -78,7 +80,7 @@ public final class WebSocketBinaryMessageHandler extends BinaryWebSocketHandler 
 
         if (saigonParkingMessage.getReceiverId() != 0) {
             /* receiver's id != 0 --> not send to system --> forward to receiver */
-            contactService.publishMessageToQueue(saigonParkingMessage);
+            queueService.publishMessageToQueue(saigonParkingMessage);
 
         } else {
             /* receiver's id == 0 --> send to system --> not forward to receiver */

@@ -19,7 +19,7 @@ import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
 import com.bht.saigonparking.common.auth.SaigonParkingTokenBody;
 import com.bht.saigonparking.common.exception.MissingTokenException;
 import com.bht.saigonparking.common.util.LoggingUtil;
-import com.bht.saigonparking.service.contact.service.ContactService;
+import com.bht.saigonparking.service.contact.service.QueueService;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -38,7 +38,7 @@ public final class WebSocketHandshakeInterceptor extends HttpSessionHandshakeInt
     private static final String USER_AUTHORIZATION_KEY = "Authorization";
 
     private final SaigonParkingAuthentication authentication;
-    private final ContactService contactService;
+    private final QueueService queueService;
 
     @Override
     public boolean beforeHandshake(@NonNull ServerHttpRequest httpRequest,
@@ -61,7 +61,7 @@ public final class WebSocketHandshakeInterceptor extends HttpSessionHandshakeInt
             attributes.put(SAIGON_PARKING_USER_KEY, userId);
             attributes.put(SAIGON_PARKING_USER_ROLE_KEY, userRole);
 
-            contactService.registerAutoDeleteQueueAndExchangeForUser(userId, userRole);
+            queueService.registerAutoDeleteQueueAndExchangeForUser(userId, userRole);
 
         } catch (ExpiredJwtException expiredJwtException) {
             LoggingUtil.log(Level.ERROR, "WebSocketInterceptor", "Exception", "ExpiredJwtException");
