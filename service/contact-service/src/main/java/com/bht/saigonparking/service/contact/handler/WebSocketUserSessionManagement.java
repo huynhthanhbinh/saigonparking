@@ -8,12 +8,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketSession;
 
-import com.bht.saigonparking.service.contact.service.QueueService;
+import com.bht.saigonparking.common.constant.SaigonParkingMessageQueue;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 public final class WebSocketUserSessionManagement {
 
     private final Map<Long, Set<WebSocketSession>> userSessionMap = new HashMap<>(); /* is a map of <userId, session> */
-    private final QueueService queueService;
+    private final AbstractMessageListenerContainer messageListenerContainer;
 
     public void addNewUserSession(@NonNull Long userId, @NonNull WebSocketSession webSocketSession) {
 
@@ -49,6 +50,7 @@ public final class WebSocketUserSessionManagement {
 
             if (sessionSet.isEmpty()) {
                 userSessionMap.remove(userId);
+                messageListenerContainer.removeQueueNames(SaigonParkingMessageQueue.generateUserQueueName(userId));
             }
         }
     }

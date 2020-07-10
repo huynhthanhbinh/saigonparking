@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc.ParkingLotServiceStub;
+import com.bht.saigonparking.common.constant.SaigonParkingMessageQueue;
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.contact.service.QueueService;
 import com.google.protobuf.Int64Value;
@@ -37,11 +38,11 @@ public final class QueueServiceImpl implements QueueService {
     @Override
     public void registerAutoDeleteQueueAndExchangeForUser(@NotNull Long userId, @NotEmpty String userRole) {
 
-        String queueName = String.format("user_%d_queue", userId);
-        Queue autoDeleteQueue = new Queue(queueName, false, false, true);
-        amqpAdmin.declareQueue(autoDeleteQueue);
-        amqpAdmin.declareBinding(BindingBuilder.bind(autoDeleteQueue).to(contactFanoutExchange));
-        messageListenerContainer.addQueues(autoDeleteQueue);
+        String queueName = SaigonParkingMessageQueue.generateUserQueueName(userId);
+        Queue autoDeleteUserQueue = new Queue(queueName, false, false, true);
+        amqpAdmin.declareQueue(autoDeleteUserQueue);
+        amqpAdmin.declareBinding(BindingBuilder.bind(autoDeleteUserQueue).to(contactFanoutExchange));
+        messageListenerContainer.addQueues(autoDeleteUserQueue);
 
         if ("PARKING_LOT_EMPLOYEE".equals(userRole)) {
             Context context = Context.current();
@@ -49,7 +50,10 @@ public final class QueueServiceImpl implements QueueService {
                     new StreamObserver<Int64Value>() {
                         @Override
                         public void onNext(Int64Value int64Value) {
-                            System.out.printf("%n%n%nUserId: %d, ParkingLotId: %d%n%n%n", userId, int64Value.getValue());
+                            String exchangeName = SaigonParkingMessageQueue.generateParkingLotExchangeName(int64Value.getValue());
+                            FanoutExchange parkingLotExchange = new FanoutExchange(exchangeName, false, true);
+                            amqpAdmin.declareExchange(parkingLotExchange);
+                            amqpAdmin.declareBinding(BindingBuilder.bind(autoDeleteUserQueue).to(parkingLotExchange));
                         }
 
                         @Override

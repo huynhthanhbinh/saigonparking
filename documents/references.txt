@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Fri, Jul 10th, 2020
+Last updated:       Sat, Jul 11th, 2020
 ========================================================================================================================
 
 001. gRPC error handling:
@@ -326,3 +326,8 @@ Last updated:       Fri, Jul 10th, 2020
 
 107. Deal with circular dependencies injection in Spring --> @Lazy
         https://www.baeldung.com/circular-dependencies-in-spring
+
+108. AMQP 0-9-1 Model Explained (Advanced Message Queuing Protocol)
+    ==> Auto-delete for exchange (exchange is deleted when last queue is unbound from it)
+    ==> Auto-delete for queue (queue that has had at least one consumer is deleted when last consumer unsubscribes)
+        https://www.rabbitmq.com/tutorials/amqp-concepts.html
