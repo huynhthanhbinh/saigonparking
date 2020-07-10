@@ -323,3 +323,6 @@ Last updated:       Fri, Jul 10th, 2020
 
 106. Dynamic addition of queues to a rabbit listener at runtime
         https://stackoverflow.com/questions/54094994/dynamic-addition-of-queues-to-a-rabbit-listener-at-runtime
+
+107. Deal with circular dependencies injection in Spring --> @Lazy
+        https://www.baeldung.com/circular-dependencies-in-spring

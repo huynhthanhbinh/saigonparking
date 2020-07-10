@@ -13,9 +13,6 @@ import com.google.protobuf.InvalidProtocolBufferException;
  */
 public interface ContactService {
 
-    void consumeMessageFromQueue(@NotNull SaigonParkingMessage saigonParkingMessage);
-
     void handleMessageSendToSystem(@NotNull SaigonParkingMessage saigonParkingMessage,
-                                   @NotNull WebSocketSession session,
-                                   @NotNull Long userId) throws InvalidProtocolBufferException;
+                                   @NotNull WebSocketSession session) throws InvalidProtocolBufferException;
 }

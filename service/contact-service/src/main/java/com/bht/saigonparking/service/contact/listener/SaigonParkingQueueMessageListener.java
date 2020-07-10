@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
-import com.bht.saigonparking.service.contact.service.ContactService;
+import com.bht.saigonparking.service.contact.service.MessagingService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,12 +21,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public final class SaigonParkingQueueMessageListener implements MessageListener {
 
-    private final ContactService contactService;
+    private final MessagingService messagingService;
     private final MessageConverter messageConverter;
 
     @Override
     public void onMessage(@NotNull Message message) {
         SaigonParkingMessage saigonParkingMessage = (SaigonParkingMessage) messageConverter.fromMessage(message);
-        contactService.consumeMessageFromQueue(saigonParkingMessage);
+        messagingService.consumeMessageFromQueue(saigonParkingMessage);
     }
 }
