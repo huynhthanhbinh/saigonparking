@@ -7,6 +7,7 @@ import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.CO
 import java.io.IOException;
 import java.util.Set;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.apache.logging.log4j.Level;
@@ -41,6 +42,11 @@ public final class ContactServiceImpl implements ContactService {
     private final WebSocketUserSessionManagement webSocketUserSessionManagement;
     private final ParkingLotServiceGrpc.ParkingLotServiceStub parkingLotServiceStub;
     private final ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
+
+    @Override
+    public void registerAutoDeleteQueueAndExchangeForUser(@NotNull Long userId, @NotEmpty String userRole) {
+
+    }
 
     @Override
     public void publishMessageToQueue(@NotNull SaigonParkingMessage saigonParkingMessage) {
