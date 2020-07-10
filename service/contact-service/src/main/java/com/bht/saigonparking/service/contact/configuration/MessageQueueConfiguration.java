@@ -3,7 +3,7 @@ package com.bht.saigonparking.service.contact.configuration;
 import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.CONTACT_EXCHANGE_NAME;
 
 import org.springframework.amqp.core.AcknowledgeMode;
-import org.springframework.amqp.core.FanoutExchange;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.DirectMessageListenerContainer;
@@ -27,8 +27,8 @@ public final class MessageQueueConfiguration {
     private final SaigonParkingQueueMessageListener saigonParkingQueueMessageListener;
 
     @Bean
-    public FanoutExchange fanoutExchange() {
-        return new FanoutExchange(CONTACT_EXCHANGE_NAME);
+    public TopicExchange topicExchange() {
+        return new TopicExchange(CONTACT_EXCHANGE_NAME);
     }
 
     @Bean

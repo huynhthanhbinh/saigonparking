@@ -96,7 +96,7 @@
     {
       "name": "saigonparking-contact.exchange",
       "vhost": "/",
-      "type": "fanout",
+      "type": "topic",
       "durable": true,
       "auto_delete": false,
       "internal": false,
