@@ -1,8 +1,5 @@
 package com.bht.saigonparking.service.contact.service.impl;
 
-import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.CONTACT_EXCHANGE_NAME;
-import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.CONTACT_ROUTING_KEY;
-
 import java.io.IOException;
 import java.util.Set;
 
@@ -16,6 +13,7 @@ import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
+import com.bht.saigonparking.common.constant.SaigonParkingMessageQueue;
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.contact.handler.WebSocketUserSessionManagement;
 import com.bht.saigonparking.service.contact.service.MessagingService;
@@ -35,7 +33,18 @@ public final class MessagingServiceImpl implements MessagingService {
 
     @Override
     public void publishMessageToQueue(@NotNull SaigonParkingMessage saigonParkingMessage) {
-        rabbitTemplate.convertAndSend(CONTACT_EXCHANGE_NAME, CONTACT_ROUTING_KEY, saigonParkingMessage);
+        switch (saigonParkingMessage.getClassification()) {
+            case PARKING_LOT_MESSAGE:
+                forwardMessageToCustomer(saigonParkingMessage);
+                return;
+
+            case CUSTOMER_MESSAGE:
+                forwardMessageToParkingLot(saigonParkingMessage);
+                return;
+
+            default:
+                break;
+        }
     }
 
     @Override
@@ -57,5 +66,25 @@ public final class MessagingServiceImpl implements MessagingService {
 
         LoggingUtil.log(Level.ERROR, "SERVICE", String.format("forwardMessageToReceiver(%d)", receiverId),
                 String.format("nSessionOfReceiver: %d", (userSessionSet != null) ? userSessionSet.size() : 0));
+    }
+
+    private void forwardMessageToCustomer(@NotNull SaigonParkingMessage message) {
+        try {
+            String routingKey = SaigonParkingMessageQueue.getUserRoutingKey(message.getReceiverId());
+            rabbitTemplate.convertAndSend(routingKey, message);
+
+        } catch (Exception exception) {
+            LoggingUtil.log(Level.ERROR, "forwardMessageToCustomer", "Exception", exception.getClass().getSimpleName());
+        }
+    }
+
+    private void forwardMessageToParkingLot(@NotNull SaigonParkingMessage message) {
+        try {
+            String exchangeName = SaigonParkingMessageQueue.getParkingLotExchangeName(message.getReceiverId());
+            rabbitTemplate.convertAndSend(exchangeName, "", message);
+
+        } catch (Exception exception) {
+            LoggingUtil.log(Level.ERROR, "forwardMessageToParkingLot", "Exception", exception.getClass().getSimpleName());
+        }
     }
 }

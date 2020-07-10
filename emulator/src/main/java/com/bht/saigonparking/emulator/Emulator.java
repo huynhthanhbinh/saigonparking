@@ -121,7 +121,7 @@ public class Emulator extends SpringBootServletInitializer {
                 .setContent(availabilityUpdateContent.toByteString())
                 .build();
 
-//        webSocket.sendBinary(saigonParkingMessage.toByteArray());
+        webSocket.sendBinary(saigonParkingMessage.toByteArray());
 //        Thread.sleep(10000);
 //        webSocket.disconnect();
     }
