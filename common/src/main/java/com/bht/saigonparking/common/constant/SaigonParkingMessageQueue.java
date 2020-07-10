@@ -24,12 +24,19 @@ public final class SaigonParkingMessageQueue {
     public static final String PARKING_LOT_ROUTING_KEY = "saigonparking.parkinglot";
     public static final String CONTACT_ROUTING_KEY = "saigonparking.contact";
 
+    public static String generateUserRoutingKey(@NotNull Long userId) {
+        return getUserQueueName(userId) + ".#";
+    }
 
-    public static String generateUserQueueName(@NotNull Long userId) {
+    public static String getUserRoutingKey(@NotNull Long userId) {
+        return getUserQueueName(userId);
+    }
+
+    public static String getUserQueueName(@NotNull Long userId) {
         return String.format("user_%d_queue", userId);
     }
 
-    public static String generateParkingLotExchangeName(@NotNull Long parkingLotId) {
+    public static String getParkingLotExchangeName(@NotNull Long parkingLotId) {
         return String.format("parking_lot_%d_exchange", parkingLotId);
     }
 }

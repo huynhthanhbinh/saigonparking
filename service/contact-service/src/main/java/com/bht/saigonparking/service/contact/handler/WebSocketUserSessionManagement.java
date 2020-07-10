@@ -50,7 +50,7 @@ public final class WebSocketUserSessionManagement {
 
             if (sessionSet.isEmpty()) {
                 userSessionMap.remove(userId);
-                messageListenerContainer.removeQueueNames(SaigonParkingMessageQueue.generateUserQueueName(userId));
+                messageListenerContainer.removeQueueNames(SaigonParkingMessageQueue.getUserQueueName(userId));
             }
         }
     }

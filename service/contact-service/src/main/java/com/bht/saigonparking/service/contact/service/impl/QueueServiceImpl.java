@@ -8,6 +8,7 @@ import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,25 +33,29 @@ public final class QueueServiceImpl implements QueueService {
 
     private final AmqpAdmin amqpAdmin;
     private final ParkingLotServiceStub parkingLotServiceStub;
-    private final FanoutExchange contactFanoutExchange;
+    private final TopicExchange contactTopicExchange;
     private final AbstractMessageListenerContainer messageListenerContainer;
 
     @Override
     public void registerAutoDeleteQueueAndExchangeForUser(@NotNull Long userId, @NotEmpty String userRole) {
 
-        String queueName = SaigonParkingMessageQueue.generateUserQueueName(userId);
+        String queueName = SaigonParkingMessageQueue.getUserQueueName(userId);
+        String routingKey = SaigonParkingMessageQueue.generateUserRoutingKey(userId);
+
         Queue autoDeleteUserQueue = new Queue(queueName, false, false, true);
         amqpAdmin.declareQueue(autoDeleteUserQueue);
-        amqpAdmin.declareBinding(BindingBuilder.bind(autoDeleteUserQueue).to(contactFanoutExchange));
+        amqpAdmin.declareBinding(BindingBuilder.bind(autoDeleteUserQueue).to(contactTopicExchange).with(routingKey));
         messageListenerContainer.addQueues(autoDeleteUserQueue);
 
         if ("PARKING_LOT_EMPLOYEE".equals(userRole)) {
+
             Context context = Context.current();
             context.run(() -> parkingLotServiceStub.getParkingLotIdByParkingLotEmployeeId(Int64Value.of(userId),
                     new StreamObserver<Int64Value>() {
+
                         @Override
                         public void onNext(Int64Value int64Value) {
-                            String exchangeName = SaigonParkingMessageQueue.generateParkingLotExchangeName(int64Value.getValue());
+                            String exchangeName = SaigonParkingMessageQueue.getParkingLotExchangeName(int64Value.getValue());
                             FanoutExchange parkingLotExchange = new FanoutExchange(exchangeName, false, true);
                             amqpAdmin.declareExchange(parkingLotExchange);
                             amqpAdmin.declareBinding(BindingBuilder.bind(autoDeleteUserQueue).to(parkingLotExchange));
