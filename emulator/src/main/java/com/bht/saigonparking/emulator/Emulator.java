@@ -20,10 +20,12 @@ import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import com.bht.saigonparking.api.grpc.contact.ContactServiceGrpc;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.bht.saigonparking.api.grpc.contact.TextMessageContent;
 import com.bht.saigonparking.emulator.configuration.SpringApplicationContext;
 import com.bht.saigonparking.emulator.handler.WebSocketHandler;
+import com.google.protobuf.Int64Value;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketException;
@@ -60,7 +62,18 @@ public class Emulator extends SpringBootServletInitializer {
     private static void runTest() throws ExecutionException, InterruptedException, IOException, WebSocketException {
 //        testAuthWithWebSocketUri();
 //        testAuthWithWebSocketWebUri();
-        testNewSocketLibrary();
+//        testNewSocketLibrary();
+
+        Thread.sleep(5000);
+
+        ContactServiceGrpc.ContactServiceBlockingStub contactServiceBlockingStub =
+                SpringApplicationContext.getBean(ContactServiceGrpc.ContactServiceBlockingStub.class);
+
+        System.out.println(contactServiceBlockingStub.checkUserOnlineByUserId(Int64Value.of(4)).getValue());
+        System.out.println(contactServiceBlockingStub.checkUserOnlineByUserId(Int64Value.of(84)).getValue());
+        System.out.println(contactServiceBlockingStub.checkParkingLotOnlineByParkingLotId(Int64Value.of(72)).getValue());
+
+        Thread.sleep(86400000);
     }
 
     private static void testAuthWithWebSocketUri() throws ExecutionException, InterruptedException, IOException {
@@ -89,7 +102,6 @@ public class Emulator extends SpringBootServletInitializer {
     private static void testNewSocketLibrary() throws IOException, WebSocketException, InterruptedException {
 //        testSocketAsEmployee();
         testSocketAsCustomer();
-        Thread.sleep(86400000);
     }
 
     private static void testSocketAsCustomer() throws IOException, WebSocketException, InterruptedException {
