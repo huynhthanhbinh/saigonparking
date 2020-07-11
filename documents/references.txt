@@ -331,3 +331,9 @@ Last updated:       Sat, Jul 11th, 2020
     ==> Auto-delete for exchange (exchange is deleted when last queue is unbound from it)
     ==> Auto-delete for queue (queue is deleted when last consumer unsubscribes it)
         https://www.rabbitmq.com/tutorials/amqp-concepts.html
+
+109. Check if the Exchange with a specified name exist in rabbitmq
+        https://stackoverflow.com/questions/25201931/check-if-the-exchange-with-a-specified-name-exist-in-rabbitmq
+
+110. RabbitMQ Passive Declaration
+        https://www.rabbitmq.com/api-guide.html#passive-declaration

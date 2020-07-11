@@ -10,4 +10,8 @@ import javax.validation.constraints.NotNull;
 public interface QueueService {
 
     void registerAutoDeleteQueueAndExchangeForUser(@NotNull Long userId, @NotEmpty String userRole);
+
+    boolean isExchangeExist(@NotEmpty String exchangeName);
+
+    boolean isQueueExist(@NotEmpty String queueName);
 }

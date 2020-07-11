@@ -9,6 +9,7 @@ import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,8 +33,9 @@ import lombok.RequiredArgsConstructor;
 public final class QueueServiceImpl implements QueueService {
 
     private final AmqpAdmin amqpAdmin;
-    private final ParkingLotServiceStub parkingLotServiceStub;
+    private final RabbitTemplate rabbitTemplate;
     private final TopicExchange contactTopicExchange;
+    private final ParkingLotServiceStub parkingLotServiceStub;
     private final AbstractMessageListenerContainer messageListenerContainer;
 
     @Override
@@ -76,5 +78,31 @@ public final class QueueServiceImpl implements QueueService {
                         }
                     }));
         }
+    }
+
+
+    @Override
+    public boolean isExchangeExist(@NotEmpty String exchangeName) {
+        return rabbitTemplate.execute(channel -> {
+            try {
+                return channel.exchangeDeclarePassive(exchangeName);
+
+            } catch (Exception exception) {
+                return null;
+            }
+        }) != null;
+    }
+
+
+    @Override
+    public boolean isQueueExist(@NotEmpty String queueName) {
+        return rabbitTemplate.execute(channel -> {
+            try {
+                return channel.queueDeclarePassive(queueName);
+
+            } catch (Exception exception) {
+                return null;
+            }
+        }) != null;
     }
 }
