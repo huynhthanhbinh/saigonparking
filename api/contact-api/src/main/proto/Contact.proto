@@ -3,6 +3,8 @@ syntax = "proto3";
 package com.bht.saigonparking.api.grpc.contact;
 option java_multiple_files = true;
 
+import "google/protobuf/wrappers.proto";
+
 /** Contact Service will use WebSocket protocol to create a bidirectional communication between client and server (text & binary format)
  * message will be initialized as an object (protobuf Java obj/ protobuf Javascript obj) then stringify into JSON format (text message)
  * or message will be initialized as an object (protobuf Java obj/ protobuf Javascript obj) then serialize into binary format (binary message)
@@ -96,4 +98,11 @@ message BookingRejectContent {
 message AvailabilityUpdateContent {
     int64 parkingLotId = 1;
     int32 newAvailability = 2;
+}
+
+service ContactService {
+
+    /* check whether user or parking-lot is online / reachable for pre-sending messages (remember to provide token) */
+    rpc checkUserOnlineByUserId (google.protobuf.Int64Value) returns (google.protobuf.BoolValue);
+    rpc checkParkingLotOnlineByParkingLotId (google.protobuf.Int64Value) returns (google.protobuf.BoolValue);
 }
