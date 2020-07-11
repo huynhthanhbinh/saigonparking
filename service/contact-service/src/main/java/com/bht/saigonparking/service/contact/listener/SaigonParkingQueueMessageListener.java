@@ -27,10 +27,9 @@ public final class SaigonParkingQueueMessageListener implements MessageListener 
 
     @Override
     public void onMessage(@NotNull Message message) {
-        String consumerQueueName = message.getMessageProperties().getConsumerQueue();
-        Long receiverUserId = SaigonParkingMessageQueue.getUserIdFromUserQueueName(consumerQueueName);
-        System.out.println(receiverUserId);
+        String userQueueName = message.getMessageProperties().getConsumerQueue();
+        Long receiverUserId = SaigonParkingMessageQueue.getUserIdFromUserQueueName(userQueueName);
         SaigonParkingMessage saigonParkingMessage = (SaigonParkingMessage) messageConverter.fromMessage(message);
-        messagingService.consumeMessageFromQueue(saigonParkingMessage);
+        messagingService.consumeMessageFromQueue(saigonParkingMessage, receiverUserId);
     }
 }

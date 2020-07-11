@@ -48,9 +48,8 @@ public final class MessagingServiceImpl implements MessagingService {
     }
 
     @Override
-    public void consumeMessageFromQueue(@NotNull SaigonParkingMessage saigonParkingMessage) {
-        Long receiverId = saigonParkingMessage.getReceiverId();
-        Set<WebSocketSession> userSessionSet = webSocketUserSessionManagement.getAllSessionOfUser(receiverId);
+    public void consumeMessageFromQueue(@NotNull SaigonParkingMessage saigonParkingMessage, @NotNull Long receiverUserId) {
+        Set<WebSocketSession> userSessionSet = webSocketUserSessionManagement.getAllSessionOfUser(receiverUserId);
 
         if (userSessionSet != null) {
             userSessionSet.forEach(userSession -> {
@@ -58,13 +57,12 @@ public final class MessagingServiceImpl implements MessagingService {
                     userSession.sendMessage(new BinaryMessage(saigonParkingMessage.toByteArray()));
 
                 } catch (IOException e) {
-                    LoggingUtil.log(Level.ERROR, String.format("forwardMessageToReceiver(%d)", receiverId),
+                    LoggingUtil.log(Level.ERROR, String.format("forwardMessageToReceiver(%d)", receiverUserId),
                             "Exception", e.getMessage());
                 }
             });
         }
-
-        LoggingUtil.log(Level.ERROR, "SERVICE", String.format("forwardMessageToReceiver(%d)", receiverId),
+        LoggingUtil.log(Level.ERROR, "SERVICE", String.format("forwardMessageToReceiver(%d)", receiverUserId),
                 String.format("nSessionOfReceiver: %d", (userSessionSet != null) ? userSessionSet.size() : 0));
     }
 

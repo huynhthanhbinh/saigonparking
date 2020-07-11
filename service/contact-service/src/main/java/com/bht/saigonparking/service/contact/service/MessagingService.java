@@ -12,5 +12,5 @@ public interface MessagingService {
 
     void publishMessageToQueue(@NotNull SaigonParkingMessage saigonParkingMessage);
 
-    void consumeMessageFromQueue(@NotNull SaigonParkingMessage saigonParkingMessage);
+    void consumeMessageFromQueue(@NotNull SaigonParkingMessage saigonParkingMessage, @NotNull Long receiverUserId);
 }
