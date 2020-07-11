@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
+import com.bht.saigonparking.common.constant.SaigonParkingMessageQueue;
 import com.bht.saigonparking.service.contact.service.MessagingService;
 
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,9 @@ public final class SaigonParkingQueueMessageListener implements MessageListener 
 
     @Override
     public void onMessage(@NotNull Message message) {
+        String consumerQueueName = message.getMessageProperties().getConsumerQueue();
+        Long receiverUserId = SaigonParkingMessageQueue.getUserIdFromUserQueueName(consumerQueueName);
+        System.out.println(receiverUserId);
         SaigonParkingMessage saigonParkingMessage = (SaigonParkingMessage) messageConverter.fromMessage(message);
         messagingService.consumeMessageFromQueue(saigonParkingMessage);
     }

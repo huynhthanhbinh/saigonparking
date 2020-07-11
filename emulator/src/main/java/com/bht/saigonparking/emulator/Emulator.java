@@ -1,7 +1,8 @@
 package com.bht.saigonparking.emulator;
 
 import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Classification.CUSTOMER_MESSAGE;
-import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Type.AVAILABILITY_UPDATE;
+import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Classification.PARKING_LOT_MESSAGE;
+import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Type.TEXT_MESSAGE;
 
 import java.io.IOException;
 import java.net.URI;
@@ -19,8 +20,6 @@ import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import com.bht.saigonparking.api.grpc.contact.AvailabilityUpdateContent;
-import com.bht.saigonparking.api.grpc.contact.NotificationContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.bht.saigonparking.api.grpc.contact.TextMessageContent;
 import com.bht.saigonparking.emulator.configuration.SpringApplicationContext;
@@ -88,41 +87,76 @@ public class Emulator extends SpringBootServletInitializer {
     }
 
     private static void testNewSocketLibrary() throws IOException, WebSocketException, InterruptedException {
+//        testSocketAsEmployee();
+        testSocketAsCustomer();
+        Thread.sleep(86400000);
+    }
+
+    private static void testSocketAsCustomer() throws IOException, WebSocketException, InterruptedException {
         WebSocketFactory webSocketFactory = new WebSocketFactory();
         WebSocket webSocket = webSocketFactory.createSocket(WEB_SOCKET_LOCAL_URI, 86400000);
-        webSocket.addHeader("Authorization", SAMPLE_TOKEN_EMPLOYEE);
+
+        webSocket.addHeader("Authorization", SAMPLE_TOKEN_CUSTOMER);
+
         webSocket.addListener(new WebSocketAdapter() {
             @Override
             public void onBinaryMessage(WebSocket websocket, byte[] binary) throws Exception {
                 SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.parseFrom(binary);
                 System.out.println(saigonParkingMessage);
-
-                NotificationContent notificationContent = NotificationContent.parseFrom(saigonParkingMessage.getContent());
-                System.out.println(notificationContent);
             }
         });
+
         webSocket.connect();
+        Thread.sleep(2000);
 
-        TextMessageContent textMessageContent = TextMessageContent.newBuilder()
+        TextMessageContent customerTextMessageContent = TextMessageContent.newBuilder()
                 .setSender("htbinh")
-                .setMessage("Hello Vu Hai")
+                .setMessage("Hello parkinglot")
                 .build();
 
-        AvailabilityUpdateContent availabilityUpdateContent = AvailabilityUpdateContent.newBuilder()
-                .setParkingLotId(1)
-                .setNewAvailability(27)
-                .build();
-
-        SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.newBuilder()
+        SaigonParkingMessage textMessage = SaigonParkingMessage.newBuilder()
                 .setClassification(CUSTOMER_MESSAGE)
-                .setType(AVAILABILITY_UPDATE)
-                .setSenderId(84)
-                .setReceiverId(0)
-                .setContent(availabilityUpdateContent.toByteString())
+                .setType(TEXT_MESSAGE)
+                .setSenderId(4)
+                .setReceiverId(72)
+                .setContent(customerTextMessageContent.toByteString())
                 .build();
 
-        webSocket.sendBinary(saigonParkingMessage.toByteArray());
-//        Thread.sleep(10000);
-//        webSocket.disconnect();
+        webSocket.sendBinary(textMessage.toByteArray());
+        //webSocket.disconnect();
+    }
+
+    private static void testSocketAsEmployee() throws IOException, WebSocketException, InterruptedException {
+        WebSocketFactory webSocketFactory = new WebSocketFactory();
+        WebSocket webSocket = webSocketFactory.createSocket(WEB_SOCKET_LOCAL_URI, 86400000);
+
+        webSocket.addHeader("Authorization", SAMPLE_TOKEN_EMPLOYEE);
+
+        webSocket.addListener(new WebSocketAdapter() {
+            @Override
+            public void onBinaryMessage(WebSocket websocket, byte[] binary) throws Exception {
+                SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.parseFrom(binary);
+                System.out.println(saigonParkingMessage);
+            }
+        });
+
+        webSocket.connect();
+        Thread.sleep(2000);
+
+        TextMessageContent parkingLotTextMessageContent = TextMessageContent.newBuilder()
+                .setSender("parkinglot")
+                .setMessage("Hello htbinh")
+                .build();
+
+        SaigonParkingMessage textMessage = SaigonParkingMessage.newBuilder()
+                .setClassification(PARKING_LOT_MESSAGE)
+                .setType(TEXT_MESSAGE)
+                .setSenderId(84)
+                .setReceiverId(4)
+                .setContent(parkingLotTextMessageContent.toByteString())
+                .build();
+
+        webSocket.sendBinary(textMessage.toByteArray());
+        //webSocket.disconnect();
     }
 }
