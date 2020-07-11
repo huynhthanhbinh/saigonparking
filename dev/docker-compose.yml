@@ -147,6 +147,7 @@ services:
       SERVICE_ID:   ${MAIL_SERVICE_ID}
       SERVICE_HOST: ${MAIL_SERVICE_HOST}
       SERVICE_PORT: ${MAIL_SERVICE_PORT}
+      WEB_DOMAIN:   ${SAIGON_PARKING_DOMAIN}
     depends_on:
       - message-queue
       - service-discovery
