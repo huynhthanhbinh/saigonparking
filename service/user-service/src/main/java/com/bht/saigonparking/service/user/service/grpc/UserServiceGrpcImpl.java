@@ -142,8 +142,6 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
     @Override
     public void getUserByUsername(StringValue request, StreamObserver<User> responseObserver) {
         try {
-            serverInterceptor.validateAdmin();
-
             User user = userMapper.toUser(userService
                     .getUserByUsername(request.getValue()));
 
