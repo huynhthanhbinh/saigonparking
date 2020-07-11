@@ -14,7 +14,6 @@ import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc.ParkingLo
 import com.bht.saigonparking.api.grpc.parkinglot.UpdateParkingLotAvailabilityRequest;
 import com.bht.saigonparking.service.contact.handler.WebSocketUserSessionManagement;
 import com.bht.saigonparking.service.contact.service.ContactService;
-import com.bht.saigonparking.service.contact.service.QueueService;
 import com.google.protobuf.Empty;
 import com.google.protobuf.InvalidProtocolBufferException;
 
@@ -30,7 +29,6 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public final class ContactServiceImpl implements ContactService {
 
-    private final QueueService queueService;
     private final ParkingLotServiceStub parkingLotServiceStub;
     private final WebSocketUserSessionManagement webSocketUserSessionManagement;
 
