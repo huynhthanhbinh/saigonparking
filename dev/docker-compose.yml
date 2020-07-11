@@ -211,10 +211,11 @@ services:
       saigonparking:
         ipv4_address: 172.28.1.11
     environment:
-      TZ:           ${TIMEZONE}
-      SERVICE_ID:   ${CONTACT_SERVICE_ID}
-      SERVICE_HOST: ${CONTACT_SERVICE_HOST}
-      SERVICE_PORT: ${CONTACT_SERVICE_PORT}
+      TZ:                 ${TIMEZONE}
+      SERVICE_ID:         ${CONTACT_SERVICE_ID}
+      SERVICE_HOST:       ${CONTACT_SERVICE_HOST}
+      SERVICE_PORT:       ${CONTACT_SERVICE_PORT}
+      SERVICE_HTTP_PORT:  ${CONTACT_SERVICE_HTTP_PORT}
     depends_on:
       - message-queue
       - service-discovery
