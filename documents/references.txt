@@ -329,5 +329,5 @@ Last updated:       Sat, Jul 11th, 2020
 
 108. AMQP 0-9-1 Model Explained (Advanced Message Queuing Protocol)
     ==> Auto-delete for exchange (exchange is deleted when last queue is unbound from it)
-    ==> Auto-delete for queue (queue that has had at least one consumer is deleted when last consumer unsubscribes)
+    ==> Auto-delete for queue (queue is deleted when last consumer unsubscribes it)
         https://www.rabbitmq.com/tutorials/amqp-concepts.html
