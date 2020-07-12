@@ -22,6 +22,11 @@
             <version>${revision}</version>
         </dependency>
         <dependency>
+            <artifactId>booking-api</artifactId>
+            <groupId>com.bht.saigonparking</groupId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
             <artifactId>mail-api</artifactId>
             <groupId>com.bht.saigonparking</groupId>
             <version>${revision}</version>
@@ -59,6 +64,20 @@
                         <configuration>
                             <outputDirectory>${project.build.directory}/classes</outputDirectory>
                             <includeArtifactIds>contact-api</includeArtifactIds>
+                            <includeGroupIds>com.bht.saigonparking</includeGroupIds>
+                            <excludeTransitive>true</excludeTransitive>
+                            <includes>**/*.proto, **/*.class</includes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>unpack-shared-resources-booking</id>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <phase>compile</phase>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                            <includeArtifactIds>booking-api</includeArtifactIds>
                             <includeGroupIds>com.bht.saigonparking</includeGroupIds>
                             <excludeTransitive>true</excludeTransitive>
                             <includes>**/*.proto, **/*.class</includes>
