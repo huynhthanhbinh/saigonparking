@@ -22,6 +22,7 @@
         <module>user-service</module>
         <module>parkinglot-service</module>
         <module>contact-service</module>
+        <module>booking-service</module>
     </modules>
 
     <properties>
