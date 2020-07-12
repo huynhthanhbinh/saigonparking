@@ -20,7 +20,9 @@
         <module>auth-api</module>
         <module>mail-api</module>
         <module>contact-api</module>
+        <module>booking-api</module>
 
+        <!-- official-api need to compile last -->
         <module>official-api</module>
     </modules>
 

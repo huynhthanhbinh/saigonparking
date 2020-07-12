@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package com.bht.saigonparking.api.grpc.user;
+option java_multiple_files = true;
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/empty.proto";
+
+enum BookingStatus {
+    ALL = 0;
+    CREATED = 1;
+    ACCEPTED = 2;
+    REJECTED = 3;
+    CANCELLED = 4;
+    FINISHED = 5;
+}
+
+message Booking {
+    int64 id = 1;
+    int64 parkingLotId = 2;
+    int64 customerId = 3;
+    string licensePlate = 4;
+    bool isFinished = 5;
+}
+
+message BookingHistory {
+    int64 id = 1;
+    int64 bookingId = 2;
+    BookingStatus status = 3;
+    string timestamp = 4;
+    string note = 5;
+}
+
+message BookingDetail {
+    Booking booking = 1;
+    repeated BookingHistory history = 2;
+}
+
+message BookingList {
+    repeated Booking booking = 1;
+}
+
+message GetAllBookingRequest {
+    BookingStatus status = 1;
+    int32 nRow = 2;
+    int32 pageNumber = 3;
+}
+
+message GetAllBookingOfParkingLotRequest {
+    int64 parkingLotId = 1;
+    BookingStatus status = 2;
+    int32 nRow = 3;
+    int32 pageNumber = 4;
+}
+
+message CreateBookingRequest {
+    int64 parkingLotId = 1;
+    int64 customerId = 2;
+    string licensePlate = 3;
+    string timestamp = 4;
+}
+
+message UpdateBookingStatusRequest {
+    int64 bookingId = 1;
+    BookingStatus status = 2;
+    string timestamp = 3;
+    string note = 4;
+}
+
+service BookingService {
+    /* PRIVATE: ADMIN & INTERNAL service use-only */
+    rpc createBooking (CreateBookingRequest) returns (google.protobuf.Int64Value);
+    rpc updateBookingStatus (UpdateBookingStatusRequest) returns (google.protobuf.Empty);
+    rpc deleteBookingById (google.protobuf.Int64Value) returns (google.protobuf.Empty);
+
+    /* PUBLIC: EXTERNAL client can call (remember to provide token for auth purposes) */
+    rpc getAllBooking (GetAllBookingRequest) returns (BookingList);
+    rpc getAllBookingOfParkingLot (GetAllBookingOfParkingLotRequest) returns (BookingList);
+    rpc getAllOnGoingBookingOfParkingLot (google.protobuf.Int64Value) returns (BookingList);
+    rpc getBookingDetailById (google.protobuf.Int64Value) returns (BookingDetail);
+}
