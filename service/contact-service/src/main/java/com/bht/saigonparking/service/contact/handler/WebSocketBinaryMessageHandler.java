@@ -1,5 +1,6 @@
 package com.bht.saigonparking.service.contact.handler;
 
+import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Classification.CUSTOMER_MESSAGE;
 import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Classification.SYSTEM_MESSAGE;
 import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Type.NOTIFICATION;
 
@@ -73,15 +74,14 @@ public final class WebSocketBinaryMessageHandler extends BinaryWebSocketHandler 
     protected void handleBinaryMessage(@NonNull WebSocketSession session, @NonNull BinaryMessage message) throws Exception {
         Long userId = webSocketUserSessionManagement.getUserIdFromSession(session);
         LoggingUtil.log(Level.INFO, LOGGING_KEY, "handleBinaryMessage", String.format("newBinaryMessageFromUser(%d)", userId));
-        SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage
-                .newBuilder(SaigonParkingMessage.parseFrom(message.getPayload()))
-                .setSenderId(userId) /* attach sender id for receiver to know */
-                .build();
+
+        SaigonParkingMessage primitiveMessage = SaigonParkingMessage.parseFrom(message.getPayload());
+        SaigonParkingMessage saigonParkingMessage = (primitiveMessage.getClassification().equals(CUSTOMER_MESSAGE))
+                ? SaigonParkingMessage.newBuilder(primitiveMessage).setSenderId(userId).build() : primitiveMessage;
 
         if (saigonParkingMessage.getReceiverId() != 0) {
             /* receiver's id != 0 --> not send to system --> forward to receiver */
             messagingService.publishMessageToQueue(saigonParkingMessage);
-
         } else {
             /* receiver's id == 0 --> send to system --> not forward to receiver */
             contactService.handleMessageSendToSystem(saigonParkingMessage, session);

@@ -43,7 +43,7 @@ message SaigonParkingMessage {
     Classification classification = 1; /* whether message is sent from customer or parking-lot */
     Type type = 2; /* default TEXT_MESSAGE (chatting) */
     bytes content = 3; /* parse it using each content's parse method, please take a look at each Content definition below */
-    int64 senderId = 4; /* sender's user ID, if sender ID = 0, it means this message is sent from system not from user */
+    int64 senderId = 4; /* sender ID: will be ParkingLotId if it sent from ParkingLot, otherwise UserId ! */
     int64 receiverId = 5; /* receiver ID: will be UserId if it sent from ParkingLot, otherwise ParkingLotId ! */
     string timestamp = 6; /* the time at which the sender sent this message, timestamp-format yyyy-MM-dd hh:mm:ss */
 }
