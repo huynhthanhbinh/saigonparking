@@ -19,4 +19,12 @@
         <basePackage>com.bht.saigonparking.service.booking</basePackage>
         <start-class>com.bht.saigonparking.service.booking.BookingService</start-class>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.bht.saigonparking</groupId>
+            <artifactId>booking-api</artifactId>
+            <version>${revision}</version>
+        </dependency>
+    </dependencies>
 </project>
