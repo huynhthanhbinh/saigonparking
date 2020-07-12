@@ -36,8 +36,10 @@ message SaigonParkingMessage {
         BOOKING_PROCESSING = 4; /* send from system to customer with new bookingId attached */
         BOOKING_ACCEPTANCE = 5; /* send from ParkingLot: accept booking request */
         BOOKING_REJECT = 6; /* send from ParkingLot: reject booking request */
-        AVAILABILITY_UPDATE = 7; /* send from ParkingLot: update available slot */
-        IMAGE = 8; /* everyone can send and receive image */
+        BOOKING_FINISH = 7; /* send from ParkingLot: when customer arrived */
+        AVAILABILITY_UPDATE = 8; /* send from ParkingLot: update available slot */
+        HISTORY_CHANGE = 9; /* send from system to notify parking-lot that booking history was updated --> refresh list */
+        IMAGE = 10; /* everyone can send and receive image */
     }
 
     Classification classification = 1; /* whether message is sent from customer or parking-lot */
@@ -48,12 +50,14 @@ message SaigonParkingMessage {
     string timestamp = 6; /* the time at which the sender sent this message, timestamp-format yyyy-MM-dd hh:mm:ss */
 }
 
-/** Below are each message content's definitions, you have to serialize into binary to send & deserialize into object on receive
+/** Below are each message content's definitions,
+ * you have to serialize into binary to send & deserialize into object on receive
  * Example: NotificationContent (message is of type SaigonParkingMessage && message.getType() == Type.NOTIFICATION)
  *
  * for Android client:
  *      + to get content:   content = NotificationContent.parseFrom(message.getContent())
  *      + to set content:   message.setContent(content.toByteString())
+ *
  * for Web client:
  *      + to get content:   content = NotificationContent.deserializeBinary(message.getContent_asU8())
  *      + to set content:   message.setContent(content.serializeBinary()) */
@@ -94,6 +98,10 @@ message BookingRejectContent {
     string reason = 2;
 }
 
+message BookingFinishContent {
+    int64 bookingId = 1;
+}
+
 /* for this message type, receiver will be system (receiver ID = 0)  */
 message AvailabilityUpdateContent {
     int64 parkingLotId = 1;
@@ -102,7 +110,9 @@ message AvailabilityUpdateContent {
 
 service ContactService {
 
-    /* check whether user or parking-lot is online / reachable for pre-sending messages (remember to provide token) */
+    /* check whether user is online / reachable for pre-sending messages (remember to provide token) */
     rpc checkUserOnlineByUserId (google.protobuf.Int64Value) returns (google.protobuf.BoolValue);
+
+    /* check whether parking-lot is online / reachable for pre-sending messages (remember to provide token) */
     rpc checkParkingLotOnlineByParkingLotId (google.protobuf.Int64Value) returns (google.protobuf.BoolValue);
 }
