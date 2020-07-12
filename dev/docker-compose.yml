@@ -144,9 +144,6 @@ services:
         ipv4_address: 172.28.1.7
     environment:
       TZ:           ${TIMEZONE}
-      SERVICE_ID:   ${MAIL_SERVICE_ID}
-      SERVICE_HOST: ${MAIL_SERVICE_HOST}
-      SERVICE_PORT: ${MAIL_SERVICE_PORT}
       WEB_DOMAIN:   ${SAIGON_PARKING_DOMAIN}
     depends_on:
       - message-queue
