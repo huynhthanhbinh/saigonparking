@@ -37,8 +37,6 @@ services:
     environment:
       TZ:           ${TIMEZONE}
       WEB_DOMAIN:   ${SAIGON_PARKING_DOMAIN}
-    ports:
-      - "${MAIL_SERVICE_PORT}:${MAIL_SERVICE_PORT}"
     depends_on:
       - message-queue
       - service-discovery
@@ -148,6 +146,7 @@ services:
       SERVICE_HTTP_PORT:  ${CONTACT_SERVICE_HTTP_PORT}
     ports:
       - "${CONTACT_SERVICE_PORT}:${CONTACT_SERVICE_PORT}"
+      - "${CONTACT_SERVICE_HTTP_PORT}:${CONTACT_SERVICE_HTTP_PORT}"
     depends_on:
       - message-queue
       - service-discovery
