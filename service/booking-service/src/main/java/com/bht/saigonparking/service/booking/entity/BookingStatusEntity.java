@@ -1,6 +1,11 @@
 package com.bht.saigonparking.service.booking.entity;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.SelectBeforeUpdate;
@@ -30,4 +35,12 @@ import lombok.experimental.SuperBuilder;
 @SelectBeforeUpdate
 @Table(name = "[BOOKING_STATUS]")
 public final class BookingStatusEntity extends BaseEntity {
+
+    @Column(name = "[STATUS]", nullable = false, unique = true, updatable = false)
+    private String status;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "bookingStatusEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<BookingHistoryEntity> bookingHistoryEntitySet;
 }

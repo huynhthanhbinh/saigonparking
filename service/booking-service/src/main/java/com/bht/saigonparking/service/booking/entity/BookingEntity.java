@@ -1,8 +1,14 @@
 package com.bht.saigonparking.service.booking.entity;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
 import com.bht.saigonparking.common.base.BaseEntity;
@@ -30,4 +36,22 @@ import lombok.experimental.SuperBuilder;
 @SelectBeforeUpdate
 @Table(name = "[BOOKING]")
 public final class BookingEntity extends BaseEntity {
+
+    @Column(name = "[PARKING_LOT_ID]", nullable = false)
+    private Long parkingLotId;
+
+    @Column(name = "[CUSTOMER_ID]", nullable = false)
+    private Long customerId;
+
+    @Column(name = "[CUSTOMER_LICENSE_PLATE]", nullable = false)
+    private String customerLicensePlate;
+
+    @ColumnDefault("false")
+    @Column(name = "[IS_FINISHED]")
+    private Boolean isFinished;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "bookingEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<BookingHistoryEntity> bookingHistoryEntitySet;
 }
