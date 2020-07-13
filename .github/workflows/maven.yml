@@ -30,6 +30,7 @@ jobs:
         run: mvn -B clean --file pom.xml -e
       - name: Build with Maven
         run: mvn -B package --file pom.xml -e
+
       - name: Login Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
@@ -43,6 +44,8 @@ jobs:
         run: cd service/mail-service/target/docker && docker build --rm -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/mail-service:$SAIGONPARKING_VERSION .
       - name: Build contact-service image
         run: cd service/contact-service/target/docker && docker build --rm -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/contact-service:$SAIGONPARKING_VERSION .
+      - name: Build booking-service image
+        run: cd service/booking-service/target/docker && docker build --rm -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/booking-service:$SAIGONPARKING_VERSION .
       - name: Build message-queue image
         run: cd queue/target/docker && docker build --rm -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/queue:$SAIGONPARKING_VERSION .
       - name: Build service-discovery image
@@ -65,6 +68,8 @@ jobs:
         run: docker push ${{ secrets.DOCKER_USERNAME }}/mail-service:$SAIGONPARKING_VERSION
       - name: Push contact-service image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/contact-service:$SAIGONPARKING_VERSION
+      - name: Push booking-service image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/booking-service:$SAIGONPARKING_VERSION
       - name: Push message-queue image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/queue:$SAIGONPARKING_VERSION
       - name: Push service-discovery image
