@@ -17,12 +17,12 @@
     </parent>
 
     <modules>
+        <module>booking-service</module>
         <module>auth-service</module>
         <module>mail-service</module>
         <module>user-service</module>
         <module>parkinglot-service</module>
         <module>contact-service</module>
-        <module>booking-service</module>
     </modules>
 
     <properties>

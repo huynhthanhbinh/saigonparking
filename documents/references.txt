@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Sat, Jul 11th, 2020
+Last updated:       Tue, Jul 14th, 2020
 ========================================================================================================================
 
 001. gRPC error handling:
@@ -337,3 +337,9 @@ Last updated:       Sat, Jul 11th, 2020
 
 110. RabbitMQ Passive Declaration
         https://www.rabbitmq.com/api-guide.html#passive-declaration
+
+111. MapStruct: Classes declared with 'uses' not being autowired
+        https://github.com/mapstruct/mapstruct/issues/938
+
+112. MapStruct - How can I inject a spring dependency in the Generated Mapper class
+        https://stackoverflow.com/questions/38807415/mapstruct-how-can-i-inject-a-spring-dependency-in-the-generated-mapper-class
