@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
-import org.mapstruct.NullValueMappingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,9 +29,7 @@ import lombok.Setter;
  */
 @Component
 @Setter(onMethod = @__(@Autowired))
-@Mapper(componentModel = "spring",
-        implementationPackage = AppConfiguration.BASE_PACKAGE + ".mapper.impl",
-        nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
+@Mapper(componentModel = "spring", implementationPackage = AppConfiguration.BASE_PACKAGE + ".mapper.impl")
 public abstract class CustomizedMapper {
 
     public static final String DEFAULT_STRING_VALUE = "";
