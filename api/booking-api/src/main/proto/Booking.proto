@@ -57,7 +57,6 @@ message CreateBookingRequest {
     int64 parkingLotId = 1;
     int64 customerId = 2;
     string licensePlate = 3;
-    string timestamp = 4;
 }
 
 message UpdateBookingStatusRequest {

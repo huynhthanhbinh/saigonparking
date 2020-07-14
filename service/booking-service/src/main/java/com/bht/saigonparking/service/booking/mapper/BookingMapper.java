@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.bht.saigonparking.api.grpc.booking.Booking;
 import com.bht.saigonparking.api.grpc.booking.BookingHistory;
+import com.bht.saigonparking.api.grpc.booking.CreateBookingRequest;
 import com.bht.saigonparking.service.booking.configuration.AppConfiguration;
 import com.bht.saigonparking.service.booking.entity.BookingEntity;
 import com.bht.saigonparking.service.booking.entity.BookingHistoryEntity;
@@ -41,7 +42,7 @@ public interface BookingMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "isFinished", ignore = true)
     @Mapping(target = "version", ignore = true)
-    BookingEntity toBookingEntity(@NotNull Booking booking);
+    BookingEntity toBookingEntity(@NotNull CreateBookingRequest bookingRequest);
 
     @Named("toBookingHistory")
     @Mapping(target = "id", source = "id", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
