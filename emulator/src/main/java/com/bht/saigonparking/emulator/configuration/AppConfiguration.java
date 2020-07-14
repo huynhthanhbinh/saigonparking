@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 import com.bht.saigonparking.api.grpc.auth.AuthServiceGrpc;
+import com.bht.saigonparking.api.grpc.booking.BookingServiceGrpc;
 import com.bht.saigonparking.api.grpc.contact.ContactServiceGrpc;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc.ParkingLotServiceBlockingStub;
@@ -44,5 +45,10 @@ public class AppConfiguration {
     @Bean
     public ContactServiceGrpc.ContactServiceBlockingStub contactServiceBlockingStub(@Autowired ManagedChannel channel) {
         return ContactServiceGrpc.newBlockingStub(channel);
+    }
+
+    @Bean
+    public BookingServiceGrpc.BookingServiceBlockingStub bookingServiceBlockingStub(@Autowired ManagedChannel channel) {
+        return BookingServiceGrpc.newBlockingStub(channel);
     }
 }
