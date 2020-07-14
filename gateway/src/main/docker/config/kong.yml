@@ -36,15 +36,15 @@ services:
     connect_timeout: 30000
 
 
-  - name: mail-service
+  - name: booking-service
     protocol: grpc
-    host: grpc-saigon-parking-mail-service.service.saigonparking-dc.consul
+    host: grpc-saigon-parking-booking-service.service.saigonparking-dc.consul
     routes:
-      - name: mail-grpc
+      - name: booking-grpc
         protocols:
           - grpc
         paths:
-          - /com.bht.saigonparking.api.grpc.mail.MailService/
+          - /com.bht.saigonparking.api.grpc.booking.BookingService/
     retries: 3
     read_timeout: 30000
     write_timeout: 30000
