@@ -16,4 +16,6 @@ public interface BookingService {
     Long saveNewBooking(@NotNull BookingEntity bookingEntity);
 
     void saveNewBookingHistory(@NotNull BookingHistoryEntity bookingHistoryEntity, @NotNull Long bookingId);
+
+    void deleteBookingById(@NotNull Long bookingId);
 }

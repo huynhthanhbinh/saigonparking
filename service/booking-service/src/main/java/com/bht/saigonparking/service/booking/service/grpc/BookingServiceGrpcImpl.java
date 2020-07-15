@@ -81,7 +81,25 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
 
     @Override
     public void deleteBookingById(Int64Value request, StreamObserver<Empty> responseObserver) {
-        super.deleteBookingById(request, responseObserver);
+        try {
+            serverInterceptor.validateAdmin();
+
+            bookingService.deleteBookingById(request.getValue());
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("deleteBookingById(%d)", request.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("deleteBookingById(%d)", request.getValue()));
+        }
     }
 
     @Override

@@ -47,4 +47,9 @@ public class BookingServiceImpl implements BookingService {
         }
         throw new BookingAlreadyFinishedException();
     }
+
+    @Override
+    public void deleteBookingById(@NotNull Long bookingId) {
+        bookingRepository.delete(getBookingById(bookingId));
+    }
 }
