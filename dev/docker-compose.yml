@@ -144,8 +144,16 @@ services:
       saigonparking:
         ipv4_address: 172.28.1.7
     environment:
-      TZ:           ${TIMEZONE}
-      WEB_DOMAIN:   ${SAIGON_PARKING_DOMAIN}
+      TZ:                     ${TIMEZONE}
+      WEB_DOMAIN:             ${SAIGON_PARKING_DOMAIN}
+      DATABASE_HOST:          ${DATABASE_HOST}
+      DATABASE_PORT:          ${DATABASE_PORT}
+      MESSAGE_QUEUE_HOST:     ${MESSAGE_QUEUE_HOST}
+      MESSAGE_QUEUE_PORT:     ${MESSAGE_QUEUE_PORT}
+      MESSAGE_QUEUE_USERNAME: ${MESSAGE_QUEUE_USERNAME}
+      MESSAGE_QUEUE_PASSWORD: ${MESSAGE_QUEUE_PASSWORD}
+      SERVICE_DISCOVERY_HOST: ${SERVICE_DISCOVERY_HOST}
+      SERVICE_DISCOVERY_PORT: ${SERVICE_DISCOVERY_PORT}
     depends_on:
       - message-queue
       - service-discovery
@@ -159,10 +167,18 @@ services:
       saigonparking:
         ipv4_address: 172.28.1.8
     environment:
-      TZ:           ${TIMEZONE}
-      SERVICE_ID:   ${AUTH_SERVICE_ID}
-      SERVICE_HOST: ${AUTH_SERVICE_HOST}
-      SERVICE_PORT: ${AUTH_SERVICE_PORT}
+      TZ:                     ${TIMEZONE}
+      SERVICE_ID:             ${AUTH_SERVICE_ID}
+      SERVICE_HOST:           ${AUTH_SERVICE_HOST}
+      SERVICE_PORT:           ${AUTH_SERVICE_PORT}
+      DATABASE_HOST:          ${DATABASE_HOST}
+      DATABASE_PORT:          ${DATABASE_PORT}
+      MESSAGE_QUEUE_HOST:     ${MESSAGE_QUEUE_HOST}
+      MESSAGE_QUEUE_PORT:     ${MESSAGE_QUEUE_PORT}
+      MESSAGE_QUEUE_USERNAME: ${MESSAGE_QUEUE_USERNAME}
+      MESSAGE_QUEUE_PASSWORD: ${MESSAGE_QUEUE_PASSWORD}
+      SERVICE_DISCOVERY_HOST: ${SERVICE_DISCOVERY_HOST}
+      SERVICE_DISCOVERY_PORT: ${SERVICE_DISCOVERY_PORT}
     depends_on:
       - message-queue
       - service-discovery
@@ -176,10 +192,18 @@ services:
       saigonparking:
         ipv4_address: 172.28.1.9
     environment:
-      TZ:           ${TIMEZONE}
-      SERVICE_ID:   ${USER_SERVICE_ID}
-      SERVICE_HOST: ${USER_SERVICE_HOST}
-      SERVICE_PORT: ${USER_SERVICE_PORT}
+      TZ:                     ${TIMEZONE}
+      SERVICE_ID:             ${USER_SERVICE_ID}
+      SERVICE_HOST:           ${USER_SERVICE_HOST}
+      SERVICE_PORT:           ${USER_SERVICE_PORT}
+      DATABASE_HOST:          ${DATABASE_HOST}
+      DATABASE_PORT:          ${DATABASE_PORT}
+      MESSAGE_QUEUE_HOST:     ${MESSAGE_QUEUE_HOST}
+      MESSAGE_QUEUE_PORT:     ${MESSAGE_QUEUE_PORT}
+      MESSAGE_QUEUE_USERNAME: ${MESSAGE_QUEUE_USERNAME}
+      MESSAGE_QUEUE_PASSWORD: ${MESSAGE_QUEUE_PASSWORD}
+      SERVICE_DISCOVERY_HOST: ${SERVICE_DISCOVERY_HOST}
+      SERVICE_DISCOVERY_PORT: ${SERVICE_DISCOVERY_PORT}
     depends_on:
       - message-queue
       - service-discovery
@@ -193,10 +217,18 @@ services:
       saigonparking:
         ipv4_address: 172.28.1.10
     environment:
-      TZ:           ${TIMEZONE}
-      SERVICE_ID:   ${PARKING_LOT_SERVICE_ID}
-      SERVICE_HOST: ${PARKING_LOT_SERVICE_HOST}
-      SERVICE_PORT: ${PARKING_LOT_SERVICE_PORT}
+      TZ:                     ${TIMEZONE}
+      SERVICE_ID:             ${PARKING_LOT_SERVICE_ID}
+      SERVICE_HOST:           ${PARKING_LOT_SERVICE_HOST}
+      SERVICE_PORT:           ${PARKING_LOT_SERVICE_PORT}
+      DATABASE_HOST:          ${DATABASE_HOST}
+      DATABASE_PORT:          ${DATABASE_PORT}
+      MESSAGE_QUEUE_HOST:     ${MESSAGE_QUEUE_HOST}
+      MESSAGE_QUEUE_PORT:     ${MESSAGE_QUEUE_PORT}
+      MESSAGE_QUEUE_USERNAME: ${MESSAGE_QUEUE_USERNAME}
+      MESSAGE_QUEUE_PASSWORD: ${MESSAGE_QUEUE_PASSWORD}
+      SERVICE_DISCOVERY_HOST: ${SERVICE_DISCOVERY_HOST}
+      SERVICE_DISCOVERY_PORT: ${SERVICE_DISCOVERY_PORT}
     depends_on:
       - message-queue
       - service-discovery
@@ -210,11 +242,19 @@ services:
       saigonparking:
         ipv4_address: 172.28.1.11
     environment:
-      TZ:                 ${TIMEZONE}
-      SERVICE_ID:         ${CONTACT_SERVICE_ID}
-      SERVICE_HOST:       ${CONTACT_SERVICE_HOST}
-      SERVICE_PORT:       ${CONTACT_SERVICE_PORT}
-      SERVICE_HTTP_PORT:  ${CONTACT_SERVICE_HTTP_PORT}
+      TZ:                     ${TIMEZONE}
+      SERVICE_ID:             ${CONTACT_SERVICE_ID}
+      SERVICE_HOST:           ${CONTACT_SERVICE_HOST}
+      SERVICE_PORT:           ${CONTACT_SERVICE_PORT}
+      SERVICE_HTTP_PORT:      ${CONTACT_SERVICE_HTTP_PORT}
+      DATABASE_HOST:          ${DATABASE_HOST}
+      DATABASE_PORT:          ${DATABASE_PORT}
+      MESSAGE_QUEUE_HOST:     ${MESSAGE_QUEUE_HOST}
+      MESSAGE_QUEUE_PORT:     ${MESSAGE_QUEUE_PORT}
+      MESSAGE_QUEUE_USERNAME: ${MESSAGE_QUEUE_USERNAME}
+      MESSAGE_QUEUE_PASSWORD: ${MESSAGE_QUEUE_PASSWORD}
+      SERVICE_DISCOVERY_HOST: ${SERVICE_DISCOVERY_HOST}
+      SERVICE_DISCOVERY_PORT: ${SERVICE_DISCOVERY_PORT}
     depends_on:
       - message-queue
       - service-discovery
@@ -228,10 +268,18 @@ services:
       saigonparking:
         ipv4_address: 172.28.1.12
     environment:
-      TZ:           ${TIMEZONE}
-      SERVICE_ID:   ${BOOKING_SERVICE_ID}
-      SERVICE_HOST: ${BOOKING_SERVICE_HOST}
-      SERVICE_PORT: ${BOOKING_SERVICE_PORT}
+      TZ:                     ${TIMEZONE}
+      SERVICE_ID:             ${BOOKING_SERVICE_ID}
+      SERVICE_HOST:           ${BOOKING_SERVICE_HOST}
+      SERVICE_PORT:           ${BOOKING_SERVICE_PORT}
+      DATABASE_HOST:          ${DATABASE_HOST}
+      DATABASE_PORT:          ${DATABASE_PORT}
+      MESSAGE_QUEUE_HOST:     ${MESSAGE_QUEUE_HOST}
+      MESSAGE_QUEUE_PORT:     ${MESSAGE_QUEUE_PORT}
+      MESSAGE_QUEUE_USERNAME: ${MESSAGE_QUEUE_USERNAME}
+      MESSAGE_QUEUE_PASSWORD: ${MESSAGE_QUEUE_PASSWORD}
+      SERVICE_DISCOVERY_HOST: ${SERVICE_DISCOVERY_HOST}
+      SERVICE_DISCOVERY_PORT: ${SERVICE_DISCOVERY_PORT}
     depends_on:
       - message-queue
       - service-discovery
