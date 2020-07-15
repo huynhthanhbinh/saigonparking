@@ -76,15 +76,16 @@ public final class WebSocketBinaryMessageHandler extends BinaryWebSocketHandler 
         LoggingUtil.log(Level.INFO, LOGGING_KEY, "handleBinaryMessage", String.format("newBinaryMessageFromUser(%d)", userId));
 
         SaigonParkingMessage primitiveMessage = SaigonParkingMessage.parseFrom(message.getPayload());
-        SaigonParkingMessage saigonParkingMessage = (primitiveMessage.getClassification().equals(CUSTOMER_MESSAGE))
-                ? SaigonParkingMessage.newBuilder(primitiveMessage).setSenderId(userId).build() : primitiveMessage;
+        SaigonParkingMessage.Builder saigonParkingMessageBuilder = (primitiveMessage.getClassification().equals(CUSTOMER_MESSAGE))
+                ? SaigonParkingMessage.newBuilder(primitiveMessage).setSenderId(userId) : primitiveMessage.toBuilder();
 
-        if (saigonParkingMessage.getReceiverId() != 0) {
+        if (saigonParkingMessageBuilder.getReceiverId() != 0) {
             /* receiver's id != 0 --> not send to system --> forward to receiver */
-            messagingService.publishMessageToQueue(saigonParkingMessage);
+            SaigonParkingMessage.Builder prePublishMessage = messagingService.prePublishMessageToQueue(saigonParkingMessageBuilder);
+            messagingService.publishMessageToQueue(prePublishMessage.build());
         } else {
             /* receiver's id == 0 --> send to system --> not forward to receiver */
-            contactService.handleMessageSendToSystem(saigonParkingMessage, session);
+            contactService.handleMessageSendToSystem(saigonParkingMessageBuilder.build(), session);
         }
     }
 }

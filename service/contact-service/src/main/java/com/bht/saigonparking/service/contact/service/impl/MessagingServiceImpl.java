@@ -32,6 +32,11 @@ public final class MessagingServiceImpl implements MessagingService {
     private final WebSocketUserSessionManagement webSocketUserSessionManagement;
 
     @Override
+    public SaigonParkingMessage.Builder prePublishMessageToQueue(@NotNull SaigonParkingMessage.Builder delegate) {
+        return null;
+    }
+
+    @Override
     public void publishMessageToQueue(@NotNull SaigonParkingMessage saigonParkingMessage) {
         switch (saigonParkingMessage.getClassification()) {
             case PARKING_LOT_MESSAGE:
