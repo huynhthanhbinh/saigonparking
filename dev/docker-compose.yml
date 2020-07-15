@@ -8,6 +8,7 @@ networks:
         - subnet: 172.28.0.0/16
 
 services:
+
   proxy:
     image: ${DOCKER_HUB_ID}/proxy:${PROXY_VERSION}
     networks:
@@ -214,6 +215,23 @@ services:
       SERVICE_HOST:       ${CONTACT_SERVICE_HOST}
       SERVICE_PORT:       ${CONTACT_SERVICE_PORT}
       SERVICE_HTTP_PORT:  ${CONTACT_SERVICE_HTTP_PORT}
+    depends_on:
+      - message-queue
+      - service-discovery
+    links:
+      - message-queue
+      - service-discovery
+
+  booking-service:
+    image: ${DOCKER_HUB_ID}/booking-service:${BOOKING_SERVICE_VERSION}
+    networks:
+      saigonparking:
+        ipv4_address: 172.28.1.12
+    environment:
+      TZ:           ${TIMEZONE}
+      SERVICE_ID:   ${BOOKING_SERVICE_ID}
+      SERVICE_HOST: ${BOOKING_SERVICE_HOST}
+      SERVICE_PORT: ${BOOKING_SERVICE_PORT}
     depends_on:
       - message-queue
       - service-discovery
