@@ -134,19 +134,39 @@ services:
       - message-queue
       - service-discovery
 
-  contact-service:
+  contact-service-1:
     image: ${DOCKER_HUB_ID}/contact-service:${CONTACT_SERVICE_VERSION}
     networks:
       - saigonparking-service
     environment:
       TZ:                 ${TIMEZONE}
-      SERVICE_ID:         ${CONTACT_SERVICE_ID}
-      SERVICE_HOST:       ${CONTACT_SERVICE_HOST}
-      SERVICE_PORT:       ${CONTACT_SERVICE_PORT}
-      SERVICE_HTTP_PORT:  ${CONTACT_SERVICE_HTTP_PORT}
+      SERVICE_ID:         ${CONTACT_SERVICE_1_ID}
+      SERVICE_HOST:       ${CONTACT_SERVICE_1_HOST}
+      SERVICE_PORT:       ${CONTACT_SERVICE_1_PORT}
+      SERVICE_HTTP_PORT:  ${CONTACT_SERVICE_1_HTTP_PORT}
     ports:
-      - "${CONTACT_SERVICE_PORT}:${CONTACT_SERVICE_PORT}"
-      - "${CONTACT_SERVICE_HTTP_PORT}:${CONTACT_SERVICE_HTTP_PORT}"
+      - "${CONTACT_SERVICE_1_PORT}:${CONTACT_SERVICE_1_PORT}"
+      - "${CONTACT_SERVICE_1_HTTP_PORT}:${CONTACT_SERVICE_1_HTTP_PORT}"
+    depends_on:
+      - message-queue
+      - service-discovery
+    links:
+      - message-queue
+      - service-discovery
+
+  contact-service-2:
+    image: ${DOCKER_HUB_ID}/contact-service:${CONTACT_SERVICE_VERSION}
+    networks:
+      - saigonparking-service
+    environment:
+      TZ:                 ${TIMEZONE}
+      SERVICE_ID:         ${CONTACT_SERVICE_2_ID}
+      SERVICE_HOST:       ${CONTACT_SERVICE_2_HOST}
+      SERVICE_PORT:       ${CONTACT_SERVICE_2_PORT}
+      SERVICE_HTTP_PORT:  ${CONTACT_SERVICE_2_HTTP_PORT}
+    ports:
+      - "${CONTACT_SERVICE_2_PORT}:${CONTACT_SERVICE_2_PORT}"
+      - "${CONTACT_SERVICE_2_HTTP_PORT}:${CONTACT_SERVICE_2_HTTP_PORT}"
     depends_on:
       - message-queue
       - service-discovery
