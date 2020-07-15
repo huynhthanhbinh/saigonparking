@@ -3,7 +3,6 @@ package com.bht.saigonparking.service.booking.mapper;
 import java.sql.Time;
 import java.sql.Timestamp;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -13,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bht.saigonparking.service.booking.configuration.AppConfiguration;
-import com.bht.saigonparking.service.booking.entity.BookingEntity;
-import com.bht.saigonparking.service.booking.repository.core.BookingRepository;
 import com.google.protobuf.ByteString;
 
 import lombok.Setter;
@@ -42,13 +39,6 @@ public abstract class CustomizedMapper {
     public static final Double DEFAULT_DOUBLE_VALUE = 0.0;
     public static final Boolean DEFAULT_BOOL_VALUE = Boolean.FALSE;
     public static final ByteString DEFAULT_BYTE_STRING_VALUE = ByteString.EMPTY;
-
-    private BookingRepository bookingRepository;
-
-    @Named("toBookingEntityFromBookingId")
-    public BookingEntity toBookingEntity(@NotNull Long bookingId) {
-        return bookingRepository.findById(bookingId).orElseThrow(EntityNotFoundException::new);
-    }
 
     @Named("toTimeString")
     public String toTimeString(@NotNull Time time) {

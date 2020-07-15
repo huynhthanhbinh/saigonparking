@@ -58,7 +58,25 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
 
     @Override
     public void updateBookingStatus(UpdateBookingStatusRequest request, StreamObserver<Empty> responseObserver) {
-        super.updateBookingStatus(request, responseObserver);
+        try {
+            serverInterceptor.validateAdmin();
+
+            bookingService.saveNewBookingHistory(bookingMapper.toBookingHistoryEntity(request), request.getBookingId());
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("updateBookingStatus(%d): %s", request.getBookingId(), request.getStatus()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("updateBookingStatus(%d): %s", request.getBookingId(), request.getStatus()));
+        }
     }
 
     @Override

@@ -1,12 +1,16 @@
 package com.bht.saigonparking.service.booking.service.main.impl;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bht.saigonparking.common.exception.BookingAlreadyFinishedException;
 import com.bht.saigonparking.service.booking.entity.BookingEntity;
+import com.bht.saigonparking.service.booking.entity.BookingHistoryEntity;
+import com.bht.saigonparking.service.booking.repository.core.BookingHistoryRepository;
 import com.bht.saigonparking.service.booking.repository.core.BookingRepository;
 import com.bht.saigonparking.service.booking.service.main.BookingService;
 
@@ -22,9 +26,25 @@ import lombok.RequiredArgsConstructor;
 public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
+    private final BookingHistoryRepository bookingHistoryRepository;
+
+    @Override
+    public BookingEntity getBookingById(@NotNull Long bookingId) {
+        return bookingRepository.findById(bookingId).orElseThrow(EntityNotFoundException::new);
+    }
 
     @Override
     public Long saveNewBooking(@NotNull BookingEntity bookingEntity) {
         return bookingRepository.saveAndFlush(bookingEntity).getId();
+    }
+
+    @Override
+    public void saveNewBookingHistory(@NotNull BookingHistoryEntity bookingHistoryEntity, @NotNull Long bookingId) {
+        BookingEntity bookingEntity = getBookingById(bookingId);
+        if (bookingEntity.getIsFinished().equals(Boolean.FALSE)) {
+            bookingHistoryEntity.setBookingEntity(bookingEntity);
+            bookingHistoryRepository.saveAndFlush(bookingHistoryEntity);
+        }
+        throw new BookingAlreadyFinishedException();
     }
 }

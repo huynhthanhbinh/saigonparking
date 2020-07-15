@@ -54,7 +54,7 @@ public interface BookingMapper {
     BookingHistory toBookingHistory(@NotNull BookingHistoryEntity bookingHistoryEntity);
 
     @Named("toBookingHistoryEntity")
-    @Mapping(target = "bookingEntity", source = "bookingId", qualifiedByName = "toBookingEntityFromBookingId")
+    @Mapping(target = "bookingEntity", ignore = true)
     @Mapping(target = "bookingStatusEntity", source = "status", qualifiedByName = "toBookingStatusEntity")
     @Mapping(target = "note", source = "note", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "lastUpdated", source = "timestamp", qualifiedByName = "toTimestamp")

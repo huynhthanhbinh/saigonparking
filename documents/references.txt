@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Tue, Jul 14th, 2020
+Last updated:       Wed, Jul 15th, 2020
 ========================================================================================================================
 
 001. gRPC error handling:
@@ -343,3 +343,6 @@ Last updated:       Tue, Jul 14th, 2020
 
 112. MapStruct - How can I inject a spring dependency in the Generated Mapper class
         https://stackoverflow.com/questions/38807415/mapstruct-how-can-i-inject-a-spring-dependency-in-the-generated-mapper-class
+
+113. Persisting and Fetching a ManyToOne association with JPA and Hibernate
+        https://vladmihalcea.com/manytoone-jpa-hibernate/
