@@ -12,11 +12,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.WebSocketSession;
 
+import com.bht.saigonparking.api.grpc.contact.BookingAcceptanceContent;
+import com.bht.saigonparking.api.grpc.contact.BookingCancellationContent;
+import com.bht.saigonparking.api.grpc.contact.BookingFinishContent;
+import com.bht.saigonparking.api.grpc.contact.BookingRejectContent;
+import com.bht.saigonparking.api.grpc.contact.BookingRequestContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.bht.saigonparking.common.constant.SaigonParkingMessageQueue;
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.contact.handler.WebSocketUserSessionManagement;
 import com.bht.saigonparking.service.contact.service.MessagingService;
+import com.google.protobuf.InvalidProtocolBufferException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,7 +39,7 @@ public final class MessagingServiceImpl implements MessagingService {
 
     @Override
     public SaigonParkingMessage.Builder prePublishMessageToQueue(@NotNull SaigonParkingMessage.Builder delegate,
-                                                                 @NotNull WebSocketSession webSocketSession) {
+                                                                 @NotNull WebSocketSession webSocketSession) throws InvalidProtocolBufferException {
         switch (delegate.getClassification()) {
             case CUSTOMER_MESSAGE:
                 delegate.setSenderId(webSocketUserSessionManagement.getUserIdFromSession(webSocketSession));
@@ -44,7 +50,7 @@ public final class MessagingServiceImpl implements MessagingService {
             default:
                 break;
         }
-        return delegate;
+        return preProcessingMessage(delegate, webSocketSession);
     }
 
     @Override
@@ -98,5 +104,29 @@ public final class MessagingServiceImpl implements MessagingService {
         } catch (Exception exception) {
             LoggingUtil.log(Level.ERROR, "forwardMessageToParkingLot", "Exception", exception.getClass().getSimpleName());
         }
+    }
+
+    private SaigonParkingMessage.Builder preProcessingMessage(@NotNull SaigonParkingMessage.Builder delegate,
+                                                              @NotNull WebSocketSession webSocketSession) throws InvalidProtocolBufferException {
+        switch (delegate.getType()) {
+            case BOOKING_REQUEST:
+                BookingRequestContent bookingRequestContent = BookingRequestContent.parseFrom(delegate.getContent());
+                break;
+            case BOOKING_CANCELLATION:
+                BookingCancellationContent bookingCancellationContent = BookingCancellationContent.parseFrom(delegate.getContent());
+                break;
+            case BOOKING_ACCEPTANCE:
+                BookingAcceptanceContent bookingAcceptanceContent = BookingAcceptanceContent.parseFrom(delegate.getContent());
+                break;
+            case BOOKING_REJECT:
+                BookingRejectContent bookingRejectContent = BookingRejectContent.parseFrom(delegate.getContent());
+                break;
+            case BOOKING_FINISH:
+                BookingFinishContent bookingFinishContent = BookingFinishContent.parseFrom(delegate.getContent());
+                break;
+            default:
+                break;
+        }
+        return delegate;
     }
 }
