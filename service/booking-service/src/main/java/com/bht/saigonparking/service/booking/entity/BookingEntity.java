@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
 import com.bht.saigonparking.common.base.BaseEntity;
@@ -46,8 +45,7 @@ public final class BookingEntity extends BaseEntity {
     @Column(name = "[CUSTOMER_LICENSE_PLATE]", nullable = false)
     private String customerLicensePlate;
 
-    @ColumnDefault("false")
-    @Column(name = "[IS_FINISHED]")
+    @Column(name = "[IS_FINISHED]", nullable = false)
     private Boolean isFinished;
 
     @ToString.Exclude
