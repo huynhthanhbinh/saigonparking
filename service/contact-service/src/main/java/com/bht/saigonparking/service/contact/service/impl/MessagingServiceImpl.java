@@ -33,7 +33,7 @@ public final class MessagingServiceImpl implements MessagingService {
 
     @Override
     public SaigonParkingMessage.Builder prePublishMessageToQueue(@NotNull SaigonParkingMessage.Builder delegate) {
-        return null;
+        return delegate;
     }
 
     @Override
