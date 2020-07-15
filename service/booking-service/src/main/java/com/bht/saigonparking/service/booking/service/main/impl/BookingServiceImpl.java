@@ -44,6 +44,7 @@ public class BookingServiceImpl implements BookingService {
         if (bookingEntity.getIsFinished().equals(Boolean.FALSE)) {
             bookingHistoryEntity.setBookingEntity(bookingEntity);
             bookingHistoryRepository.saveAndFlush(bookingHistoryEntity);
+            return;
         }
         throw new BookingAlreadyFinishedException();
     }
