@@ -1,6 +1,5 @@
 package com.bht.saigonparking.service.contact.handler;
 
-import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Classification.CUSTOMER_MESSAGE;
 import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Classification.SYSTEM_MESSAGE;
 import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Type.NOTIFICATION;
 
@@ -75,17 +74,17 @@ public final class WebSocketBinaryMessageHandler extends BinaryWebSocketHandler 
         Long userId = webSocketUserSessionManagement.getUserIdFromSession(session);
         LoggingUtil.log(Level.INFO, LOGGING_KEY, "handleBinaryMessage", String.format("newBinaryMessageFromUser(%d)", userId));
 
-        SaigonParkingMessage primitiveMessage = SaigonParkingMessage.parseFrom(message.getPayload());
-        SaigonParkingMessage.Builder saigonParkingMessageBuilder = (primitiveMessage.getClassification().equals(CUSTOMER_MESSAGE))
-                ? SaigonParkingMessage.newBuilder(primitiveMessage).setSenderId(userId) : primitiveMessage.toBuilder();
+        SaigonParkingMessage.Builder messageBuilder = SaigonParkingMessage.newBuilder().mergeFrom(message.getPayload().array());
 
-        if (saigonParkingMessageBuilder.getReceiverId() != 0) {
+        if (messageBuilder.getReceiverId() != 0) {
+
             /* receiver's id != 0 --> not send to system --> forward to receiver */
-            SaigonParkingMessage.Builder prePublishMessage = messagingService.prePublishMessageToQueue(saigonParkingMessageBuilder);
+            SaigonParkingMessage.Builder prePublishMessage = messagingService.prePublishMessageToQueue(messageBuilder, session);
             messagingService.publishMessageToQueue(prePublishMessage.build());
+
         } else {
             /* receiver's id == 0 --> send to system --> not forward to receiver */
-            contactService.handleMessageSendToSystem(saigonParkingMessageBuilder.build(), session);
+            contactService.handleMessageSendToSystem(messageBuilder.build(), session);
         }
     }
 }

@@ -1,8 +1,5 @@
 package com.bht.saigonparking.service.contact.interceptor;
 
-import static com.bht.saigonparking.service.contact.interceptor.WebSocketInterceptorConstraint.SAIGON_PARKING_USER_KEY;
-import static com.bht.saigonparking.service.contact.interceptor.WebSocketInterceptorConstraint.SAIGON_PARKING_USER_ROLE_KEY;
-
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +16,7 @@ import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
 import com.bht.saigonparking.common.auth.SaigonParkingTokenBody;
 import com.bht.saigonparking.common.exception.MissingTokenException;
 import com.bht.saigonparking.common.util.LoggingUtil;
-import com.bht.saigonparking.service.contact.service.QueueService;
+import com.bht.saigonparking.service.contact.service.HandshakeService;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -38,7 +35,7 @@ public final class WebSocketHandshakeInterceptor extends HttpSessionHandshakeInt
     private static final String USER_AUTHORIZATION_KEY = "Authorization";
 
     private final SaigonParkingAuthentication authentication;
-    private final QueueService queueService;
+    private final HandshakeService handshakeService;
 
     @Override
     public boolean beforeHandshake(@NonNull ServerHttpRequest httpRequest,
@@ -53,15 +50,8 @@ public final class WebSocketHandshakeInterceptor extends HttpSessionHandshakeInt
             }
 
             String accessToken = authorizationHeaders.get(0);
-
             SaigonParkingTokenBody saigonParkingTokenBody = authentication.parseJwtToken(accessToken);
-            Long userId = saigonParkingTokenBody.getUserId();
-            String userRole = saigonParkingTokenBody.getUserRole();
-
-            attributes.put(SAIGON_PARKING_USER_KEY, userId);
-            attributes.put(SAIGON_PARKING_USER_ROLE_KEY, userRole);
-
-            queueService.registerAutoDeleteQueueAndExchangeForUser(userId, userRole);
+            attributes.putAll(handshakeService.postAuthentication(saigonParkingTokenBody));
 
         } catch (ExpiredJwtException expiredJwtException) {
             LoggingUtil.log(Level.ERROR, "WebSocketInterceptor", "Exception", "ExpiredJwtException");

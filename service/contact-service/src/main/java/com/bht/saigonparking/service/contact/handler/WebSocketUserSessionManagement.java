@@ -1,7 +1,6 @@
 package com.bht.saigonparking.service.contact.handler;
 
-import static com.bht.saigonparking.service.contact.interceptor.WebSocketInterceptorConstraint.SAIGON_PARKING_USER_KEY;
-import static com.bht.saigonparking.service.contact.interceptor.WebSocketInterceptorConstraint.SAIGON_PARKING_USER_ROLE_KEY;
+import static com.bht.saigonparking.service.contact.interceptor.WebSocketInterceptorConstraint.*;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -60,10 +59,14 @@ public final class WebSocketUserSessionManagement {
     }
 
     public Long getUserIdFromSession(@NonNull WebSocketSession webSocketSession) {
-        return (Long) webSocketSession.getAttributes().get(SAIGON_PARKING_USER_KEY);
+        return (Long) webSocketSession.getAttributes().get(SAIGON_PARKING_USER_ID_KEY);
     }
 
     public String getUserRoleFromSession(@NonNull WebSocketSession webSocketSession) {
         return (String) webSocketSession.getAttributes().get(SAIGON_PARKING_USER_ROLE_KEY);
+    }
+
+    public Long getParkingLotIdFromSession(@NonNull WebSocketSession webSocketSession) {
+        return (Long) webSocketSession.getAttributes().get(SAIGON_PARKING_PARKING_LOT_ID_KEY);
     }
 }

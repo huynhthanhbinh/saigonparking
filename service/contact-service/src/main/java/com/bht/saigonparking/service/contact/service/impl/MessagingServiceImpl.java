@@ -32,7 +32,18 @@ public final class MessagingServiceImpl implements MessagingService {
     private final WebSocketUserSessionManagement webSocketUserSessionManagement;
 
     @Override
-    public SaigonParkingMessage.Builder prePublishMessageToQueue(@NotNull SaigonParkingMessage.Builder delegate) {
+    public SaigonParkingMessage.Builder prePublishMessageToQueue(@NotNull SaigonParkingMessage.Builder delegate,
+                                                                 @NotNull WebSocketSession webSocketSession) {
+        switch (delegate.getClassification()) {
+            case CUSTOMER_MESSAGE:
+                delegate.setSenderId(webSocketUserSessionManagement.getUserIdFromSession(webSocketSession));
+                break;
+            case PARKING_LOT_MESSAGE:
+                delegate.setSenderId(webSocketUserSessionManagement.getParkingLotIdFromSession(webSocketSession));
+                break;
+            default:
+                break;
+        }
         return delegate;
     }
 
@@ -42,11 +53,9 @@ public final class MessagingServiceImpl implements MessagingService {
             case PARKING_LOT_MESSAGE:
                 forwardMessageToCustomer(saigonParkingMessage);
                 return;
-
             case CUSTOMER_MESSAGE:
                 forwardMessageToParkingLot(saigonParkingMessage);
                 return;
-
             default:
                 break;
         }

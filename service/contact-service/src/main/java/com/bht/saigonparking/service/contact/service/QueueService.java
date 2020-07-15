@@ -3,13 +3,17 @@ package com.bht.saigonparking.service.contact.service;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.amqp.core.Queue;
+
 /**
  *
  * @author bht
  */
 public interface QueueService {
 
-    void registerAutoDeleteQueueAndExchangeForUser(@NotNull Long userId, @NotEmpty String userRole);
+    Queue registerAutoDeleteQueueForUser(@NotNull Long userId);
+
+    void registerAutoDeleteExchangeForParkingLot(@NotNull Long parkingLotId, @NotNull Queue employeeQueue);
 
     boolean isExchangeExist(@NotEmpty String exchangeName);
 

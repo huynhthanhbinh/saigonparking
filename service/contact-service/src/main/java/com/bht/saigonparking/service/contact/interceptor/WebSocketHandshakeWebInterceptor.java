@@ -1,8 +1,5 @@
 package com.bht.saigonparking.service.contact.interceptor;
 
-import static com.bht.saigonparking.service.contact.interceptor.WebSocketInterceptorConstraint.SAIGON_PARKING_USER_KEY;
-import static com.bht.saigonparking.service.contact.interceptor.WebSocketInterceptorConstraint.SAIGON_PARKING_USER_ROLE_KEY;
-
 import java.net.URI;
 import java.util.Map;
 
@@ -19,7 +16,7 @@ import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
 import com.bht.saigonparking.common.auth.SaigonParkingTokenBody;
 import com.bht.saigonparking.common.exception.MissingTokenException;
 import com.bht.saigonparking.common.util.LoggingUtil;
-import com.bht.saigonparking.service.contact.service.QueueService;
+import com.bht.saigonparking.service.contact.service.HandshakeService;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -37,9 +34,8 @@ public final class WebSocketHandshakeWebInterceptor extends HttpSessionHandshake
 
     private static final String AUTH_PATH_PREFIX = "web?token=";
     private static final Short AUTH_PATH_PREFIX_LENGTH = 10;
-
     private final SaigonParkingAuthentication authentication;
-    private final QueueService queueService;
+    private final HandshakeService handshakeService;
 
     @Override
     public boolean beforeHandshake(@NonNull ServerHttpRequest httpRequest,
@@ -51,14 +47,8 @@ public final class WebSocketHandshakeWebInterceptor extends HttpSessionHandshake
             if (accessToken.isEmpty()) {
                 throw new MissingTokenException();
             }
-
             SaigonParkingTokenBody saigonParkingTokenBody = authentication.parseJwtToken(accessToken);
-            Long userId = saigonParkingTokenBody.getUserId();
-            String userRole = saigonParkingTokenBody.getUserRole();
-
-            attributes.put(SAIGON_PARKING_USER_KEY, userId);
-            attributes.put(SAIGON_PARKING_USER_ROLE_KEY, userRole);
-            queueService.registerAutoDeleteQueueAndExchangeForUser(userId, userRole);
+            attributes.putAll(handshakeService.postAuthentication(saigonParkingTokenBody));
 
         } catch (ExpiredJwtException expiredJwtException) {
             LoggingUtil.log(Level.ERROR, "WebSocketInterceptor", "Exception", "ExpiredJwtException");
