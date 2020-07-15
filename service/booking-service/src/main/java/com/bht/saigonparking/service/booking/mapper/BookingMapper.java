@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.bht.saigonparking.api.grpc.booking.Booking;
 import com.bht.saigonparking.api.grpc.booking.BookingHistory;
 import com.bht.saigonparking.api.grpc.booking.CreateBookingRequest;
+import com.bht.saigonparking.api.grpc.booking.UpdateBookingStatusRequest;
 import com.bht.saigonparking.service.booking.configuration.AppConfiguration;
 import com.bht.saigonparking.service.booking.entity.BookingEntity;
 import com.bht.saigonparking.service.booking.entity.BookingHistoryEntity;
@@ -51,4 +52,13 @@ public interface BookingMapper {
     @Mapping(target = "timestamp", source = "lastUpdated", qualifiedByName = "toTimestampString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "note", source = "note", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     BookingHistory toBookingHistory(@NotNull BookingHistoryEntity bookingHistoryEntity);
+
+    @Named("toBookingHistoryEntity")
+    @Mapping(target = "bookingEntity", source = "bookingId", qualifiedByName = "toBookingEntityFromBookingId")
+    @Mapping(target = "bookingStatusEntity", source = "status", qualifiedByName = "toBookingStatusEntity")
+    @Mapping(target = "note", source = "note", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    @Mapping(target = "lastUpdated", source = "timestamp", qualifiedByName = "toTimestamp")
+    @Mapping(target = "version", constant = "1L")
+    @Mapping(target = "id", ignore = true)
+    BookingHistoryEntity toBookingHistoryEntity(@NotNull UpdateBookingStatusRequest updateBookingStatusRequest);
 }
