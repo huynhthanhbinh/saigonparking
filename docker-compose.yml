@@ -1,5 +1,4 @@
 version: '3'
-
 networks:
   saigonparking-service:
     driver: bridge
@@ -16,6 +15,7 @@ services:
       - "${SERVICE_DISCOVERY_HTTP_PORT}:${SERVICE_DISCOVERY_HTTP_PORT}"
       - "${SERVICE_DISCOVERY_GRPC_PORT}:${SERVICE_DISCOVERY_GRPC_PORT}"
 
+
   message-queue:
     image: ${DOCKER_HUB_ID}/queue:${MESSAGE_QUEUE_VERSION}
     networks:
@@ -30,6 +30,7 @@ services:
     links:
       - service-discovery
 
+
   mail-service:
     image: ${DOCKER_HUB_ID}/mail-service:${MAIL_SERVICE_VERSION}
     networks:
@@ -39,6 +40,7 @@ services:
       WEB_DOMAIN:             ${SAIGON_PARKING_DOMAIN}
       DATABASE_HOST:          ${DATABASE_HOST}
       DATABASE_PORT:          ${DATABASE_PORT}
+      DATABASE_USER:          ${DATABASE_USER}
       DATABASE_PASS:          ${DATABASE_PASS}
       MESSAGE_QUEUE_HOST:     ${MESSAGE_QUEUE_HOST}
       MESSAGE_QUEUE_PORT:     ${MESSAGE_QUEUE_PORT}
@@ -53,6 +55,7 @@ services:
       - message-queue
       - service-discovery
 
+
   auth-service:
     image: ${DOCKER_HUB_ID}/auth-service:${AUTH_SERVICE_VERSION}
     networks:
@@ -64,6 +67,7 @@ services:
       SERVICE_PORT:           ${AUTH_SERVICE_PORT}
       DATABASE_HOST:          ${DATABASE_HOST}
       DATABASE_PORT:          ${DATABASE_PORT}
+      DATABASE_USER:          ${DATABASE_USER}
       DATABASE_PASS:          ${DATABASE_PASS}
       MESSAGE_QUEUE_HOST:     ${MESSAGE_QUEUE_HOST}
       MESSAGE_QUEUE_PORT:     ${MESSAGE_QUEUE_PORT}
@@ -80,6 +84,7 @@ services:
       - message-queue
       - service-discovery
 
+
   booking-service:
     image: ${DOCKER_HUB_ID}/booking-service:${BOOKING_SERVICE_VERSION}
     networks:
@@ -91,6 +96,7 @@ services:
       SERVICE_PORT:           ${BOOKING_SERVICE_PORT}
       DATABASE_HOST:          ${DATABASE_HOST}
       DATABASE_PORT:          ${DATABASE_PORT}
+      DATABASE_USER:          ${DATABASE_USER}
       DATABASE_PASS:          ${DATABASE_PASS}
       MESSAGE_QUEUE_HOST:     ${MESSAGE_QUEUE_HOST}
       MESSAGE_QUEUE_PORT:     ${MESSAGE_QUEUE_PORT}
@@ -107,6 +113,7 @@ services:
       - message-queue
       - service-discovery
 
+
   user-service-1:
     image: ${DOCKER_HUB_ID}/user-service:${USER_SERVICE_VERSION}
     networks:
@@ -118,6 +125,7 @@ services:
       SERVICE_PORT:           ${USER_SERVICE_1_PORT}
       DATABASE_HOST:          ${DATABASE_HOST}
       DATABASE_PORT:          ${DATABASE_PORT}
+      DATABASE_USER:          ${DATABASE_USER}
       DATABASE_PASS:          ${DATABASE_PASS}
       MESSAGE_QUEUE_HOST:     ${MESSAGE_QUEUE_HOST}
       MESSAGE_QUEUE_PORT:     ${MESSAGE_QUEUE_PORT}
@@ -134,6 +142,7 @@ services:
       - message-queue
       - service-discovery
 
+
   user-service-2:
     image: ${DOCKER_HUB_ID}/user-service:${USER_SERVICE_VERSION}
     networks:
@@ -145,6 +154,7 @@ services:
       SERVICE_PORT:           ${USER_SERVICE_2_PORT}
       DATABASE_HOST:          ${DATABASE_HOST}
       DATABASE_PORT:          ${DATABASE_PORT}
+      DATABASE_USER:          ${DATABASE_USER}
       DATABASE_PASS:          ${DATABASE_PASS}
       MESSAGE_QUEUE_HOST:     ${MESSAGE_QUEUE_HOST}
       MESSAGE_QUEUE_PORT:     ${MESSAGE_QUEUE_PORT}
@@ -161,6 +171,7 @@ services:
       - message-queue
       - service-discovery
 
+
   parkinglot-service-1:
     image: ${DOCKER_HUB_ID}/parkinglot-service:${PARKING_LOT_SERVICE_VERSION}
     networks:
@@ -172,6 +183,7 @@ services:
       SERVICE_PORT:           ${PARKING_LOT_SERVICE_1_PORT}
       DATABASE_HOST:          ${DATABASE_HOST}
       DATABASE_PORT:          ${DATABASE_PORT}
+      DATABASE_USER:          ${DATABASE_USER}
       DATABASE_PASS:          ${DATABASE_PASS}
       MESSAGE_QUEUE_HOST:     ${MESSAGE_QUEUE_HOST}
       MESSAGE_QUEUE_PORT:     ${MESSAGE_QUEUE_PORT}
@@ -188,6 +200,7 @@ services:
       - message-queue
       - service-discovery
 
+
   parkinglot-service-2:
     image: ${DOCKER_HUB_ID}/parkinglot-service:${PARKING_LOT_SERVICE_VERSION}
     networks:
@@ -199,6 +212,7 @@ services:
       SERVICE_PORT:           ${PARKING_LOT_SERVICE_2_PORT}
       DATABASE_HOST:          ${DATABASE_HOST}
       DATABASE_PORT:          ${DATABASE_PORT}
+      DATABASE_USER:          ${DATABASE_USER}
       DATABASE_PASS:          ${DATABASE_PASS}
       MESSAGE_QUEUE_HOST:     ${MESSAGE_QUEUE_HOST}
       MESSAGE_QUEUE_PORT:     ${MESSAGE_QUEUE_PORT}
@@ -215,6 +229,7 @@ services:
       - message-queue
       - service-discovery
 
+
   contact-service-1:
     image: ${DOCKER_HUB_ID}/contact-service:${CONTACT_SERVICE_VERSION}
     networks:
@@ -227,6 +242,7 @@ services:
       SERVICE_HTTP_PORT:      ${CONTACT_SERVICE_1_HTTP_PORT}
       DATABASE_HOST:          ${DATABASE_HOST}
       DATABASE_PORT:          ${DATABASE_PORT}
+      DATABASE_USER:          ${DATABASE_USER}
       DATABASE_PASS:          ${DATABASE_PASS}
       MESSAGE_QUEUE_HOST:     ${MESSAGE_QUEUE_HOST}
       MESSAGE_QUEUE_PORT:     ${MESSAGE_QUEUE_PORT}
@@ -244,6 +260,7 @@ services:
       - message-queue
       - service-discovery
 
+
   contact-service-2:
     image: ${DOCKER_HUB_ID}/contact-service:${CONTACT_SERVICE_VERSION}
     networks:
@@ -256,6 +273,7 @@ services:
       SERVICE_HTTP_PORT:      ${CONTACT_SERVICE_2_HTTP_PORT}
       DATABASE_HOST:          ${DATABASE_HOST}
       DATABASE_PORT:          ${DATABASE_PORT}
+      DATABASE_USER:          ${DATABASE_USER}
       DATABASE_PASS:          ${DATABASE_PASS}
       MESSAGE_QUEUE_HOST:     ${MESSAGE_QUEUE_HOST}
       MESSAGE_QUEUE_PORT:     ${MESSAGE_QUEUE_PORT}
