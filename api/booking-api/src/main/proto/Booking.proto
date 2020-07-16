@@ -20,7 +20,8 @@ message Booking {
     int64 parkingLotId = 2;
     int64 customerId = 3;
     string licensePlate = 4;
-    bool isFinished = 5;
+    BookingStatus latestStatus = 5;
+    bool isFinished = 6;
 }
 
 message BookingHistory {
@@ -41,7 +42,7 @@ message BookingList {
 }
 
 message GetAllBookingRequest {
-    BookingStatus status = 1;
+    BookingStatus status = 1; /* default: ALL */
     int32 nRow = 2;
     int32 pageNumber = 3;
 }
@@ -54,8 +55,9 @@ message GetAllBookingOfCustomerRequest {
 
 message GetAllBookingOfParkingLotRequest {
     int64 parkingLotId = 1;
-    int32 nRow = 2;
-    int32 pageNumber = 3;
+    BookingStatus status = 2; /* default: ALL */
+    int32 nRow = 3;
+    int32 pageNumber = 4;
 }
 
 message CreateBookingRequest {

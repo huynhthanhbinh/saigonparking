@@ -34,6 +34,7 @@ public interface BookingMapper {
     @Mapping(target = "customerId", source = "customerId", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
     @Mapping(target = "licensePlate", source = "customerLicensePlate", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "isFinished", source = "isFinished", defaultExpression = "java(customizedMapper.DEFAULT_BOOL_VALUE)")
+    @Mapping(target = "latestStatus", source = "bookingStatusEntity", qualifiedByName = "toBookingStatus")
     Booking toBooking(@NotNull BookingEntity bookingEntity);
 
     @Named("toBookingEntity")
