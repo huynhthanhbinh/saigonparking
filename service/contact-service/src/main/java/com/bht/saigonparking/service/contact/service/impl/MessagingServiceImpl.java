@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
  * @author bht
  */
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public final class MessagingServiceImpl implements MessagingService {
 
     private final RabbitTemplate rabbitTemplate;
@@ -82,7 +82,8 @@ public final class MessagingServiceImpl implements MessagingService {
                 String.format("nSessionOfReceiver: %d", (userSessionSet != null) ? userSessionSet.size() : 0));
     }
 
-    private void forwardMessageToCustomer(@NotNull SaigonParkingMessage message) {
+    @Override
+    public void forwardMessageToCustomer(@NotNull SaigonParkingMessage message) {
         try {
             String routingKey = SaigonParkingMessageQueue.getUserRoutingKey(message.getReceiverId());
             rabbitTemplate.convertAndSend(routingKey, message);
@@ -92,7 +93,8 @@ public final class MessagingServiceImpl implements MessagingService {
         }
     }
 
-    private void forwardMessageToParkingLot(@NotNull SaigonParkingMessage message) {
+    @Override
+    public void forwardMessageToParkingLot(@NotNull SaigonParkingMessage message) {
         try {
             String exchangeName = SaigonParkingMessageQueue.getParkingLotExchangeName(message.getReceiverId());
             rabbitTemplate.convertAndSend(exchangeName, "", message);
@@ -109,16 +111,16 @@ public final class MessagingServiceImpl implements MessagingService {
                 intermediateService.handleBookingRequest(delegate, webSocketSession);
                 break;
             case BOOKING_CANCELLATION:
-                intermediateService.handleBookingCancellation(delegate, webSocketSession);
+                intermediateService.handleBookingCancellation(delegate, this);
                 break;
             case BOOKING_ACCEPTANCE:
-                intermediateService.handleBookingAcceptance(delegate, webSocketSession);
+                intermediateService.handleBookingAcceptance(delegate, this);
                 break;
             case BOOKING_REJECT:
-                intermediateService.handleBookingReject(delegate, webSocketSession);
+                intermediateService.handleBookingReject(delegate, this);
                 break;
             case BOOKING_FINISH:
-                intermediateService.handleBookingFinish(delegate, webSocketSession);
+                intermediateService.handleBookingFinish(delegate, this);
                 break;
             default:
                 break;

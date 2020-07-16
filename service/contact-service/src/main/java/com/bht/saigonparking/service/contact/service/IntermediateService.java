@@ -15,13 +15,18 @@ import com.google.protobuf.InvalidProtocolBufferException;
  */
 public interface IntermediateService {
 
-    void handleBookingRequest(@NotNull SaigonParkingMessage.Builder message, @NotNull WebSocketSession webSocketSession) throws IOException;
+    void handleBookingRequest(@NotNull SaigonParkingMessage.Builder message,
+                              @NotNull WebSocketSession webSocketSession) throws IOException;
 
-    void handleBookingCancellation(@NotNull SaigonParkingMessage.Builder message, @NotNull WebSocketSession webSocketSession) throws InvalidProtocolBufferException;
+    void handleBookingCancellation(@NotNull SaigonParkingMessage.Builder message,
+                                   @NotNull MessagingService messagingService) throws InvalidProtocolBufferException;
 
-    void handleBookingAcceptance(@NotNull SaigonParkingMessage.Builder message, @NotNull WebSocketSession webSocketSession) throws InvalidProtocolBufferException;
+    void handleBookingAcceptance(@NotNull SaigonParkingMessage.Builder message,
+                                 @NotNull MessagingService messagingService) throws InvalidProtocolBufferException;
 
-    void handleBookingReject(@NotNull SaigonParkingMessage.Builder message, @NotNull WebSocketSession webSocketSession) throws InvalidProtocolBufferException;
+    void handleBookingReject(@NotNull SaigonParkingMessage.Builder message,
+                             @NotNull MessagingService messagingService) throws InvalidProtocolBufferException;
 
-    void handleBookingFinish(@NotNull SaigonParkingMessage.Builder message, @NotNull WebSocketSession webSocketSession) throws InvalidProtocolBufferException;
+    void handleBookingFinish(@NotNull SaigonParkingMessage.Builder message,
+                             @NotNull MessagingService messagingService) throws InvalidProtocolBufferException;
 }

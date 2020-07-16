@@ -20,4 +20,8 @@ public interface MessagingService {
     void publishMessageToQueue(@NotNull SaigonParkingMessage saigonParkingMessage);
 
     void consumeMessageFromQueue(@NotNull SaigonParkingMessage saigonParkingMessage, @NotNull Long receiverUserId);
+
+    void forwardMessageToCustomer(@NotNull SaigonParkingMessage message);
+
+    void forwardMessageToParkingLot(@NotNull SaigonParkingMessage message);
 }

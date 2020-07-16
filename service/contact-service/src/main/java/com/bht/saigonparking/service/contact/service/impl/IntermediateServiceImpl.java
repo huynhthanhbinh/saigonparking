@@ -1,12 +1,15 @@
 package com.bht.saigonparking.service.contact.service.impl;
 
+import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Classification.PARKING_LOT_MESSAGE;
 import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Classification.SYSTEM_MESSAGE;
 import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Type.BOOKING_PROCESSING;
+import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Type.HISTORY_CHANGE;
 
 import java.io.IOException;
 
 import javax.validation.constraints.NotNull;
 
+import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.BinaryMessage;
@@ -23,11 +26,13 @@ import com.bht.saigonparking.api.grpc.contact.BookingProcessingContent;
 import com.bht.saigonparking.api.grpc.contact.BookingRejectContent;
 import com.bht.saigonparking.api.grpc.contact.BookingRequestContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
-import com.bht.saigonparking.service.contact.handler.WebSocketUserSessionManagement;
+import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.contact.service.IntermediateService;
+import com.bht.saigonparking.service.contact.service.MessagingService;
 import com.google.protobuf.Empty;
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import io.grpc.Context;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 
@@ -36,15 +41,16 @@ import lombok.RequiredArgsConstructor;
  * @author bht
  */
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public final class IntermediateServiceImpl implements IntermediateService {
 
-    private final WebSocketUserSessionManagement webSocketUserSessionManagement;
     private final BookingServiceGrpc.BookingServiceStub bookingServiceStub;
     private final BookingServiceGrpc.BookingServiceBlockingStub bookingServiceBlockingStub;
 
     @Override
-    public void handleBookingRequest(SaigonParkingMessage.@NotNull Builder message, @NotNull WebSocketSession webSocketSession) throws IOException {
+    public void handleBookingRequest(@NotNull SaigonParkingMessage.Builder message,
+                                     @NotNull WebSocketSession webSocketSession) throws IOException {
+
         BookingRequestContent bookingRequestContent = BookingRequestContent.parseFrom(message.getContent());
         long newBookingId = bookingServiceBlockingStub.createBooking(CreateBookingRequest.newBuilder()
                 .setParkingLotId(bookingRequestContent.getParkingLotId())
@@ -69,109 +75,106 @@ public final class IntermediateServiceImpl implements IntermediateService {
         webSocketSession.sendMessage(new BinaryMessage(bookingProcessingMessage.toByteArray()));
     }
 
-
     @Override
-    public void handleBookingCancellation(SaigonParkingMessage.@NotNull Builder message, @NotNull WebSocketSession webSocketSession) throws InvalidProtocolBufferException {
+    public void handleBookingCancellation(@NotNull SaigonParkingMessage.Builder message,
+                                          @NotNull MessagingService messagingService) throws InvalidProtocolBufferException {
+
         BookingCancellationContent bookingCancellationContent = BookingCancellationContent.parseFrom(message.getContent());
-        bookingServiceStub.updateBookingStatus(UpdateBookingStatusRequest.newBuilder()
+
+        UpdateBookingStatusRequest request = UpdateBookingStatusRequest.newBuilder()
                 .setBookingId(bookingCancellationContent.getBookingId())
                 .setStatus(BookingStatus.CANCELLED)
                 .setNote(bookingCancellationContent.getReason())
                 .setTimestamp(message.getTimestamp())
-                .build(), new StreamObserver<Empty>() {
-            @Override
-            public void onNext(Empty empty) {
+                .build();
 
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-
-            }
-
-            @Override
-            public void onCompleted() {
-
-            }
-        });
+        updateBookingStatus(request, message, messagingService);
     }
 
-
     @Override
-    public void handleBookingAcceptance(SaigonParkingMessage.@NotNull Builder message, @NotNull WebSocketSession webSocketSession) throws InvalidProtocolBufferException {
+    public void handleBookingAcceptance(@NotNull SaigonParkingMessage.Builder message,
+                                        @NotNull MessagingService messagingService) throws InvalidProtocolBufferException {
+
         BookingAcceptanceContent bookingAcceptanceContent = BookingAcceptanceContent.parseFrom(message.getContent());
-        bookingServiceStub.updateBookingStatus(UpdateBookingStatusRequest.newBuilder()
+
+        UpdateBookingStatusRequest request = UpdateBookingStatusRequest.newBuilder()
                 .setBookingId(bookingAcceptanceContent.getBookingId())
                 .setStatus(BookingStatus.ACCEPTED)
                 .setTimestamp(message.getTimestamp())
-                .build(), new StreamObserver<Empty>() {
-            @Override
-            public void onNext(Empty empty) {
+                .build();
 
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-
-            }
-
-            @Override
-            public void onCompleted() {
-
-            }
-        });
+        updateBookingStatus(request, message, messagingService);
     }
 
-
     @Override
-    public void handleBookingReject(SaigonParkingMessage.@NotNull Builder message, @NotNull WebSocketSession webSocketSession) throws InvalidProtocolBufferException {
+    public void handleBookingReject(@NotNull SaigonParkingMessage.Builder message,
+                                    @NotNull MessagingService messagingService) throws InvalidProtocolBufferException {
+
         BookingRejectContent bookingRejectContent = BookingRejectContent.parseFrom(message.getContent());
-        bookingServiceStub.updateBookingStatus(UpdateBookingStatusRequest.newBuilder()
+
+        UpdateBookingStatusRequest request = UpdateBookingStatusRequest.newBuilder()
                 .setBookingId(bookingRejectContent.getBookingId())
                 .setStatus(BookingStatus.REJECTED)
                 .setNote(bookingRejectContent.getReason())
                 .setTimestamp(message.getTimestamp())
-                .build(), new StreamObserver<Empty>() {
-            @Override
-            public void onNext(Empty empty) {
+                .build();
 
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-
-            }
-
-            @Override
-            public void onCompleted() {
-
-            }
-        });
+        updateBookingStatus(request, message, messagingService);
     }
 
-
     @Override
-    public void handleBookingFinish(SaigonParkingMessage.@NotNull Builder message, @NotNull WebSocketSession webSocketSession) throws InvalidProtocolBufferException {
+    public void handleBookingFinish(@NotNull SaigonParkingMessage.Builder message,
+                                    @NotNull MessagingService messagingService) throws InvalidProtocolBufferException {
+
         BookingFinishContent bookingFinishContent = BookingFinishContent.parseFrom(message.getContent());
-        bookingServiceStub.updateBookingStatus(UpdateBookingStatusRequest.newBuilder()
+
+        UpdateBookingStatusRequest request = UpdateBookingStatusRequest.newBuilder()
                 .setBookingId(bookingFinishContent.getBookingId())
                 .setStatus(BookingStatus.FINISHED)
                 .setTimestamp(message.getTimestamp())
-                .build(), new StreamObserver<Empty>() {
+                .build();
+
+        updateBookingStatus(request, message, messagingService);
+    }
+
+    private void updateBookingStatus(@NotNull UpdateBookingStatusRequest request,
+                                     @NotNull SaigonParkingMessage.Builder message,
+                                     @NotNull MessagingService messagingService) {
+
+        Context.current().run(() -> bookingServiceStub
+                .updateBookingStatus(request, updateBookingStatusStreamObserver(request, message, messagingService)));
+    }
+
+    private StreamObserver<Empty> updateBookingStatusStreamObserver(@NotNull UpdateBookingStatusRequest request,
+                                                                    @NotNull SaigonParkingMessage.Builder message,
+                                                                    @NotNull MessagingService messagingService) {
+        return new StreamObserver<Empty>() {
             @Override
             public void onNext(Empty empty) {
-
+                if (message.getClassification().equals(PARKING_LOT_MESSAGE)) {
+                    messagingService.forwardMessageToParkingLot(SaigonParkingMessage.newBuilder()
+                            .setClassification(SYSTEM_MESSAGE)
+                            .setType(HISTORY_CHANGE)
+                            .setSenderId(0)
+                            .setReceiverId(message.getSenderId())
+                            .setContent(message.getContent())
+                            .setTimestamp(message.getTimestamp())
+                            .build());
+                }
             }
 
             @Override
             public void onError(Throwable throwable) {
-
+                LoggingUtil.log(Level.ERROR,
+                        String.format("updateBookingStatus(%d, %s)", request.getBookingId(), request.getStatus()),
+                        "Exception", throwable.getClass().getSimpleName());
             }
 
             @Override
             public void onCompleted() {
-
+                LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                        String.format("updateBookingStatus(%d, %s)", request.getBookingId(), request.getStatus()));
             }
-        });
+        };
     }
 }
