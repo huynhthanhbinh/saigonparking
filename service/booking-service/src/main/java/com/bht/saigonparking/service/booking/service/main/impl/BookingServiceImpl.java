@@ -65,28 +65,32 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public Set<BookingEntity> getAllBooking(@NotNull Integer nRow,
                                             @NotNull Integer pageNumber) {
-        return null;
+
+        return bookingRepository.getAllBooking(nRow, pageNumber);
     }
 
     @Override
     public Set<BookingEntity> getAllBooking(@NotNull BookingStatusEntity bookingStatusEntity,
                                             @NotNull Integer nRow,
                                             @NotNull Integer pageNumber) {
-        return null;
+
+        return bookingRepository.getAllBooking(bookingStatusEntity, nRow, pageNumber);
     }
 
     @Override
     public Set<BookingEntity> getAllBookingOfCustomer(@NotNull Long customerId,
                                                       @NotNull Integer nRow,
                                                       @NotNull Integer pageNumber) {
-        return null;
+
+        return bookingRepository.getAllBookingOfCustomer(customerId, nRow, pageNumber);
     }
 
     @Override
     public Set<BookingEntity> getAllBookingOfParkingLot(@NotNull Long parkingLotId,
                                                         @NotNull Integer nRow,
                                                         @NotNull Integer pageNumber) {
-        return null;
+
+        return bookingRepository.getAllBookingOfParkingLot(parkingLotId, nRow, pageNumber);
     }
 
     @Override
@@ -94,11 +98,13 @@ public class BookingServiceImpl implements BookingService {
                                                         @NotNull BookingStatusEntity bookingStatusEntity,
                                                         @NotNull Integer nRow,
                                                         @NotNull Integer pageNumber) {
-        return null;
+
+        return bookingRepository.getAllBookingOfParkingLot(parkingLotId, bookingStatusEntity, nRow, pageNumber);
     }
 
     @Override
     public Set<BookingEntity> getAllOnGoingBookingOfParkingLot(@NotNull Long parkingLotId) {
-        return null;
+
+        return bookingRepository.getAllOnGoingBookingOfParkingLot(parkingLotId);
     }
 }

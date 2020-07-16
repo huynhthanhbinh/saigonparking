@@ -9,13 +9,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.bht.saigonparking.service.booking.entity.BookingEntity;
+import com.bht.saigonparking.service.booking.repository.custom.BookingRepositoryCustom;
 
 /**
  *
  * @author bht
  */
 @Repository
-public interface BookingRepository extends JpaRepository<BookingEntity, Long> {
+public interface BookingRepository extends JpaRepository<BookingEntity, Long>, BookingRepositoryCustom {
 
     @Query("FROM BookingEntity B " +
             "JOIN FETCH B.bookingHistoryEntitySet H " +
