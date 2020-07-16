@@ -42,5 +42,10 @@ public final class BookingStatusEntity extends BaseEntity {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "bookingStatusEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<BookingEntity> bookingEntitySet;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "bookingStatusEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<BookingHistoryEntity> bookingHistoryEntitySet;
 }

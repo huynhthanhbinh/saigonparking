@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Wed, Jul 15th, 2020
+Last updated:       Thu, Jul 16th, 2020
 ========================================================================================================================
 
 001. gRPC error handling:
@@ -346,3 +346,9 @@ Last updated:       Wed, Jul 15th, 2020
 
 113. Persisting and Fetching a ManyToOne association with JPA and Hibernate
         https://vladmihalcea.com/manytoone-jpa-hibernate/
+
+114. Sql Server 'Saving changes is not permitted' error ► Prevent saving changes that require table re-creation
+        https://stackoverflow.com/questions/6810425/sql-server-saving-changes-is-not-permitted-error-prevent-saving-changes-that
+
+115. Implementing IF Condition Within a T-SQL UPDATE Statement
+        https://stackoverflow.com/questions/3252935/implementing-if-condition-within-a-t-sql-update-statement

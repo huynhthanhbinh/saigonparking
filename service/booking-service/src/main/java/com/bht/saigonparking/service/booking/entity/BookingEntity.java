@@ -5,6 +5,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -47,6 +49,10 @@ public final class BookingEntity extends BaseEntity {
 
     @Column(name = "[IS_FINISHED]", nullable = false)
     private Boolean isFinished;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "[LATEST_STATUS_ID]", referencedColumnName = "[ID]", updatable = false)
+    private BookingStatusEntity bookingStatusEntity;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
