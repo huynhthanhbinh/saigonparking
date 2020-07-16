@@ -48,6 +48,10 @@ message GetAllBookingRequest {
     int32 pageNumber = 3;
 }
 
+message CountAllBookingRequest {
+    BookingStatus status = 1; /* default: ALL */
+}
+
 message GetAllBookingOfCustomerRequest {
     int64 customerId = 1; /* let skip customerId (not set) if you want auto-get customerId by customer JWT token  */
     int32 nRow = 2;
@@ -87,7 +91,7 @@ service BookingService {
 
     /* PUBLIC: EXTERNAL client can call (remember to provide token for auth purposes) */
     rpc getAllBooking (GetAllBookingRequest) returns (BookingList);
-    rpc countAllBooking (google.protobuf.Empty) returns (google.protobuf.Int64Value);
+    rpc countAllBooking (CountAllBookingRequest) returns (google.protobuf.Int64Value);
     rpc getAllBookingOfCustomer (GetAllBookingOfCustomerRequest) returns (BookingList);
     rpc countAllBookingOfCustomerByCustomerId (google.protobuf.Int64Value) returns (google.protobuf.Int64Value);
     rpc countAllBookingOfCustomerByAuthorizationHeader (google.protobuf.Empty) returns (google.protobuf.Int64Value); /* get customerId from JWT */

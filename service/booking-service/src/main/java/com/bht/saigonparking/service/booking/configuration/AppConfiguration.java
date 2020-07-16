@@ -7,6 +7,7 @@ import org.lognet.springboot.grpc.GRpcGlobalInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
@@ -28,6 +29,7 @@ import com.google.common.collect.ImmutableMap;
  */
 @Configuration
 @EnableTransactionManagement
+@Import(ChannelConfiguration.class)
 @ComponentScan(basePackages = AppConfiguration.BASE_PACKAGE,
         includeFilters = @ComponentScan.Filter(InheritedComponent.class))
 public class AppConfiguration {

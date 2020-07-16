@@ -1,5 +1,8 @@
 package com.bht.saigonparking.service.booking.service.grpc;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.logging.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.bht.saigonparking.api.grpc.booking.BookingDetail;
 import com.bht.saigonparking.api.grpc.booking.BookingList;
 import com.bht.saigonparking.api.grpc.booking.BookingServiceGrpc;
+import com.bht.saigonparking.api.grpc.booking.BookingStatus;
 import com.bht.saigonparking.api.grpc.booking.CountAllBookingOfParkingLotRequest;
+import com.bht.saigonparking.api.grpc.booking.CountAllBookingRequest;
 import com.bht.saigonparking.api.grpc.booking.CreateBookingRequest;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingOfCustomerRequest;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingOfParkingLotRequest;
@@ -15,7 +20,10 @@ import com.bht.saigonparking.api.grpc.booking.GetAllBookingRequest;
 import com.bht.saigonparking.api.grpc.booking.UpdateBookingStatusRequest;
 import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
 import com.bht.saigonparking.common.util.LoggingUtil;
+import com.bht.saigonparking.service.booking.entity.BookingEntity;
 import com.bht.saigonparking.service.booking.mapper.BookingMapper;
+import com.bht.saigonparking.service.booking.mapper.CustomizedMapper;
+import com.bht.saigonparking.service.booking.mapper.EnumMapper;
 import com.bht.saigonparking.service.booking.service.main.BookingService;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
@@ -32,7 +40,9 @@ import lombok.RequiredArgsConstructor;
 public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServiceImplBase {
 
     private final SaigonParkingServerInterceptor serverInterceptor;
+    private final EnumMapper enumMapper;
     private final BookingMapper bookingMapper;
+    private final CustomizedMapper customizedMapper;
     private final BookingService bookingService;
 
     @Override
@@ -105,52 +115,241 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
     }
 
     @Override
-    public void countAllBooking(Empty request, StreamObserver<Int64Value> responseObserver) {
-        super.countAllBooking(request, responseObserver);
+    public void countAllBooking(CountAllBookingRequest request, StreamObserver<Int64Value> responseObserver) {
+        try {
+            serverInterceptor.validateAdmin();
+
+            Long count = request.getStatus().equals(BookingStatus.ALL)
+                    ? bookingService.countAllBooking()
+                    : bookingService.countAllBooking(enumMapper.toBookingStatusEntity(request.getStatus()));
+
+            responseObserver.onNext(Int64Value.of(count));
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("countAllBooking(%s): %d", request.getStatus(), count));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("countAllBooking(%s)", request.getStatus()));
+        }
     }
 
     @Override
     public void countAllBookingOfCustomerByCustomerId(Int64Value request, StreamObserver<Int64Value> responseObserver) {
-        super.countAllBookingOfCustomerByCustomerId(request, responseObserver);
+        try {
+            serverInterceptor.validateAdmin();
+
+            Long count = bookingService.countAllBookingOfCustomer(request.getValue());
+
+            responseObserver.onNext(Int64Value.of(count));
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("countAllBookingOfCustomerByCustomerId(%d): %d", request.getValue(), count));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("countAllBookingOfCustomerByCustomerId(%d)", request.getValue()));
+        }
     }
 
     @Override
     public void countAllBookingOfCustomerByAuthorizationHeader(Empty request, StreamObserver<Int64Value> responseObserver) {
-        super.countAllBookingOfCustomerByAuthorizationHeader(request, responseObserver);
+        Long customerId = serverInterceptor.getUserIdContext().get();
+        try {
+            Long count = bookingService.countAllBookingOfCustomer(customerId);
+
+            responseObserver.onNext(Int64Value.of(count));
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("countAllBookingOfCustomerByAuthorizationHeader(%d): %d", customerId, count));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("countAllBookingOfCustomerByAuthorizationHeader(%d)", customerId));
+        }
     }
 
     @Override
     public void countAllBookingOfParkingLot(CountAllBookingOfParkingLotRequest request, StreamObserver<Int64Value> responseObserver) {
-        super.countAllBookingOfParkingLot(request, responseObserver);
+        try {
+            Long count = (request.getStatus().equals(BookingStatus.ALL))
+                    ? bookingService.countAllBookingOfParkingLot(request.getParkingLotId())
+                    : bookingService.countAllBookingOfParkingLot(request.getParkingLotId(), enumMapper.toBookingStatusEntity(request.getStatus()));
+
+            responseObserver.onNext(Int64Value.of(count));
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("countAllBookingOfParkingLot(%d, %s): %d", request.getParkingLotId(), request.getStatus(), count));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("countAllBookingOfParkingLot(%d, %s)", request.getParkingLotId(), request.getStatus()));
+        }
     }
 
     @Override
     public void countAllOnGoingBookingOfParkingLot(Int64Value request, StreamObserver<Int64Value> responseObserver) {
-        super.countAllOnGoingBookingOfParkingLot(request, responseObserver);
+        try {
+            Long count = bookingService.countAllOnGoingBookingOfParkingLot(request.getValue());
+
+            responseObserver.onNext(Int64Value.of(count));
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("countAllOnGoingBookingOfParkingLot(%d): %d", request.getValue(), count));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("countAllOnGoingBookingOfParkingLot(%d)", request.getValue()));
+        }
     }
 
     @Override
     public void getAllBooking(GetAllBookingRequest request, StreamObserver<BookingList> responseObserver) {
-        super.getAllBooking(request, responseObserver);
+        try {
+            List<BookingEntity> bookingEntityList = request.getStatus().equals(BookingStatus.ALL)
+                    ? bookingService.getAllBooking(request.getNRow(), request.getPageNumber())
+                    : bookingService.getAllBooking(enumMapper.toBookingStatusEntity(request.getStatus()), request.getNRow(), request.getPageNumber());
+
+            Map<BookingEntity, String> bookingMap = customizedMapper.toBookingEntityParkingLotNameMap(bookingEntityList);
+            BookingList bookingList = BookingList.newBuilder().addAllBooking(bookingMapper.toBookingList(bookingMap)).build();
+
+            responseObserver.onNext(bookingList);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getAllBooking(%s, %d, %d)", request.getStatus(), request.getNRow(), request.getPageNumber()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getAllBooking(%s, %d, %d)", request.getStatus(), request.getNRow(), request.getPageNumber()));
+        }
     }
 
     @Override
     public void getAllBookingOfCustomer(GetAllBookingOfCustomerRequest request, StreamObserver<BookingList> responseObserver) {
-        super.getAllBookingOfCustomer(request, responseObserver);
+        Long customerId = request.getCustomerId() != 0 ? request.getCustomerId() : serverInterceptor.getUserIdContext().get();
+        try {
+            List<BookingEntity> bookingEntityList = bookingService
+                    .getAllBookingOfCustomer(customerId, request.getNRow(), request.getPageNumber());
+
+            Map<BookingEntity, String> bookingMap = customizedMapper.toBookingEntityParkingLotNameMap(bookingEntityList);
+            BookingList bookingList = BookingList.newBuilder().addAllBooking(bookingMapper.toBookingList(bookingMap)).build();
+
+            responseObserver.onNext(bookingList);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getAllBookingOfCustomer(%d, %d, %d)", customerId, request.getNRow(), request.getPageNumber()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getAllBookingOfCustomer(%d, %d, %d)", customerId, request.getNRow(), request.getPageNumber()));
+        }
     }
 
     @Override
     public void getAllBookingOfParkingLot(GetAllBookingOfParkingLotRequest request, StreamObserver<BookingList> responseObserver) {
-        super.getAllBookingOfParkingLot(request, responseObserver);
+        try {
+            List<BookingEntity> bookingEntityList = request.getStatus().equals(BookingStatus.ALL)
+                    ? bookingService.getAllBookingOfParkingLot(request.getParkingLotId(), request.getNRow(), request.getPageNumber())
+                    : bookingService.getAllBookingOfParkingLot(request.getParkingLotId(), enumMapper.toBookingStatusEntity(request.getStatus()), request.getNRow(), request.getPageNumber());
+
+            Map<BookingEntity, String> bookingMap = customizedMapper.toBookingEntityParkingLotNameMap(bookingEntityList);
+            BookingList bookingList = BookingList.newBuilder().addAllBooking(bookingMapper.toBookingList(bookingMap)).build();
+
+            responseObserver.onNext(bookingList);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getAllBookingOfParkingLot(%d, %s, %d, %d)",
+                            request.getParkingLotId(), request.getStatus(), request.getNRow(), request.getPageNumber()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getAllBookingOfParkingLot(%d, %s, %d, %d)",
+                            request.getParkingLotId(), request.getStatus(), request.getNRow(), request.getPageNumber()));
+        }
     }
 
     @Override
     public void getAllOnGoingBookingOfParkingLot(Int64Value request, StreamObserver<BookingList> responseObserver) {
-        super.getAllOnGoingBookingOfParkingLot(request, responseObserver);
+        try {
+            List<BookingEntity> bookingEntityList = bookingService.getAllOnGoingBookingOfParkingLot(request.getValue());
+
+            Map<BookingEntity, String> bookingMap = customizedMapper.toBookingEntityParkingLotNameMap(bookingEntityList);
+            BookingList bookingList = BookingList.newBuilder().addAllBooking(bookingMapper.toBookingList(bookingMap)).build();
+
+            responseObserver.onNext(bookingList);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getAllOnGoingBookingOfParkingLot(%d)", request.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getAllOnGoingBookingOfParkingLot(%d)", request.getValue()));
+        }
     }
 
     @Override
     public void getBookingDetailByBookingId(Int64Value request, StreamObserver<BookingDetail> responseObserver) {
-        super.getBookingDetailByBookingId(request, responseObserver);
+        try {
+            BookingEntity bookingEntity = bookingService.getBookingDetailByBookingId(request.getValue());
+
+            responseObserver.onNext(bookingMapper.toBookingDetail(bookingEntity));
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getBookingDetailByBookingId(%d)", request.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getBookingDetailByBookingId(%d)", request.getValue()));
+        }
     }
 }
