@@ -46,11 +46,16 @@ message GetAllBookingRequest {
     int32 pageNumber = 3;
 }
 
+message GetAllBookingOfCustomerRequest {
+    int64 customerId = 1;
+    int32 nRow = 2;
+    int32 pageNumber = 3;
+}
+
 message GetAllBookingOfParkingLotRequest {
     int64 parkingLotId = 1;
-    BookingStatus status = 2;
-    int32 nRow = 3;
-    int32 pageNumber = 4;
+    int32 nRow = 2;
+    int32 pageNumber = 3;
 }
 
 message CreateBookingRequest {
@@ -74,6 +79,7 @@ service BookingService {
 
     /* PUBLIC: EXTERNAL client can call (remember to provide token for auth purposes) */
     rpc getAllBooking (GetAllBookingRequest) returns (BookingList);
+    rpc getAllBookingOfCustomer (GetAllBookingOfCustomerRequest) returns (BookingList);
     rpc getAllBookingOfParkingLot (GetAllBookingOfParkingLotRequest) returns (BookingList);
     rpc getAllOnGoingBookingOfParkingLot (google.protobuf.Int64Value) returns (BookingList);
     rpc getBookingDetailById (google.protobuf.Int64Value) returns (BookingDetail);

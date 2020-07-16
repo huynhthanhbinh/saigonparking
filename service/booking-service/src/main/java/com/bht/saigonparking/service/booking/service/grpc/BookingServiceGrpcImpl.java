@@ -8,6 +8,7 @@ import com.bht.saigonparking.api.grpc.booking.BookingDetail;
 import com.bht.saigonparking.api.grpc.booking.BookingList;
 import com.bht.saigonparking.api.grpc.booking.BookingServiceGrpc;
 import com.bht.saigonparking.api.grpc.booking.CreateBookingRequest;
+import com.bht.saigonparking.api.grpc.booking.GetAllBookingOfCustomerRequest;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingRequest;
 import com.bht.saigonparking.api.grpc.booking.UpdateBookingStatusRequest;
@@ -105,6 +106,11 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
     @Override
     public void getAllBooking(GetAllBookingRequest request, StreamObserver<BookingList> responseObserver) {
         super.getAllBooking(request, responseObserver);
+    }
+
+    @Override
+    public void getAllBookingOfCustomer(GetAllBookingOfCustomerRequest request, StreamObserver<BookingList> responseObserver) {
+        super.getAllBookingOfCustomer(request, responseObserver);
     }
 
     @Override
