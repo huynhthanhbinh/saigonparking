@@ -124,7 +124,7 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
     }
 
     @Override
-    public void getBookingDetailById(Int64Value request, StreamObserver<BookingDetail> responseObserver) {
-        super.getBookingDetailById(request, responseObserver);
+    public void getBookingDetailByBookingId(Int64Value request, StreamObserver<BookingDetail> responseObserver) {
+        super.getBookingDetailByBookingId(request, responseObserver);
     }
 }

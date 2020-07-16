@@ -84,5 +84,5 @@ service BookingService {
     rpc getAllBookingOfCustomer (GetAllBookingOfCustomerRequest) returns (BookingList);
     rpc getAllBookingOfParkingLot (GetAllBookingOfParkingLotRequest) returns (BookingList);
     rpc getAllOnGoingBookingOfParkingLot (google.protobuf.Int64Value) returns (BookingList);
-    rpc getBookingDetailById (google.protobuf.Int64Value) returns (BookingDetail);
+    rpc getBookingDetailByBookingId (google.protobuf.Int64Value) returns (BookingDetail);
 }
