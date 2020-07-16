@@ -166,6 +166,14 @@ message UpdateParkingLotAvailabilityRequest {
     int32 newAvailability = 2;
 }
 
+message MapToParkingLotNameMapRequest {
+    repeated int64 parkingLotId = 1;
+}
+
+message MapToParkingLotNameMapResponse {
+    map<int64, string> parkingLotName = 1;
+}
+
 service ParkingLotService {
 
     /** PUBLIC
@@ -308,4 +316,10 @@ service ParkingLotService {
      *      ++ newAvailability: new available slots of parking-lot
      *  + response: Empty value if succeed, otherwise, throw exception */
     rpc updateParkingLotAvailability (UpdateParkingLotAvailabilityRequest) returns (google.protobuf.Empty);
+
+    /** PRIVATE
+     * use-case: map parking lot id list from bookings to <parking lot id, parking lot name> map
+     *  + request: parking-lot id list/set
+     *  + response: <parking-lot id, parking-lot name> map, if succeed, otherwise, throw exception */
+    rpc mapToParkingLotNameMap (MapToParkingLotNameMapRequest) returns (MapToParkingLotNameMapResponse);
 }

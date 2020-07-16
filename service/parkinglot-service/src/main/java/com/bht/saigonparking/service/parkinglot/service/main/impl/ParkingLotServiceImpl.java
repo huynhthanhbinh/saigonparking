@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bht.saigonparking.api.grpc.parkinglot.DeleteParkingLotNotification;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotEmployeeInfo;
-import com.bht.saigonparking.api.grpc.user.MapToUsernameListRequest;
+import com.bht.saigonparking.api.grpc.user.MapToUsernameMapRequest;
 import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEmployeeEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
@@ -223,7 +223,7 @@ public class ParkingLotServiceImpl implements ParkingLotService {
         List<Tuple> parkingLotRatingTupleList = parkingLotRatingRepository
                 .getAllRatingsOfParkingLot(parkingLotId, sortLastUpdatedAsc, nRow, pageNumber);
 
-        Map<Long, String> usernameMap = userServiceBlockingStub.mapToUsernameList(MapToUsernameListRequest.newBuilder()
+        Map<Long, String> usernameMap = userServiceBlockingStub.mapToUsernameMap(MapToUsernameMapRequest.newBuilder()
                 .addAllUserId(parkingLotRatingTupleList.stream()
                         .map(tuple -> tuple.get(2, Long.class)).collect(Collectors.toSet()))
                 .build())
@@ -244,7 +244,7 @@ public class ParkingLotServiceImpl implements ParkingLotService {
             List<Tuple> parkingLotRatingTupleList = parkingLotRatingRepository
                     .getAllRatingsOfParkingLot(parkingLotId, rating, sortLastUpdatedAsc, nRow, pageNumber);
 
-            Map<Long, String> usernameMap = userServiceBlockingStub.mapToUsernameList(MapToUsernameListRequest.newBuilder()
+            Map<Long, String> usernameMap = userServiceBlockingStub.mapToUsernameMap(MapToUsernameMapRequest.newBuilder()
                     .addAllUserId(parkingLotRatingTupleList.stream()
                             .map(tuple -> tuple.get(2, Long.class)).collect(Collectors.toSet()))
                     .build())

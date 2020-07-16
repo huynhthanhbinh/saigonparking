@@ -18,6 +18,8 @@ import com.bht.saigonparking.api.grpc.parkinglot.GetAllParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.GetAllParkingLotResponse;
 import com.bht.saigonparking.api.grpc.parkinglot.GetAllRatingsOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.GetAllRatingsOfParkingLotResponse;
+import com.bht.saigonparking.api.grpc.parkinglot.MapToParkingLotNameMapRequest;
+import com.bht.saigonparking.api.grpc.parkinglot.MapToParkingLotNameMapResponse;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotIdList;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotLimit;
@@ -507,5 +509,10 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("updateParkingLotAvailability(%d): %d", request.getParkingLotId(), request.getNewAvailability()));
         }
+    }
+
+    @Override
+    public void mapToParkingLotNameMap(MapToParkingLotNameMapRequest request, StreamObserver<MapToParkingLotNameMapResponse> responseObserver) {
+        super.mapToParkingLotNameMap(request, responseObserver);
     }
 }

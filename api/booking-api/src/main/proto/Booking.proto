@@ -18,10 +18,11 @@ enum BookingStatus {
 message Booking {
     int64 id = 1;
     int64 parkingLotId = 2;
-    int64 customerId = 3;
-    string licensePlate = 4;
-    BookingStatus latestStatus = 5;
-    bool isFinished = 6;
+    string parkingLotName = 3;
+    int64 customerId = 4;
+    string licensePlate = 5;
+    BookingStatus latestStatus = 6;
+    bool isFinished = 7;
 }
 
 message BookingHistory {

@@ -12,8 +12,8 @@ import com.bht.saigonparking.api.grpc.user.Customer;
 import com.bht.saigonparking.api.grpc.user.DeleteMultiUserByIdRequest;
 import com.bht.saigonparking.api.grpc.user.GetAllUserRequest;
 import com.bht.saigonparking.api.grpc.user.GetAllUserResponse;
-import com.bht.saigonparking.api.grpc.user.MapToUsernameListRequest;
-import com.bht.saigonparking.api.grpc.user.MapToUsernameListResponse;
+import com.bht.saigonparking.api.grpc.user.MapToUsernameMapRequest;
+import com.bht.saigonparking.api.grpc.user.MapToUsernameMapResponse;
 import com.bht.saigonparking.api.grpc.user.UpdatePasswordRequest;
 import com.bht.saigonparking.api.grpc.user.User;
 import com.bht.saigonparking.api.grpc.user.UserRole;
@@ -209,11 +209,11 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
     }
 
     @Override
-    public void mapToUsernameList(MapToUsernameListRequest request, StreamObserver<MapToUsernameListResponse> responseObserver) {
+    public void mapToUsernameMap(MapToUsernameMapRequest request, StreamObserver<MapToUsernameMapResponse> responseObserver) {
         try {
             serverInterceptor.validateAdmin();
 
-            MapToUsernameListResponse mapToUsernameListResponse = MapToUsernameListResponse.newBuilder()
+            MapToUsernameMapResponse mapToUsernameListResponse = MapToUsernameMapResponse.newBuilder()
                     .putAllUsername(userService.mapToUsernameList(new HashSet<>(request.getUserIdList())))
                     .build();
 

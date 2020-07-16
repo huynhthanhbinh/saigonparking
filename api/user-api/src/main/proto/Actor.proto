@@ -67,11 +67,11 @@ message DeleteMultiUserByIdRequest {
     repeated int64 userId = 1;
 }
 
-message MapToUsernameListRequest {
+message MapToUsernameMapRequest {
     repeated int64 userId = 1;
 }
 
-message MapToUsernameListResponse {
+message MapToUsernameMapResponse {
     map<int64, string> username = 1;
 }
 
@@ -134,21 +134,21 @@ service UserService {
     rpc getCustomerByUsername (google.protobuf.StringValue) returns (Customer);
 
     /** PRIVATE
-    * use-case: map user id list from ratings/suggestions to username list
-    *  + request: userId list/set
-    *  + response: username List, otherwise, throw exception */
-    rpc mapToUsernameList (MapToUsernameListRequest) returns (MapToUsernameListResponse);
+     * use-case: map user id list from ratings/suggestions to <user id, username> map
+     *  + request: userId list/set
+     *  + response: <userId, username> map, if succeed, otherwise, throw exception */
+    rpc mapToUsernameMap (MapToUsernameMapRequest) returns (MapToUsernameMapResponse);
 
     /** PRIVATE
-    * use-case: create user, CUSTOMER type (will be called by AuthService)
-    *  + request: Customer object
-    *  + response: user ID if succeed, otherwise, throw exception */
+     * use-case: create user, CUSTOMER type (will be called by AuthService)
+     *  + request: Customer object
+     *  + response: user ID if succeed, otherwise, throw exception */
     rpc createCustomer (Customer) returns (google.protobuf.Int64Value);
 
     /** PUBLIC
-    * use-case: update user, CUSTOMER type (will be called by AuthService)
-    *  + request: Customer object
-    *  + response: empty value if succeed, otherwise, throw exception */
+     * use-case: update user, CUSTOMER type (will be called by AuthService)
+     *  + request: Customer object
+     *  + response: empty value if succeed, otherwise, throw exception */
     rpc updateCustomer (Customer) returns (google.protobuf.Empty);
 
     /** PUBLIC
