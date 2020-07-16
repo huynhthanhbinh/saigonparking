@@ -212,7 +212,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<Long, String> mapToUsernameList(@NotNull Set<Long> userIdSet) {
+    public Map<Long, String> mapToUsernameMap(@NotNull Set<Long> userIdSet) {
         List<UserEntity> userEntityList = getAll(userIdSet);
         return userEntityList.isEmpty()
                 ? Collections.emptyMap()

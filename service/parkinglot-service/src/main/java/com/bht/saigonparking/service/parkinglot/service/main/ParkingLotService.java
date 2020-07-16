@@ -95,4 +95,6 @@ public interface ParkingLotService {
     void deleteMultiParkingLotById(@NotNull Set<Long> parkingLotIdSet);
 
     void updateAvailability(@NotNull Short newAvailability, @NotNull Long parkingLotId);
+
+    Map<Long, String> mapToParkingLotNameMap(@NotNull Set<Long> parkingLotIdSet);
 }

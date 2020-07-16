@@ -513,6 +513,24 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
 
     @Override
     public void mapToParkingLotNameMap(MapToParkingLotNameMapRequest request, StreamObserver<MapToParkingLotNameMapResponse> responseObserver) {
-        super.mapToParkingLotNameMap(request, responseObserver);
+        try {
+            serverInterceptor.validateAdmin();
+
+            MapToParkingLotNameMapResponse mapToParkingLotNameMapResponse = MapToParkingLotNameMapResponse.newBuilder()
+                    .putAllParkingLotName(parkingLotService.mapToParkingLotNameMap(new HashSet<>(request.getParkingLotIdList())))
+                    .build();
+
+            responseObserver.onNext(mapToParkingLotNameMapResponse);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success", "mapToParkingLotNameMap()");
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL", "mapToParkingLotNameMap()");
+        }
     }
 }

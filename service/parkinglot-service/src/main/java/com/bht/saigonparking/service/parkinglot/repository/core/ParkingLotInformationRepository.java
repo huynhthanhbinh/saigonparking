@@ -1,5 +1,8 @@
 package com.bht.saigonparking.service.parkinglot.repository.core;
 
+import java.util.Set;
+
+import javax.persistence.Tuple;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,4 +31,18 @@ public interface ParkingLotInformationRepository extends JpaRepository<ParkingLo
             "JOIN FETCH PL.parkingLotLimitEntity PLL " +
             "WHERE PLI.id = ?1")
     ParkingLotInformationEntity getById(@NotNull Long id);
+
+
+    /**
+     *
+     * self-implement mapParkingLotNameWithId method
+     * in order to prevent N+1 problem
+     *
+     * each tuple will contains 2 fields: parkingLotId, parkingLotName
+     * tuple set will then be map into a map of <parkingLotId, parkingLotName>
+     */
+    @Query("SELECT PLI.parkingLotEntity.id, PLI.name " +
+            "FROM ParkingLotInformationEntity PLI " +
+            "WHERE PLI.parkingLotEntity.id IN ?1")
+    Set<Tuple> mapParkingLotNameWithId(@NotNull Set<Long> parkingLotIdSet);
 }

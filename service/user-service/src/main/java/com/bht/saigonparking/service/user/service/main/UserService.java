@@ -59,5 +59,5 @@ public interface UserService {
 
     void deleteMultiUserById(@NotNull Set<Long> userIdSet);
 
-    Map<Long, String> mapToUsernameList(@NotNull Set<Long> userIdList);
+    Map<Long, String> mapToUsernameMap(@NotNull Set<Long> userIdList);
 }

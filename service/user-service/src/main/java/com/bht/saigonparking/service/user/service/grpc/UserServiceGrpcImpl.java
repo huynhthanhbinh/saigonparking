@@ -213,21 +213,21 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
         try {
             serverInterceptor.validateAdmin();
 
-            MapToUsernameMapResponse mapToUsernameListResponse = MapToUsernameMapResponse.newBuilder()
-                    .putAllUsername(userService.mapToUsernameList(new HashSet<>(request.getUserIdList())))
+            MapToUsernameMapResponse mapToUsernameMapResponse = MapToUsernameMapResponse.newBuilder()
+                    .putAllUsername(userService.mapToUsernameMap(new HashSet<>(request.getUserIdList())))
                     .build();
 
-            responseObserver.onNext(mapToUsernameListResponse);
+            responseObserver.onNext(mapToUsernameMapResponse);
             responseObserver.onCompleted();
 
-            LoggingUtil.log(Level.INFO, "SERVICE", "Success", "mapToUsernameList()");
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success", "mapToUsernameMap()");
 
         } catch (Exception exception) {
 
             responseObserver.onError(exception);
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
-            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL", "mapToUsernameList()");
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL", "mapToUsernameMap()");
         }
     }
 

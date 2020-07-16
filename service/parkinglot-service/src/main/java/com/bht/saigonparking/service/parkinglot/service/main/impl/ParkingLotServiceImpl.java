@@ -345,4 +345,10 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     public void updateAvailability(@NotNull Short newAvailability, @NotNull Long parkingLotId) {
         parkingLotLimitRepository.updateAvailability(newAvailability, parkingLotId);
     }
+
+    @Override
+    public Map<Long, String> mapToParkingLotNameMap(@NotNull Set<Long> parkingLotIdSet) {
+        return parkingLotInformationRepository.mapParkingLotNameWithId(parkingLotIdSet).stream()
+                .collect(Collectors.toMap(tuple -> tuple.get(0, Long.class), tuple -> tuple.get(1, String.class)));
+    }
 }
