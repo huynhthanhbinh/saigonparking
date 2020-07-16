@@ -20,6 +20,7 @@ import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
 import com.bht.saigonparking.service.booking.configuration.AppConfiguration;
 import com.bht.saigonparking.service.booking.entity.BookingEntity;
 import com.google.protobuf.ByteString;
+import com.google.protobuf.Int64Value;
 
 import lombok.Setter;
 
@@ -70,18 +71,25 @@ public abstract class CustomizedMapper {
         return Timestamp.valueOf(timestampString);
     }
 
+    @Named("toParkingLotName")
+    public String toParkingLotName(@NotNull Long parkingLotId) {
+        return parkingLotServiceBlockingStub.getParkingLotNameByParkingLotId(Int64Value.of(parkingLotId)).getValue();
+    }
+
     @Named("toBookingEntityParkingLotNameMap")
     public Map<BookingEntity, String> toBookingEntityParkingLotNameMap(@NotNull List<BookingEntity> bookingEntityList) {
         if (!bookingEntityList.isEmpty()) {
             Map<Long, String> parkingLotIdNameMap = parkingLotServiceBlockingStub
                     .mapToParkingLotNameMap(MapToParkingLotNameMapRequest.newBuilder()
                             .addAllParkingLotId(bookingEntityList.stream()
-                                    .map(BookingEntity::getParkingLotId).collect(Collectors.toList()))
+                                    .map(BookingEntity::getParkingLotId)
+                                    .collect(Collectors.toList()))
                             .build())
                     .getParkingLotNameMap();
 
             return bookingEntityList.stream().collect(Collectors
-                    .toMap(bookingEntity -> bookingEntity, bookingEntity -> parkingLotIdNameMap.get(bookingEntity.getParkingLotId())));
+                    .toMap(bookingEntity -> bookingEntity,
+                            bookingEntity -> parkingLotIdNameMap.get(bookingEntity.getParkingLotId())));
         }
         return Collections.emptyMap();
     }
