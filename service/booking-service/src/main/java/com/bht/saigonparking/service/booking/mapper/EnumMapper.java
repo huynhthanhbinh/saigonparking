@@ -24,6 +24,7 @@ import lombok.Setter;
  *
  * for using repository inside Component class,
  * we need to {@code @Autowired} it by Spring Dependency Injection
+ *
  * we can achieve that easily
  * by using {@code @Setter(onMethod = @__(@Autowired)} for class level like below
  *
@@ -41,8 +42,8 @@ import lombok.Setter;
         nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
 public abstract class EnumMapper implements BaseBean {
 
-    private BookingStatusRepository bookingStatusRepository;
     private static final BiMap<BookingStatusEntity, BookingStatus> BOOKING_STATUS_BI_MAP = HashBiMap.create();
+    private BookingStatusRepository bookingStatusRepository;
 
     @Override
     public void initialize() {
@@ -57,6 +58,10 @@ public abstract class EnumMapper implements BaseBean {
     @Named("toBookingStatusEntity")
     public BookingStatusEntity toBookingStatusEntity(@NotNull BookingStatus bookingStatus) {
         return BOOKING_STATUS_BI_MAP.inverse().get(bookingStatus);
+    }
+
+    public BookingStatusEntity getDefaultBookingStatusEntity() {
+        return toBookingStatusEntity(BookingStatus.CREATED);
     }
 
     private void initParkingLotTypeBiMap() {

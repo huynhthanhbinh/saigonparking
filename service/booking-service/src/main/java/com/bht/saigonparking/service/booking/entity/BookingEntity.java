@@ -51,7 +51,7 @@ public final class BookingEntity extends BaseEntity {
     private Boolean isFinished;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "[LATEST_STATUS_ID]", referencedColumnName = "[ID]", updatable = false)
+    @JoinColumn(name = "[LATEST_STATUS_ID]", referencedColumnName = "[ID]", nullable = false, updatable = false)
     private BookingStatusEntity bookingStatusEntity;
 
     @ToString.Exclude
