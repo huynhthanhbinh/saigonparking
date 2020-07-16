@@ -2,6 +2,10 @@ package com.bht.saigonparking.service.booking.mapper;
 
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -11,7 +15,10 @@ import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.bht.saigonparking.api.grpc.parkinglot.MapToParkingLotNameMapRequest;
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
 import com.bht.saigonparking.service.booking.configuration.AppConfiguration;
+import com.bht.saigonparking.service.booking.entity.BookingEntity;
 import com.google.protobuf.ByteString;
 
 import lombok.Setter;
@@ -40,7 +47,10 @@ public abstract class CustomizedMapper {
     public static final Boolean DEFAULT_BOOL_VALUE = Boolean.FALSE;
     public static final ByteString DEFAULT_BYTE_STRING_VALUE = ByteString.EMPTY;
 
+    private ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
+
     @Named("toTimeString")
+
     public String toTimeString(@NotNull Time time) {
         return time.toString();
     }
@@ -58,5 +68,21 @@ public abstract class CustomizedMapper {
     @Named("toTimestamp")
     public Timestamp toTimestamp(@NotEmpty String timestampString) {
         return Timestamp.valueOf(timestampString);
+    }
+
+    @Named("toBookingEntityParkingLotNameMap")
+    public Map<BookingEntity, String> toBookingEntityParkingLotNameMap(@NotNull List<BookingEntity> bookingEntityList) {
+        if (!bookingEntityList.isEmpty()) {
+            Map<Long, String> parkingLotIdNameMap = parkingLotServiceBlockingStub
+                    .mapToParkingLotNameMap(MapToParkingLotNameMapRequest.newBuilder()
+                            .addAllParkingLotId(bookingEntityList.stream()
+                                    .map(BookingEntity::getParkingLotId).collect(Collectors.toList()))
+                            .build())
+                    .getParkingLotNameMap();
+
+            return bookingEntityList.stream().collect(Collectors
+                    .toMap(bookingEntity -> bookingEntity, bookingEntity -> parkingLotIdNameMap.get(bookingEntity.getParkingLotId())));
+        }
+        return Collections.emptyMap();
     }
 }

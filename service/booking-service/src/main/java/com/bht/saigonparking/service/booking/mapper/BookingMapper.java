@@ -2,6 +2,7 @@ package com.bht.saigonparking.service.booking.mapper;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotNull;
@@ -72,5 +73,10 @@ public interface BookingMapper {
     @Named("toBookingList")
     default List<Booking> toBookingList(@NotNull Map<BookingEntity, String> bookingEntityParkingLotNameMap) {
         return bookingEntityParkingLotNameMap.entrySet().stream().map(this::toBooking).collect(Collectors.toList());
+    }
+
+    @Named("toBookingHistoryList")
+    default List<BookingHistory> toBookingHistoryList(@NotNull Set<BookingHistoryEntity> bookingHistoryEntitySet) {
+        return bookingHistoryEntitySet.stream().map(this::toBookingHistory).collect(Collectors.toList());
     }
 }
