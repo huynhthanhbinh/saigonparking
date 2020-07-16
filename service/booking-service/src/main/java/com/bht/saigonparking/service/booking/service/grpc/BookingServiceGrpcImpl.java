@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.bht.saigonparking.api.grpc.booking.BookingDetail;
 import com.bht.saigonparking.api.grpc.booking.BookingList;
 import com.bht.saigonparking.api.grpc.booking.BookingServiceGrpc;
+import com.bht.saigonparking.api.grpc.booking.CountAllBookingOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.booking.CreateBookingRequest;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingOfCustomerRequest;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingOfParkingLotRequest;
@@ -101,6 +102,31 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("deleteBookingById(%d)", request.getValue()));
         }
+    }
+
+    @Override
+    public void countAllBooking(Empty request, StreamObserver<Int64Value> responseObserver) {
+        super.countAllBooking(request, responseObserver);
+    }
+
+    @Override
+    public void countAllBookingOfCustomerByCustomerId(Int64Value request, StreamObserver<Int64Value> responseObserver) {
+        super.countAllBookingOfCustomerByCustomerId(request, responseObserver);
+    }
+
+    @Override
+    public void countAllBookingOfCustomerByAuthorizationHeader(Empty request, StreamObserver<Int64Value> responseObserver) {
+        super.countAllBookingOfCustomerByAuthorizationHeader(request, responseObserver);
+    }
+
+    @Override
+    public void countAllBookingOfParkingLot(CountAllBookingOfParkingLotRequest request, StreamObserver<Int64Value> responseObserver) {
+        super.countAllBookingOfParkingLot(request, responseObserver);
+    }
+
+    @Override
+    public void countAllOnGoingBookingOfParkingLot(Int64Value request, StreamObserver<Int64Value> responseObserver) {
+        super.countAllOnGoingBookingOfParkingLot(request, responseObserver);
     }
 
     @Override

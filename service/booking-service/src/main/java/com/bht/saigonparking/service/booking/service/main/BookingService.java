@@ -1,6 +1,6 @@
 package com.bht.saigonparking.service.booking.service.main;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
@@ -26,25 +26,38 @@ public interface BookingService {
 
     void deleteBookingById(@NotNull Long bookingId);
 
-    Set<BookingEntity> getAllBooking(@NotNull Integer nRow,
-                                     @NotNull Integer pageNumber);
+    Long countAllBooking();
 
-    Set<BookingEntity> getAllBooking(@NotNull BookingStatusEntity bookingStatusEntity,
-                                     @NotNull Integer nRow,
-                                     @NotNull Integer pageNumber);
+    Long countAllBooking(@NotNull BookingStatusEntity bookingStatusEntity);
 
-    Set<BookingEntity> getAllBookingOfCustomer(@NotNull Long customerId,
-                                               @NotNull Integer nRow,
-                                               @NotNull Integer pageNumber);
+    Long countAllBookingOfCustomer(@NotNull Long customerId);
 
-    Set<BookingEntity> getAllBookingOfParkingLot(@NotNull Long parkingLotId,
-                                                 @NotNull Integer nRow,
-                                                 @NotNull Integer pageNumber);
+    Long countAllBookingOfParkingLot(@NotNull Long parkingLotId);
 
-    Set<BookingEntity> getAllBookingOfParkingLot(@NotNull Long parkingLotId,
-                                                 @NotNull BookingStatusEntity bookingStatusEntity,
-                                                 @NotNull Integer nRow,
-                                                 @NotNull Integer pageNumber);
+    Long countAllBookingOfParkingLot(@NotNull Long parkingLotId,
+                                     @NotNull BookingStatusEntity bookingStatusEntity);
 
-    Set<BookingEntity> getAllOnGoingBookingOfParkingLot(@NotNull Long parkingLotId);
+    Long countAllOnGoingBookingOfParkingLot(@NotNull Long parkingLotId);
+
+    List<BookingEntity> getAllBooking(@NotNull Integer nRow,
+                                      @NotNull Integer pageNumber);
+
+    List<BookingEntity> getAllBooking(@NotNull BookingStatusEntity bookingStatusEntity,
+                                      @NotNull Integer nRow,
+                                      @NotNull Integer pageNumber);
+
+    List<BookingEntity> getAllBookingOfCustomer(@NotNull Long customerId,
+                                                @NotNull Integer nRow,
+                                                @NotNull Integer pageNumber);
+
+    List<BookingEntity> getAllBookingOfParkingLot(@NotNull Long parkingLotId,
+                                                  @NotNull Integer nRow,
+                                                  @NotNull Integer pageNumber);
+
+    List<BookingEntity> getAllBookingOfParkingLot(@NotNull Long parkingLotId,
+                                                  @NotNull BookingStatusEntity bookingStatusEntity,
+                                                  @NotNull Integer nRow,
+                                                  @NotNull Integer pageNumber);
+
+    List<BookingEntity> getAllOnGoingBookingOfParkingLot(@NotNull Long parkingLotId);
 }

@@ -1,6 +1,6 @@
 package com.bht.saigonparking.service.booking.service.main.impl;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
@@ -63,48 +63,78 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Set<BookingEntity> getAllBooking(@NotNull Integer nRow,
-                                            @NotNull Integer pageNumber) {
+    public Long countAllBooking() {
+        return bookingRepository.countAllBooking();
+    }
+
+    @Override
+    public Long countAllBooking(@NotNull BookingStatusEntity bookingStatusEntity) {
+        return bookingRepository.countAllBooking(bookingStatusEntity);
+    }
+
+    @Override
+    public Long countAllBookingOfCustomer(@NotNull Long customerId) {
+        return bookingRepository.countAllBookingOfCustomer(customerId);
+    }
+
+    @Override
+    public Long countAllBookingOfParkingLot(@NotNull Long parkingLotId) {
+        return bookingRepository.countAllBookingOfParkingLot(parkingLotId);
+    }
+
+    @Override
+    public Long countAllBookingOfParkingLot(@NotNull Long parkingLotId,
+                                            @NotNull BookingStatusEntity bookingStatusEntity) {
+        return bookingRepository.countAllBookingOfParkingLot(parkingLotId, bookingStatusEntity);
+    }
+
+    @Override
+    public Long countAllOnGoingBookingOfParkingLot(@NotNull Long parkingLotId) {
+        return bookingRepository.countAllOnGoingBookingOfParkingLot(parkingLotId);
+    }
+
+    @Override
+    public List<BookingEntity> getAllBooking(@NotNull Integer nRow,
+                                             @NotNull Integer pageNumber) {
 
         return bookingRepository.getAllBooking(nRow, pageNumber);
     }
 
     @Override
-    public Set<BookingEntity> getAllBooking(@NotNull BookingStatusEntity bookingStatusEntity,
-                                            @NotNull Integer nRow,
-                                            @NotNull Integer pageNumber) {
+    public List<BookingEntity> getAllBooking(@NotNull BookingStatusEntity bookingStatusEntity,
+                                             @NotNull Integer nRow,
+                                             @NotNull Integer pageNumber) {
 
         return bookingRepository.getAllBooking(bookingStatusEntity, nRow, pageNumber);
     }
 
     @Override
-    public Set<BookingEntity> getAllBookingOfCustomer(@NotNull Long customerId,
-                                                      @NotNull Integer nRow,
-                                                      @NotNull Integer pageNumber) {
+    public List<BookingEntity> getAllBookingOfCustomer(@NotNull Long customerId,
+                                                       @NotNull Integer nRow,
+                                                       @NotNull Integer pageNumber) {
 
         return bookingRepository.getAllBookingOfCustomer(customerId, nRow, pageNumber);
     }
 
     @Override
-    public Set<BookingEntity> getAllBookingOfParkingLot(@NotNull Long parkingLotId,
-                                                        @NotNull Integer nRow,
-                                                        @NotNull Integer pageNumber) {
+    public List<BookingEntity> getAllBookingOfParkingLot(@NotNull Long parkingLotId,
+                                                         @NotNull Integer nRow,
+                                                         @NotNull Integer pageNumber) {
 
         return bookingRepository.getAllBookingOfParkingLot(parkingLotId, nRow, pageNumber);
     }
 
     @Override
-    public Set<BookingEntity> getAllBookingOfParkingLot(@NotNull Long parkingLotId,
-                                                        @NotNull BookingStatusEntity bookingStatusEntity,
-                                                        @NotNull Integer nRow,
-                                                        @NotNull Integer pageNumber) {
+    public List<BookingEntity> getAllBookingOfParkingLot(@NotNull Long parkingLotId,
+                                                         @NotNull BookingStatusEntity bookingStatusEntity,
+                                                         @NotNull Integer nRow,
+                                                         @NotNull Integer pageNumber) {
 
         return bookingRepository.getAllBookingOfParkingLot(parkingLotId, bookingStatusEntity, nRow, pageNumber);
     }
 
     @Override
-    public Set<BookingEntity> getAllOnGoingBookingOfParkingLot(@NotNull Long parkingLotId) {
-
+    public List<BookingEntity> getAllOnGoingBookingOfParkingLot(@NotNull Long parkingLotId) {
         return bookingRepository.getAllOnGoingBookingOfParkingLot(parkingLotId);
     }
 }

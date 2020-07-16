@@ -48,7 +48,7 @@ message GetAllBookingRequest {
 }
 
 message GetAllBookingOfCustomerRequest {
-    int64 customerId = 1;
+    int64 customerId = 1; /* let skip customerId (not set) if you want auto-get customerId by customer JWT token  */
     int32 nRow = 2;
     int32 pageNumber = 3;
 }
@@ -58,6 +58,11 @@ message GetAllBookingOfParkingLotRequest {
     BookingStatus status = 2; /* default: ALL */
     int32 nRow = 3;
     int32 pageNumber = 4;
+}
+
+message CountAllBookingOfParkingLotRequest {
+    int64 parkingLotId = 1;
+    BookingStatus status = 2; /* default: ALL */
 }
 
 message CreateBookingRequest {
@@ -81,8 +86,13 @@ service BookingService {
 
     /* PUBLIC: EXTERNAL client can call (remember to provide token for auth purposes) */
     rpc getAllBooking (GetAllBookingRequest) returns (BookingList);
+    rpc countAllBooking (google.protobuf.Empty) returns (google.protobuf.Int64Value);
     rpc getAllBookingOfCustomer (GetAllBookingOfCustomerRequest) returns (BookingList);
+    rpc countAllBookingOfCustomerByCustomerId (google.protobuf.Int64Value) returns (google.protobuf.Int64Value);
+    rpc countAllBookingOfCustomerByAuthorizationHeader (google.protobuf.Empty) returns (google.protobuf.Int64Value); /* get customerId from JWT */
     rpc getAllBookingOfParkingLot (GetAllBookingOfParkingLotRequest) returns (BookingList);
+    rpc countAllBookingOfParkingLot (CountAllBookingOfParkingLotRequest) returns (google.protobuf.Int64Value);
     rpc getAllOnGoingBookingOfParkingLot (google.protobuf.Int64Value) returns (BookingList);
+    rpc countAllOnGoingBookingOfParkingLot (google.protobuf.Int64Value) returns (google.protobuf.Int64Value);
     rpc getBookingDetailByBookingId (google.protobuf.Int64Value) returns (BookingDetail);
 }
