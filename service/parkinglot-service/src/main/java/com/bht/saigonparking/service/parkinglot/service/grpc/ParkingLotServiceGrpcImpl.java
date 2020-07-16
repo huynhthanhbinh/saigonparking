@@ -42,6 +42,7 @@ import com.bht.saigonparking.service.parkinglot.service.main.ParkingLotService;
 import com.google.protobuf.BoolValue;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
+import com.google.protobuf.StringValue;
 
 import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
@@ -531,6 +532,29 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL", "mapToParkingLotNameMap()");
+        }
+    }
+
+    @Override
+    public void getParkingLotNameByParkingLotId(Int64Value request, StreamObserver<StringValue> responseObserver) {
+        try {
+            serverInterceptor.validateAdmin();
+
+            String parkingLotName = parkingLotService.getParkingLotNameByParkingLotId(request.getValue());
+
+            responseObserver.onNext(StringValue.of(parkingLotName));
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getParkingLotNameByParkingLotId(%d): %s", request.getValue(), parkingLotName));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getParkingLotNameByParkingLotId(%d)", request.getValue()));
         }
     }
 }

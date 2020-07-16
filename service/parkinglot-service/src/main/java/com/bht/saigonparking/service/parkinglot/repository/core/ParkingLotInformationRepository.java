@@ -1,5 +1,6 @@
 package com.bht.saigonparking.service.parkinglot.repository.core;
 
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.Tuple;
@@ -32,6 +33,12 @@ public interface ParkingLotInformationRepository extends JpaRepository<ParkingLo
             "WHERE PLI.id = ?1")
     ParkingLotInformationEntity getById(@NotNull Long id);
 
+    /**
+     *
+     * self-implement getParkingLotNameByParkingLotId method
+     */
+    @Query("SELECT PLI.name FROM ParkingLotInformationEntity PLI WHERE PLI.parkingLotEntity.id = ?1")
+    Optional<String> getParkingLotName(@NotNull Long parkingLotId);
 
     /**
      *

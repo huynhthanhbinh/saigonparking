@@ -1,7 +1,6 @@
 syntax = "proto3";
 
 package com.bht.saigonparking.api.grpc.parkinglot;
-//option java_generic_services = true;
 option java_multiple_files = true;
 
 import "google/protobuf/wrappers.proto";
@@ -322,4 +321,10 @@ service ParkingLotService {
      *  + request: parking-lot id list/set
      *  + response: <parking-lot id, parking-lot name> map, if succeed, otherwise, throw exception */
     rpc mapToParkingLotNameMap (MapToParkingLotNameMapRequest) returns (MapToParkingLotNameMapResponse);
+
+    /** PRIVATE
+     * use-case: view booking details
+     *  + request: parking-lot id
+     *  + response: parking-lot name, if succeed, otherwise, throw exception */
+    rpc getParkingLotNameByParkingLotId (google.protobuf.Int64Value) returns (google.protobuf.StringValue);
 }

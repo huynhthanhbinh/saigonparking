@@ -96,5 +96,7 @@ public interface ParkingLotService {
 
     void updateAvailability(@NotNull Short newAvailability, @NotNull Long parkingLotId);
 
+    String getParkingLotNameByParkingLotId(@NotNull Long parkingLotId);
+
     Map<Long, String> mapToParkingLotNameMap(@NotNull Set<Long> parkingLotIdSet);
 }

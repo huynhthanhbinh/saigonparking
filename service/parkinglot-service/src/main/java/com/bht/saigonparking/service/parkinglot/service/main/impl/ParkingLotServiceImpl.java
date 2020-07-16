@@ -348,7 +348,13 @@ public class ParkingLotServiceImpl implements ParkingLotService {
 
     @Override
     public Map<Long, String> mapToParkingLotNameMap(@NotNull Set<Long> parkingLotIdSet) {
-        return parkingLotInformationRepository.mapParkingLotNameWithId(parkingLotIdSet).stream()
+        return parkingLotInformationRepository
+                .mapParkingLotNameWithId(parkingLotIdSet).stream()
                 .collect(Collectors.toMap(tuple -> tuple.get(0, Long.class), tuple -> tuple.get(1, String.class)));
+    }
+
+    @Override
+    public String getParkingLotNameByParkingLotId(@NotNull Long parkingLotId) {
+        return parkingLotInformationRepository.getParkingLotName(parkingLotId).orElseThrow(EntityNotFoundException::new);
     }
 }
