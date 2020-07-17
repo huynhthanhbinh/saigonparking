@@ -1,8 +1,7 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Thu, Jul 16th, 2020
+Last updated:       Fri, Jul 17th, 2020
 ========================================================================================================================
-
 001. gRPC error handling:
         https://grpc.io/docs/guides/error/
 
@@ -352,3 +351,10 @@ Last updated:       Thu, Jul 16th, 2020
 
 115. Implementing IF Condition Within a T-SQL UPDATE Statement
         https://stackoverflow.com/questions/3252935/implementing-if-condition-within-a-t-sql-update-statement
+
+116. Does Java pass by reference or pass by value?
+        https://www.infoworld.com/article/3512039/does-java-pass-by-reference-or-pass-by-value.html
+    ==> "Passing by value" refers to passing a copy of the value
+    ==> "Passing by reference" refers to passing the real reference of the variable in memory
+    ==> A mutable object’s value can be changed when it is passed to a method, such as Builder object
+    ==> An immutable object’s value cannot be changed, even if it is passed a new value, such as primitive type

@@ -34,8 +34,9 @@ public final class MessagingServiceImpl implements MessagingService {
     private final WebSocketUserSessionManagement webSocketUserSessionManagement;
 
     @Override
-    public SaigonParkingMessage.Builder prePublishMessageToQueue(@NotNull SaigonParkingMessage.Builder delegate,
-                                                                 @NotNull WebSocketSession webSocketSession) throws IOException {
+    public void prePublishMessageToQueue(@NotNull SaigonParkingMessage.Builder delegate,
+                                         @NotNull WebSocketSession webSocketSession) throws IOException {
+
         switch (delegate.getClassification()) {
             case CUSTOMER_MESSAGE:
                 delegate.setSenderId(webSocketUserSessionManagement.getUserIdFromSession(webSocketSession));
@@ -46,7 +47,7 @@ public final class MessagingServiceImpl implements MessagingService {
             default:
                 break;
         }
-        return preProcessingMessage(delegate, webSocketSession);
+        preProcessingMessage(delegate, webSocketSession);
     }
 
     @Override
@@ -104,8 +105,8 @@ public final class MessagingServiceImpl implements MessagingService {
         }
     }
 
-    private SaigonParkingMessage.Builder preProcessingMessage(@NotNull SaigonParkingMessage.Builder delegate,
-                                                              @NotNull WebSocketSession webSocketSession) throws IOException {
+    private void preProcessingMessage(@NotNull SaigonParkingMessage.Builder delegate,
+                                      @NotNull WebSocketSession webSocketSession) throws IOException {
         switch (delegate.getType()) {
             case BOOKING_REQUEST:
                 intermediateService.handleBookingRequest(delegate, webSocketSession);
@@ -125,6 +126,5 @@ public final class MessagingServiceImpl implements MessagingService {
             default:
                 break;
         }
-        return delegate;
     }
 }

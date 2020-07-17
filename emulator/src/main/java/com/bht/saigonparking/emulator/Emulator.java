@@ -21,12 +21,11 @@ import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import com.bht.saigonparking.api.grpc.contact.ContactServiceGrpc;
+import com.bht.saigonparking.api.grpc.contact.BookingRequestContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.bht.saigonparking.api.grpc.contact.TextMessageContent;
 import com.bht.saigonparking.emulator.configuration.SpringApplicationContext;
 import com.bht.saigonparking.emulator.handler.WebSocketHandler;
-import com.google.protobuf.Int64Value;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketException;
@@ -65,16 +64,31 @@ public class Emulator extends SpringBootServletInitializer {
 //        testAuthWithWebSocketWebUri();
         testNewSocketLibrary();
 
-        Thread.sleep(5000);
+//        Thread.sleep(5000);
+//
+//        ContactServiceGrpc.ContactServiceBlockingStub contactServiceBlockingStub =
+//                SpringApplicationContext.getBean(ContactServiceGrpc.ContactServiceBlockingStub.class);
+//
+//        System.out.println(contactServiceBlockingStub.checkUserOnlineByUserId(Int64Value.of(4)).getValue());
+//        System.out.println(contactServiceBlockingStub.checkUserOnlineByUserId(Int64Value.of(84)).getValue());
+//        System.out.println(contactServiceBlockingStub.checkParkingLotOnlineByParkingLotId(Int64Value.of(72)).getValue());
+//
+//        Thread.sleep(86400000);
 
-        ContactServiceGrpc.ContactServiceBlockingStub contactServiceBlockingStub =
-                SpringApplicationContext.getBean(ContactServiceGrpc.ContactServiceBlockingStub.class);
+//        System.out.println(SpringApplicationContext.getBean(BookingServiceGrpc.BookingServiceBlockingStub.class)
+//                .createBooking(CreateBookingRequest.newBuilder()
+//                        .setCustomerId(4)
+//                        .setParkingLotId(1)
+//                        .setLicensePlate("59H1-762.17")
+//                        .build())
+//                .getValue());
 
-        System.out.println(contactServiceBlockingStub.checkUserOnlineByUserId(Int64Value.of(4)).getValue());
-        System.out.println(contactServiceBlockingStub.checkUserOnlineByUserId(Int64Value.of(84)).getValue());
-        System.out.println(contactServiceBlockingStub.checkParkingLotOnlineByParkingLotId(Int64Value.of(72)).getValue());
-
-        Thread.sleep(86400000);
+//        SpringApplicationContext.getBean(BookingServiceGrpc.BookingServiceBlockingStub.class)
+//                .updateBookingStatus(UpdateBookingStatusRequest.newBuilder()
+//                        .setBookingId(1)
+//                        .setStatus(BookingStatus.REJECTED)
+//                        .setTimestamp(new Timestamp(System.currentTimeMillis()).toString())
+//                        .build());
     }
 
     private static void testAuthWithWebSocketUri() throws ExecutionException, InterruptedException, IOException {
