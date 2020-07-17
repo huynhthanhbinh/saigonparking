@@ -13,6 +13,7 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.BinaryWebSocketHandler;
 
+import com.bht.saigonparking.api.grpc.contact.BookingRequestContent;
 import com.bht.saigonparking.api.grpc.contact.NotificationContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.bht.saigonparking.common.util.LoggingUtil;
@@ -80,7 +81,17 @@ public final class WebSocketBinaryMessageHandler extends BinaryWebSocketHandler 
 
             /* receiver's id != 0 --> not send to system --> forward to receiver */
             SaigonParkingMessage.Builder prePublishMessage = messagingService.prePublishMessageToQueue(messageBuilder, session);
-            messagingService.publishMessageToQueue(prePublishMessage.build());
+
+            SaigonParkingMessage afterProcessingMessage = prePublishMessage.build();
+
+            System.out.println();
+            System.out.println();
+            System.out.println(afterProcessingMessage);
+            System.out.println(BookingRequestContent.parseFrom(afterProcessingMessage.getContent()));
+            System.out.println();
+            System.out.println();
+
+            messagingService.publishMessageToQueue(afterProcessingMessage);
 
         } else {
             /* receiver's id == 0 --> send to system --> not forward to receiver */

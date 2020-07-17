@@ -2,6 +2,7 @@ package com.bht.saigonparking.emulator;
 
 import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Classification.CUSTOMER_MESSAGE;
 import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Classification.PARKING_LOT_MESSAGE;
+import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Type.BOOKING_REQUEST;
 import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Type.TEXT_MESSAGE;
 
 import java.io.IOException;
@@ -62,7 +63,7 @@ public class Emulator extends SpringBootServletInitializer {
     private static void runTest() throws ExecutionException, InterruptedException, IOException, WebSocketException {
 //        testAuthWithWebSocketUri();
 //        testAuthWithWebSocketWebUri();
-//        testNewSocketLibrary();
+        testNewSocketLibrary();
 
         Thread.sleep(5000);
 
@@ -115,6 +116,7 @@ public class Emulator extends SpringBootServletInitializer {
             public void onBinaryMessage(WebSocket websocket, byte[] binary) throws Exception {
                 SaigonParkingMessage saigonParkingMessage = SaigonParkingMessage.parseFrom(binary);
                 System.out.println(saigonParkingMessage);
+                System.out.println(BookingRequestContent.parseFrom(saigonParkingMessage.getContent()));
             }
         });
 
@@ -126,12 +128,20 @@ public class Emulator extends SpringBootServletInitializer {
                 .setMessage("Hello parkinglot")
                 .build();
 
+        BookingRequestContent bookingRequestContent = BookingRequestContent.newBuilder()
+                .setBookingId(10000)
+                .setAmountOfParkingHour(5)
+                .setCustomerName("htbinh")
+                .setCustomerLicense("54L6-2908")
+                .setParkingLotId(72)
+                .build();
+
         SaigonParkingMessage textMessage = SaigonParkingMessage.newBuilder()
                 .setClassification(CUSTOMER_MESSAGE)
-                .setType(TEXT_MESSAGE)
+                .setType(BOOKING_REQUEST)
                 .setSenderId(4)
                 .setReceiverId(72)
-                .setContent(customerTextMessageContent.toByteString())
+                .setContent(bookingRequestContent.toByteString())
                 .build();
 
         webSocket.sendBinary(textMessage.toByteArray());

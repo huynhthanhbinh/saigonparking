@@ -6,6 +6,7 @@ import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Type.B
 import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Type.HISTORY_CHANGE;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 
 import javax.validation.constraints.NotNull;
 
@@ -51,16 +52,18 @@ public final class IntermediateServiceImpl implements IntermediateService {
     public void handleBookingRequest(@NotNull SaigonParkingMessage.Builder message,
                                      @NotNull WebSocketSession webSocketSession) throws IOException {
 
-        BookingRequestContent bookingRequestContent = BookingRequestContent.parseFrom(message.getContent());
+        BookingRequestContent.Builder bookingRequestContentBuilder = BookingRequestContent.newBuilder()
+                .mergeFrom(message.getContent());
+
         long newBookingId = bookingServiceBlockingStub.createBooking(CreateBookingRequest.newBuilder()
-                .setParkingLotId(bookingRequestContent.getParkingLotId())
+                .setParkingLotId(bookingRequestContentBuilder.getParkingLotId())
                 .setCustomerId(message.getSenderId())
-                .setLicensePlate(bookingRequestContent.getCustomerLicense())
+                .setLicensePlate(bookingRequestContentBuilder.getCustomerLicense())
                 .build())
                 .getValue();
 
         BookingProcessingContent bookingProcessingContent = BookingProcessingContent.newBuilder()
-                .setParkingLotId(bookingRequestContent.getParkingLotId())
+                .setParkingLotId(bookingRequestContentBuilder.getParkingLotId())
                 .setBookingId(newBookingId)
                 .build();
 
@@ -72,6 +75,10 @@ public final class IntermediateServiceImpl implements IntermediateService {
                 .setContent(bookingProcessingContent.toByteString())
                 .build();
 
+        /* attach new booking Id to forward to parking-lot */
+        message.setContent(bookingRequestContentBuilder.setBookingId(newBookingId).build().toByteString());
+
+        /* notify new booking Id to customer */
         webSocketSession.sendMessage(new BinaryMessage(bookingProcessingMessage.toByteArray()));
     }
 
@@ -149,6 +156,7 @@ public final class IntermediateServiceImpl implements IntermediateService {
                                                                     @NotNull SaigonParkingMessage.Builder message,
                                                                     @NotNull MessagingService messagingService) {
         return new StreamObserver<Empty>() {
+
             @Override
             public void onNext(Empty empty) {
                 if (message.getClassification().equals(PARKING_LOT_MESSAGE)) {
@@ -158,7 +166,7 @@ public final class IntermediateServiceImpl implements IntermediateService {
                             .setSenderId(0)
                             .setReceiverId(message.getSenderId())
                             .setContent(message.getContent())
-                            .setTimestamp(message.getTimestamp())
+                            .setTimestamp(new Timestamp(System.currentTimeMillis()).toString())
                             .build());
                 }
             }
