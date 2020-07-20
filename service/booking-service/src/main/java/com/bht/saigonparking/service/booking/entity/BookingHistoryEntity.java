@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
 import com.bht.saigonparking.common.base.BaseEntity;
@@ -47,7 +48,8 @@ public final class BookingHistoryEntity extends BaseEntity {
     @Column(name = "[NOTE]")
     private String note;
 
+    @CreationTimestamp
     @EqualsAndHashCode.Exclude
-    @Column(name = "[LAST_UPDATED]", nullable = false)
+    @Column(name = "[LAST_UPDATED]", nullable = false, updatable = false)
     private Timestamp lastUpdated;
 }

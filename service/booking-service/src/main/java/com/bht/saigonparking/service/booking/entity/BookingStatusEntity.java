@@ -36,7 +36,7 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "[BOOKING_STATUS]")
 public final class BookingStatusEntity extends BaseEntity {
 
-    @Column(name = "[STATUS]", nullable = false, unique = true, updatable = false)
+    @Column(name = "[STATUS]", nullable = false, unique = true, insertable = false, updatable = false)
     private String status;
 
     @ToString.Exclude

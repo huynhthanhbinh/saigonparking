@@ -1,5 +1,6 @@
 package com.bht.saigonparking.service.booking.entity;
 
+import java.sql.Timestamp;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -10,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
 import com.bht.saigonparking.common.base.BaseEntity;
@@ -46,6 +48,10 @@ public final class BookingEntity extends BaseEntity {
 
     @Column(name = "[CUSTOMER_LICENSE_PLATE]", nullable = false)
     private String customerLicensePlate;
+
+    @CreationTimestamp
+    @Column(name = "[CREATED_AT]", nullable = false, updatable = false)
+    private Timestamp createdAt;
 
     @Column(name = "[IS_FINISHED]", nullable = false)
     private Boolean isFinished;

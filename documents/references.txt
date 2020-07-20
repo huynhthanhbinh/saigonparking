@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Fri, Jul 17th, 2020
+Last updated:       Mon, Jul 20th, 2020
 ========================================================================================================================
 001. gRPC error handling:
         https://grpc.io/docs/guides/error/
@@ -358,3 +358,8 @@ Last updated:       Fri, Jul 17th, 2020
     ==> "Passing by reference" refers to passing the real reference of the variable in memory
     ==> A mutable object’s value can be changed when it is passed to a method, such as Builder object
     ==> An immutable object’s value cannot be changed, even if it is passed a new value, such as primitive type
+
+117. How to persist creation and update timestamps with Hibernate ==> @CreationTimestamp v.s. @UpdateTimestamp
+        https://thorben-janssen.com/persist-creation-update-timestamps-hibernate/
+    ==> @CreationTimestamp: when a new entity gets persisted, gets the current timestamp and sets it as the value of the attribute
+    ==> @UpdateTimestamp:   get the current timestamp from the VM and sets it as the update timestamp on the SQL Update statements
