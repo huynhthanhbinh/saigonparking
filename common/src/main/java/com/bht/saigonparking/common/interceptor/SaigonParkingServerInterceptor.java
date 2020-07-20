@@ -63,10 +63,12 @@ public final class SaigonParkingServerInterceptor implements ServerInterceptor {
         this(Collections.emptyMap());
     }
 
+
     public SaigonParkingServerInterceptor(Map<Class<? extends Throwable>, String> errorCodeMap) {
         authentication = new SaigonParkingAuthenticationImpl();
         this.errorCodeMap = errorCodeMap;
     }
+
 
     @Override
     public <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> serverCall,
@@ -150,17 +152,25 @@ public final class SaigonParkingServerInterceptor implements ServerInterceptor {
                 serverCallHandler);
     }
 
+
     public void validateAdmin() {
-        if (!roleContext.get().equals("ADMIN")) {
-            throw new PermissionDeniedException();
-        }
+        validateUserRole("ADMIN");
     }
+
 
     public void validateUser(@NotNull Long userEntityId) {
         if (!userIdContext.get().equals(userEntityId)) {
             throw new UsernameNotMatchException();
         }
     }
+
+
+    public void validateUserRole(@NotEmpty String acceptedRole) {
+        if (!acceptedRole.equals(roleContext.get())) {
+            throw new PermissionDeniedException();
+        }
+    }
+
 
     public void validateUserRole(@NotEmpty List<String> acceptedRoles) {
         if (!acceptedRoles.contains(roleContext.get())) {

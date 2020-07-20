@@ -70,18 +70,41 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
     private final SaigonParkingServerInterceptor serverInterceptor;
 
     @Override
+    public void getParkingLotIdByAuthorizationHeader(Empty request, StreamObserver<Int64Value> responseObserver) {
+        try {
+            serverInterceptor.validateUserRole("PARKING_LOT_EMPLOYEE");
+
+            long employeeId = serverInterceptor.getUserIdContext().get();
+            long parkingLotId = parkingLotService.getParkingLotIdByParkingLotEmployeeId(employeeId);
+
+            responseObserver.onNext(Int64Value.of(parkingLotId));
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getParkingLotIdByAuthorizationHeader(%d): %d", employeeId, parkingLotId));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL", "getParkingLotIdByAuthorizationHeader()");
+        }
+    }
+
+    @Override
     public void getParkingLotIdByParkingLotEmployeeId(Int64Value request, StreamObserver<Int64Value> responseObserver) {
         try {
             serverInterceptor.validateAdmin();
 
-            Int64Value parkingLotIdResponse = Int64Value.of(parkingLotService
-                    .getParkingLotIdByParkingLotEmployeeId(request.getValue()));
+            long employeeId = request.getValue();
+            long parkingLotId = parkingLotService.getParkingLotIdByParkingLotEmployeeId(employeeId);
 
-            responseObserver.onNext(parkingLotIdResponse);
+            responseObserver.onNext(Int64Value.of(parkingLotId));
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("getParkingLotIdByParkingLotEmployeeId(%d)", request.getValue()));
+                    String.format("getParkingLotIdByParkingLotEmployeeId(%d): %d", employeeId, parkingLotId));
 
         } catch (Exception exception) {
 

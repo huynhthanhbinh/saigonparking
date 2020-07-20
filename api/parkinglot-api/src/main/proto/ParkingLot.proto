@@ -175,7 +175,13 @@ message MapToParkingLotNameMapResponse {
 
 service ParkingLotService {
 
-    /** PUBLIC
+    /** PUBLIC - PARKING-LOT EMPLOYEE ONLY
+     * use-case: get parking-lot id by request's authorization header (parse employee id from Json Web Token - JWT)
+     *  + request: empty
+     *  + response: parking-lot's ID */
+    rpc getParkingLotIdByAuthorizationHeader (google.protobuf.Empty) returns (google.protobuf.Int64Value);
+
+    /** PUBLIC - ADMIN ONLY
      * use-case: send message to parking-lot employee, known parking-lot id
      *  + request: parking-lot employee's ID
      *  + response: parking-lot's ID */
