@@ -21,8 +21,9 @@ message Booking {
     string parkingLotName = 3;
     int64 customerId = 4;
     string licensePlate = 5;
-    BookingStatus latestStatus = 6;
-    bool isFinished = 7;
+    string createdAt = 6;
+    BookingStatus latestStatus = 7;
+    bool isFinished = 8;
 }
 
 message BookingHistory {
@@ -79,7 +80,6 @@ message CreateBookingRequest {
 message UpdateBookingStatusRequest {
     int64 bookingId = 1;
     BookingStatus status = 2;
-    string timestamp = 3;
     string note = 4;
 }
 

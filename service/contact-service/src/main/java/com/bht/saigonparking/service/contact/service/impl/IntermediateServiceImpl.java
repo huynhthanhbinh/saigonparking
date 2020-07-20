@@ -92,7 +92,6 @@ public final class IntermediateServiceImpl implements IntermediateService {
                 .setBookingId(bookingCancellationContent.getBookingId())
                 .setStatus(BookingStatus.CANCELLED)
                 .setNote(bookingCancellationContent.getReason())
-                .setTimestamp(message.getTimestamp())
                 .build();
 
         updateBookingStatus(request, message, messagingService);
@@ -107,7 +106,6 @@ public final class IntermediateServiceImpl implements IntermediateService {
         UpdateBookingStatusRequest request = UpdateBookingStatusRequest.newBuilder()
                 .setBookingId(bookingAcceptanceContent.getBookingId())
                 .setStatus(BookingStatus.ACCEPTED)
-                .setTimestamp(message.getTimestamp())
                 .build();
 
         updateBookingStatus(request, message, messagingService);
@@ -123,7 +121,6 @@ public final class IntermediateServiceImpl implements IntermediateService {
                 .setBookingId(bookingRejectContent.getBookingId())
                 .setStatus(BookingStatus.REJECTED)
                 .setNote(bookingRejectContent.getReason())
-                .setTimestamp(message.getTimestamp())
                 .build();
 
         updateBookingStatus(request, message, messagingService);
@@ -138,7 +135,6 @@ public final class IntermediateServiceImpl implements IntermediateService {
         UpdateBookingStatusRequest request = UpdateBookingStatusRequest.newBuilder()
                 .setBookingId(bookingFinishContent.getBookingId())
                 .setStatus(BookingStatus.FINISHED)
-                .setTimestamp(message.getTimestamp())
                 .build();
 
         updateBookingStatus(request, message, messagingService);
