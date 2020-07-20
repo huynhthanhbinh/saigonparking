@@ -1,6 +1,8 @@
 package com.bht.saigonparking.service.booking.entity;
 
 import java.sql.Timestamp;
+import java.util.Comparator;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -40,6 +42,8 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "[BOOKING]")
 public final class BookingEntity extends BaseEntity {
 
+    public static final Comparator<Map.Entry<BookingEntity, String>> SORT_BY_CREATED_AT = new SortByCreatedAt();
+
     @Column(name = "[PARKING_LOT_ID]", nullable = false)
     private Long parkingLotId;
 
@@ -64,4 +68,13 @@ public final class BookingEntity extends BaseEntity {
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "bookingEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<BookingHistoryEntity> bookingHistoryEntitySet;
+
+
+    @NoArgsConstructor
+    private static final class SortByCreatedAt implements Comparator<Map.Entry<BookingEntity, String>> {
+        @Override
+        public int compare(Map.Entry<BookingEntity, String> bookingEntry1, Map.Entry<BookingEntity, String> bookingEntry2) {
+            return bookingEntry1.getKey().createdAt.compareTo(bookingEntry2.getKey().createdAt);
+        }
+    }
 }

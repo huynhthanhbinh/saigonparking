@@ -24,6 +24,8 @@ import com.bht.saigonparking.service.booking.entity.BookingHistoryEntity;
 
 /**
  *
+ * implements all necessary mappers for BookingService
+ *
  * @author bht
  */
 @Component
@@ -90,11 +92,17 @@ public interface BookingMapper {
 
     @Named("toBookingList")
     default List<Booking> toBookingList(@NotNull Map<BookingEntity, String> bookingEntityParkingLotNameMap) {
-        return bookingEntityParkingLotNameMap.entrySet().stream().map(this::toBooking).collect(Collectors.toList());
+        return bookingEntityParkingLotNameMap.entrySet().stream()
+                .sorted(BookingEntity.SORT_BY_CREATED_AT)
+                .map(this::toBooking)
+                .collect(Collectors.toList());
     }
 
     @Named("toBookingHistoryList")
     default List<BookingHistory> toBookingHistoryList(@NotNull Set<BookingHistoryEntity> bookingHistoryEntitySet) {
-        return bookingHistoryEntitySet.stream().map(this::toBookingHistory).collect(Collectors.toList());
+        return bookingHistoryEntitySet.stream()
+                .sorted(BookingHistoryEntity.SORT_BY_LAST_UPDATED)
+                .map(this::toBookingHistory)
+                .collect(Collectors.toList());
     }
 }

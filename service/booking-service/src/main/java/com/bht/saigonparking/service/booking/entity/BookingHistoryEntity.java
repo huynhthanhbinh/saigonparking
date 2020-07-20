@@ -1,6 +1,7 @@
 package com.bht.saigonparking.service.booking.entity;
 
 import java.sql.Timestamp;
+import java.util.Comparator;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,6 +38,8 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "[BOOKING_HISTORY]")
 public final class BookingHistoryEntity extends BaseEntity {
 
+    public static final Comparator<BookingHistoryEntity> SORT_BY_LAST_UPDATED = new SortByLastUpdated();
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "[BOOKING_ID]", referencedColumnName = "[ID]", nullable = false, updatable = false)
     private BookingEntity bookingEntity;
@@ -52,4 +55,12 @@ public final class BookingHistoryEntity extends BaseEntity {
     @EqualsAndHashCode.Exclude
     @Column(name = "[LAST_UPDATED]", nullable = false, updatable = false)
     private Timestamp lastUpdated;
+
+    @NoArgsConstructor
+    private static final class SortByLastUpdated implements Comparator<BookingHistoryEntity> {
+        @Override
+        public int compare(BookingHistoryEntity history1, BookingHistoryEntity history2) {
+            return history1.lastUpdated.compareTo(history2.lastUpdated);
+        }
+    }
 }
