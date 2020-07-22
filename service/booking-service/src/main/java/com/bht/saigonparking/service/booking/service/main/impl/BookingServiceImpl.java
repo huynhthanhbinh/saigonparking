@@ -1,6 +1,7 @@
 package com.bht.saigonparking.service.booking.service.main.impl;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
@@ -32,23 +33,23 @@ public class BookingServiceImpl implements BookingService {
     private final BookingHistoryRepository bookingHistoryRepository;
 
     @Override
-    public BookingEntity getBookingById(@NotNull Long bookingId) {
-        return bookingRepository.findById(bookingId).orElseThrow(EntityNotFoundException::new);
+    public BookingEntity getBookingByUuid(@NotNull String uuidString) {
+        return bookingRepository.getBookingByUuid(UUID.fromString(uuidString)).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
-    public BookingEntity getBookingDetailByBookingId(@NotNull Long bookingId) {
-        return bookingRepository.getBookingDetailByBookingId(bookingId).orElseThrow(EntityNotFoundException::new);
+    public BookingEntity getBookingDetailByUuid(@NotNull String uuidString) {
+        return bookingRepository.getBookingDetailByUuid(UUID.fromString(uuidString)).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
-    public Long saveNewBooking(@NotNull BookingEntity bookingEntity) {
-        return bookingRepository.saveAndFlush(bookingEntity).getId();
+    public String saveNewBooking(@NotNull BookingEntity bookingEntity) {
+        return bookingRepository.saveAndFlush(bookingEntity).getUuid().toString();
     }
 
     @Override
-    public void saveNewBookingHistory(@NotNull BookingHistoryEntity bookingHistoryEntity, @NotNull Long bookingId) {
-        BookingEntity bookingEntity = getBookingById(bookingId);
+    public void saveNewBookingHistory(@NotNull BookingHistoryEntity bookingHistoryEntity, @NotNull String uuidString) {
+        BookingEntity bookingEntity = getBookingByUuid(uuidString);
         if (bookingEntity.getIsFinished().equals(Boolean.FALSE)) {
             bookingHistoryEntity.setBookingEntity(bookingEntity);
             bookingHistoryRepository.saveAndFlush(bookingHistoryEntity);
@@ -58,8 +59,8 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void deleteBookingById(@NotNull Long bookingId) {
-        bookingRepository.delete(getBookingById(bookingId));
+    public void deleteBookingByUuid(@NotNull String uuidString) {
+        bookingRepository.delete(getBookingByUuid(uuidString));
     }
 
     @Override
@@ -83,8 +84,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Long countAllBookingOfParkingLot(@NotNull Long parkingLotId,
-                                            @NotNull BookingStatusEntity bookingStatusEntity) {
+    public Long countAllBookingOfParkingLot(@NotNull Long parkingLotId, @NotNull BookingStatusEntity bookingStatusEntity) {
         return bookingRepository.countAllBookingOfParkingLot(parkingLotId, bookingStatusEntity);
     }
 

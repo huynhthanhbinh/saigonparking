@@ -27,6 +27,7 @@ import com.bht.saigonparking.service.booking.mapper.EnumMapper;
 import com.bht.saigonparking.service.booking.service.main.BookingService;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
+import com.google.protobuf.StringValue;
 
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
@@ -46,13 +47,13 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
     private final BookingService bookingService;
 
     @Override
-    public void createBooking(CreateBookingRequest request, StreamObserver<Int64Value> responseObserver) {
+    public void createBooking(CreateBookingRequest request, StreamObserver<StringValue> responseObserver) {
         try {
             serverInterceptor.validateAdmin();
 
-            Long newBookingId = bookingService.saveNewBooking(bookingMapper.toBookingEntity(request));
+            String newBookingUuid = bookingService.saveNewBooking(bookingMapper.toBookingEntity(request));
 
-            responseObserver.onNext(Int64Value.of(newBookingId));
+            responseObserver.onNext(StringValue.of(newBookingUuid));
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",
@@ -79,7 +80,7 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("updateBookingStatus(%d): %s", request.getBookingId(), request.getStatus()));
+                    String.format("updateBookingStatus(%s): %s", request.getBookingId(), request.getStatus()));
 
         } catch (Exception exception) {
 
@@ -87,22 +88,22 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                    String.format("updateBookingStatus(%d): %s", request.getBookingId(), request.getStatus()));
+                    String.format("updateBookingStatus(%s): %s", request.getBookingId(), request.getStatus()));
         }
     }
 
     @Override
-    public void deleteBookingById(Int64Value request, StreamObserver<Empty> responseObserver) {
+    public void deleteBookingById(StringValue request, StreamObserver<Empty> responseObserver) {
         try {
             serverInterceptor.validateAdmin();
 
-            bookingService.deleteBookingById(request.getValue());
+            bookingService.deleteBookingByUuid(request.getValue());
 
             responseObserver.onNext(Empty.getDefaultInstance());
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("deleteBookingById(%d)", request.getValue()));
+                    String.format("deleteBookingById(%s)", request.getValue()));
 
         } catch (Exception exception) {
 
@@ -110,7 +111,7 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                    String.format("deleteBookingById(%d)", request.getValue()));
+                    String.format("deleteBookingById(%s)", request.getValue()));
         }
     }
 
@@ -333,15 +334,15 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
     }
 
     @Override
-    public void getBookingDetailByBookingId(Int64Value request, StreamObserver<BookingDetail> responseObserver) {
+    public void getBookingDetailByBookingId(StringValue request, StreamObserver<BookingDetail> responseObserver) {
         try {
-            BookingEntity bookingEntity = bookingService.getBookingDetailByBookingId(request.getValue());
+            BookingEntity bookingEntity = bookingService.getBookingDetailByUuid(request.getValue());
 
             responseObserver.onNext(bookingMapper.toBookingDetail(bookingEntity));
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("getBookingDetailByBookingId(%d)", request.getValue()));
+                    String.format("getBookingDetailByBookingId(%s)", request.getValue()));
 
         } catch (Exception exception) {
 
@@ -349,7 +350,7 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                    String.format("getBookingDetailByBookingId(%d)", request.getValue()));
+                    String.format("getBookingDetailByBookingId(%s)", request.getValue()));
         }
     }
 }

@@ -1,10 +1,10 @@
 package com.bht.saigonparking.service.booking.mapper;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotEmpty;
@@ -19,6 +19,7 @@ import com.bht.saigonparking.api.grpc.parkinglot.MapToParkingLotNameMapRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
 import com.bht.saigonparking.service.booking.configuration.AppConfiguration;
 import com.bht.saigonparking.service.booking.entity.BookingEntity;
+import com.fasterxml.uuid.Generators;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Int64Value;
 
@@ -50,15 +51,14 @@ public abstract class CustomizedMapper {
 
     private ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
 
-    @Named("toTimeString")
-
-    public String toTimeString(@NotNull Time time) {
-        return time.toString();
+    @Named("generateUUID")
+    public UUID generateUUID() {
+        return Generators.timeBasedGenerator().generate();
     }
 
-    @Named("toTime")
-    public Time toTime(@NotEmpty String timeString) {
-        return Time.valueOf(timeString);
+    @Named("toUUIDString")
+    public String toUUIDString(@NotNull UUID uuid) {
+        return uuid.toString();
     }
 
     @Named("toTimestampString")

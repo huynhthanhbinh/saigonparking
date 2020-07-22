@@ -21,6 +21,9 @@ import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import com.bht.saigonparking.api.grpc.booking.BookingServiceGrpc;
+import com.bht.saigonparking.api.grpc.booking.BookingStatus;
+import com.bht.saigonparking.api.grpc.booking.UpdateBookingStatusRequest;
 import com.bht.saigonparking.api.grpc.contact.BookingRequestContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.bht.saigonparking.api.grpc.contact.TextMessageContent;
@@ -143,7 +146,6 @@ public class Emulator extends SpringBootServletInitializer {
                 .build();
 
         BookingRequestContent bookingRequestContent = BookingRequestContent.newBuilder()
-                .setBookingId(10000)
                 .setAmountOfParkingHour(5)
                 .setCustomerName("htbinh")
                 .setCustomerLicense("54L6-2908")

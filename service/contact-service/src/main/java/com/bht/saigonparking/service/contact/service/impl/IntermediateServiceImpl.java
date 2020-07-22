@@ -55,7 +55,7 @@ public final class IntermediateServiceImpl implements IntermediateService {
         BookingRequestContent.Builder bookingRequestContentBuilder = BookingRequestContent.newBuilder()
                 .mergeFrom(message.getContent());
 
-        long newBookingId = bookingServiceBlockingStub.createBooking(CreateBookingRequest.newBuilder()
+        String newBookingUuid = bookingServiceBlockingStub.createBooking(CreateBookingRequest.newBuilder()
                 .setParkingLotId(bookingRequestContentBuilder.getParkingLotId())
                 .setCustomerId(message.getSenderId())
                 .setLicensePlate(bookingRequestContentBuilder.getCustomerLicense())
@@ -64,7 +64,7 @@ public final class IntermediateServiceImpl implements IntermediateService {
 
         BookingProcessingContent bookingProcessingContent = BookingProcessingContent.newBuilder()
                 .setParkingLotId(bookingRequestContentBuilder.getParkingLotId())
-                .setBookingId(newBookingId)
+                .setBookingId(newBookingUuid)
                 .build();
 
         SaigonParkingMessage bookingProcessingMessage = SaigonParkingMessage.newBuilder()
@@ -76,7 +76,7 @@ public final class IntermediateServiceImpl implements IntermediateService {
                 .build();
 
         /* attach new booking Id to forward to parking-lot */
-        message.setContent(bookingRequestContentBuilder.setBookingId(newBookingId).build().toByteString());
+        message.setContent(bookingRequestContentBuilder.setBookingId(newBookingUuid).build().toByteString());
 
         /* notify new booking Id to customer */
         webSocketSession.sendMessage(new BinaryMessage(bookingProcessingMessage.toByteArray()));
@@ -170,14 +170,14 @@ public final class IntermediateServiceImpl implements IntermediateService {
             @Override
             public void onError(Throwable throwable) {
                 LoggingUtil.log(Level.ERROR,
-                        String.format("updateBookingStatus(%d, %s)", request.getBookingId(), request.getStatus()),
+                        String.format("updateBookingStatus(%s, %s)", request.getBookingId(), request.getStatus()),
                         "Exception", throwable.getClass().getSimpleName());
             }
 
             @Override
             public void onCompleted() {
                 LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                        String.format("updateBookingStatus(%d, %s)", request.getBookingId(), request.getStatus()));
+                        String.format("updateBookingStatus(%s, %s)", request.getBookingId(), request.getStatus()));
             }
         };
     }

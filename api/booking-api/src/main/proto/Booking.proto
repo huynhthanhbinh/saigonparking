@@ -16,7 +16,7 @@ enum BookingStatus {
 }
 
 message Booking {
-    int64 id = 1;
+    string id = 1; /* will be an Universal Unique Identifier - UUID */
     int64 parkingLotId = 2;
     string parkingLotName = 3;
     int64 customerId = 4;
@@ -28,10 +28,9 @@ message Booking {
 
 message BookingHistory {
     int64 id = 1;
-    int64 bookingId = 2;
-    BookingStatus status = 3;
-    string timestamp = 4;
-    string note = 5;
+    BookingStatus status = 2;
+    string timestamp = 3;
+    string note = 4;
 }
 
 message BookingDetail {
@@ -78,16 +77,16 @@ message CreateBookingRequest {
 }
 
 message UpdateBookingStatusRequest {
-    int64 bookingId = 1;
+    string bookingId = 1; /* will be an Universal Unique Identifier - UUID */
     BookingStatus status = 2;
     string note = 4;
 }
 
 service BookingService {
     /* PRIVATE: ADMIN & INTERNAL service use-only */
-    rpc createBooking (CreateBookingRequest) returns (google.protobuf.Int64Value);
+    rpc createBooking (CreateBookingRequest) returns (google.protobuf.StringValue);
     rpc updateBookingStatus (UpdateBookingStatusRequest) returns (google.protobuf.Empty);
-    rpc deleteBookingById (google.protobuf.Int64Value) returns (google.protobuf.Empty);
+    rpc deleteBookingById (google.protobuf.StringValue) returns (google.protobuf.Empty);
 
     /* PUBLIC: EXTERNAL client can call (remember to provide token for auth purposes) */
     rpc getAllBooking (GetAllBookingRequest) returns (BookingList);
@@ -99,5 +98,5 @@ service BookingService {
     rpc countAllBookingOfParkingLot (CountAllBookingOfParkingLotRequest) returns (google.protobuf.Int64Value);
     rpc getAllOnGoingBookingOfParkingLot (google.protobuf.Int64Value) returns (BookingList);
     rpc countAllOnGoingBookingOfParkingLot (google.protobuf.Int64Value) returns (google.protobuf.Int64Value);
-    rpc getBookingDetailByBookingId (google.protobuf.Int64Value) returns (BookingDetail);
+    rpc getBookingDetailByBookingId (google.protobuf.StringValue) returns (BookingDetail);
 }

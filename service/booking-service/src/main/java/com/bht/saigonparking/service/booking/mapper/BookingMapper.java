@@ -3,6 +3,7 @@ package com.bht.saigonparking.service.booking.mapper;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotNull;
@@ -23,7 +24,6 @@ import com.bht.saigonparking.service.booking.entity.BookingEntity;
 import com.bht.saigonparking.service.booking.entity.BookingHistoryEntity;
 
 /**
- *
  * implements all necessary mappers for BookingService
  *
  * @author bht
@@ -33,11 +33,11 @@ import com.bht.saigonparking.service.booking.entity.BookingHistoryEntity;
 @Mapper(componentModel = "spring",
         implementationPackage = AppConfiguration.BASE_PACKAGE + ".mapper.impl",
         nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT,
-        uses = {EnumMapper.class, CustomizedMapper.class})
+        uses = {EnumMapper.class, CustomizedMapper.class, UUID.class})
 public interface BookingMapper {
 
     @Named("toBookingFromMapEntry")
-    @Mapping(target = "id", source = "key.id", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
+    @Mapping(target = "id", source = "key.uuid", qualifiedByName = "toUUIDString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "parkingLotId", source = "key.parkingLotId", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
     @Mapping(target = "parkingLotName", source = "value", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "customerId", source = "key.customerId", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
@@ -48,7 +48,7 @@ public interface BookingMapper {
     Booking toBooking(@NotNull Map.Entry<BookingEntity, String> bookingEntityParkingLotNameEntry);
 
     @Named("toBooking")
-    @Mapping(target = "id", source = "id", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
+    @Mapping(target = "id", source = "uuid", qualifiedByName = "toUUIDString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "parkingLotId", source = "parkingLotId", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
     @Mapping(target = "parkingLotName", source = "parkingLotId", qualifiedByName = "toParkingLotName", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "customerId", source = "customerId", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
@@ -65,12 +65,12 @@ public interface BookingMapper {
     @Mapping(target = "bookingStatusEntity", expression = "java(enumMapper.getDefaultBookingStatusEntity())")
     @Mapping(target = "isFinished", constant = "false")
     @Mapping(target = "version", constant = "1L")
+    @Mapping(target = "uuid", expression = "java(customizedMapper.generateUUID())")
     @Mapping(target = "id", ignore = true)
     BookingEntity toBookingEntity(@NotNull CreateBookingRequest bookingRequest);
 
     @Named("toBookingHistory")
     @Mapping(target = "id", source = "id", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
-    @Mapping(target = "bookingId", source = "bookingEntity.id", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
     @Mapping(target = "status", source = "bookingStatusEntity", qualifiedByName = "toBookingStatus")
     @Mapping(target = "timestamp", source = "lastUpdated", qualifiedByName = "toTimestampString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "note", source = "note", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")

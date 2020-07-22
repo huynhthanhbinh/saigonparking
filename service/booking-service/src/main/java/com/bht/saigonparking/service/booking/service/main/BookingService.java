@@ -15,16 +15,16 @@ import com.bht.saigonparking.service.booking.entity.BookingStatusEntity;
 public interface BookingService {
 
     /* getBookingById not JOIN bookingHistorySet */
-    BookingEntity getBookingById(@NotNull Long bookingId);
+    BookingEntity getBookingByUuid(@NotNull String uuidString);
 
     /* getBookingById JOIN FETCH bookingHistorySet */
-    BookingEntity getBookingDetailByBookingId(@NotNull Long bookingId);
+    BookingEntity getBookingDetailByUuid(@NotNull String uuidString);
 
-    Long saveNewBooking(@NotNull BookingEntity bookingEntity);
+    String saveNewBooking(@NotNull BookingEntity bookingEntity);
 
-    void saveNewBookingHistory(@NotNull BookingHistoryEntity bookingHistoryEntity, @NotNull Long bookingId);
+    void saveNewBookingHistory(@NotNull BookingHistoryEntity bookingHistoryEntity, @NotNull String uuidString);
 
-    void deleteBookingById(@NotNull Long bookingId);
+    void deleteBookingByUuid(@NotNull String uuidString);
 
     Long countAllBooking();
 

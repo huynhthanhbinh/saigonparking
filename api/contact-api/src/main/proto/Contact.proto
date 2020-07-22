@@ -72,7 +72,7 @@ message TextMessageContent {
 
 /* for customer, do not initialize bookingId, the system will then set bookingId before forward request to parking-lot */
 message BookingRequestContent {
-    int64 bookingId = 1;
+    string bookingId = 1; /* will be an Universal Unique Identifier - UUID */
     int64 parkingLotId = 2;
     string customerName = 3;
     string customerLicense = 4;
@@ -80,26 +80,28 @@ message BookingRequestContent {
 }
 
 message BookingCancellationContent {
-    int64 bookingId = 1;
+    string bookingId = 1; /* will be an Universal Unique Identifier - UUID */
     string reason = 2;
 }
 
 message BookingProcessingContent {
-    int64 bookingId = 1;
-    int64 parkingLotId = 2;
+    string bookingId = 1; /* will be an Universal Unique Identifier - UUID */
+    bytes qrCode = 2; /* QR code will be sent as a byte-array, convert to picture such as bitmap to show on screen */
+    int64 parkingLotId = 3;
+    string createdAt = 4;
 }
 
 message BookingAcceptanceContent {
-    int64 bookingId = 1;
+    string bookingId = 1; /* will be an Universal Unique Identifier - UUID */
 }
 
 message BookingRejectContent {
-    int64 bookingId = 1;
+    string bookingId = 1; /* will be an Universal Unique Identifier - UUID */
     string reason = 2;
 }
 
 message BookingFinishContent {
-    int64 bookingId = 1;
+    string bookingId = 1; /* will be an Universal Unique Identifier - UUID */
 }
 
 /* for this message type, receiver will be system (receiver ID = 0)  */

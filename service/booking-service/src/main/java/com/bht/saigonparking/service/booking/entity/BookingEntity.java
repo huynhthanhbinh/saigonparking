@@ -9,18 +9,16 @@ import java.util.UUID;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
-import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.SelectBeforeUpdate;
+import org.hibernate.annotations.Type;
 
 import com.bht.saigonparking.common.base.BaseEntity;
 
@@ -50,17 +48,10 @@ import lombok.experimental.SuperBuilder;
 public final class BookingEntity extends BaseEntity {
 
     public static final Comparator<Map.Entry<BookingEntity, String>> SORT_BY_CREATED_AT = new SortByCreatedAt();
-    private static final String UUID_GENERATOR_NAME = "UUID";
 
     @NaturalId
-    @GeneratedValue(generator = UUID_GENERATOR_NAME)
-    @GenericGenerator(
-            name = UUID_GENERATOR_NAME,
-            strategy = "org.hibernate.id.UUIDGenerator",
-            parameters = {
-                    @Parameter(name = "uuid_gen_strategy_class", value = "org.hibernate.id.uuid.CustomVersionOneStrategy")
-            })
-    @Column(name = "[UUID]", unique = true, updatable = false, nullable = false)
+    @Type(type = "uuid-char")
+    @Column(name = "[UUID]", nullable = false, unique = true, updatable = false, columnDefinition = "UNIQUEIDENTIFIER")
     private UUID uuid;
 
     @Column(name = "[PARKING_LOT_ID]", nullable = false)
