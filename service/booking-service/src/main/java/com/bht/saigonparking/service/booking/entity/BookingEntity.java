@@ -4,16 +4,22 @@ import java.sql.Timestamp;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
+import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
 import com.bht.saigonparking.common.base.BaseEntity;
@@ -34,6 +40,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @SuperBuilder
+@NaturalIdCache
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
@@ -43,6 +50,18 @@ import lombok.experimental.SuperBuilder;
 public final class BookingEntity extends BaseEntity {
 
     public static final Comparator<Map.Entry<BookingEntity, String>> SORT_BY_CREATED_AT = new SortByCreatedAt();
+    private static final String UUID_GENERATOR_NAME = "UUID";
+
+    @NaturalId
+    @GeneratedValue(generator = UUID_GENERATOR_NAME)
+    @GenericGenerator(
+            name = UUID_GENERATOR_NAME,
+            strategy = "org.hibernate.id.UUIDGenerator",
+            parameters = {
+                    @Parameter(name = "uuid_gen_strategy_class", value = "org.hibernate.id.uuid.CustomVersionOneStrategy")
+            })
+    @Column(name = "[UUID]", unique = true, updatable = false, nullable = false)
+    private UUID uuid;
 
     @Column(name = "[PARKING_LOT_ID]", nullable = false)
     private Long parkingLotId;
@@ -53,12 +72,13 @@ public final class BookingEntity extends BaseEntity {
     @Column(name = "[CUSTOMER_LICENSE_PLATE]", nullable = false)
     private String customerLicensePlate;
 
-    @CreationTimestamp
-    @Column(name = "[CREATED_AT]", nullable = false, updatable = false)
-    private Timestamp createdAt;
-
     @Column(name = "[IS_FINISHED]", nullable = false)
     private Boolean isFinished;
+
+    @CreationTimestamp
+    @EqualsAndHashCode.Exclude
+    @Column(name = "[CREATED_AT]", nullable = false, updatable = false)
+    private Timestamp createdAt;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "[LATEST_STATUS_ID]", referencedColumnName = "[ID]", nullable = false, updatable = false)
@@ -68,7 +88,6 @@ public final class BookingEntity extends BaseEntity {
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "bookingEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<BookingHistoryEntity> bookingHistoryEntitySet;
-
 
     @NoArgsConstructor
     private static final class SortByCreatedAt implements Comparator<Map.Entry<BookingEntity, String>> {
