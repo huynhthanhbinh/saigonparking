@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Wed, Jul 22th, 2020
+Last updated:       Thu, Jul 23th, 2020
 ========================================================================================================================
 001. gRPC error handling:
         https://grpc.io/docs/guides/error/
@@ -368,5 +368,14 @@ Last updated:       Wed, Jul 22th, 2020
 118. Guide to UUID in Java ==> UUID: a 128-bit long value (size), length equal to 36 characters (string length)
         https://www.baeldung.com/java-uuid
 
-119. How to generate UUIDs as primary keys with Hibernate
-        https://thorben-janssen.com/generate-uuids-primary-keys-hibernate/
+119. Using Hibernate UUIDGenerator via annotations
+        https://stackoverflow.com/questions/6356834/using-hibernate-uuidgenerator-via-annotations
+
+120. Java UUID Generator – Java GUID
+        https://www.journaldev.com/17182/java-uuid-generator-java-guid
+
+121. Understanding the GUID data type in SQL Server
+        https://www.sqlshack.com/understanding-the-guid-data-type-in-sql-server/
+
+122. Different representation of UUID in Java Hibernate and SQL Server
+        https://stackoverflow.com/questions/41651681/different-representation-of-uuid-in-java-hibernate-and-sql-server
