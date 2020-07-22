@@ -1,12 +1,10 @@
 version: '3'
-
 networks:
   saigonparking:
     driver: bridge
     ipam:
       config:
         - subnet: 172.28.0.0/16
-
 services:
 
   proxy:
@@ -292,6 +290,8 @@ services:
       MESSAGE_QUEUE_PASSWORD: ${MESSAGE_QUEUE_PASSWORD}
       SERVICE_DISCOVERY_HOST: ${SERVICE_DISCOVERY_HOST}
       SERVICE_DISCOVERY_PORT: ${SERVICE_DISCOVERY_PORT}
+      QR_CODE_WIDTH:          ${QR_CODE_WIDTH}
+      QR_CODE_HEIGHT:         ${QR_CODE_HEIGHT}
     depends_on:
       - message-queue
       - service-discovery

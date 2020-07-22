@@ -379,3 +379,6 @@ Last updated:       Thu, Jul 23th, 2020
 
 122. Different representation of UUID in Java Hibernate and SQL Server
         https://stackoverflow.com/questions/41651681/different-representation-of-uuid-in-java-hibernate-and-sql-server
+
+123. Generating Barcodes and QR Codes in Java
+        https://www.baeldung.com/java-generating-barcodes-qr-codes

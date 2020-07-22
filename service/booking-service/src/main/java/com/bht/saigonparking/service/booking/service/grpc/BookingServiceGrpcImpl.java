@@ -21,12 +21,14 @@ import com.bht.saigonparking.api.grpc.booking.GetAllBookingOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingRequest;
 import com.bht.saigonparking.api.grpc.booking.UpdateBookingStatusRequest;
 import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
+import com.bht.saigonparking.common.util.ImageUtil;
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.booking.entity.BookingEntity;
 import com.bht.saigonparking.service.booking.mapper.BookingMapper;
 import com.bht.saigonparking.service.booking.mapper.CustomizedMapper;
 import com.bht.saigonparking.service.booking.mapper.EnumMapper;
 import com.bht.saigonparking.service.booking.service.main.BookingService;
+import com.bht.saigonparking.service.booking.service.main.QrCodeService;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
@@ -47,6 +49,7 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
     private final BookingMapper bookingMapper;
     private final CustomizedMapper customizedMapper;
     private final BookingService bookingService;
+    private final QrCodeService qrCodeService;
 
     @Override
     public void createBooking(CreateBookingRequest request, StreamObserver<CreateBookingResponse> responseObserver) {
@@ -57,6 +60,7 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
 
             CreateBookingResponse response = CreateBookingResponse.newBuilder()
                     .setBookingId(newBooking.getFirst())
+                    .setQrCode(ImageUtil.encodeImage(qrCodeService.encodeContents(newBooking.getFirst())))
                     .setCreatedAt(newBooking.getSecond())
                     .build();
 
