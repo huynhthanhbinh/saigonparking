@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import org.springframework.data.util.Pair;
+
 import com.bht.saigonparking.service.booking.entity.BookingEntity;
 import com.bht.saigonparking.service.booking.entity.BookingHistoryEntity;
 import com.bht.saigonparking.service.booking.entity.BookingStatusEntity;
@@ -20,7 +22,7 @@ public interface BookingService {
     /* getBookingById JOIN FETCH bookingHistorySet */
     BookingEntity getBookingDetailByUuid(@NotNull String uuidString);
 
-    String saveNewBooking(@NotNull BookingEntity bookingEntity);
+    Pair<String, String> saveNewBooking(@NotNull BookingEntity bookingEntity);
 
     void saveNewBookingHistory(@NotNull BookingHistoryEntity bookingHistoryEntity, @NotNull String uuidString);
 

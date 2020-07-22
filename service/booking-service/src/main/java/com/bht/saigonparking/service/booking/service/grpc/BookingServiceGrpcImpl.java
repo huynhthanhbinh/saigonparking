@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.logging.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 
 import com.bht.saigonparking.api.grpc.booking.BookingDetail;
 import com.bht.saigonparking.api.grpc.booking.BookingList;
@@ -14,6 +15,7 @@ import com.bht.saigonparking.api.grpc.booking.BookingStatus;
 import com.bht.saigonparking.api.grpc.booking.CountAllBookingOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.booking.CountAllBookingRequest;
 import com.bht.saigonparking.api.grpc.booking.CreateBookingRequest;
+import com.bht.saigonparking.api.grpc.booking.CreateBookingResponse;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingOfCustomerRequest;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingRequest;
@@ -47,13 +49,18 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
     private final BookingService bookingService;
 
     @Override
-    public void createBooking(CreateBookingRequest request, StreamObserver<StringValue> responseObserver) {
+    public void createBooking(CreateBookingRequest request, StreamObserver<CreateBookingResponse> responseObserver) {
         try {
             serverInterceptor.validateAdmin();
 
-            String newBookingUuid = bookingService.saveNewBooking(bookingMapper.toBookingEntity(request));
+            Pair<String, String> newBooking = bookingService.saveNewBooking(bookingMapper.toBookingEntity(request));
 
-            responseObserver.onNext(StringValue.of(newBookingUuid));
+            CreateBookingResponse response = CreateBookingResponse.newBuilder()
+                    .setBookingId(newBooking.getFirst())
+                    .setCreatedAt(newBooking.getSecond())
+                    .build();
+
+            responseObserver.onNext(response);
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",

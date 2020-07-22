@@ -76,6 +76,12 @@ message CreateBookingRequest {
     string licensePlate = 3;
 }
 
+message CreateBookingResponse {
+    string bookingId = 1; /* will be an Universal Unique Identifier - UUID */
+    bytes qrCode = 2; /* representation of booking UUID as image */
+    string createdAt = 3; /* timestamp when this booking was persisted into DB */
+}
+
 message UpdateBookingStatusRequest {
     string bookingId = 1; /* will be an Universal Unique Identifier - UUID */
     BookingStatus status = 2;
@@ -84,7 +90,7 @@ message UpdateBookingStatusRequest {
 
 service BookingService {
     /* PRIVATE: ADMIN & INTERNAL service use-only */
-    rpc createBooking (CreateBookingRequest) returns (google.protobuf.StringValue);
+    rpc createBooking (CreateBookingRequest) returns (CreateBookingResponse);
     rpc updateBookingStatus (UpdateBookingStatusRequest) returns (google.protobuf.Empty);
     rpc deleteBookingById (google.protobuf.StringValue) returns (google.protobuf.Empty);
 

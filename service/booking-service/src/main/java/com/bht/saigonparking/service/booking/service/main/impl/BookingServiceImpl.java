@@ -7,6 +7,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,8 +44,9 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public String saveNewBooking(@NotNull BookingEntity bookingEntity) {
-        return bookingRepository.saveAndFlush(bookingEntity).getUuid().toString();
+    public Pair<String, String> saveNewBooking(@NotNull BookingEntity bookingEntity) {
+        BookingEntity newBookingEntity = bookingRepository.saveAndFlush(bookingEntity);
+        return Pair.of(newBookingEntity.getUuid().toString(), newBookingEntity.getCreatedAt().toString());
     }
 
     @Override

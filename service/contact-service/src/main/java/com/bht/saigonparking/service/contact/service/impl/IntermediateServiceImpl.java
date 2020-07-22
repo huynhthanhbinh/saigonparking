@@ -19,6 +19,7 @@ import org.springframework.web.socket.WebSocketSession;
 import com.bht.saigonparking.api.grpc.booking.BookingServiceGrpc;
 import com.bht.saigonparking.api.grpc.booking.BookingStatus;
 import com.bht.saigonparking.api.grpc.booking.CreateBookingRequest;
+import com.bht.saigonparking.api.grpc.booking.CreateBookingResponse;
 import com.bht.saigonparking.api.grpc.booking.UpdateBookingStatusRequest;
 import com.bht.saigonparking.api.grpc.contact.BookingAcceptanceContent;
 import com.bht.saigonparking.api.grpc.contact.BookingCancellationContent;
@@ -55,16 +56,17 @@ public final class IntermediateServiceImpl implements IntermediateService {
         BookingRequestContent.Builder bookingRequestContentBuilder = BookingRequestContent.newBuilder()
                 .mergeFrom(message.getContent());
 
-        String newBookingUuid = bookingServiceBlockingStub.createBooking(CreateBookingRequest.newBuilder()
+        CreateBookingResponse newBooking = bookingServiceBlockingStub.createBooking(CreateBookingRequest.newBuilder()
                 .setParkingLotId(bookingRequestContentBuilder.getParkingLotId())
                 .setCustomerId(message.getSenderId())
                 .setLicensePlate(bookingRequestContentBuilder.getCustomerLicense())
-                .build())
-                .getValue();
+                .build());
 
         BookingProcessingContent bookingProcessingContent = BookingProcessingContent.newBuilder()
                 .setParkingLotId(bookingRequestContentBuilder.getParkingLotId())
-                .setBookingId(newBookingUuid)
+                .setBookingId(newBooking.getBookingId())
+                .setCreatedAt(newBooking.getCreatedAt())
+                .setQrCode(newBooking.getQrCode())
                 .build();
 
         SaigonParkingMessage bookingProcessingMessage = SaigonParkingMessage.newBuilder()
@@ -76,7 +78,7 @@ public final class IntermediateServiceImpl implements IntermediateService {
                 .build();
 
         /* attach new booking Id to forward to parking-lot */
-        message.setContent(bookingRequestContentBuilder.setBookingId(newBookingUuid).build().toByteString());
+        message.setContent(bookingRequestContentBuilder.setBookingId(newBooking.getBookingId()).build().toByteString());
 
         /* notify new booking Id to customer */
         webSocketSession.sendMessage(new BinaryMessage(bookingProcessingMessage.toByteArray()));
