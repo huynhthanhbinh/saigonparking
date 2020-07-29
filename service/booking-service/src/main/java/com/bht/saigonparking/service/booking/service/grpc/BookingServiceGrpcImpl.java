@@ -12,10 +12,14 @@ import com.bht.saigonparking.api.grpc.booking.BookingDetail;
 import com.bht.saigonparking.api.grpc.booking.BookingList;
 import com.bht.saigonparking.api.grpc.booking.BookingServiceGrpc;
 import com.bht.saigonparking.api.grpc.booking.BookingStatus;
+import com.bht.saigonparking.api.grpc.booking.CountAllBookingOfParkingLotGroupByStatusResponse;
 import com.bht.saigonparking.api.grpc.booking.CountAllBookingOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.booking.CountAllBookingRequest;
 import com.bht.saigonparking.api.grpc.booking.CreateBookingRequest;
 import com.bht.saigonparking.api.grpc.booking.CreateBookingResponse;
+import com.bht.saigonparking.api.grpc.booking.FinishBookingRequest;
+import com.bht.saigonparking.api.grpc.booking.GenerateBookingQrCodeRequest;
+import com.bht.saigonparking.api.grpc.booking.GenerateBookingQrCodeResponse;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingOfCustomerRequest;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingRequest;
@@ -363,5 +367,20 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("getBookingDetailByBookingId(%s)", request.getValue()));
         }
+    }
+
+    @Override
+    public void generateBookingQrCode(GenerateBookingQrCodeRequest request, StreamObserver<GenerateBookingQrCodeResponse> responseObserver) {
+        super.generateBookingQrCode(request, responseObserver);
+    }
+
+    @Override
+    public void finishBooking(FinishBookingRequest request, StreamObserver<Empty> responseObserver) {
+        super.finishBooking(request, responseObserver);
+    }
+
+    @Override
+    public void countAllBookingOfParkingLotGroupByStatus(Int64Value request, StreamObserver<CountAllBookingOfParkingLotGroupByStatusResponse> responseObserver) {
+        super.countAllBookingOfParkingLotGroupByStatus(request, responseObserver);
     }
 }
