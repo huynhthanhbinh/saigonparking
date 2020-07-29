@@ -45,13 +45,13 @@ public class S3ServiceImpl implements S3Service {
 
     @Override
     public InputStream getFile(@NotEmpty String filePath, boolean warnOnFail) {
-        try (InputStream inputStream = amazonS3Client.getObject(bucketName, filePath).getObjectContent()) {
+        try {
 
+            InputStream inputStream = amazonS3Client.getObject(bucketName, filePath).getObjectContent();
             LoggingUtil.log(Level.DEBUG, "SERVICE", "Success", String.format("getS3File(\"%s\")", filePath));
-
             return inputStream;
 
-        } catch (AmazonClientException | IOException exception) {
+        } catch (AmazonClientException exception) {
 
             if (warnOnFail) {
                 LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
