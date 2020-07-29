@@ -85,6 +85,7 @@ public final class IntermediateServiceImpl implements IntermediateService {
     }
 
     @Override
+    @SuppressWarnings("all")
     public void handleBookingCancellation(@NotNull SaigonParkingMessage.Builder message,
                                           @NotNull MessagingService messagingService) throws InvalidProtocolBufferException {
 
@@ -96,7 +97,7 @@ public final class IntermediateServiceImpl implements IntermediateService {
                 .setNote(bookingCancellationContent.getReason())
                 .build();
 
-        updateBookingStatus(request, message, messagingService);
+        bookingServiceBlockingStub.updateBookingStatus(request);
     }
 
     @Override
