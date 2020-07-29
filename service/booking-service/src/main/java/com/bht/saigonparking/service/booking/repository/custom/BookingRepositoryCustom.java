@@ -2,6 +2,7 @@ package com.bht.saigonparking.service.booking.repository.custom;
 
 import java.util.List;
 
+import javax.persistence.Tuple;
 import javax.validation.constraints.NotNull;
 
 import com.bht.saigonparking.service.booking.entity.BookingEntity;
@@ -12,6 +13,10 @@ import com.bht.saigonparking.service.booking.entity.BookingStatusEntity;
  * @author bht
  */
 public interface BookingRepositoryCustom {
+
+    List<Tuple> countAllBookingGroupByStatus();
+
+    List<Tuple> countAllBookingOfParkingLotGroupByStatus(@NotNull Long parkingLotId);
 
     Long countAllBooking();
 

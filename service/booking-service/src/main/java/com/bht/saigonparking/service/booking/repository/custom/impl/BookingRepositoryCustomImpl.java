@@ -2,6 +2,7 @@ package com.bht.saigonparking.service.booking.repository.custom.impl;
 
 import java.util.List;
 
+import javax.persistence.Tuple;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Repository;
@@ -19,6 +20,28 @@ import com.bht.saigonparking.service.booking.repository.custom.BookingRepository
 @Repository
 @Transactional
 public class BookingRepositoryCustomImpl extends BaseRepositoryCustom implements BookingRepositoryCustom {
+
+    @Override
+    public List<Tuple> countAllBookingGroupByStatus() {
+        String getCountGroupByQuery = "SELECT B.bookingStatusEntity.id, COUNT(B.id) " +
+                "FROM BookingEntity B " +
+                "GROUP BY B.bookingStatusEntity.id ";
+
+        return entityManager.createQuery(getCountGroupByQuery, Tuple.class)
+                .getResultList();
+    }
+
+    @Override
+    public List<Tuple> countAllBookingOfParkingLotGroupByStatus(@NotNull Long parkingLotId) {
+        String getCountGroupByQuery = "SELECT B.bookingStatusEntity.id, COUNT(B.id) " +
+                "FROM BookingEntity B " +
+                "WHERE B.parkingLotId = :parkingLotId " +
+                "GROUP BY B.bookingStatusEntity.id ";
+
+        return entityManager.createQuery(getCountGroupByQuery, Tuple.class)
+                .setParameter("parkingLotId", parkingLotId)
+                .getResultList();
+    }
 
     @Override
     public Long countAllBooking() {

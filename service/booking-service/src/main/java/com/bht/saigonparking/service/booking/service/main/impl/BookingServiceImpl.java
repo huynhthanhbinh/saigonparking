@@ -1,7 +1,9 @@
 package com.bht.saigonparking.service.booking.service.main.impl;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotEmpty;
@@ -184,5 +186,17 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public List<BookingEntity> getAllOnGoingBookingOfParkingLot(@NotNull Long parkingLotId) {
         return bookingRepository.getAllOnGoingBookingOfParkingLot(parkingLotId);
+    }
+
+    @Override
+    public Map<Long, Long> countAllBookingGroupByStatus() {
+        return bookingRepository.countAllBookingGroupByStatus().stream().collect(Collectors
+                .toMap(tuple -> enumMapper.toBookingStatusValue(tuple.get(0, Long.class)), tuple -> tuple.get(1, Long.class)));
+    }
+
+    @Override
+    public Map<Long, Long> countAllBookingOfParkingLotGroupByStatus(@NotNull Long parkingLotId) {
+        return bookingRepository.countAllBookingOfParkingLotGroupByStatus(parkingLotId).stream().collect(Collectors
+                .toMap(tuple -> enumMapper.toBookingStatusValue(tuple.get(0, Long.class)), tuple -> tuple.get(1, Long.class)));
     }
 }

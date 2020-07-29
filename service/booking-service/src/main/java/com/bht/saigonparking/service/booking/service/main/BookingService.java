@@ -1,6 +1,7 @@
 package com.bht.saigonparking.service.booking.service.main;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -65,4 +66,8 @@ public interface BookingService {
                                                   @NotNull Integer pageNumber);
 
     List<BookingEntity> getAllOnGoingBookingOfParkingLot(@NotNull Long parkingLotId);
+
+    Map<Long, Long> countAllBookingGroupByStatus();
+
+    Map<Long, Long> countAllBookingOfParkingLotGroupByStatus(@NotNull Long parkingLotId);
 }

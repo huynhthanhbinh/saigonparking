@@ -1,5 +1,9 @@
 package com.bht.saigonparking.service.booking.mapper;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -24,7 +28,6 @@ import lombok.Setter;
  *
  * for using repository inside Component class,
  * we need to {@code @Autowired} it by Spring Dependency Injection
- *
  * we can achieve that easily
  * by using {@code @Setter(onMethod = @__(@Autowired)} for class level like below
  *
@@ -43,11 +46,13 @@ import lombok.Setter;
 public abstract class EnumMapper implements BaseBean {
 
     private static final BiMap<BookingStatusEntity, BookingStatus> BOOKING_STATUS_BI_MAP = HashBiMap.create();
+    private static final Map<Long, Long> BOOKING_STATUS_VALUE_MAP = new HashMap<>();
     private BookingStatusRepository bookingStatusRepository;
 
     @Override
     public void initialize() {
-        initParkingLotTypeBiMap();
+        initBookingStatusBiMap();
+        initBookingStatusValueMap();
     }
 
     @Named("toBookingStatus")
@@ -60,16 +65,26 @@ public abstract class EnumMapper implements BaseBean {
         return BOOKING_STATUS_BI_MAP.inverse().get(bookingStatus);
     }
 
+    @Named("toBookingStatusValue")
+    public Long toBookingStatusValue(Long bookingStatusId) {
+        return BOOKING_STATUS_VALUE_MAP.get(bookingStatusId);
+    }
+
     public BookingStatusEntity getDefaultBookingStatusEntity() {
         return toBookingStatusEntity(BookingStatus.CREATED);
     }
 
-    private void initParkingLotTypeBiMap() {
+    private void initBookingStatusBiMap() {
         BOOKING_STATUS_BI_MAP.put(getBookingStatusByStatus("CREATED"), BookingStatus.CREATED);
         BOOKING_STATUS_BI_MAP.put(getBookingStatusByStatus("ACCEPTED"), BookingStatus.ACCEPTED);
         BOOKING_STATUS_BI_MAP.put(getBookingStatusByStatus("REJECTED"), BookingStatus.REJECTED);
         BOOKING_STATUS_BI_MAP.put(getBookingStatusByStatus("CANCELLED"), BookingStatus.CANCELLED);
         BOOKING_STATUS_BI_MAP.put(getBookingStatusByStatus("FINISHED"), BookingStatus.FINISHED);
+    }
+
+    private void initBookingStatusValueMap() {
+        BOOKING_STATUS_VALUE_MAP.putAll(BOOKING_STATUS_BI_MAP.entrySet().stream()
+                .collect(Collectors.toMap(entry -> entry.getKey().getId(), entry -> (long) entry.getValue().getNumber())));
     }
 
     private BookingStatusEntity getBookingStatusByStatus(@NotEmpty String status) {

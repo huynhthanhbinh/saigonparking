@@ -1,5 +1,6 @@
 package com.bht.saigonparking.service.booking.service.grpc;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -423,11 +424,49 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
 
     @Override
     public void countAllBookingGroupByStatus(Empty request, StreamObserver<CountAllBookingGroupByStatusResponse> responseObserver) {
-        super.countAllBookingGroupByStatus(request, responseObserver);
+        try {
+            serverInterceptor.validateAdmin();
+
+            CountAllBookingGroupByStatusResponse response = CountAllBookingGroupByStatusResponse.newBuilder()
+                    .putAllStatusCount(bookingService.countAllBookingGroupByStatus())
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success", "countAllBookingGroupByStatus()");
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL", "countAllBookingGroupByStatus()");
+        }
     }
 
     @Override
     public void countAllBookingOfParkingLotGroupByStatus(Int64Value request, StreamObserver<CountAllBookingGroupByStatusResponse> responseObserver) {
-        super.countAllBookingOfParkingLotGroupByStatus(request, responseObserver);
+        try {
+            serverInterceptor.validateUserRole(Arrays.asList("PARKING_LOT_EMPLOYEE", "ADMIN"));
+
+            CountAllBookingGroupByStatusResponse response = CountAllBookingGroupByStatusResponse.newBuilder()
+                    .putAllStatusCount(bookingService.countAllBookingOfParkingLotGroupByStatus(request.getValue()))
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("countAllBookingOfParkingLotGroupByStatus(%d)", request.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("countAllBookingOfParkingLotGroupByStatus(%d)", request.getValue()));
+        }
     }
 }
