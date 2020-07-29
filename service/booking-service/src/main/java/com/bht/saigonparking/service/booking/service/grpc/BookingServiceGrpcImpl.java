@@ -12,7 +12,7 @@ import com.bht.saigonparking.api.grpc.booking.BookingDetail;
 import com.bht.saigonparking.api.grpc.booking.BookingList;
 import com.bht.saigonparking.api.grpc.booking.BookingServiceGrpc;
 import com.bht.saigonparking.api.grpc.booking.BookingStatus;
-import com.bht.saigonparking.api.grpc.booking.CountAllBookingOfParkingLotGroupByStatusResponse;
+import com.bht.saigonparking.api.grpc.booking.CountAllBookingGroupByStatusResponse;
 import com.bht.saigonparking.api.grpc.booking.CountAllBookingOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.booking.CountAllBookingRequest;
 import com.bht.saigonparking.api.grpc.booking.CreateBookingRequest;
@@ -422,7 +422,12 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
     }
 
     @Override
-    public void countAllBookingOfParkingLotGroupByStatus(Int64Value request, StreamObserver<CountAllBookingOfParkingLotGroupByStatusResponse> responseObserver) {
+    public void countAllBookingGroupByStatus(Empty request, StreamObserver<CountAllBookingGroupByStatusResponse> responseObserver) {
+        super.countAllBookingGroupByStatus(request, responseObserver);
+    }
+
+    @Override
+    public void countAllBookingOfParkingLotGroupByStatus(Int64Value request, StreamObserver<CountAllBookingGroupByStatusResponse> responseObserver) {
         super.countAllBookingOfParkingLotGroupByStatus(request, responseObserver);
     }
 }

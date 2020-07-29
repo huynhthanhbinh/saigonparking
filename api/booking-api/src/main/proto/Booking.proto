@@ -88,7 +88,7 @@ message UpdateBookingStatusRequest {
     string note = 4;
 }
 
-message CountAllBookingOfParkingLotGroupByStatusResponse {
+message CountAllBookingGroupByStatusResponse {
     map<int32, int64> statusCount = 1; /* is a map of <booking_status_int_value, count_booking_status> */
 }
 
@@ -105,11 +105,11 @@ message GenerateBookingQrCodeResponse {
 }
 
 service BookingService {
-
     /* PRIVATE: ADMIN & INTERNAL service use-only */
     rpc createBooking (CreateBookingRequest) returns (CreateBookingResponse);
     rpc updateBookingStatus (UpdateBookingStatusRequest) returns (google.protobuf.Empty);
     rpc deleteBookingById (google.protobuf.StringValue) returns (google.protobuf.Empty);
+    rpc countAllBookingGroupByStatus (google.protobuf.Empty) returns (CountAllBookingGroupByStatusResponse);
 
     /* PUBLIC: EXTERNAL client can call (remember to provide token for auth purposes) */
     rpc generateBookingQrCode (GenerateBookingQrCodeRequest) returns (GenerateBookingQrCodeResponse);
@@ -124,5 +124,5 @@ service BookingService {
     rpc getAllOnGoingBookingOfParkingLot (google.protobuf.Int64Value) returns (BookingList);
     rpc countAllOnGoingBookingOfParkingLot (google.protobuf.Int64Value) returns (google.protobuf.Int64Value);
     rpc getBookingDetailByBookingId (google.protobuf.StringValue) returns (BookingDetail);
-    rpc countAllBookingOfParkingLotGroupByStatus (google.protobuf.Int64Value) returns (CountAllBookingOfParkingLotGroupByStatusResponse);
+    rpc countAllBookingOfParkingLotGroupByStatus (google.protobuf.Int64Value) returns (CountAllBookingGroupByStatusResponse);
 }
