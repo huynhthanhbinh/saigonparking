@@ -399,7 +399,26 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
 
     @Override
     public void finishBooking(FinishBookingRequest request, StreamObserver<Empty> responseObserver) {
-        super.finishBooking(request, responseObserver);
+        try {
+            serverInterceptor.validateUserRole("PARKING_LOT_EMPLOYEE");
+
+            String bookingUuid = request.getBookingId();
+            bookingService.finishBooking(bookingUuid);
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("finishBooking(%s)", request.getBookingId()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("finishBooking(%s)", request.getBookingId()));
+        }
     }
 
     @Override

@@ -4,17 +4,24 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bht.saigonparking.api.grpc.booking.BookingStatus;
+import com.bht.saigonparking.api.grpc.contact.BookingFinishContent;
+import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
+import com.bht.saigonparking.common.constant.SaigonParkingMessageQueue;
 import com.bht.saigonparking.common.exception.BookingAlreadyFinishedException;
 import com.bht.saigonparking.service.booking.entity.BookingEntity;
 import com.bht.saigonparking.service.booking.entity.BookingHistoryEntity;
 import com.bht.saigonparking.service.booking.entity.BookingStatusEntity;
+import com.bht.saigonparking.service.booking.mapper.EnumMapper;
 import com.bht.saigonparking.service.booking.repository.core.BookingHistoryRepository;
 import com.bht.saigonparking.service.booking.repository.core.BookingRepository;
 import com.bht.saigonparking.service.booking.service.main.BookingService;
@@ -30,16 +37,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class BookingServiceImpl implements BookingService {
 
+    private final EnumMapper enumMapper;
+    private final RabbitTemplate rabbitTemplate;
+
     private final BookingRepository bookingRepository;
     private final BookingHistoryRepository bookingHistoryRepository;
 
     @Override
-    public BookingEntity getBookingByUuid(@NotNull String uuidString) {
+    public BookingEntity getBookingByUuid(@NotEmpty String uuidString) {
         return bookingRepository.getBookingByUuid(UUID.fromString(uuidString)).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
-    public BookingEntity getBookingDetailByUuid(@NotNull String uuidString) {
+    public BookingEntity getBookingDetailByUuid(@NotEmpty String uuidString) {
         return bookingRepository.getBookingDetailByUuid(UUID.fromString(uuidString)).orElseThrow(EntityNotFoundException::new);
     }
 
@@ -61,8 +71,44 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void deleteBookingByUuid(@NotNull String uuidString) {
+    public void deleteBookingByUuid(@NotEmpty String uuidString) {
         bookingRepository.delete(getBookingByUuid(uuidString));
+    }
+
+    @Override
+    public void finishBooking(@NotEmpty String uuidString) {
+        BookingHistoryEntity bookingHistoryEntity = BookingHistoryEntity.builder()
+                .bookingStatusEntity(enumMapper.toBookingStatusEntity(BookingStatus.FINISHED))
+                .version(1L)
+                .build();
+
+        saveNewBookingHistory(bookingHistoryEntity, uuidString);
+        notifyBookingFinish(uuidString);
+    }
+
+    private void notifyBookingFinish(@NotEmpty String uuidString) {
+        BookingEntity bookingEntity = getBookingByUuid(uuidString);
+        SaigonParkingMessage.Builder saigonParkingMessageBuilder = SaigonParkingMessage.newBuilder()
+                .setType(SaigonParkingMessage.Type.BOOKING_FINISH)
+                .setContent(BookingFinishContent.newBuilder().setBookingId(uuidString).build().toByteString());
+
+        /* notify customer that booking has been finished */
+        String userQueueRoutingKey = SaigonParkingMessageQueue.getUserRoutingKey(bookingEntity.getCustomerId());
+        SaigonParkingMessage toCustomerMessage = saigonParkingMessageBuilder
+                .setSenderId(bookingEntity.getParkingLotId())
+                .setReceiverId(bookingEntity.getCustomerId())
+                .setClassification(SaigonParkingMessage.Classification.PARKING_LOT_MESSAGE)
+                .build();
+        rabbitTemplate.convertAndSend(userQueueRoutingKey, toCustomerMessage);
+
+        /* notify parking-lot (another concurrent account) that booking has been finished */
+        String parkingLotExchangeName = SaigonParkingMessageQueue.getParkingLotExchangeName(bookingEntity.getParkingLotId());
+        SaigonParkingMessage toParkingLotMessage = saigonParkingMessageBuilder
+                .setSenderId(bookingEntity.getCustomerId())
+                .setReceiverId(bookingEntity.getParkingLotId())
+                .setClassification(SaigonParkingMessage.Classification.CUSTOMER_MESSAGE)
+                .build();
+        rabbitTemplate.convertAndSend(parkingLotExchangeName, "", toParkingLotMessage);
     }
 
     @Override

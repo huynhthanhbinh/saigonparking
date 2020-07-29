@@ -2,6 +2,7 @@ package com.bht.saigonparking.service.booking.service.main;
 
 import java.util.List;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.data.util.Pair;
@@ -17,16 +18,18 @@ import com.bht.saigonparking.service.booking.entity.BookingStatusEntity;
 public interface BookingService {
 
     /* getBookingById not JOIN bookingHistorySet */
-    BookingEntity getBookingByUuid(@NotNull String uuidString);
+    BookingEntity getBookingByUuid(@NotEmpty String uuidString);
 
     /* getBookingById JOIN FETCH bookingHistorySet */
-    BookingEntity getBookingDetailByUuid(@NotNull String uuidString);
+    BookingEntity getBookingDetailByUuid(@NotEmpty String uuidString);
 
     Pair<String, String> saveNewBooking(@NotNull BookingEntity bookingEntity);
 
-    void saveNewBookingHistory(@NotNull BookingHistoryEntity bookingHistoryEntity, @NotNull String uuidString);
+    void saveNewBookingHistory(@NotNull BookingHistoryEntity bookingHistoryEntity, @NotEmpty String uuidString);
 
-    void deleteBookingByUuid(@NotNull String uuidString);
+    void deleteBookingByUuid(@NotEmpty String uuidString);
+
+    void finishBooking(@NotEmpty String uuidString);
 
     Long countAllBooking();
 
