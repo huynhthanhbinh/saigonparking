@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 package com.bht.saigonparking.api.grpc.booking;
+//option java_generic_services = true;
 option java_multiple_files = true;
 
 import "google/protobuf/wrappers.proto";
@@ -88,13 +89,23 @@ message UpdateBookingStatusRequest {
     string note = 4;
 }
 
+message CountAllBookingOfParkingLotGroupByStatusResponse {
+    map<int32, int64> statusCount = 1; /* is a map of <booking_status_int_value, count_booking_status> */
+}
+
+message FinishBookingRequest {
+    string bookingId = 1; /* will be an Universal Unique Identifier - UUID */
+}
+
 service BookingService {
+
     /* PRIVATE: ADMIN & INTERNAL service use-only */
     rpc createBooking (CreateBookingRequest) returns (CreateBookingResponse);
     rpc updateBookingStatus (UpdateBookingStatusRequest) returns (google.protobuf.Empty);
     rpc deleteBookingById (google.protobuf.StringValue) returns (google.protobuf.Empty);
 
     /* PUBLIC: EXTERNAL client can call (remember to provide token for auth purposes) */
+    rpc finishBooking (FinishBookingRequest) returns (google.protobuf.Empty); /* send notification to parking-lot and customer */
     rpc getAllBooking (GetAllBookingRequest) returns (BookingList);
     rpc countAllBooking (CountAllBookingRequest) returns (google.protobuf.Int64Value);
     rpc getAllBookingOfCustomer (GetAllBookingOfCustomerRequest) returns (BookingList);
@@ -105,4 +116,5 @@ service BookingService {
     rpc getAllOnGoingBookingOfParkingLot (google.protobuf.Int64Value) returns (BookingList);
     rpc countAllOnGoingBookingOfParkingLot (google.protobuf.Int64Value) returns (google.protobuf.Int64Value);
     rpc getBookingDetailByBookingId (google.protobuf.StringValue) returns (BookingDetail);
+    rpc countAllBookingOfParkingLotGroupByStatus (google.protobuf.Int64Value) returns (CountAllBookingOfParkingLotGroupByStatusResponse);
 }
