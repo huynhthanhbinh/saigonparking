@@ -89,7 +89,7 @@
 
         <javax.version>4.0.1</javax.version>
         <java-jwt.version>0.11.2</java-jwt.version>
-        <hibernate.version>5.4.18.Final</hibernate.version>
+        <hibernate.version>5.4.19.Final</hibernate.version>
         <mssql-jdbc.version>8.2.2.jre8</mssql-jdbc.version>
 
         <grpc.version>1.30.0</grpc.version>
@@ -102,9 +102,9 @@
         <lombok.version>1.18.12</lombok.version>
         <mapstruct.version>1.3.1.Final</mapstruct.version>
 
-        <aws.version>1.11.786</aws.version>
+        <aws.version>1.11.829</aws.version>
         <zxing.version>3.4.0</zxing.version>
-        <commons-lang3.version>3.10</commons-lang3.version>
+        <commons-lang3.version>3.11</commons-lang3.version>
         <java-uuid-generator.version>4.0.1</java-uuid-generator.version>
     </properties>
 
