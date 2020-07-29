@@ -371,7 +371,30 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
 
     @Override
     public void generateBookingQrCode(GenerateBookingQrCodeRequest request, StreamObserver<GenerateBookingQrCodeResponse> responseObserver) {
-        super.generateBookingQrCode(request, responseObserver);
+        try {
+            String bookingUuid = request.getBookingId();
+
+            /* check if booking is exist, otherwise, throw exception */
+            bookingService.getBookingByUuid(bookingUuid);
+
+            GenerateBookingQrCodeResponse response = GenerateBookingQrCodeResponse.newBuilder()
+                    .setQrCode(ImageUtil.encodeImage(qrCodeService.encodeContents(bookingUuid)))
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("generateBookingQrCode(%s)", request.getBookingId()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("generateBookingQrCode(%s)", request.getBookingId()));
+        }
     }
 
     @Override
