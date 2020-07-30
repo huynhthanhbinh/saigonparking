@@ -368,6 +368,11 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     }
 
     @Override
+    public Long createNewParkingLot(@NotNull ParkingLotEntity parkingLotEntity) {
+        return parkingLotRepository.saveAndFlush(parkingLotEntity).getId();
+    }
+
+    @Override
     public void createNewRating(@NotNull Long parkingLotId, @NotNull Long customerId,
                                 @NotNull Integer rating, @NotEmpty String comment) {
 
@@ -380,6 +385,11 @@ public class ParkingLotServiceImpl implements ParkingLotService {
                 .build();
 
         parkingLotRatingRepository.saveAndFlush(parkingLotRatingEntity);
+    }
+
+    @Override
+    public boolean checkEmployeeAlreadyManageParkingLot(@NotNull Long employeeId) {
+        return parkingLotEmployeeRepository.countByUserId(employeeId) != 0;
     }
 
     @Override

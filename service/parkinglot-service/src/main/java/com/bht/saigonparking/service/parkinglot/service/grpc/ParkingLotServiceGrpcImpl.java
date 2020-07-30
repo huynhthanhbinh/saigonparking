@@ -653,4 +653,51 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
                     String.format("addEmployeeOfParkingLot(%d, %d)", request.getEmployeeId(), request.getParkingLotId()));
         }
     }
+
+    @Override
+    public void createNewParkingLot(ParkingLot request, StreamObserver<Int64Value> responseObserver) {
+        try {
+            serverInterceptor.validateAdmin();
+
+            Long newParkingLotId = parkingLotService
+                    .createNewParkingLot(parkingLotMapperExt.toParkingLotEntity(request, true));
+
+            responseObserver.onNext(Int64Value.of(newParkingLotId));
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("createNewParkingLot(%s)", request.getInformation().getName()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("createNewParkingLot(%s)", request.getInformation().getName()));
+        }
+    }
+
+    @Override
+    public void checkEmployeeAlreadyManageParkingLot(Int64Value request, StreamObserver<BoolValue> responseObserver) {
+        try {
+            serverInterceptor.validateAdmin();
+
+            boolean isEmployeeAlreadyManageParkingLot = parkingLotService.checkEmployeeAlreadyManageParkingLot(request.getValue());
+
+            responseObserver.onNext(BoolValue.of(isEmployeeAlreadyManageParkingLot));
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("checkEmployeeAlreadyManageParkingLot(%d): %b", request.getValue(), isEmployeeAlreadyManageParkingLot));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("checkEmployeeAlreadyManageParkingLot(%d)", request.getValue()));
+        }
+    }
 }

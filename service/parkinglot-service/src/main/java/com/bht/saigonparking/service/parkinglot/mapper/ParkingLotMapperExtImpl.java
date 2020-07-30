@@ -45,25 +45,25 @@ public final class ParkingLotMapperExtImpl implements ParkingLotMapperExt {
     @Override
     public final ParkingLotEntity toParkingLotEntity(@NotNull ParkingLot parkingLot, boolean isAboutToCreate) {
 
-        long parkingLotId = parkingLot.getId();
         ParkingLotEntity parkingLotEntity;
+        ParkingLotLimitEntity parkingLotLimitEntity;
         ParkingLotInformationEntity parkingLotInformationEntity;
         ParkingLotInformation parkingLotInformation = parkingLot.getInformation();
 
         if (!isAboutToCreate) {    // update parkingLotEntity
-            parkingLotEntity = parkingLotRepository.getById(parkingLotId);
+            parkingLotEntity = parkingLotRepository.getById(parkingLot.getId());
+            parkingLotLimitEntity = parkingLotEntity.getParkingLotLimitEntity();
             parkingLotInformationEntity = parkingLotEntity.getParkingLotInformationEntity();
             parkingLotEntity.setVersion(parkingLot.getVersion());
 
         } else {                    // create parkingLotEntity
             parkingLotEntity = new ParkingLotEntity();
+            parkingLotLimitEntity = new ParkingLotLimitEntity();
             parkingLotInformationEntity = new ParkingLotInformationEntity();
-
-            parkingLotEntity.setParkingLotLimitEntity(ParkingLotLimitEntity.builder()
-                    .availableSlot((short) parkingLot.getAvailableSlot())
-                    .totalSlot((short) parkingLot.getTotalSlot())
-                    .build());
         }
+
+        parkingLotLimitEntity.setTotalSlot((short) parkingLot.getTotalSlot());
+        parkingLotLimitEntity.setAvailableSlot((short) parkingLot.getAvailableSlot());
 
         parkingLotInformationEntity.setName(parkingLotInformation.getName());
         parkingLotInformationEntity.setAddress(parkingLotInformation.getAddress());
@@ -73,6 +73,7 @@ public final class ParkingLotMapperExtImpl implements ParkingLotMapperExt {
         parkingLotEntity.setLongitude(parkingLot.getLongitude());
         parkingLotEntity.setOpeningHour(customizedMapper.toTime(parkingLot.getOpeningHour()));
         parkingLotEntity.setClosingHour(customizedMapper.toTime(parkingLot.getClosingHour()));
+        parkingLotEntity.setParkingLotLimitEntity(parkingLotLimitEntity);
         parkingLotEntity.setParkingLotInformationEntity(parkingLotInformationEntity);
 
         return parkingLotEntity;

@@ -102,8 +102,12 @@ public interface ParkingLotService {
 
     Map<Long, Long> countAllParkingLotGroupByType();
 
+    Long createNewParkingLot(@NotNull ParkingLotEntity parkingLotEntity);
+
     void createNewRating(@NotNull Long parkingLotId, @NotNull Long customerId,
                          @NotNull Integer rating, @NotEmpty String comment);
+
+    boolean checkEmployeeAlreadyManageParkingLot(@NotNull Long employeeId);
 
     void addEmployeeOfParkingLot(@NotNull Long employeeId, @NotNull Long parkingLotId);
 }

@@ -377,4 +377,10 @@ service ParkingLotService {
      *  + request: AddEmployeeOfParkingLotRequest
      *  + response: empty, if succeed, otherwise, throw exception */
     rpc addEmployeeOfParkingLot (AddEmployeeOfParkingLotRequest) returns (google.protobuf.Empty);
+
+    /** PUBLIC - admin only
+     * use-case: addEmployeeOfParkingLot
+     *  + request: employee's id
+     *  + response: bool value if succeed, otherwise, throw exception */
+    rpc checkEmployeeAlreadyManageParkingLot (google.protobuf.Int64Value) returns (google.protobuf.BoolValue);
 }
