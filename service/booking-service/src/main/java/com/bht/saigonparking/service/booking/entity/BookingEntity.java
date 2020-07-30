@@ -84,7 +84,7 @@ public final class BookingEntity extends BaseEntity {
     private static final class SortByCreatedAt implements Comparator<Map.Entry<BookingEntity, String>> {
         @Override
         public int compare(Map.Entry<BookingEntity, String> bookingEntry1, Map.Entry<BookingEntity, String> bookingEntry2) {
-            return bookingEntry1.getKey().createdAt.compareTo(bookingEntry2.getKey().createdAt);
+            return bookingEntry2.getKey().createdAt.compareTo(bookingEntry1.getKey().createdAt);
         }
     }
 }

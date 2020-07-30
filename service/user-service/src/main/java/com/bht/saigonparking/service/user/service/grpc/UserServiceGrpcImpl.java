@@ -400,6 +400,24 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
 
     @Override
     public void countAllUserGroupByRole(Empty request, StreamObserver<CountAllUserGroupByRoleResponse> responseObserver) {
-        super.countAllUserGroupByRole(request, responseObserver);
+        try {
+            serverInterceptor.validateAdmin();
+
+            CountAllUserGroupByRoleResponse response = CountAllUserGroupByRoleResponse.newBuilder()
+                    .putAllRoleCount(userService.countAllUserGroupByRole())
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success", "countAllUserGroupByRole()");
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL", "countAllUserGroupByRole()");
+        }
     }
 }

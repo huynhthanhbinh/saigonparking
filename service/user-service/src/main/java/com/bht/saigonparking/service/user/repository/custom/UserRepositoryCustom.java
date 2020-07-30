@@ -2,6 +2,7 @@ package com.bht.saigonparking.service.user.repository.custom;
 
 import java.util.List;
 
+import javax.persistence.Tuple;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -14,6 +15,8 @@ import com.bht.saigonparking.service.user.entity.UserRoleEntity;
  * @author bht
  */
 public interface UserRepositoryCustom {
+
+    List<Tuple> countAllUserGroupByRole();
 
     Long countAll();
 

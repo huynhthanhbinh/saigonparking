@@ -584,6 +584,24 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
 
     @Override
     public void countAllParkingLotGroupByType(Empty request, StreamObserver<CountAllParkingLotGroupByTypeResponse> responseObserver) {
-        super.countAllParkingLotGroupByType(request, responseObserver);
+        try {
+            serverInterceptor.validateAdmin();
+
+            CountAllParkingLotGroupByTypeResponse response = CountAllParkingLotGroupByTypeResponse.newBuilder()
+                    .putAllTypeCount(parkingLotService.countAllParkingLotGroupByType())
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success", "countAllParkingLotGroupByType()");
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL", "countAllParkingLotGroupByType()");
+        }
     }
 }

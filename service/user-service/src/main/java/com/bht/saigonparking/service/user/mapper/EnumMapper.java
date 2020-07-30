@@ -1,5 +1,9 @@
 package com.bht.saigonparking.service.user.mapper;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -46,10 +50,12 @@ public abstract class EnumMapper implements BaseBean {
 
     private UserRoleRepository userRoleRepository;
     private static final BiMap<UserRoleEntity, UserRole> USER_ROLE_BI_MAP = HashBiMap.create();
+    private static final Map<Long, Long> USER_ROLE_VALUE_MAP = new HashMap<>();
 
     @Override
     public void initialize() {
         initUserRoleBiMap();
+        initUserRoleValueMap();
     }
 
     @Named("toUserRole")
@@ -62,11 +68,21 @@ public abstract class EnumMapper implements BaseBean {
         return USER_ROLE_BI_MAP.inverse().get(userRole);
     }
 
+    @Named("toUserRoleValue")
+    public Long toUserRoleValue(Long userRoleId) {
+        return USER_ROLE_VALUE_MAP.get(userRoleId);
+    }
+
     private void initUserRoleBiMap() {
         USER_ROLE_BI_MAP.put(getUserRoleByRoleName("ADMIN"), UserRole.ADMIN);
         USER_ROLE_BI_MAP.put(getUserRoleByRoleName("CUSTOMER"), UserRole.CUSTOMER);
         USER_ROLE_BI_MAP.put(getUserRoleByRoleName("PARKING_LOT_EMPLOYEE"), UserRole.PARKING_LOT_EMPLOYEE);
         USER_ROLE_BI_MAP.put(getUserRoleByRoleName("GOVERNMENT"), UserRole.GOVERNMENT_EMPLOYEE);
+    }
+
+    private void initUserRoleValueMap() {
+        USER_ROLE_VALUE_MAP.putAll(USER_ROLE_BI_MAP.entrySet().stream()
+                .collect(Collectors.toMap(entry -> entry.getKey().getId(), entry -> (long) entry.getValue().getNumber())));
     }
 
     private UserRoleEntity getUserRoleByRoleName(@NotEmpty String role) {

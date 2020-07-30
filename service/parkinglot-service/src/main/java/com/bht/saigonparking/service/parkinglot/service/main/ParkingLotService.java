@@ -99,4 +99,6 @@ public interface ParkingLotService {
     String getParkingLotNameByParkingLotId(@NotNull Long parkingLotId);
 
     Map<Long, String> mapToParkingLotNameMap(@NotNull Set<Long> parkingLotIdSet);
+
+    Map<Long, Long> countAllParkingLotGroupByType();
 }

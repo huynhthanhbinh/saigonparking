@@ -4,6 +4,7 @@ import java.sql.Time;
 import java.time.LocalTime;
 import java.util.List;
 
+import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Fetch;
@@ -32,6 +33,16 @@ import com.bht.saigonparking.service.parkinglot.repository.custom.ParkingLotRepo
 @Repository
 @SuppressWarnings("unchecked")
 public class ParkingLotRepositoryCustomImpl extends BaseRepositoryCustom implements ParkingLotRepositoryCustom {
+
+    @Override
+    public List<Tuple> countAllParkingLotGroupByType() {
+        String getCountGroupByQuery = "SELECT P.parkingLotTypeEntity.id, COUNT(P.id) " +
+                "FROM ParkingLotEntity P " +
+                "GROUP BY P.parkingLotTypeEntity.id ";
+
+        return entityManager.createQuery(getCountGroupByQuery, Tuple.class)
+                .getResultList();
+    }
 
     @Override
     public Long countAll() {

@@ -60,4 +60,6 @@ public interface UserService {
     void deleteMultiUserById(@NotNull Set<Long> userIdSet);
 
     Map<Long, String> mapToUsernameMap(@NotNull Set<Long> userIdList);
+
+    Map<Long, Long> countAllUserGroupByRole();
 }

@@ -29,6 +29,7 @@ import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEmployeeEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotTypeEntity;
+import com.bht.saigonparking.service.parkinglot.mapper.EnumMapper;
 import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotEmployeeRepository;
 import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotInformationRepository;
 import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotLimitRepository;
@@ -55,6 +56,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class ParkingLotServiceImpl implements ParkingLotService {
 
+    private final EnumMapper enumMapper;
     private final RabbitTemplate rabbitTemplate;
     private final ParkingLotRepository parkingLotRepository;
     private final ParkingLotLimitRepository parkingLotLimitRepository;
@@ -351,6 +353,12 @@ public class ParkingLotServiceImpl implements ParkingLotService {
         return parkingLotInformationRepository
                 .mapParkingLotNameWithId(parkingLotIdSet).stream()
                 .collect(Collectors.toMap(tuple -> tuple.get(0, Long.class), tuple -> tuple.get(1, String.class)));
+    }
+
+    @Override
+    public Map<Long, Long> countAllParkingLotGroupByType() {
+        return parkingLotRepository.countAllParkingLotGroupByType().stream().collect(Collectors
+                .toMap(tuple -> enumMapper.toParkingLotTypeValue(tuple.get(0, Long.class)), tuple -> tuple.get(1, Long.class)));
     }
 
     @Override

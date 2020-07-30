@@ -21,6 +21,7 @@ import com.bht.saigonparking.common.base.BaseEntity;
 import com.bht.saigonparking.service.user.entity.CustomerEntity;
 import com.bht.saigonparking.service.user.entity.UserEntity;
 import com.bht.saigonparking.service.user.entity.UserRoleEntity;
+import com.bht.saigonparking.service.user.mapper.EnumMapper;
 import com.bht.saigonparking.service.user.repository.core.CustomerRepository;
 import com.bht.saigonparking.service.user.repository.core.UserRepository;
 import com.bht.saigonparking.service.user.service.main.UserService;
@@ -44,6 +45,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class UserServiceImpl implements UserService {
 
+    private final EnumMapper enumMapper;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final CustomerRepository customerRepository;
@@ -217,5 +219,11 @@ public class UserServiceImpl implements UserService {
         return userEntityList.isEmpty()
                 ? Collections.emptyMap()
                 : userEntityList.stream().collect(Collectors.toMap(BaseEntity::getId, UserEntity::getUsername));
+    }
+
+    @Override
+    public Map<Long, Long> countAllUserGroupByRole() {
+        return userRepository.countAllUserGroupByRole().stream().collect(Collectors
+                .toMap(tuple -> enumMapper.toUserRoleValue(tuple.get(0, Long.class)), tuple -> tuple.get(1, Long.class)));
     }
 }

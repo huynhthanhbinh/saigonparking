@@ -2,6 +2,7 @@ package com.bht.saigonparking.service.parkinglot.mapper;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotEmpty;
@@ -51,10 +52,12 @@ public abstract class EnumMapper implements BaseBean {
     private ParkingLotTypeRepository parkingLotTypeRepository;
     private static final BiMap<ParkingLotTypeEntity, ParkingLotType> PARKING_LOT_TYPE_BI_MAP = HashBiMap.create();
     private static final Map<Long, ParkingLotType> PARKING_LOT_TYPE_MAP = new HashMap<>();
+    private static final Map<Long, Long> PARKING_LOT_TYPE_VALUE_MAP = new HashMap<>();
 
     @Override
     public void initialize() {
         initParkingLotTypeBiMap();
+        initParkingLotTypeValueMap();
         initParkingLotTypeMap();
     }
 
@@ -74,10 +77,20 @@ public abstract class EnumMapper implements BaseBean {
         return PARKING_LOT_TYPE_MAP.get(parkingLotTypeId);
     }
 
+    @Named("toParkingLotTypeValue")
+    public Long toParkingLotTypeValue(Long parkingLotTypeId) {
+        return PARKING_LOT_TYPE_VALUE_MAP.get(parkingLotTypeId);
+    }
+
     private void initParkingLotTypeBiMap() {
         PARKING_LOT_TYPE_BI_MAP.put(getParkingLotTypeByType("PRIVATE"), ParkingLotType.PRIVATE);
         PARKING_LOT_TYPE_BI_MAP.put(getParkingLotTypeByType("BUILDING"), ParkingLotType.BUILDING);
         PARKING_LOT_TYPE_BI_MAP.put(getParkingLotTypeByType("STREET"), ParkingLotType.STREET);
+    }
+
+    private void initParkingLotTypeValueMap() {
+        PARKING_LOT_TYPE_VALUE_MAP.putAll(PARKING_LOT_TYPE_BI_MAP.entrySet().stream()
+                .collect(Collectors.toMap(entry -> entry.getKey().getId(), entry -> (long) entry.getValue().getNumber())));
     }
 
     private void initParkingLotTypeMap() {

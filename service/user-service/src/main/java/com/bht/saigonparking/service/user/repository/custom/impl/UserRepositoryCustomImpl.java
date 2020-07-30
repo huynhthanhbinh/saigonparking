@@ -2,6 +2,7 @@ package com.bht.saigonparking.service.user.repository.custom.impl;
 
 import java.util.List;
 
+import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Fetch;
@@ -28,6 +29,16 @@ import com.bht.saigonparking.service.user.repository.custom.UserRepositoryCustom
 @Repository
 @SuppressWarnings("unchecked")
 public class UserRepositoryCustomImpl extends BaseRepositoryCustom implements UserRepositoryCustom {
+
+    @Override
+    public List<Tuple> countAllUserGroupByRole() {
+        String getCountGroupByQuery = "SELECT U.userRoleEntity.id, COUNT(U.id) " +
+                "FROM UserEntity U " +
+                "GROUP BY U.userRoleEntity.id ";
+
+        return entityManager.createQuery(getCountGroupByQuery, Tuple.class)
+                .getResultList();
+    }
 
     @Override
     public Long countAll() {
