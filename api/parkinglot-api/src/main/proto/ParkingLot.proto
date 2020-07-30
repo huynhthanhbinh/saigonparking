@@ -184,6 +184,11 @@ message CreateNewRatingRequest {
     /* customerId will be get from JWT (Authorization Header) */
 }
 
+message AddEmployeeOfParkingLotRequest {
+    int64 employeeId = 1;
+    int64 parkingLotId = 2;
+}
+
 service ParkingLotService {
 
     /** PUBLIC - ADMIN ONLY
@@ -359,4 +364,17 @@ service ParkingLotService {
      *      ++ comment: can be an empty string or a comment string
      *  + response: Empty value if succeed, otherwise, throw exception */
     rpc createNewRating (CreateNewRatingRequest) returns (google.protobuf.Empty);
+
+    /** PUBLIC - admin only
+     * use-case: createNewParkingLot
+     *  + request: ParkingLot (ignore id and version)
+     *  + response: new parking-lot id, if succeed, otherwise, throw exception */
+    rpc createNewParkingLot (ParkingLot) returns (google.protobuf.Int64Value);
+
+    /** PUBLIC - admin only
+     * use-case: addEmployeeOfParkingLot
+     * note that: 1 parking lot can have more than 1 employee account
+     *  + request: AddEmployeeOfParkingLotRequest
+     *  + response: empty, if succeed, otherwise, throw exception */
+    rpc addEmployeeOfParkingLot (AddEmployeeOfParkingLotRequest) returns (google.protobuf.Empty);
 }
