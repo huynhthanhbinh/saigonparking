@@ -149,8 +149,20 @@ service UserService {
      *  + response: <userId, username> map, if succeed, otherwise, throw exception */
     rpc mapToUsernameMap (MapToUsernameMapRequest) returns (MapToUsernameMapResponse);
 
+    /** PUBLIC - ADMIN ONLY, if you are not admin, please call via AuthService
+     * use-case: create new user or customer
+     *  + request: username
+     *  + response: bool value if succeed, otherwise, throw exception */
+    rpc checkUsernameAlreadyExist (google.protobuf.StringValue) returns (google.protobuf.BoolValue);
+
     /** PRIVATE
-     * use-case: create user, CUSTOMER type (will be called by AuthService)
+     * use-case: create user, all type except customer (will be called by Admin)
+     *  + request: User object
+     *  + response: user ID if succeed, otherwise, throw exception */
+    rpc createUser (User) returns (google.protobuf.Int64Value);
+
+    /** PRIVATE
+     * use-case: create user, CUSTOMER type (will be called by Admin or AuthService)
      *  + request: Customer object
      *  + response: user ID if succeed, otherwise, throw exception */
     rpc createCustomer (Customer) returns (google.protobuf.Int64Value);

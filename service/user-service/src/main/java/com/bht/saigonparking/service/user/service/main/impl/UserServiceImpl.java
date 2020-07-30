@@ -161,6 +161,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Long createUser(@NotNull UserEntity userEntity) {
+        UserEntity result = userRepository.saveAndFlush(userEntity);
+        return result.getId();
+    }
+
+    @Override
     public Long createCustomer(@NotNull CustomerEntity customerEntity) {
         CustomerEntity result = customerRepository.saveAndFlush(customerEntity);
         return result.getId();
@@ -225,5 +231,10 @@ public class UserServiceImpl implements UserService {
     public Map<Long, Long> countAllUserGroupByRole() {
         return userRepository.countAllUserGroupByRole().stream().collect(Collectors
                 .toMap(tuple -> enumMapper.toUserRoleValue(tuple.get(0, Long.class)), tuple -> tuple.get(1, Long.class)));
+    }
+
+    @Override
+    public boolean checkUsernameAlreadyExist(@NotEmpty String username) {
+        return userRepository.countByUsername(username) != 0;
     }
 }

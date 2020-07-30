@@ -27,6 +27,7 @@ import com.bht.saigonparking.service.user.mapper.EnumMapper;
 import com.bht.saigonparking.service.user.mapper.UserMapper;
 import com.bht.saigonparking.service.user.mapper.UserMapperExt;
 import com.bht.saigonparking.service.user.service.main.UserService;
+import com.google.protobuf.BoolValue;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
@@ -233,6 +234,30 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
     }
 
     @Override
+    public void createUser(User request, StreamObserver<Int64Value> responseObserver) {
+        try {
+            serverInterceptor.validateAdmin();
+
+            UserEntity userEntity = userMapperExt.toUserEntity(request, true);
+            Long newUserId = userService.createUser(userEntity);
+
+            responseObserver.onNext(Int64Value.of(newUserId));
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("createUser(%s)", request.getUsername()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("createUser(%s)", request.getUsername()));
+        }
+    }
+
+    @Override
     public void createCustomer(Customer request, StreamObserver<Int64Value> responseObserver) {
         try {
             serverInterceptor.validateAdmin();
@@ -418,6 +443,29 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL", "countAllUserGroupByRole()");
+        }
+    }
+
+    @Override
+    public void checkUsernameAlreadyExist(StringValue request, StreamObserver<BoolValue> responseObserver) {
+        try {
+            serverInterceptor.validateAdmin();
+
+            boolean isUsernameAlreadyExist = userService.checkUsernameAlreadyExist(request.getValue());
+
+            responseObserver.onNext(BoolValue.of(isUsernameAlreadyExist));
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("checkUsernameAlreadyExist(%s): %b", request.getValue(), isUsernameAlreadyExist));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("checkUsernameAlreadyExist(%s)", request.getValue()));
         }
     }
 }

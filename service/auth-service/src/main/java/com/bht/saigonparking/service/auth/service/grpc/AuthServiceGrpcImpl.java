@@ -11,11 +11,13 @@ import com.bht.saigonparking.api.grpc.auth.RefreshTokenResponse;
 import com.bht.saigonparking.api.grpc.auth.RegisterRequest;
 import com.bht.saigonparking.api.grpc.auth.ValidateRequest;
 import com.bht.saigonparking.api.grpc.auth.ValidateResponse;
+import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
 import com.bht.saigonparking.common.auth.SaigonParkingTokenType;
 import com.bht.saigonparking.common.exception.WrongTokenTypeException;
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.auth.interceptor.AuthServiceInterceptor;
 import com.bht.saigonparking.service.auth.service.AuthService;
+import com.google.protobuf.BoolValue;
 import com.google.protobuf.Empty;
 import com.google.protobuf.StringValue;
 
@@ -32,6 +34,28 @@ public final class AuthServiceGrpcImpl extends AuthServiceGrpc.AuthServiceImplBa
 
     private final AuthService authService;
     private final AuthServiceInterceptor authServiceInterceptor;
+    private final UserServiceGrpc.UserServiceBlockingStub userServiceBlockingStub;
+
+    @Override
+    public void checkUsernameAlreadyExist(StringValue request, StreamObserver<BoolValue> responseObserver) {
+        try {
+            BoolValue isUsernameAlreadyExist = userServiceBlockingStub.checkUsernameAlreadyExist(request);
+
+            responseObserver.onNext(isUsernameAlreadyExist);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("checkUsernameAlreadyExist(%s): %b", request.getValue(), isUsernameAlreadyExist.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("checkUsernameAlreadyExist(%s)", request.getValue()));
+        }
+    }
 
     @Override
     public void validateUser(ValidateRequest request, StreamObserver<ValidateResponse> responseObserver) {

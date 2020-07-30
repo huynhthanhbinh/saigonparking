@@ -43,6 +43,8 @@ public interface UserService {
 
     CustomerEntity getCustomerByUsername(@NotEmpty String username);
 
+    Long createUser(@NotNull UserEntity userEntity);
+
     Long createCustomer(@NotNull CustomerEntity customerEntity);
 
     void updateCustomer(@NotNull CustomerEntity customerEntity);
@@ -62,4 +64,6 @@ public interface UserService {
     Map<Long, String> mapToUsernameMap(@NotNull Set<Long> userIdList);
 
     Map<Long, Long> countAllUserGroupByRole();
+
+    boolean checkUsernameAlreadyExist(@NotEmpty String username);
 }

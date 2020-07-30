@@ -83,6 +83,7 @@ public final class AuthServiceInterceptor implements ServerInterceptor {
     private static final Key<String> AUTHORIZATION_KEY = Key.of(AUTHORIZATION_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER);
 
     public AuthServiceInterceptor() {
+
         authentication = new SaigonParkingAuthenticationImpl();
 
         nonProvideTokenMethodSet = new ImmutableSet.Builder<String>()
@@ -90,6 +91,7 @@ public final class AuthServiceInterceptor implements ServerInterceptor {
                 .add("com.bht.saigonparking.api.grpc.auth.AuthService/registerUser")
                 .add("com.bht.saigonparking.api.grpc.auth.AuthService/sendResetPasswordEmail")
                 .add("com.bht.saigonparking.api.grpc.auth.AuthService/sendActivateAccountEmail")
+                .add("com.bht.saigonparking.api.grpc.auth.AuthService/checkUsernameAlreadyExist")
                 .build();
 
         errorCodeMap = new ImmutableMap.Builder<Class<? extends Throwable>, String>()

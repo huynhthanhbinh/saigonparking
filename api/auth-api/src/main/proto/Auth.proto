@@ -36,6 +36,13 @@ message RefreshTokenResponse {
 }
 
 service AuthService {
+
+    /** PUBLIC - everyone can call
+     * use-case: create new user or customer
+     *  + request: username
+     *  + response: bool value if succeed, otherwise, throw exception */
+    rpc checkUsernameAlreadyExist (google.protobuf.StringValue) returns (google.protobuf.BoolValue);
+
     /** PUBLIC
      * use-case: user login (Validate all type of user)
      *  + request: validate request, includes username, password and role

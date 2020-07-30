@@ -50,7 +50,7 @@ public abstract class BaseRepositoryCustom implements BaseBean {
     protected CriteriaBuilder criteriaBuilder;
 
     @Override
-    public final void initialize() {
+    public void initialize() {
         criteriaBuilder = entityManager.getCriteriaBuilder();
     }
 
