@@ -86,9 +86,12 @@ public interface BookingMapper {
     BookingHistoryEntity toBookingHistoryEntity(@NotNull UpdateBookingStatusRequest updateBookingStatusRequest);
 
     @Named("toBookingDetail")
-    @Mapping(target = "booking", source = "bookingEntity", qualifiedByName = "toBooking")
-    @Mapping(target = "historyList", source = "bookingHistoryEntitySet", qualifiedByName = "toBookingHistoryList")
-    BookingDetail toBookingDetail(@NotNull BookingEntity bookingEntity);
+    default BookingDetail toBookingDetail(@NotNull BookingEntity bookingEntity) {
+        return BookingDetail.newBuilder()
+                .setBooking(toBooking(bookingEntity))
+                .addAllHistory(toBookingHistoryList(bookingEntity.getBookingHistoryEntitySet()))
+                .build();
+    }
 
     @Named("toBookingList")
     default List<Booking> toBookingList(@NotNull Map<BookingEntity, String> bookingEntityParkingLotNameMap) {
