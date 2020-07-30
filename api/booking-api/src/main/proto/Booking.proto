@@ -89,7 +89,7 @@ message UpdateBookingStatusRequest {
 }
 
 message CountAllBookingGroupByStatusResponse {
-    map<int64, int64> statusCount = 1; /* is a map of <booking_status_int_value, count_booking_status> */
+    map<int64, int64> statusCount = 1; /* is a map of <booking_status_long_value, count_booking_status> */
 }
 
 message FinishBookingRequest {

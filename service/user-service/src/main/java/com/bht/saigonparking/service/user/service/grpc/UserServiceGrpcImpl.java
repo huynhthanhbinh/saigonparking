@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.bht.saigonparking.api.grpc.user.CountAllUserGroupByRoleResponse;
 import com.bht.saigonparking.api.grpc.user.CountAllUserRequest;
 import com.bht.saigonparking.api.grpc.user.Customer;
 import com.bht.saigonparking.api.grpc.user.DeleteMultiUserByIdRequest;
@@ -395,5 +396,10 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("deleteMultiUserById(%s)", request.getUserIdList()));
         }
+    }
+
+    @Override
+    public void countAllUserGroupByRole(Empty request, StreamObserver<CountAllUserGroupByRoleResponse> responseObserver) {
+        super.countAllUserGroupByRole(request, responseObserver);
     }
 }

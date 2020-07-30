@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.bht.saigonparking.api.grpc.parkinglot.CountAllParkingLotGroupByTypeResponse;
 import com.bht.saigonparking.api.grpc.parkinglot.CountAllParkingLotHasRatingsRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.CountAllParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.CountAllRatingsOfParkingLotRequest;
@@ -579,5 +580,10 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("getParkingLotNameByParkingLotId(%d)", request.getValue()));
         }
+    }
+
+    @Override
+    public void countAllParkingLotGroupByType(Empty request, StreamObserver<CountAllParkingLotGroupByTypeResponse> responseObserver) {
+        super.countAllParkingLotGroupByType(request, responseObserver);
     }
 }

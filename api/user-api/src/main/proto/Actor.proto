@@ -75,7 +75,17 @@ message MapToUsernameMapResponse {
     map<int64, string> username = 1;
 }
 
+message CountAllUserGroupByRoleResponse {
+    map<int64, int64> roleCount = 1; /* is a map of <user_role_long_value, count_user_role> */
+}
+
 service UserService {
+
+    /** PUBLIC - ADMIN ONLY
+     * use-case: countAllUserGroupByRole - admin dashboard
+     *  + request: Empty
+     *  + response: a map of <user_role_long_value, count_user_role> */
+    rpc countAllUserGroupByRole (google.protobuf.Empty) returns (CountAllUserGroupByRoleResponse);
 
     /** PUBLIC - ADMIN ONLY
      * use-case: get all users
