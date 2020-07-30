@@ -381,4 +381,15 @@ public class ParkingLotServiceImpl implements ParkingLotService {
 
         parkingLotRatingRepository.saveAndFlush(parkingLotRatingEntity);
     }
+
+    @Override
+    public void addEmployeeOfParkingLot(@NotNull Long employeeId, @NotNull Long parkingLotId) {
+        ParkingLotEntity parkingLotEntity = getParkingLotById(parkingLotId);
+        ParkingLotEmployeeEntity parkingLotEmployeeEntity = ParkingLotEmployeeEntity.builder()
+                .userId(employeeId)
+                .parkingLotEntity(parkingLotEntity)
+                .build();
+
+        parkingLotEmployeeRepository.saveAndFlush(parkingLotEmployeeEntity);
+    }
 }

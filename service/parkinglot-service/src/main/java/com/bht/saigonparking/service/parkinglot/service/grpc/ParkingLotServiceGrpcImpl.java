@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.bht.saigonparking.api.grpc.parkinglot.AddEmployeeOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.CountAllParkingLotGroupByTypeResponse;
 import com.bht.saigonparking.api.grpc.parkinglot.CountAllParkingLotHasRatingsRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.CountAllParkingLotRequest;
@@ -628,6 +629,28 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("createNewRating(%d, %d, %d, %s)",
                             request.getParkingLotId(), customerId, request.getRating(), request.getComment()));
+        }
+    }
+
+    @Override
+    public void addEmployeeOfParkingLot(AddEmployeeOfParkingLotRequest request, StreamObserver<Empty> responseObserver) {
+        try {
+            serverInterceptor.validateAdmin();
+            parkingLotService.addEmployeeOfParkingLot(request.getEmployeeId(), request.getParkingLotId());
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("addEmployeeOfParkingLot(%d, %d)", request.getEmployeeId(), request.getParkingLotId()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("addEmployeeOfParkingLot(%d, %d)", request.getEmployeeId(), request.getParkingLotId()));
         }
     }
 }

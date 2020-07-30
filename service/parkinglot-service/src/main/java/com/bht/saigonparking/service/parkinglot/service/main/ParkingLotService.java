@@ -104,4 +104,6 @@ public interface ParkingLotService {
 
     void createNewRating(@NotNull Long parkingLotId, @NotNull Long customerId,
                          @NotNull Integer rating, @NotEmpty String comment);
+
+    void addEmployeeOfParkingLot(@NotNull Long employeeId, @NotNull Long parkingLotId);
 }
