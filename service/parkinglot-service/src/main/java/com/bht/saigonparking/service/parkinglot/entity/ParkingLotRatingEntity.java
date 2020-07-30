@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SelectBeforeUpdate;
 import org.hibernate.validator.constraints.Range;
 
@@ -51,6 +52,7 @@ public final class ParkingLotRatingEntity extends BaseEntity {
     @Column(name = "[CUSTOMER_ID]", nullable = false)
     private Long customerId;
 
+    @CreationTimestamp
     @EqualsAndHashCode.Exclude
     @Column(name = "[LAST_UPDATED]")
     private Timestamp lastUpdated;

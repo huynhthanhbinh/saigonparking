@@ -101,4 +101,7 @@ public interface ParkingLotService {
     Map<Long, String> mapToParkingLotNameMap(@NotNull Set<Long> parkingLotIdSet);
 
     Map<Long, Long> countAllParkingLotGroupByType();
+
+    void createNewRating(@NotNull Long parkingLotId, @NotNull Long customerId,
+                         @NotNull Integer rating, @NotEmpty String comment);
 }

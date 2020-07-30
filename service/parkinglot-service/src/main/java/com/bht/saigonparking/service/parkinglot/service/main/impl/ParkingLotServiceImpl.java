@@ -28,6 +28,7 @@ import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEmployeeEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
+import com.bht.saigonparking.service.parkinglot.entity.ParkingLotRatingEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotTypeEntity;
 import com.bht.saigonparking.service.parkinglot.mapper.EnumMapper;
 import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotEmployeeRepository;
@@ -364,5 +365,20 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     @Override
     public String getParkingLotNameByParkingLotId(@NotNull Long parkingLotId) {
         return parkingLotInformationRepository.getParkingLotName(parkingLotId).orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Override
+    public void createNewRating(@NotNull Long parkingLotId, @NotNull Long customerId,
+                                @NotNull Integer rating, @NotEmpty String comment) {
+
+        ParkingLotEntity parkingLotEntity = getParkingLotById(parkingLotId);
+        ParkingLotRatingEntity parkingLotRatingEntity = ParkingLotRatingEntity.builder()
+                .parkingLotEntity(parkingLotEntity)
+                .customerId(customerId)
+                .rating(rating.shortValue())
+                .comment(comment)
+                .build();
+
+        parkingLotRatingRepository.saveAndFlush(parkingLotRatingEntity);
     }
 }

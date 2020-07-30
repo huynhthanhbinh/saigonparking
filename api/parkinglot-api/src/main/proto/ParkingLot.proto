@@ -177,6 +177,13 @@ message CountAllParkingLotGroupByTypeResponse {
     map<int64, int64> typeCount = 1; /* is a map of <parking_lot_type_long_value, count_parking_lot_type> */
 }
 
+message CreateNewRatingRequest {
+    int64 parkingLotId = 1;
+    int32 rating = 2;
+    string comment = 3;
+    /* customerId will be get from JWT (Authorization Header) */
+}
+
 service ParkingLotService {
 
     /** PUBLIC - ADMIN ONLY
@@ -343,4 +350,13 @@ service ParkingLotService {
      *  + request: parking-lot id
      *  + response: parking-lot name, if succeed, otherwise, throw exception */
     rpc getParkingLotNameByParkingLotId (google.protobuf.Int64Value) returns (google.protobuf.StringValue);
+
+    /** PUBLIC - for customer only
+     * use-case: customer add new rating of a specific parking lot
+     *  + request: CreateNewRatingRequest, you need to provide 3 arguments:
+     *      ++ parkingLotId: id of parking-lot
+     *      ++ rating: rating star (min = 1, max = 5)
+     *      ++ comment: can be an empty string or a comment string
+     *  + response: Empty value if succeed, otherwise, throw exception */
+    rpc createNewRating (CreateNewRatingRequest) returns (google.protobuf.Empty);
 }
