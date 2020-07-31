@@ -1,4 +1,4 @@
-#Saigon Parking - Final Project - FIT.HCMUS 
+<h2>saigonparking©2020 - graduate thesis - fit@hcmus</h2>
 <pre>
  _____         _                        ______              _     _                         ________
 /  ___|       (_)                       | ___ \            | |   (_)                       //  ||  \\
@@ -9,6 +9,7 @@
                    __/ |                                                     __/ |
                   |___/                                                     |___/   v2.3.6 - ©Copyright 2020
 </pre>
+
 [![saigonparking-master Actions Status](https://github.com/huynhthanhbinh/saigonparking/workflows/saigonparking-master/badge.svg)](https://github.com/huynhthanhbinh/saigonparking/actions)
 
 <h2>1. Project's members:</h2>
@@ -17,11 +18,13 @@
 <h6>3. 1653012 - Pham Viet Minh Dao - 1653012@student.hcmus.edu.vn</h6>
 <h6>4. 1653020 - Vu Hai - 1653020@student.hcmus.edu.vn</h6>
 <h6>5. 1653076 - Dang Duc Tai - 1653076@student.hcmus.edu.vn</h6>
-<br/>
 
-<h2>2. Project's architecture:</h2>
-![](documents/architecture.png)
 <br/>
+<h2>2. Project's workflow:</h2>
 
-<h2>3. Project's workflow:</h2>
-![](documents/workflow.png)
+![workflow_img](documents/workflow.png)
+
+<br/>
+<h2>3. Project's architecture:</h2>
+
+![architecture_img](documents/architecture.png)
