@@ -10,7 +10,7 @@
                   |___/                                                     |___/   v2.3.6 - ©Copyright 2020
 </pre>
 
-[![saigonparking-master Actions Status](https://github.com/huynhthanhbinh/saigonparking/workflows/saigonparking-master/badge.svg)](https://github.com/huynhthanhbinh/saigonparking/actions)
+![saigonparking-master action-status](https://github.com/huynhthanhbinh/saigonparking/workflows/saigonparking-master/badge.svg)
 
 <h2>1. Project's members:</h2>
 <h6>1. 1653005 - Vu Tuong Bach - 1653005@student.hcmus.edu.vn</h6>
