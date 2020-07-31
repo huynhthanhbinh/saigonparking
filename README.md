@@ -17,11 +17,11 @@
 <h6>3. 1653012 - Pham Viet Minh Dao - 1653012@student.hcmus.edu.vn</h6>
 <h6>4. 1653020 - Vu Hai - 1653020@student.hcmus.edu.vn</h6>
 <h6>5. 1653076 - Dang Duc Tai - 1653076@student.hcmus.edu.vn</h6>
-<br/><br/>
+<br/>
 
 <h2>2. Project's architecture:</h2>
 ![](documents/architecture.png)
-<br/><br/>
+<br/>
 
 <h2>3. Project's workflow:</h2>
 ![](documents/workflow.png)
