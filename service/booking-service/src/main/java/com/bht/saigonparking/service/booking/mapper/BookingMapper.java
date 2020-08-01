@@ -96,7 +96,7 @@ public interface BookingMapper {
     @Named("toBookingList")
     default List<Booking> toBookingList(@NotNull Map<BookingEntity, String> bookingEntityParkingLotNameMap) {
         return bookingEntityParkingLotNameMap.entrySet().stream()
-                .sorted(BookingEntity.SORT_BY_CREATED_AT)
+                .sorted(BookingEntity.SORT_BY_CREATED_AT_THEN_BY_BOOKING_ID)
                 .map(this::toBooking)
                 .collect(Collectors.toList());
     }

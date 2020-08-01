@@ -47,7 +47,8 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "[BOOKING]")
 public final class BookingEntity extends BaseEntity {
 
-    public static final Comparator<Map.Entry<BookingEntity, String>> SORT_BY_CREATED_AT = new SortByCreatedAt();
+    public static final Comparator<Map.Entry<BookingEntity, String>> SORT_BY_CREATED_AT_THEN_BY_BOOKING_ID
+            = new SortByCreatedAt().thenComparing(new SortById());
 
     @NaturalId
     @Type(type = "uuid-char")
@@ -85,6 +86,14 @@ public final class BookingEntity extends BaseEntity {
         @Override
         public int compare(Map.Entry<BookingEntity, String> bookingEntry1, Map.Entry<BookingEntity, String> bookingEntry2) {
             return bookingEntry2.getKey().createdAt.compareTo(bookingEntry1.getKey().createdAt);
+        }
+    }
+
+    @NoArgsConstructor
+    private static final class SortById implements Comparator<Map.Entry<BookingEntity, String>> {
+        @Override
+        public int compare(Map.Entry<BookingEntity, String> bookingEntry1, Map.Entry<BookingEntity, String> bookingEntry2) {
+            return bookingEntry2.getKey().id.compareTo(bookingEntry1.getKey().id);
         }
     }
 }
