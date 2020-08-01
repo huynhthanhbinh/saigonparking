@@ -1,6 +1,7 @@
 package com.bht.saigonparking.service.contact.handler;
 
 import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Classification.SYSTEM_MESSAGE;
+import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Type.ERROR;
 import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Type.NOTIFICATION;
 
 import java.io.IOException;
@@ -13,12 +14,14 @@ import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.BinaryWebSocketHandler;
 
+import com.bht.saigonparking.api.grpc.contact.ErrorContent;
 import com.bht.saigonparking.api.grpc.contact.NotificationContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.contact.service.ContactService;
 import com.bht.saigonparking.service.contact.service.MessagingService;
 
+import io.grpc.StatusRuntimeException;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -75,16 +78,31 @@ public final class WebSocketBinaryMessageHandler extends BinaryWebSocketHandler 
         LoggingUtil.log(Level.INFO, LOGGING_KEY, "handleBinaryMessage", String.format("newBinaryMessageFromUser(%d)", userId));
 
         SaigonParkingMessage.Builder messageBuilder = SaigonParkingMessage.newBuilder().mergeFrom(message.getPayload().array());
+        try {
+            if (messageBuilder.getReceiverId() != 0) {
 
-        if (messageBuilder.getReceiverId() != 0) {
+                /* receiver's id != 0 --> not send to system --> forward to receiver */
+                messagingService.prePublishMessageToQueue(messageBuilder, session);
+                messagingService.publishMessageToQueue(messageBuilder.build());
 
-            /* receiver's id != 0 --> not send to system --> forward to receiver */
-            messagingService.prePublishMessageToQueue(messageBuilder, session);
-            messagingService.publishMessageToQueue(messageBuilder.build());
+            } else {
+                /* receiver's id == 0 --> send to system --> not forward to receiver */
+                contactService.handleMessageSendToSystem(messageBuilder.build(), session);
+            }
+        } catch (StatusRuntimeException exception) {
 
-        } else {
-            /* receiver's id == 0 --> send to system --> not forward to receiver */
-            contactService.handleMessageSendToSystem(messageBuilder.build(), session);
+            ErrorContent content = ErrorContent.newBuilder()
+                    .setInternalErrorCode(exception.getStatus().getDescription())
+                    .build();
+
+            session.sendMessage(new BinaryMessage(messageBuilder
+                    .setSenderId(0)
+                    .setReceiverId(userId)
+                    .setClassification(SYSTEM_MESSAGE)
+                    .setType(ERROR)
+                    .setContent(content.toByteString())
+                    .build()
+                    .toByteArray()));
         }
     }
 }
