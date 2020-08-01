@@ -104,7 +104,7 @@ public interface BookingMapper {
     @Named("toBookingHistoryList")
     default List<BookingHistory> toBookingHistoryList(@NotNull Set<BookingHistoryEntity> bookingHistoryEntitySet) {
         return bookingHistoryEntitySet.stream()
-                .sorted(BookingHistoryEntity.SORT_BY_LAST_UPDATED)
+                .sorted(BookingHistoryEntity.SORT_BY_LAST_UPDATED_THEN_BY_ID)
                 .map(this::toBookingHistory)
                 .collect(Collectors.toList());
     }

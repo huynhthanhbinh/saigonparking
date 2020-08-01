@@ -38,7 +38,8 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "[BOOKING_HISTORY]")
 public final class BookingHistoryEntity extends BaseEntity {
 
-    public static final Comparator<BookingHistoryEntity> SORT_BY_LAST_UPDATED = new SortByLastUpdated();
+    public static final Comparator<BookingHistoryEntity> SORT_BY_LAST_UPDATED_THEN_BY_ID =
+            new SortByLastUpdated().thenComparing(new SortById());
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "[BOOKING_ID]", referencedColumnName = "[ID]", nullable = false, updatable = false)
@@ -60,7 +61,15 @@ public final class BookingHistoryEntity extends BaseEntity {
     private static final class SortByLastUpdated implements Comparator<BookingHistoryEntity> {
         @Override
         public int compare(BookingHistoryEntity history1, BookingHistoryEntity history2) {
-            return history1.lastUpdated.compareTo(history2.lastUpdated);
+            return history2.lastUpdated.compareTo(history1.lastUpdated);
+        }
+    }
+
+    @NoArgsConstructor
+    private static final class SortById implements Comparator<BookingHistoryEntity> {
+        @Override
+        public int compare(BookingHistoryEntity history1, BookingHistoryEntity history2) {
+            return history2.id.compareTo(history1.id);
         }
     }
 }
