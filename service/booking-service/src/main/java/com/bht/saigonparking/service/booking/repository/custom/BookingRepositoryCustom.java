@@ -1,6 +1,7 @@
 package com.bht.saigonparking.service.booking.repository.custom;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.Tuple;
 import javax.validation.constraints.NotNull;
@@ -52,4 +53,6 @@ public interface BookingRepositoryCustom {
                                                   @NotNull Integer pageNumber);
 
     List<BookingEntity> getAllOnGoingBookingOfParkingLot(@NotNull Long parkingLotId);
+
+    Optional<BookingEntity> getFirstByCustomerIdAndIsFinished(@NotNull Long customerId, @NotNull Boolean isFinished);
 }

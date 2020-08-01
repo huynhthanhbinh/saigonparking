@@ -19,6 +19,10 @@ import com.bht.saigonparking.service.booking.repository.custom.BookingRepository
 @Repository
 public interface BookingRepository extends JpaRepository<BookingEntity, Long>, BookingRepositoryCustom {
 
+    @Query("SELECT B " +
+            "FROM BookingEntity B " +
+            "JOIN FETCH B.bookingStatusEntity " +
+            "WHERE B.uuid = ?1")
     Optional<BookingEntity> getBookingByUuid(@NotNull UUID uuid);
 
     @Query("SELECT B " +
@@ -31,7 +35,7 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long>, B
     /**
      *
      * self-implement countUnfinishedBookingByUserId method
-     * using to check if username already exist
+     * using to check if user has on going booking
      */
     @Query("SELECT COUNT (B.id) " +
             "FROM BookingEntity B " +

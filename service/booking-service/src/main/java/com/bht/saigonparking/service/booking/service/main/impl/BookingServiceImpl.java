@@ -46,6 +46,11 @@ public class BookingServiceImpl implements BookingService {
     private final BookingHistoryRepository bookingHistoryRepository;
 
     @Override
+    public BookingEntity getOnGoingBookingOfCustomer(@NotNull Long customerId) {
+        return bookingRepository.getFirstByCustomerIdAndIsFinished(customerId, Boolean.FALSE).orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Override
     public BookingEntity getBookingByUuid(@NotEmpty String uuidString) {
         return bookingRepository.getBookingByUuid(UUID.fromString(uuidString)).orElseThrow(EntityNotFoundException::new);
     }

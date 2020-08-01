@@ -9,6 +9,7 @@ import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 
+import com.bht.saigonparking.api.grpc.booking.Booking;
 import com.bht.saigonparking.api.grpc.booking.BookingDetail;
 import com.bht.saigonparking.api.grpc.booking.BookingList;
 import com.bht.saigonparking.api.grpc.booking.BookingServiceGrpc;
@@ -492,6 +493,29 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("checkCustomerHasOnGoingBooking(%d)", customerId));
+        }
+    }
+
+    @Override
+    public void getCustomerOnGoingBooking(Empty request, StreamObserver<Booking> responseObserver) {
+        Long customerId = serverInterceptor.getUserIdContext().get();
+        try {
+            serverInterceptor.validateUserRole("CUSTOMER");
+            BookingEntity onGoingBooking = bookingService.getOnGoingBookingOfCustomer(customerId);
+
+            responseObserver.onNext(bookingMapper.toBooking(onGoingBooking));
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getCustomerOnGoingBooking(%d): %s", customerId, onGoingBooking.getUuid()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getCustomerOnGoingBooking(%d)", customerId));
         }
     }
 }

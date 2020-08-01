@@ -1,6 +1,7 @@
 package com.bht.saigonparking.service.booking.repository.custom.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.Tuple;
 import javax.validation.constraints.NotNull;
@@ -214,5 +215,21 @@ public class BookingRepositoryCustomImpl extends BaseRepositoryCustom implements
         return entityManager.createQuery(getAllQuery, BookingEntity.class)
                 .setParameter("parkingLotId", parkingLotId)
                 .getResultList();
+    }
+
+    @Override
+    public Optional<BookingEntity> getFirstByCustomerIdAndIsFinished(@NotNull Long customerId, @NotNull Boolean isFinished) {
+
+        String query = "SELECT B " +
+                "FROM BookingEntity B " +
+                "JOIN FETCH B.bookingStatusEntity " +
+                "WHERE B.customerId = :customerId AND B.isFinished = :isFinished";
+
+        return Optional.ofNullable(entityManager
+                .createQuery(query, BookingEntity.class)
+                .setParameter("customerId", customerId)
+                .setParameter("isFinished", isFinished)
+                .setMaxResults(1)
+                .getSingleResult());
     }
 }

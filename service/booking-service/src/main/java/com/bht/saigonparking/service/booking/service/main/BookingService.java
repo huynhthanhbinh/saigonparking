@@ -18,6 +18,9 @@ import com.bht.saigonparking.service.booking.entity.BookingStatusEntity;
  */
 public interface BookingService {
 
+    /* getOnGoingBookingOfCustomer not JOIN bookingHistorySet */
+    BookingEntity getOnGoingBookingOfCustomer(@NotNull Long customerId);
+
     /* getBookingById not JOIN bookingHistorySet */
     BookingEntity getBookingByUuid(@NotEmpty String uuidString);
 
