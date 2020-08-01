@@ -40,6 +40,7 @@ message SaigonParkingMessage {
         AVAILABILITY_UPDATE = 8; /* send from ParkingLot: update available slot */
         HISTORY_CHANGE = 9; /* send from system to notify parking-lot that booking history was updated --> refresh list */
         IMAGE = 10; /* everyone can send and receive image */
+        ERROR = 11; /* send from system back to sender to notify that an unexpected error has occurred */
     }
 
     Classification classification = 1; /* whether message is sent from customer or parking-lot */
@@ -108,6 +109,10 @@ message BookingFinishContent {
 message AvailabilityUpdateContent {
     int64 parkingLotId = 1;
     int32 newAvailability = 2;
+}
+
+message ErrorContent {
+    string internalErrorCode = 1; /* will be SaigonParking system internal error code, eg. SPE#00020 */
 }
 
 service ContactService {
