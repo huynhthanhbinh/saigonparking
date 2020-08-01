@@ -393,6 +393,11 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     }
 
     @Override
+    public List<Long> getEmployeeManageParkingLotIdList(@NotNull Long parkingLotId) {
+        return parkingLotEmployeeRepository.getEmployeeManageParkingLotIdList(parkingLotId);
+    }
+
+    @Override
     public void addEmployeeOfParkingLot(@NotNull Long employeeId, @NotNull Long parkingLotId) {
         ParkingLotEntity parkingLotEntity = getParkingLotById(parkingLotId);
         ParkingLotEmployeeEntity parkingLotEmployeeEntity = ParkingLotEmployeeEntity.builder()

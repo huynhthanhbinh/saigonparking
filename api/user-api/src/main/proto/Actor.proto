@@ -79,6 +79,10 @@ message CountAllUserGroupByRoleResponse {
     map<int64, int64> roleCount = 1; /* is a map of <user_role_long_value, count_user_role> */
 }
 
+message GetEmployeeManageParkingLotListResponse {
+    repeated User employee = 1;
+}
+
 service UserService {
 
     /** PUBLIC - ADMIN ONLY
@@ -211,4 +215,10 @@ service UserService {
      *  + request: user ID list
      *  + response: empty value if succeed, otherwise, throw exception */
     rpc deleteMultiUserById (DeleteMultiUserByIdRequest) returns (google.protobuf.Empty);
+
+    /** PUBLIC - admin only
+     * use-case: add/remove EmployeeOfParkingLot
+     *  + request: parking lot's id
+     *  + response: employee list if succeed, otherwise, throw exception */
+    rpc getEmployeeManageParkingLotList (google.protobuf.Int64Value) returns (GetEmployeeManageParkingLotListResponse);
 }

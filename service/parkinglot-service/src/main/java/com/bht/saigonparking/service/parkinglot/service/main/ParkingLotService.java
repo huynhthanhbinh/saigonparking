@@ -109,5 +109,7 @@ public interface ParkingLotService {
 
     boolean checkEmployeeAlreadyManageParkingLot(@NotNull Long employeeId);
 
+    List<Long> getEmployeeManageParkingLotIdList(@NotNull Long parkingLotId);
+
     void addEmployeeOfParkingLot(@NotNull Long employeeId, @NotNull Long parkingLotId);
 }

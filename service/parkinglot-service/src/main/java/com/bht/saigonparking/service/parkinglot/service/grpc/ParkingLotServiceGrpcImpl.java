@@ -21,6 +21,7 @@ import com.bht.saigonparking.api.grpc.parkinglot.GetAllParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.GetAllParkingLotResponse;
 import com.bht.saigonparking.api.grpc.parkinglot.GetAllRatingsOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.GetAllRatingsOfParkingLotResponse;
+import com.bht.saigonparking.api.grpc.parkinglot.GetEmployeeManageParkingLotIdListResponse;
 import com.bht.saigonparking.api.grpc.parkinglot.MapToParkingLotNameMapRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.MapToParkingLotNameMapResponse;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
@@ -698,6 +699,32 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("checkEmployeeAlreadyManageParkingLot(%d)", request.getValue()));
+        }
+    }
+
+    @Override
+    public void getEmployeeManageParkingLotIdList(Int64Value request, StreamObserver<GetEmployeeManageParkingLotIdListResponse> responseObserver) {
+        try {
+            serverInterceptor.validateAdmin();
+
+            List<Long> employeeIdList = parkingLotService.getEmployeeManageParkingLotIdList(request.getValue());
+            GetEmployeeManageParkingLotIdListResponse response = GetEmployeeManageParkingLotIdListResponse.newBuilder()
+                    .addAllEmployeeId(employeeIdList)
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getEmployeeManageParkingLotIdList(%d): %s", request.getValue(), employeeIdList));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getEmployeeManageParkingLotIdList(%d)", request.getValue()));
         }
     }
 }

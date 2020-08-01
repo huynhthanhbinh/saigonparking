@@ -1,5 +1,7 @@
 package com.bht.saigonparking.service.parkinglot.repository.core;
 
+import java.util.List;
+
 import javax.validation.constraints.NotNull;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,4 +27,14 @@ public interface ParkingLotEmployeeRepository extends JpaRepository<ParkingLotEm
             "FROM ParkingLotEmployeeEntity E " +
             "WHERE E.userId = ?1")
     Long countByUserId(@NotNull Long userId);
+
+    /**
+     *
+     * self-implement getEmployeeManageParkingLotIdList method
+     * using to get all employees who manage this parking-lot
+     */
+    @Query("SELECT E.userId " +
+            "FROM ParkingLotEmployeeEntity E " +
+            "WHERE E.parkingLotEntity.id = ?1")
+    List<Long> getEmployeeManageParkingLotIdList(@NotNull Long parkingLotId);
 }

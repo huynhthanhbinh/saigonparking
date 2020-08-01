@@ -189,6 +189,10 @@ message AddEmployeeOfParkingLotRequest {
     int64 parkingLotId = 2;
 }
 
+message GetEmployeeManageParkingLotIdListResponse {
+    repeated int64 employeeId = 1;
+}
+
 service ParkingLotService {
 
     /** PUBLIC - ADMIN ONLY
@@ -379,8 +383,14 @@ service ParkingLotService {
     rpc addEmployeeOfParkingLot (AddEmployeeOfParkingLotRequest) returns (google.protobuf.Empty);
 
     /** PUBLIC - admin only
-     * use-case: addEmployeeOfParkingLot
+     * use-case: add/remove EmployeeOfParkingLot
      *  + request: employee's id
      *  + response: bool value if succeed, otherwise, throw exception */
     rpc checkEmployeeAlreadyManageParkingLot (google.protobuf.Int64Value) returns (google.protobuf.BoolValue);
+
+    /** PRIVATE - internal use only
+     * use-case: add/remove EmployeeOfParkingLot
+     *  + request: parking lot's id
+     *  + response: employee id list if succeed, otherwise, throw exception */
+    rpc getEmployeeManageParkingLotIdList (google.protobuf.Int64Value) returns (GetEmployeeManageParkingLotIdListResponse);
 }
