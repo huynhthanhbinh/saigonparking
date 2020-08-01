@@ -1,5 +1,6 @@
 package com.bht.saigonparking.service.user.service.grpc;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -7,12 +8,14 @@ import org.apache.logging.log4j.Level;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
 import com.bht.saigonparking.api.grpc.user.CountAllUserGroupByRoleResponse;
 import com.bht.saigonparking.api.grpc.user.CountAllUserRequest;
 import com.bht.saigonparking.api.grpc.user.Customer;
 import com.bht.saigonparking.api.grpc.user.DeleteMultiUserByIdRequest;
 import com.bht.saigonparking.api.grpc.user.GetAllUserRequest;
 import com.bht.saigonparking.api.grpc.user.GetAllUserResponse;
+import com.bht.saigonparking.api.grpc.user.GetEmployeeManageParkingLotListResponse;
 import com.bht.saigonparking.api.grpc.user.MapToUsernameMapRequest;
 import com.bht.saigonparking.api.grpc.user.MapToUsernameMapResponse;
 import com.bht.saigonparking.api.grpc.user.UpdatePasswordRequest;
@@ -56,6 +59,7 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
     private final UserMapperExt userMapperExt;
     private final EnumMapper enumMapper;
     private final SaigonParkingServerInterceptor serverInterceptor;
+    private final ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
 
     @Override
     public void countAllUser(CountAllUserRequest request, StreamObserver<Int64Value> responseObserver) {
@@ -489,6 +493,36 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("checkEmailAlreadyExist(%s)", request.getValue()));
+        }
+    }
+
+    @Override
+    public void getEmployeeManageParkingLotList(Int64Value request, StreamObserver<GetEmployeeManageParkingLotListResponse> responseObserver) {
+        try {
+            serverInterceptor.validateUserRole(Arrays.asList("PARKING_LOT_EMPLOYEE", "ADMIN"));
+
+            List<Long> employeeIdList = parkingLotServiceBlockingStub
+                    .getEmployeeManageParkingLotIdList(request)
+                    .getEmployeeIdList();
+
+            List<User> employeeList = userMapper.toUserList(userService.getAll(new HashSet<>(employeeIdList)));
+            GetEmployeeManageParkingLotListResponse response = GetEmployeeManageParkingLotListResponse.newBuilder()
+                    .addAllEmployee(employeeList)
+                    .build();
+
+            responseObserver.onNext(response);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getEmployeeManageParkingLotList(%d)", request.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getEmployeeManageParkingLotList(%d)", request.getValue()));
         }
     }
 }
