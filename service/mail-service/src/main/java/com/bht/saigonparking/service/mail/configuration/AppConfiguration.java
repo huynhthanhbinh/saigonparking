@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 import com.bht.saigonparking.common.spring.SpringApplicationContext;
 import com.bht.saigonparking.common.spring.SpringBeanLifeCycle;
@@ -12,8 +13,9 @@ import com.bht.saigonparking.common.spring.SpringBeanLifeCycle;
  *
  * @author bht
  */
+@EnableAsync
 @Configuration
-@Import(MessageQueueConfiguration.class)
+@Import({MessageQueueConfiguration.class, MailConfiguration.class})
 @ComponentScan(basePackages = AppConfiguration.BASE_PACKAGE)
 public class AppConfiguration {
 

@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Thu, Jul 23th, 2020
+Last updated:       Sat, Aug 1st, 2020
 ========================================================================================================================
 001. gRPC error handling:
         https://grpc.io/docs/guides/error/
@@ -382,3 +382,9 @@ Last updated:       Thu, Jul 23th, 2020
 
 123. Generating Barcodes and QR Codes in Java
         https://www.baeldung.com/java-generating-barcodes-qr-codes
+
+124. How do I send HTML email in Spring MVC ?
+        https://stackoverflow.com/questions/5289849/how-do-i-send-html-email-in-spring-mvc
+
+125. SENDING ASYNC EMAILS IN SPRING
+        https://www.danvega.dev/blog/2016/01/13/sending-async-emails-in-spring/
