@@ -26,6 +26,7 @@ import com.bht.saigonparking.api.grpc.booking.GetAllBookingOfCustomerRequest;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingRequest;
 import com.bht.saigonparking.api.grpc.booking.UpdateBookingStatusRequest;
+import com.bht.saigonparking.common.exception.CustomerHasOnGoingBookingException;
 import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
 import com.bht.saigonparking.common.util.ImageUtil;
 import com.bht.saigonparking.common.util.LoggingUtil;
@@ -62,6 +63,10 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
     public void createBooking(CreateBookingRequest request, StreamObserver<CreateBookingResponse> responseObserver) {
         try {
             serverInterceptor.validateAdmin();
+
+            if (bookingService.checkCustomerHasOnGoingBooking(request.getCustomerId())) {
+                throw new CustomerHasOnGoingBookingException();
+            }
 
             Pair<String, String> newBooking = bookingService.saveNewBooking(bookingMapper.toBookingEntity(request));
 

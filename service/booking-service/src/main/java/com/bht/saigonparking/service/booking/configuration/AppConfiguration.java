@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.bht.saigonparking.common.annotation.InheritedComponent;
 import com.bht.saigonparking.common.exception.BookingAlreadyFinishedException;
+import com.bht.saigonparking.common.exception.CustomerHasOnGoingBookingException;
 import com.bht.saigonparking.common.exception.PermissionDeniedException;
 import com.bht.saigonparking.common.interceptor.SaigonParkingClientInterceptor;
 import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
@@ -73,6 +74,7 @@ public class AppConfiguration {
                 .put(ServiceUnavailableException.class, "SPE#00017")
                 .put(EmptyResultDataAccessException.class, "SPE#00018")
                 .put(BookingAlreadyFinishedException.class, "SPE#00019")
+                .put(CustomerHasOnGoingBookingException.class, "SPE#00020")
                 .build());
     }
 }
