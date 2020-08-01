@@ -468,4 +468,27 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
                     String.format("checkUsernameAlreadyExist(%s)", request.getValue()));
         }
     }
+
+    @Override
+    public void checkEmailAlreadyExist(StringValue request, StreamObserver<BoolValue> responseObserver) {
+        try {
+            serverInterceptor.validateAdmin();
+
+            boolean isEmailAlreadyExist = userService.checkEmailAlreadyExist(request.getValue());
+
+            responseObserver.onNext(BoolValue.of(isEmailAlreadyExist));
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("checkEmailAlreadyExist(%s): %b", request.getValue(), isEmailAlreadyExist));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("checkEmailAlreadyExist(%s)", request.getValue()));
+        }
+    }
 }

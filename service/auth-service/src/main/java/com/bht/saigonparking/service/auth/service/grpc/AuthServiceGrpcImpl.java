@@ -58,6 +58,27 @@ public final class AuthServiceGrpcImpl extends AuthServiceGrpc.AuthServiceImplBa
     }
 
     @Override
+    public void checkEmailAlreadyExist(StringValue request, StreamObserver<BoolValue> responseObserver) {
+        try {
+            BoolValue isEmailAlreadyExist = userServiceBlockingStub.checkEmailAlreadyExist(request);
+
+            responseObserver.onNext(isEmailAlreadyExist);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("checkEmailAlreadyExist(%s): %b", request.getValue(), isEmailAlreadyExist.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("checkEmailAlreadyExist(%s)", request.getValue()));
+        }
+    }
+
+    @Override
     public void validateUser(ValidateRequest request, StreamObserver<ValidateResponse> responseObserver) {
         try {
             Pair<String, String> validateResponseTriple = authService.validateLogin(

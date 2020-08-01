@@ -43,6 +43,12 @@ service AuthService {
      *  + response: bool value if succeed, otherwise, throw exception */
     rpc checkUsernameAlreadyExist (google.protobuf.StringValue) returns (google.protobuf.BoolValue);
 
+    /** PUBLIC - everyone can call
+     * use-case: create new user or customer
+     *  + request: email
+     *  + response: bool value if succeed, otherwise, throw exception */
+    rpc checkEmailAlreadyExist (google.protobuf.StringValue) returns (google.protobuf.BoolValue);
+
     /** PUBLIC
      * use-case: user login (Validate all type of user)
      *  + request: validate request, includes username, password and role

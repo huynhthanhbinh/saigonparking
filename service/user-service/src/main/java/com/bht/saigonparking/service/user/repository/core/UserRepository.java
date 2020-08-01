@@ -33,6 +33,17 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>, UserRep
 
     /**
      *
+     * self-implement countByEmail method
+     * using to check if email already exist
+     */
+    @Query("SELECT COUNT (U.id) " +
+            "FROM UserEntity U " +
+            "WHERE U.email = ?1")
+    Long countByEmail(@NotEmpty String email);
+
+
+    /**
+     *
      * self-implement getByUsername method
      * in order to prevent N+1 problem
      */

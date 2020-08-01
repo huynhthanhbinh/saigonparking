@@ -155,6 +155,12 @@ service UserService {
      *  + response: bool value if succeed, otherwise, throw exception */
     rpc checkUsernameAlreadyExist (google.protobuf.StringValue) returns (google.protobuf.BoolValue);
 
+    /** PUBLIC - ADMIN ONLY, if you are not admin, please call via AuthService
+     * use-case: create new user or customer
+     *  + request: email
+     *  + response: bool value if succeed, otherwise, throw exception */
+    rpc checkEmailAlreadyExist (google.protobuf.StringValue) returns (google.protobuf.BoolValue);
+
     /** PRIVATE
      * use-case: create user, all type except customer (will be called by Admin)
      *  + request: User object

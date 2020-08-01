@@ -66,4 +66,6 @@ public interface UserService {
     Map<Long, Long> countAllUserGroupByRole();
 
     boolean checkUsernameAlreadyExist(@NotEmpty String username);
+
+    boolean checkEmailAlreadyExist(@NotEmpty String email);
 }

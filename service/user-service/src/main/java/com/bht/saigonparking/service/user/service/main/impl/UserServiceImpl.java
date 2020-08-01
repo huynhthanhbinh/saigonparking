@@ -237,4 +237,9 @@ public class UserServiceImpl implements UserService {
     public boolean checkUsernameAlreadyExist(@NotEmpty String username) {
         return userRepository.countByUsername(username) != 0;
     }
+
+    @Override
+    public boolean checkEmailAlreadyExist(@NotEmpty String email) {
+        return userRepository.countByEmail(email) != 0;
+    }
 }

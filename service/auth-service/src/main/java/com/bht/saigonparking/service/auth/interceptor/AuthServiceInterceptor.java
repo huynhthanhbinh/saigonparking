@@ -91,6 +91,7 @@ public final class AuthServiceInterceptor implements ServerInterceptor {
                 .add("com.bht.saigonparking.api.grpc.auth.AuthService/registerUser")
                 .add("com.bht.saigonparking.api.grpc.auth.AuthService/sendResetPasswordEmail")
                 .add("com.bht.saigonparking.api.grpc.auth.AuthService/sendActivateAccountEmail")
+                .add("com.bht.saigonparking.api.grpc.auth.AuthService/checkEmailAlreadyExist")
                 .add("com.bht.saigonparking.api.grpc.auth.AuthService/checkUsernameAlreadyExist")
                 .build();
 
