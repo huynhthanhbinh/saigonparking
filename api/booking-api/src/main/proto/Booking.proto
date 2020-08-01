@@ -112,6 +112,8 @@ service BookingService {
     rpc countAllBookingGroupByStatus (google.protobuf.Empty) returns (CountAllBookingGroupByStatusResponse);
 
     /* PUBLIC: EXTERNAL client can call (remember to provide token for auth purposes) */
+    rpc getCustomerOnGoingBooking (google.protobuf.Empty) returns (Booking);
+    rpc checkCustomerHasOnGoingBooking (google.protobuf.Empty) returns (google.protobuf.BoolValue);
     rpc generateBookingQrCode (GenerateBookingQrCodeRequest) returns (GenerateBookingQrCodeResponse);
     rpc finishBooking (FinishBookingRequest) returns (google.protobuf.Empty); /* send notification to parking-lot and customer */
     rpc getAllBooking (GetAllBookingRequest) returns (BookingList);

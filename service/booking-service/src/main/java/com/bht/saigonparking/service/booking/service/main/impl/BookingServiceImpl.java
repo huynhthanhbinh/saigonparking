@@ -199,4 +199,9 @@ public class BookingServiceImpl implements BookingService {
         return bookingRepository.countAllBookingOfParkingLotGroupByStatus(parkingLotId).stream().collect(Collectors
                 .toMap(tuple -> enumMapper.toBookingStatusValue(tuple.get(0, Long.class)), tuple -> tuple.get(1, Long.class)));
     }
+
+    @Override
+    public boolean checkCustomerHasOnGoingBooking(@NotNull Long customerId) {
+        return bookingRepository.countAllUnfinishedBookingByCustomerId(customerId) != 0;
+    }
 }

@@ -34,6 +34,7 @@ import com.bht.saigonparking.service.booking.mapper.CustomizedMapper;
 import com.bht.saigonparking.service.booking.mapper.EnumMapper;
 import com.bht.saigonparking.service.booking.service.main.BookingService;
 import com.bht.saigonparking.service.booking.service.main.QrCodeService;
+import com.google.protobuf.BoolValue;
 import com.google.protobuf.Empty;
 import com.google.protobuf.Int64Value;
 import com.google.protobuf.StringValue;
@@ -467,6 +468,30 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("countAllBookingOfParkingLotGroupByStatus(%d)", request.getValue()));
+        }
+    }
+
+    @Override
+    public void checkCustomerHasOnGoingBooking(Empty request, StreamObserver<BoolValue> responseObserver) {
+        Long customerId = serverInterceptor.getUserIdContext().get();
+        try {
+            serverInterceptor.validateUserRole("CUSTOMER");
+
+            boolean isCustomerHasOnGoingBooking = bookingService.checkCustomerHasOnGoingBooking(customerId);
+
+            responseObserver.onNext(BoolValue.of(isCustomerHasOnGoingBooking));
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("checkCustomerHasOnGoingBooking(%d): %b", customerId, isCustomerHasOnGoingBooking));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("checkCustomerHasOnGoingBooking(%d)", customerId));
         }
     }
 }

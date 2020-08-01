@@ -70,4 +70,6 @@ public interface BookingService {
     Map<Long, Long> countAllBookingGroupByStatus();
 
     Map<Long, Long> countAllBookingOfParkingLotGroupByStatus(@NotNull Long parkingLotId);
+
+    boolean checkCustomerHasOnGoingBooking(@NotNull Long customerId);
 }

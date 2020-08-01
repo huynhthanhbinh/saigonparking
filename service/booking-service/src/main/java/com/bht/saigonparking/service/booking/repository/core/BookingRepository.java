@@ -27,4 +27,14 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long>, B
             "JOIN FETCH H.bookingStatusEntity " +
             "WHERE B.uuid = ?1")
     Optional<BookingEntity> getBookingDetailByUuid(@NotNull UUID uuid);
+
+    /**
+     *
+     * self-implement countUnfinishedBookingByUserId method
+     * using to check if username already exist
+     */
+    @Query("SELECT COUNT (B.id) " +
+            "FROM BookingEntity B " +
+            "WHERE B.customerId = ?1 AND B.isFinished = FALSE")
+    Long countAllUnfinishedBookingByCustomerId(@NotNull Long userId);
 }
