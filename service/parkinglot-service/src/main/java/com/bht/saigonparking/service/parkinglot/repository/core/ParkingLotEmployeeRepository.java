@@ -1,6 +1,7 @@
 package com.bht.saigonparking.service.parkinglot.repository.core;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
 
@@ -17,6 +18,20 @@ import com.bht.saigonparking.service.parkinglot.repository.custom.ParkingLotEmpl
  */
 @Repository
 public interface ParkingLotEmployeeRepository extends JpaRepository<ParkingLotEmployeeEntity, Long>, ParkingLotEmployeeRepositoryCustom {
+
+    /**
+     *
+     * self-implement countByUsername method
+     * in order to prevent N+1 problem
+     */
+    @Query("SELECT E " +
+            "FROM ParkingLotEmployeeEntity E " +
+            "JOIN FETCH E.parkingLotEntity P " +
+            "JOIN FETCH P.parkingLotTypeEntity " +
+            "JOIN FETCH P.parkingLotLimitEntity " +
+            "JOIN FETCH P.parkingLotInformationEntity " +
+            "WHERE E.userId = ?1")
+    Optional<ParkingLotEmployeeEntity> getByEmployeeId(@NotNull Long employeeId);
 
     /**
      *

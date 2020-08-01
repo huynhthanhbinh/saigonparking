@@ -12,6 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.bht.saigonparking.common.annotation.InheritedComponent;
@@ -26,6 +27,7 @@ import com.google.common.collect.ImmutableMap;
  *
  * @author bht
  */
+@EnableAsync
 @Configuration
 @EnableTransactionManagement
 @Import({AwsConfiguration.class, ChannelConfiguration.class})

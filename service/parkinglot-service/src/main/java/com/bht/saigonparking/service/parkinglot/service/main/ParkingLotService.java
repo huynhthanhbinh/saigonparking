@@ -112,4 +112,6 @@ public interface ParkingLotService {
     List<Long> getEmployeeManageParkingLotIdList(@NotNull Long parkingLotId);
 
     void addEmployeeOfParkingLot(@NotNull Long employeeId, @NotNull Long parkingLotId);
+
+    void removeEmployeeOfParkingLot(@NotNull Long employeeId, @NotNull Long parkingLotId, boolean deleteEmployee);
 }

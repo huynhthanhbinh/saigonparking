@@ -15,9 +15,11 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.apache.logging.log4j.Level;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,7 @@ import com.bht.saigonparking.api.grpc.parkinglot.DeleteParkingLotNotification;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotEmployeeInfo;
 import com.bht.saigonparking.api.grpc.user.MapToUsernameMapRequest;
 import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
+import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEmployeeEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
@@ -37,7 +40,10 @@ import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotLimitR
 import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotRatingRepository;
 import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotRepository;
 import com.bht.saigonparking.service.parkinglot.service.main.ParkingLotService;
+import com.google.protobuf.Empty;
+import com.google.protobuf.Int64Value;
 
+import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
 
 /**
@@ -65,6 +71,7 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     private final ParkingLotEmployeeRepository parkingLotEmployeeRepository;
     private final ParkingLotInformationRepository parkingLotInformationRepository;
     private final UserServiceGrpc.UserServiceBlockingStub userServiceBlockingStub;
+    private final UserServiceGrpc.UserServiceStub userServiceStub;
 
     @Override
     public Long getParkingLotIdByParkingLotEmployeeId(@NotNull Long parkingLotEmployeeId) {
@@ -406,5 +413,36 @@ public class ParkingLotServiceImpl implements ParkingLotService {
                 .build();
 
         parkingLotEmployeeRepository.saveAndFlush(parkingLotEmployeeEntity);
+    }
+
+    @Async
+    @Override
+    public void removeEmployeeOfParkingLot(@NotNull Long employeeId, @NotNull Long parkingLotId, boolean deleteEmployee) {
+        ParkingLotEmployeeEntity parkingLotEmployeeEntity = parkingLotEmployeeRepository
+                .getByEmployeeId(employeeId).orElseThrow(EntityNotFoundException::new);
+
+        parkingLotEmployeeRepository.delete(parkingLotEmployeeEntity);
+
+        if (deleteEmployee) {
+            userServiceStub.deleteUserById(Int64Value.of(employeeId), new StreamObserver<Empty>() {
+                @Override
+                public void onNext(Empty empty) {
+                    // ...
+                }
+
+                @Override
+                public void onError(Throwable throwable) {
+                    LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", throwable.getClass().getSimpleName());
+                    LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                            String.format("deleteEmployeeById(%d)", employeeId));
+                }
+
+                @Override
+                public void onCompleted() {
+                    LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                            String.format("deleteEmployeeById(%d)", employeeId));
+                }
+            });
+        }
     }
 }

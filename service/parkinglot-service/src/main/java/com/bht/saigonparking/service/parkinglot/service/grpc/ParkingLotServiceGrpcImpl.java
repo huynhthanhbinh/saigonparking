@@ -34,6 +34,7 @@ import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResult;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResultList;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc.ParkingLotServiceImplBase;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
+import com.bht.saigonparking.api.grpc.parkinglot.RemoveEmployeeOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.ScanningByRadiusRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.UpdateParkingLotAvailabilityRequest;
 import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
@@ -652,6 +653,30 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("addEmployeeOfParkingLot(%d, %d)", request.getEmployeeId(), request.getParkingLotId()));
+        }
+    }
+
+    @Override
+    public void removeEmployeeOfParkingLot(RemoveEmployeeOfParkingLotRequest request, StreamObserver<Empty> responseObserver) {
+        try {
+            serverInterceptor.validateAdmin();
+            parkingLotService.removeEmployeeOfParkingLot(request.getEmployeeId(), request.getParkingLotId(), request.getDeleteEmployee());
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("removeEmployeeOfParkingLot(%d, %d, %b)",
+                            request.getEmployeeId(), request.getParkingLotId(), request.getDeleteEmployee()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("removeEmployeeOfParkingLot(%d, %d, %b)",
+                            request.getEmployeeId(), request.getParkingLotId(), request.getDeleteEmployee()));
         }
     }
 
