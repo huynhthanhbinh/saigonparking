@@ -27,6 +27,7 @@ public final class UserMapperExtImpl implements UserMapperExt {
 
     private final EnumMapper enumMapper;
     private final PasswordEncoder passwordEncoder;
+
     private final UserRepository userRepository;
     private final CustomerRepository customerRepository;
 
@@ -41,6 +42,7 @@ public final class UserMapperExtImpl implements UserMapperExt {
         userEntity.setUserRoleEntity(enumMapper.toUserRoleEntity(user.getRole()));
         userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
         userEntity.setEmail(user.getEmail());
+        userEntity.setIsActivated(user.getIsActivated());
 
         /* Optimistic version control - prevent loss update */
         userEntity.setVersion(!isAboutToCreate ? user.getVersion() : 1L);
