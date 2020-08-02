@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,6 +67,7 @@ public class BookingServiceImpl implements BookingService {
         return Pair.of(newBookingEntity.getUuid().toString(), newBookingEntity.getCreatedAt().toString());
     }
 
+    @Async
     @Override
     public void saveNewBookingHistory(@NotNull BookingHistoryEntity bookingHistoryEntity, @NotNull String uuidString) {
         BookingEntity bookingEntity = getBookingByUuid(uuidString);
@@ -77,11 +79,13 @@ public class BookingServiceImpl implements BookingService {
         throw new BookingAlreadyFinishedException();
     }
 
+    @Async
     @Override
     public void deleteBookingByUuid(@NotEmpty String uuidString) {
         bookingRepository.delete(getBookingByUuid(uuidString));
     }
 
+    @Async
     @Override
     public void finishBooking(@NotEmpty String uuidString) {
         BookingHistoryEntity bookingHistoryEntity = BookingHistoryEntity.builder()
