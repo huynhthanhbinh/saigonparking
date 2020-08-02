@@ -46,6 +46,7 @@ public class AuthServiceImplHelper {
     private final RabbitTemplate rabbitTemplate;
     private final UserServiceGrpc.UserServiceStub userServiceStub;
 
+    @Async
     void updateUserLastSignIn(@NotNull Long userId) {
         rabbitTemplate.convertAndSend(USER_TOPIC_ROUTING_KEY, UpdateUserLastSignInRequest.newBuilder()
                 .setUserId(userId)
@@ -53,6 +54,7 @@ public class AuthServiceImplHelper {
                 .build());
     }
 
+    @Async
     void activateUserWithId(@NotNull Long userId) {
         userServiceStub.activateUser(Int64Value.of(userId), new StreamObserver<Empty>() {
             @Override
@@ -73,6 +75,7 @@ public class AuthServiceImplHelper {
         });
     }
 
+    @Async
     void sendMail(@NotNull MailRequestType type,
                   @NotEmpty String email,
                   @NotEmpty String username,
