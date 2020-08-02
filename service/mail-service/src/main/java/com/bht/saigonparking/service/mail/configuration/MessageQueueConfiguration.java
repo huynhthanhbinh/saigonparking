@@ -4,6 +4,7 @@ import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.MA
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import com.bht.saigonparking.api.grpc.mail.MailRequest;
@@ -17,10 +18,11 @@ import lombok.AllArgsConstructor;
  */
 @Component
 @AllArgsConstructor(onConstructor = @__(@Autowired))
-public final class MessageQueueConfiguration {
+public class MessageQueueConfiguration {
 
     private final MailService mailService;
 
+    @Async
     @RabbitListener(queues = {MAIL_QUEUE_NAME})
     public void consumeMessageFromMailTopic(MailRequest request) {
         mailService.sendNewMail(request);
