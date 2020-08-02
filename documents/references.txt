@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Sat, Aug 1st, 2020
+Last updated:       Sat, Aug 2nd, 2020
 ========================================================================================================================
 001. gRPC error handling:
         https://grpc.io/docs/guides/error/
@@ -388,3 +388,6 @@ Last updated:       Sat, Aug 1st, 2020
 
 125. SENDING ASYNC EMAILS IN SPRING
         https://www.danvega.dev/blog/2016/01/13/sending-async-emails-in-spring/
+
+126. How To Do @Async in Spring
+        https://www.baeldung.com/spring-async

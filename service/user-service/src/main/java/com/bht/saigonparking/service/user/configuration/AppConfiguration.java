@@ -12,6 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -30,11 +31,11 @@ import com.google.common.collect.ImmutableMap;
  *
  * @author bht
  */
+@EnableAsync
 @Configuration
 @EnableTransactionManagement
 @Import(MessageQueueConfiguration.class)
-@ComponentScan(basePackages = AppConfiguration.BASE_PACKAGE,
-        includeFilters = @ComponentScan.Filter(InheritedComponent.class))
+@ComponentScan(basePackages = AppConfiguration.BASE_PACKAGE, includeFilters = @ComponentScan.Filter(InheritedComponent.class))
 public class AppConfiguration {
 
     public static final String BASE_PACKAGE = "com.bht.saigonparking.service.user";
