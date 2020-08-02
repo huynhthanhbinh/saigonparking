@@ -8,9 +8,11 @@ import java.io.IOException;
 
 import org.apache.logging.log4j.Level;
 import org.springframework.lang.NonNull;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.BinaryWebSocketHandler;
 
@@ -30,13 +32,14 @@ import lombok.RequiredArgsConstructor;
  */
 @Component
 @RequiredArgsConstructor
-public final class WebSocketBinaryMessageHandler extends BinaryWebSocketHandler {
+public class WebSocketBinaryMessageHandler extends BinaryWebSocketHandler {
 
     private static final String LOGGING_KEY = "WebSocketBinaryMessageHandler";
     private final WebSocketUserSessionManagement webSocketUserSessionManagement;
     private final ContactService contactService;
     private final MessagingService messagingService;
 
+    @Async
     @Override
     public void afterConnectionEstablished(@NonNull WebSocketSession session) throws IOException {
         Long userId = webSocketUserSessionManagement.getUserIdFromSession(session);
@@ -58,6 +61,7 @@ public final class WebSocketBinaryMessageHandler extends BinaryWebSocketHandler 
         session.sendMessage(new BinaryMessage(saigonParkingMessage.toByteArray()));
     }
 
+    @Async
     @Override
     public void afterConnectionClosed(@NonNull WebSocketSession session, @NonNull CloseStatus status) {
         Long userId = webSocketUserSessionManagement.getUserIdFromSession(session);
@@ -72,12 +76,20 @@ public final class WebSocketBinaryMessageHandler extends BinaryWebSocketHandler 
         LoggingUtil.log(Level.INFO, LOGGING_KEY, "transportErrorException", exception.getClass().getSimpleName());
     }
 
+    @Async
+    @Override
+    public void handleMessage(@NonNull WebSocketSession session, @NonNull WebSocketMessage<?> message) throws Exception {
+        super.handleMessage(session, message);
+    }
+
     @Override
     protected void handleBinaryMessage(@NonNull WebSocketSession session, @NonNull BinaryMessage message) throws Exception {
         Long userId = webSocketUserSessionManagement.getUserIdFromSession(session);
         LoggingUtil.log(Level.INFO, LOGGING_KEY, "handleBinaryMessage", String.format("newBinaryMessageFromUser(%d)", userId));
 
-        SaigonParkingMessage.Builder messageBuilder = SaigonParkingMessage.newBuilder().mergeFrom(message.getPayload().array());
+        SaigonParkingMessage.Builder messageBuilder = SaigonParkingMessage.newBuilder()
+                .mergeFrom(message.getPayload().array());
+
         try {
             if (messageBuilder.getReceiverId() != 0) {
 
