@@ -7,7 +7,7 @@
 /\__/ /| (_| || || (_| || (_) || | | |  | |   | (_| || |   |   < | || | | || (_| |   |_/ \_________/ \___|
 \____/  \__,_||_| \__, | \___/ |_| |_|  \_|    \__,_||_|   |_|\_\|_||_| |_| \__, | ____\_/_________\_/_____
                    __/ |                                                     __/ |
-                  |___/                                                     |___/   v2.3.7 - ©Copyright 2020
+                  |___/                                                     |___/   v2.3.8 - ©Copyright 2020
 </pre>
 
 [![saigonparking-master action-status](https://github.com/huynhthanhbinh/saigonparking/workflows/saigonparking-master/badge.svg)](https://github.com/huynhthanhbinh/saigonparking/actions)
