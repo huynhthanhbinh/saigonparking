@@ -28,3 +28,13 @@
 <h2>3. Project's architecture:</h2>
 
 ![architecture_img](documents/architecture.png)
+
+<br/>
+<h2>4. Project's deployment:</h2>
+
+![deployment_img](documents/deployment.png)
+
+<br/>
+<h2>5. Project's technology stack:</h2>
+
+![technology_img](documents/technology.png)
