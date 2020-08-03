@@ -21,6 +21,7 @@ import org.hibernate.annotations.SelectBeforeUpdate;
 import org.hibernate.annotations.Type;
 
 import com.bht.saigonparking.common.base.BaseEntity;
+import com.bht.saigonparking.service.booking.annotation.LicensePlateValidation;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -47,8 +48,7 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "[BOOKING]")
 public final class BookingEntity extends BaseEntity {
 
-    public static final Comparator<Map.Entry<BookingEntity, String>> SORT_BY_CREATED_AT_THEN_BY_BOOKING_ID
-            = new SortByCreatedAt().thenComparing(new SortById());
+    public static final Comparator<Map.Entry<BookingEntity, String>> SORT_BY_CREATED_AT_THEN_BY_BOOKING_ID = new SortByCreatedAt().thenComparing(new SortById());
 
     @NaturalId
     @Type(type = "uuid-char")
@@ -61,6 +61,7 @@ public final class BookingEntity extends BaseEntity {
     @Column(name = "[CUSTOMER_ID]", nullable = false)
     private Long customerId;
 
+    @LicensePlateValidation
     @Column(name = "[CUSTOMER_LICENSE_PLATE]", nullable = false)
     private String customerLicensePlate;
 

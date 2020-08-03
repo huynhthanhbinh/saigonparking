@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Sat, Aug 2nd, 2020
+Last updated:       Mon, Aug 3rd, 2020
 ========================================================================================================================
 001. gRPC error handling:
         https://grpc.io/docs/guides/error/
@@ -391,3 +391,9 @@ Last updated:       Sat, Aug 2nd, 2020
 
 126. How To Do @Async in Spring
         https://www.baeldung.com/spring-async
+
+127. Spring DTO validation using ConstraintValidator
+        https://stackoverflow.com/questions/56381693/spring-dto-validation-using-constraintvalidator
+
+128. Dynamic DTO Validation Config - Retrieved from the Database
+        https://www.baeldung.com/spring-dynamic-dto-validation
