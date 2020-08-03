@@ -30,6 +30,7 @@ import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEmployeeEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
+import com.bht.saigonparking.service.parkinglot.entity.ParkingLotInformationEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotRatingEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotTypeEntity;
@@ -375,8 +376,19 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     }
 
     @Override
-    public Long createNewParkingLot(@NotNull ParkingLotEntity parkingLotEntity) {
-        return parkingLotRepository.saveAndFlush(parkingLotEntity).getId();
+    public Long createNewParkingLot(@NotNull ParkingLotEntity parkingLotEntity,
+                                    @NotNull ParkingLotLimitEntity parkingLotLimitEntity,
+                                    @NotNull ParkingLotInformationEntity parkingLotInformationEntity) {
+
+        ParkingLotEntity result = parkingLotRepository.saveAndFlush(parkingLotEntity);
+
+        parkingLotLimitEntity.setParkingLotEntity(result);
+        parkingLotLimitRepository.saveAndFlush(parkingLotLimitEntity);
+
+        parkingLotInformationEntity.setParkingLotEntity(result);
+        parkingLotInformationRepository.saveAndFlush(parkingLotInformationEntity);
+
+        return result.getId();
     }
 
     @Override

@@ -63,10 +63,10 @@ public final class ParkingLotEntity extends BaseEntity {
     @Column(name = "[IS_AVAILABLE]")
     private Boolean isAvailable;
 
-    @OneToOne(mappedBy = "parkingLotEntity", cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
+    @OneToOne(mappedBy = "parkingLotEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private ParkingLotLimitEntity parkingLotLimitEntity;
 
-    @OneToOne(mappedBy = "parkingLotEntity", cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
+    @OneToOne(mappedBy = "parkingLotEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private ParkingLotInformationEntity parkingLotInformationEntity;
 
     @ToString.Exclude

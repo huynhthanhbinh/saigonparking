@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Range;
 
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
+import com.bht.saigonparking.service.parkinglot.entity.ParkingLotInformationEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotTypeEntity;
 
@@ -102,7 +103,9 @@ public interface ParkingLotService {
 
     Map<Long, Long> countAllParkingLotGroupByType();
 
-    Long createNewParkingLot(@NotNull ParkingLotEntity parkingLotEntity);
+    Long createNewParkingLot(@NotNull ParkingLotEntity parkingLotEntity,
+                             @NotNull ParkingLotLimitEntity parkingLotLimitEntity,
+                             @NotNull ParkingLotInformationEntity parkingLotInformationEntity);
 
     void createNewRating(@NotNull Long parkingLotId, @NotNull Long customerId,
                          @NotNull Integer rating, @NotEmpty String comment);

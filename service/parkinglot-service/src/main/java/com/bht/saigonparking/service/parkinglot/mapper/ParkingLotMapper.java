@@ -21,6 +21,7 @@ import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResult;
 import com.bht.saigonparking.service.parkinglot.configuration.AppConfiguration;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotInformationEntity;
+import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
 
 /**
  *
@@ -125,6 +126,27 @@ public interface ParkingLotMapper {
     @Mapping(target = "comment", expression = "java(parkingLotRatingTupleEntry.getKey().get(4, String.class))")
     @Mapping(target = "lastUpdated", expression = "java(customizedMapper.toTimestampString(parkingLotRatingTupleEntry.getKey().get(5, java.sql.Timestamp.class)))")
     ParkingLotRating toParkingLotRating(@NotNull Map.Entry<Tuple, String> parkingLotRatingTupleEntry);
+
+
+    @Named("toParkingLotLimitEntityIgnoreParkingLotEntity")
+    @Mapping(target = "parkingLotEntity", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "version", ignore = true)
+    @Mapping(target = "totalSlot", source = "totalSlot", defaultExpression = "java(customizedMapper.DEFAULT_SHORT_VALUE)")
+    @Mapping(target = "availableSlot", source = "availableSlot", defaultExpression = "java(customizedMapper.DEFAULT_SHORT_VALUE)")
+    ParkingLotLimitEntity toParkingLotLimitEntityIgnoreParkingLotEntity(@NotNull ParkingLot parkingLot);
+
+
+    @Named("toParkingLotInformationEntityIgnoreParkingLotEntity")
+    @Mapping(target = "parkingLotEntity", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "version", ignore = true)
+    @Mapping(target = "ratingAverage", ignore = true)
+    @Mapping(target = "nRating", ignore = true)
+    @Mapping(target = "name", source = "information.name", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    @Mapping(target = "phone", source = "information.phone", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    @Mapping(target = "address", source = "information.address", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    ParkingLotInformationEntity toParkingLotInformationEntityIgnoreParkingLotEntity(@NotNull ParkingLot parkingLot);
 
 
     @Named("toParkingLotResultListWithoutName")

@@ -685,8 +685,10 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
         try {
             serverInterceptor.validateAdmin();
 
-            Long newParkingLotId = parkingLotService
-                    .createNewParkingLot(parkingLotMapperExt.toParkingLotEntity(request, true));
+            Long newParkingLotId = parkingLotService.createNewParkingLot(
+                    parkingLotMapperExt.toParkingLotEntity(request, true),
+                    parkingLotMapper.toParkingLotLimitEntityIgnoreParkingLotEntity(request),
+                    parkingLotMapper.toParkingLotInformationEntityIgnoreParkingLotEntity(request));
 
             responseObserver.onNext(Int64Value.of(newParkingLotId));
             responseObserver.onCompleted();

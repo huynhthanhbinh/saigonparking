@@ -24,6 +24,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public final class ParkingLotMapperExtImpl implements ParkingLotMapperExt {
 
+    private final EnumMapper enumMapper;
     private final CustomizedMapper customizedMapper;
     private final ParkingLotRepository parkingLotRepository;
 
@@ -36,36 +37,35 @@ public final class ParkingLotMapperExtImpl implements ParkingLotMapperExt {
         ParkingLotInformation parkingLotInformation = parkingLot.getInformation();
 
         if (!isAboutToCreate) {
+
             /* case: update parkingLotEntity */
             parkingLotEntity = parkingLotRepository.getById(parkingLot.getId());
             parkingLotLimitEntity = parkingLotEntity.getParkingLotLimitEntity();
             parkingLotInformationEntity = parkingLotEntity.getParkingLotInformationEntity();
             parkingLotEntity.setVersion(parkingLot.getVersion());
 
+            parkingLotLimitEntity.setTotalSlot((short) parkingLot.getTotalSlot());
+            parkingLotLimitEntity.setAvailableSlot((short) parkingLot.getAvailableSlot());
+
+            parkingLotInformationEntity.setName(parkingLotInformation.getName());
+            parkingLotInformationEntity.setAddress(parkingLotInformation.getAddress());
+            parkingLotInformationEntity.setPhone(parkingLotInformation.getPhone().isEmpty() ? "" : parkingLotInformation.getPhone());
+
         } else {
+
             /* case: create parkingLotEntity */
             parkingLotEntity = new ParkingLotEntity();
-            parkingLotLimitEntity = new ParkingLotLimitEntity();
-            parkingLotInformationEntity = new ParkingLotInformationEntity();
-
+            parkingLotEntity.setVersion(1L);
             parkingLotEntity.setParkingLotUnitEntitySet(Collections.emptySet());
             parkingLotEntity.setParkingLotRatingEntitySet(Collections.emptySet());
             parkingLotEntity.setParkingLotEmployeeEntitySet(Collections.emptySet());
+            parkingLotEntity.setParkingLotTypeEntity(enumMapper.toParkingLotTypeEntity(parkingLot.getType()));
         }
-
-        parkingLotLimitEntity.setTotalSlot((short) parkingLot.getTotalSlot());
-        parkingLotLimitEntity.setAvailableSlot((short) parkingLot.getAvailableSlot());
-
-        parkingLotInformationEntity.setName(parkingLotInformation.getName());
-        parkingLotInformationEntity.setAddress(parkingLotInformation.getAddress());
-        parkingLotInformationEntity.setPhone(parkingLotInformation.getPhone().isEmpty() ? "" : parkingLotInformation.getPhone());
 
         parkingLotEntity.setLatitude(parkingLot.getLatitude());
         parkingLotEntity.setLongitude(parkingLot.getLongitude());
         parkingLotEntity.setOpeningHour(customizedMapper.toTime(parkingLot.getOpeningHour()));
         parkingLotEntity.setClosingHour(customizedMapper.toTime(parkingLot.getClosingHour()));
-        parkingLotEntity.setParkingLotLimitEntity(parkingLotLimitEntity);
-        parkingLotEntity.setParkingLotInformationEntity(parkingLotInformationEntity);
 
         return parkingLotEntity;
     }
