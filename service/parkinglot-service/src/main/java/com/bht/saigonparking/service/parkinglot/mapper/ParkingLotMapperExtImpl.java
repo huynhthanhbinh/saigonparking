@@ -1,5 +1,7 @@
 package com.bht.saigonparking.service.parkinglot.mapper;
 
+import java.util.Collections;
+
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,23 +17,6 @@ import com.bht.saigonparking.service.parkinglot.repository.core.ParkingLotReposi
 import lombok.AllArgsConstructor;
 
 /**
- *
- * Parking Lot Mapper Extension
- * this class implement override methods of ParkingLotMapper
- *
- * Note that Ext class in declared as final non-public
- * in order to hide this class from outside of mapper package
- * It is expected to be seen only by mapper class, here is ParkingLotMapper
- *
- * for using repository inside Component class,
- * we need to {@code @Autowired} it by Spring Dependency Injection
- * we can achieve that easily
- * by using {@code @Setter(onMethod = @__(@Autowired)} for class level like below
- *
- * we cannot use {@code @AllArgsConstructor} for class level,
- * because these repository/injected fields are optional,
- * and it will conflict with {@code @Mapper @Component} bean
- * which will be initialized by NonArgsConstructor !!!!!!!!!
  *
  * @author bht
  */
@@ -50,16 +35,22 @@ public final class ParkingLotMapperExtImpl implements ParkingLotMapperExt {
         ParkingLotInformationEntity parkingLotInformationEntity;
         ParkingLotInformation parkingLotInformation = parkingLot.getInformation();
 
-        if (!isAboutToCreate) {    // update parkingLotEntity
+        if (!isAboutToCreate) {
+            /* case: update parkingLotEntity */
             parkingLotEntity = parkingLotRepository.getById(parkingLot.getId());
             parkingLotLimitEntity = parkingLotEntity.getParkingLotLimitEntity();
             parkingLotInformationEntity = parkingLotEntity.getParkingLotInformationEntity();
             parkingLotEntity.setVersion(parkingLot.getVersion());
 
-        } else {                    // create parkingLotEntity
+        } else {
+            /* case: create parkingLotEntity */
             parkingLotEntity = new ParkingLotEntity();
             parkingLotLimitEntity = new ParkingLotLimitEntity();
             parkingLotInformationEntity = new ParkingLotInformationEntity();
+
+            parkingLotEntity.setParkingLotUnitEntitySet(Collections.emptySet());
+            parkingLotEntity.setParkingLotRatingEntitySet(Collections.emptySet());
+            parkingLotEntity.setParkingLotEmployeeEntitySet(Collections.emptySet());
         }
 
         parkingLotLimitEntity.setTotalSlot((short) parkingLot.getTotalSlot());
@@ -67,7 +58,7 @@ public final class ParkingLotMapperExtImpl implements ParkingLotMapperExt {
 
         parkingLotInformationEntity.setName(parkingLotInformation.getName());
         parkingLotInformationEntity.setAddress(parkingLotInformation.getAddress());
-        parkingLotInformationEntity.setPhone(parkingLotInformation.getPhone().isEmpty() ? null : parkingLotInformation.getPhone());
+        parkingLotInformationEntity.setPhone(parkingLotInformation.getPhone().isEmpty() ? "" : parkingLotInformation.getPhone());
 
         parkingLotEntity.setLatitude(parkingLot.getLatitude());
         parkingLotEntity.setLongitude(parkingLot.getLongitude());
