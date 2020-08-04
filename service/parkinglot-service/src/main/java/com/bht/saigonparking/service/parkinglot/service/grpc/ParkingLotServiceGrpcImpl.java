@@ -754,4 +754,27 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
                     String.format("getEmployeeManageParkingLotIdList(%d)", request.getValue()));
         }
     }
+
+    @Override
+    public void getParkingLotManagedByEmployee(Int64Value request, StreamObserver<ParkingLot> responseObserver) {
+        try {
+            serverInterceptor.validateUserRole(Arrays.asList("PARKING_LOT_EMPLOYEE", "ADMIN"));
+
+            ParkingLot parkingLot = parkingLotMapper.toParkingLot(parkingLotService.getParkingLotByEmployeeId(request.getValue()));
+
+            responseObserver.onNext(parkingLot);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getParkingLotManagedByEmployee(%d): %s", request.getValue(), parkingLot.getInformation().getName()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getParkingLotManagedByEmployee(%d)", request.getValue()));
+        }
+    }
 }

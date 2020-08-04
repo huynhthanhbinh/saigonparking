@@ -75,6 +75,8 @@ public interface ParkingLotService {
 
     ParkingLotEntity getParkingLotById(@NotNull Long id);
 
+    ParkingLotEntity getParkingLotByEmployeeId(@NotNull Long parkingLotEmployeeId);
+
     ParkingLotLimitEntity getParkingLotLimitById(@NotNull Long id);
 
     Boolean checkAvailability(@NotNull Long parkingLotId);

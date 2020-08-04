@@ -406,4 +406,10 @@ service ParkingLotService {
      *  + request: parking lot's id
      *  + response: employee id list if succeed, otherwise, throw exception */
     rpc getEmployeeManageParkingLotIdList (google.protobuf.Int64Value) returns (GetEmployeeManageParkingLotIdListResponse);
+
+    /** PUBLIC - admin only
+     * use-case: add/remove/view EmployeeOfParkingLot
+     *  + request: employee's id
+     *  + response: ParkingLot */
+    rpc getParkingLotManagedByEmployee (google.protobuf.Int64Value) returns (ParkingLot);
 }

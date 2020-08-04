@@ -279,6 +279,11 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     }
 
     @Override
+    public ParkingLotEntity getParkingLotByEmployeeId(@NotNull Long parkingLotEmployeeId) {
+        return parkingLotRepository.getByEmployeeId(parkingLotEmployeeId).orElseThrow(EntityNotFoundException::new);
+    }
+
+    @Override
     public ParkingLotLimitEntity getParkingLotLimitById(@NotNull Long id) {
         return parkingLotLimitRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }

@@ -1,6 +1,7 @@
 package com.bht.saigonparking.service.parkinglot.repository.core;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.Tuple;
@@ -32,7 +33,25 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLotEntity, Lo
             "JOIN FETCH PL.parkingLotLimitEntity PLL " +
             "JOIN FETCH PL.parkingLotInformationEntity PLI " +
             "WHERE PL.id = ?1")
-    ParkingLotEntity getById(@NotNull Long id);
+    Optional<ParkingLotEntity> getById(@NotNull Long id);
+
+
+    /**
+     *
+     * self-implement getByEmployeeId method
+     * in order to prevent N+1 problem
+     */
+    @Query("SELECT PL " +
+            "FROM ParkingLotEntity PL " +
+            "JOIN FETCH PL.parkingLotTypeEntity PLT " +
+            "JOIN FETCH PL.parkingLotLimitEntity PLL " +
+            "JOIN FETCH PL.parkingLotInformationEntity PLI " +
+            "WHERE PL.id = (" +
+            "SELECT PLE.parkingLotEntity.id " +
+            "FROM ParkingLotEmployeeEntity PLE " +
+            "WHERE PLE.userId = ?1 " +
+            ")")
+    Optional<ParkingLotEntity> getByEmployeeId(@NotNull Long employeeId);
 
 
     /**

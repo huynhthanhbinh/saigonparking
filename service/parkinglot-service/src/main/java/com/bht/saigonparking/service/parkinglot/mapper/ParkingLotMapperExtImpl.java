@@ -2,6 +2,7 @@ package com.bht.saigonparking.service.parkinglot.mapper;
 
 import java.util.Collections;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +35,10 @@ public final class ParkingLotMapperExtImpl implements ParkingLotMapperExt {
         ParkingLotEntity parkingLotEntity;
         ParkingLotLimitEntity parkingLotLimitEntity;
         ParkingLotInformationEntity parkingLotInformationEntity;
-        ParkingLotInformation parkingLotInformation = parkingLot.getInformation();
 
         if (!isAboutToCreate) {
-
             /* case: update parkingLotEntity */
-            parkingLotEntity = parkingLotRepository.getById(parkingLot.getId());
+            parkingLotEntity = parkingLotRepository.getById(parkingLot.getId()).orElseThrow(EntityNotFoundException::new);
             parkingLotLimitEntity = parkingLotEntity.getParkingLotLimitEntity();
             parkingLotInformationEntity = parkingLotEntity.getParkingLotInformationEntity();
             parkingLotEntity.setVersion(parkingLot.getVersion());
@@ -47,12 +46,13 @@ public final class ParkingLotMapperExtImpl implements ParkingLotMapperExt {
             parkingLotLimitEntity.setTotalSlot((short) parkingLot.getTotalSlot());
             parkingLotLimitEntity.setAvailableSlot((short) parkingLot.getAvailableSlot());
 
+            ParkingLotInformation parkingLotInformation = parkingLot.getInformation();
+
             parkingLotInformationEntity.setName(parkingLotInformation.getName());
             parkingLotInformationEntity.setAddress(parkingLotInformation.getAddress());
             parkingLotInformationEntity.setPhone(parkingLotInformation.getPhone().isEmpty() ? "" : parkingLotInformation.getPhone());
 
         } else {
-
             /* case: create parkingLotEntity */
             parkingLotEntity = new ParkingLotEntity();
             parkingLotEntity.setVersion(1L);
