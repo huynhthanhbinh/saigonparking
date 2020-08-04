@@ -107,6 +107,7 @@ public final class MessagingServiceImpl implements MessagingService {
 
     private void preProcessingMessage(@NotNull SaigonParkingMessage.Builder delegate,
                                       @NotNull WebSocketSession webSocketSession) throws IOException {
+
         switch (delegate.getType()) {
             case BOOKING_REQUEST:
                 intermediateService.handleBookingRequest(delegate, webSocketSession);
@@ -119,9 +120,6 @@ public final class MessagingServiceImpl implements MessagingService {
                 break;
             case BOOKING_REJECT:
                 intermediateService.handleBookingReject(delegate, this);
-                break;
-            case BOOKING_FINISH:
-                intermediateService.handleBookingFinish(delegate, this);
                 break;
             default:
                 break;

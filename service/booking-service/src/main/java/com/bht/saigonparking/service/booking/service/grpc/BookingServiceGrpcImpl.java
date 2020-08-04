@@ -408,7 +408,7 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
     @Override
     public void finishBooking(FinishBookingRequest request, StreamObserver<Empty> responseObserver) {
         try {
-            serverInterceptor.validateUserRole("PARKING_LOT_EMPLOYEE");
+            serverInterceptor.validateUserRole(Arrays.asList("PARKING_LOT_EMPLOYEE", "ADMIN"));
 
             String bookingUuid = request.getBookingId();
             bookingService.finishBooking(bookingUuid);

@@ -26,7 +26,4 @@ public interface IntermediateService {
 
     void handleBookingReject(@NotNull SaigonParkingMessage.Builder message,
                              @NotNull MessagingService messagingService) throws InvalidProtocolBufferException;
-
-    void handleBookingFinish(@NotNull SaigonParkingMessage.Builder message,
-                             @NotNull MessagingService messagingService) throws InvalidProtocolBufferException;
 }

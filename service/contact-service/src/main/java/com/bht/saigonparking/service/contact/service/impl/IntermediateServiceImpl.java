@@ -23,7 +23,6 @@ import com.bht.saigonparking.api.grpc.booking.CreateBookingResponse;
 import com.bht.saigonparking.api.grpc.booking.UpdateBookingStatusRequest;
 import com.bht.saigonparking.api.grpc.contact.BookingAcceptanceContent;
 import com.bht.saigonparking.api.grpc.contact.BookingCancellationContent;
-import com.bht.saigonparking.api.grpc.contact.BookingFinishContent;
 import com.bht.saigonparking.api.grpc.contact.BookingProcessingContent;
 import com.bht.saigonparking.api.grpc.contact.BookingRejectContent;
 import com.bht.saigonparking.api.grpc.contact.BookingRequestContent;
@@ -129,24 +128,9 @@ public final class IntermediateServiceImpl implements IntermediateService {
         updateBookingStatus(request, message, messagingService);
     }
 
-    @Override
-    public void handleBookingFinish(@NotNull SaigonParkingMessage.Builder message,
-                                    @NotNull MessagingService messagingService) throws InvalidProtocolBufferException {
-
-        BookingFinishContent bookingFinishContent = BookingFinishContent.parseFrom(message.getContent());
-
-        UpdateBookingStatusRequest request = UpdateBookingStatusRequest.newBuilder()
-                .setBookingId(bookingFinishContent.getBookingId())
-                .setStatus(BookingStatus.FINISHED)
-                .build();
-
-        updateBookingStatus(request, message, messagingService);
-    }
-
     private void updateBookingStatus(@NotNull UpdateBookingStatusRequest request,
                                      @NotNull SaigonParkingMessage.Builder message,
                                      @NotNull MessagingService messagingService) {
-
         Context.current().run(() -> bookingServiceStub
                 .updateBookingStatus(request, updateBookingStatusStreamObserver(request, message, messagingService)));
     }
@@ -155,7 +139,6 @@ public final class IntermediateServiceImpl implements IntermediateService {
                                                                     @NotNull SaigonParkingMessage.Builder message,
                                                                     @NotNull MessagingService messagingService) {
         return new StreamObserver<Empty>() {
-
             @Override
             public void onNext(Empty empty) {
                 if (message.getClassification().equals(PARKING_LOT_MESSAGE)) {
