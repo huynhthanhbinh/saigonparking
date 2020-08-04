@@ -58,7 +58,6 @@ message SaigonParkingMessage {
  * for Android client:
  *      + to get content:   content = NotificationContent.parseFrom(message.getContent())
  *      + to set content:   message.setContent(content.toByteString())
- *
  * for Web client:
  *      + to get content:   content = NotificationContent.deserializeBinary(message.getContent_asU8())
  *      + to set content:   message.setContent(content.serializeBinary()) */
@@ -115,6 +114,14 @@ message ErrorContent {
     string internalErrorCode = 1; /* will be SaigonParking system internal error code, eg. SPE#00020 */
 }
 
+message GenerateSocketConnectQrCodeResponse {
+    bytes qrCode = 1; /* representation of accessToken as image */
+}
+
+message GenerateSocketConnectQrCodeRequest {
+    string accessToken = 1; /* user's access token */
+}
+
 service ContactService {
 
     /* check whether user is online / reachable for pre-sending messages (remember to provide token) */
@@ -122,4 +129,7 @@ service ContactService {
 
     /* check whether parking-lot is online / reachable for pre-sending messages (remember to provide token) */
     rpc checkParkingLotOnlineByParkingLotId (google.protobuf.Int64Value) returns (google.protobuf.BoolValue);
+
+    /* generate qrCode from given user-access-token, to create new socket connection from another device via qrCode */
+    rpc generateSocketConnectQrCode (GenerateSocketConnectQrCodeRequest) returns (GenerateSocketConnectQrCodeResponse);
 }

@@ -28,6 +28,7 @@ import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
 import com.bht.saigonparking.common.spring.SpringApplicationContext;
 import com.bht.saigonparking.common.spring.SpringBeanLifeCycle;
 import com.google.common.collect.ImmutableMap;
+import com.google.zxing.qrcode.QRCodeWriter;
 
 
 /**
@@ -43,6 +44,11 @@ import com.google.common.collect.ImmutableMap;
 public class AppConfiguration {
 
     public static final String BASE_PACKAGE = "com.bht.saigonparking.service.contact";
+
+    @Bean
+    public QRCodeWriter qrCodeWriter() {
+        return new QRCodeWriter();
+    }
 
     @Bean
     public SpringApplicationContext springApplicationContext() {

@@ -1,9 +1,12 @@
 version: '3'
+
 networks:
+
   saigonparking-service:
     driver: bridge
 
 services:
+
   service-discovery:
     image: ${DOCKER_HUB_ID}/discovery:${SERVICE_DISCOVERY_VERSION}
     networks:
@@ -21,7 +24,6 @@ services:
     networks:
       - saigonparking-service
     environment:
-      TZ: ${TIMEZONE}
       RABBITMQ_CONFIG_FILE:                 ${RABBITMQ_CONFIG_FILE}
       RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS:  ${RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS}
     ports:
@@ -252,6 +254,8 @@ services:
       MESSAGE_QUEUE_PASSWORD: ${MESSAGE_QUEUE_PASSWORD}
       SERVICE_DISCOVERY_HOST: ${SERVICE_DISCOVERY_HOST}
       SERVICE_DISCOVERY_PORT: ${SERVICE_DISCOVERY_PORT}
+      QR_CODE_WIDTH:          ${QR_CODE_WIDTH}
+      QR_CODE_HEIGHT:         ${QR_CODE_HEIGHT}
     ports:
       - "${CONTACT_SERVICE_1_PORT}:${CONTACT_SERVICE_1_PORT}"
       - "${CONTACT_SERVICE_1_HTTP_PORT}:${CONTACT_SERVICE_1_HTTP_PORT}"
@@ -283,6 +287,8 @@ services:
       MESSAGE_QUEUE_PASSWORD: ${MESSAGE_QUEUE_PASSWORD}
       SERVICE_DISCOVERY_HOST: ${SERVICE_DISCOVERY_HOST}
       SERVICE_DISCOVERY_PORT: ${SERVICE_DISCOVERY_PORT}
+      QR_CODE_WIDTH:          ${QR_CODE_WIDTH}
+      QR_CODE_HEIGHT:         ${QR_CODE_HEIGHT}
     ports:
       - "${CONTACT_SERVICE_2_PORT}:${CONTACT_SERVICE_2_PORT}"
       - "${CONTACT_SERVICE_2_HTTP_PORT}:${CONTACT_SERVICE_2_HTTP_PORT}"

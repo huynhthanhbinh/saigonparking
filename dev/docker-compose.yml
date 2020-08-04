@@ -6,7 +6,6 @@ networks:
       config:
         - subnet: 172.28.0.0/16
 services:
-
   proxy:
     image: ${DOCKER_HUB_ID}/proxy:${PROXY_VERSION}
     networks:
@@ -126,7 +125,6 @@ services:
       saigonparking:
         ipv4_address: 172.28.1.6
     environment:
-      TZ:                                   ${TIMEZONE}
       RABBITMQ_CONFIG_FILE:                 ${RABBITMQ_CONFIG_FILE}
       RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS:  ${RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS}
     ports:
@@ -263,6 +261,8 @@ services:
       MESSAGE_QUEUE_PASSWORD: ${MESSAGE_QUEUE_PASSWORD}
       SERVICE_DISCOVERY_HOST: ${SERVICE_DISCOVERY_HOST}
       SERVICE_DISCOVERY_PORT: ${SERVICE_DISCOVERY_PORT}
+      QR_CODE_WIDTH:          ${QR_CODE_WIDTH}
+      QR_CODE_HEIGHT:         ${QR_CODE_HEIGHT}
     depends_on:
       - message-queue
       - service-discovery
