@@ -63,7 +63,7 @@
     </developers>
 
     <properties>
-        <revision>v2.3.9</revision> <!-- version of project -->
+        <revision>v2.3.10</revision> <!-- version of project -->
         <java.version>1.8</java.version> <!-- version of java (jdk) -->
 
         <project.docker.hub-id>saigonparkingmap</project.docker.hub-id>
