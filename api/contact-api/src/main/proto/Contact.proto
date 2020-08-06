@@ -38,9 +38,8 @@ message SaigonParkingMessage {
         BOOKING_REJECT = 6; /* send from ParkingLot: reject booking request */
         BOOKING_FINISH = 7; /* send from ParkingLot: when customer arrived */
         AVAILABILITY_UPDATE = 8; /* send from ParkingLot: update available slot */
-        HISTORY_CHANGE = 9; /* send from system to notify parking-lot that booking history was updated --> refresh list */
-        IMAGE = 10; /* everyone can send and receive image */
-        ERROR = 11; /* send from system back to sender to notify that an unexpected error has occurred */
+        IMAGE = 9; /* everyone can send and receive image */
+        ERROR = 10; /* send from system back to sender to notify that an unexpected error has occurred */
     }
 
     Classification classification = 1; /* whether message is sent from customer or parking-lot */
@@ -58,6 +57,7 @@ message SaigonParkingMessage {
  * for Android client:
  *      + to get content:   content = NotificationContent.parseFrom(message.getContent())
  *      + to set content:   message.setContent(content.toByteString())
+ *
  * for Web client:
  *      + to get content:   content = NotificationContent.deserializeBinary(message.getContent_asU8())
  *      + to set content:   message.setContent(content.serializeBinary()) */
