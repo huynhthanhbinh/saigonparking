@@ -28,11 +28,6 @@
         </dependency>
         <dependency>
             <groupId>com.bht.saigonparking</groupId>
-            <artifactId>contact-api</artifactId>
-            <version>${revision}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.bht.saigonparking</groupId>
             <artifactId>parkinglot-api</artifactId>
             <version>${revision}</version>
         </dependency>
