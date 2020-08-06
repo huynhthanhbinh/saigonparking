@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Mon, Aug 3rd, 2020
+Last updated:       Thu, Aug 6th, 2020
 ========================================================================================================================
 001. gRPC error handling:
         https://grpc.io/docs/guides/error/
@@ -352,11 +352,10 @@ Last updated:       Mon, Aug 3rd, 2020
 115. Implementing IF Condition Within a T-SQL UPDATE Statement
         https://stackoverflow.com/questions/3252935/implementing-if-condition-within-a-t-sql-update-statement
 
-116. Does Java pass by reference or pass by value?
+116. Does Java pass by reference or pass by value? ==> Java always passes parameter variables by value
         https://www.infoworld.com/article/3512039/does-java-pass-by-reference-or-pass-by-value.html
     ==> "Passing by value" refers to passing a copy of the value
     ==> "Passing by reference" refers to passing the real reference of the variable in memory
-    ==> Java always passes parameter variables by value
     ==> A mutable object’s value can be changed when it is passed to a method, such as Builder object
     ==> An immutable object’s value cannot be changed, even if it is passed a new value, such as primitive type
 
@@ -397,3 +396,13 @@ Last updated:       Mon, Aug 3rd, 2020
 
 128. Dynamic DTO Validation Config - Retrieved from the Database
         https://www.baeldung.com/spring-dynamic-dto-validation
+
+129. Asynchronous vs synchronous (nonblocking thread vs blocking thread) execution, what does it really mean ?
+        https://stackoverflow.com/questions/748175/asynchronous-vs-synchronous-execution-what-does-it-really-mean
+     ==> Synchronous Execution:  All tasks within a block of code are all effectively executed "at the same time". (step-by-step)
+     ==> Asynchronous Execution: All tasks within a block of code are not all effectively executed "at the same time". (concurrent)
+
+130. Grpc Java Documents - Instantiating a stub
+        https://grpc.io/docs/languages/java/basics/#instantiating-a-stub
+     ==> a blocking/synchronous stub: the RPC call blocks current thread and waits until the server respond
+     ==> a non-blocking/asynchronous stub: the RPC non-blocking current thread, make call to the server where the response is returned asynchronously.
