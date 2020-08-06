@@ -16,9 +16,9 @@ services:
         paths:
           - /com.bht.saigonparking.api.grpc.mail.MailService/
     retries: 3
-    read_timeout: 30000
-    write_timeout: 30000
-    connect_timeout: 30000
+    read_timeout: 60000
+    write_timeout: 60000
+    connect_timeout: 60000
 
 
   - name: auth-service
@@ -37,9 +37,9 @@ services:
         paths:
           - /com.bht.saigonparking.api.grpc.auth.AuthService/
     retries: 3
-    read_timeout: 30000
-    write_timeout: 30000
-    connect_timeout: 30000
+    read_timeout: 60000
+    write_timeout: 60000
+    connect_timeout: 60000
 
 
   - name: user-service
@@ -58,9 +58,9 @@ services:
         paths:
           - /com.bht.saigonparking.api.grpc.user.UserService/
     retries: 3
-    read_timeout: 30000
-    write_timeout: 30000
-    connect_timeout: 30000
+    read_timeout: 60000
+    write_timeout: 60000
+    connect_timeout: 60000
 
 
   - name: parkinglot-service
@@ -79,6 +79,6 @@ services:
         paths:
           - /com.bht.saigonparking.api.grpc.parkinglot.ParkingLotService/
     retries: 3
-    read_timeout: 30000
-    write_timeout: 30000
-    connect_timeout: 30000
+    read_timeout: 60000
+    write_timeout: 60000
+    connect_timeout: 60000
