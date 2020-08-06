@@ -96,6 +96,12 @@ message FinishBookingRequest {
     string bookingId = 1; /* will be an Universal Unique Identifier - UUID */
 }
 
+message FinishBookingResponse {
+    string bookingId = 1; /* will be an Universal Unique Identifier - UUID */
+    int64 customerId = 2;
+    int64 parkingLotId = 3;
+}
+
 message GenerateBookingQrCodeRequest {
     string bookingId = 1; /* will be an Universal Unique Identifier - UUID */
 }
@@ -105,6 +111,7 @@ message GenerateBookingQrCodeResponse {
 }
 
 service BookingService {
+
     /* PRIVATE: ADMIN & INTERNAL service use-only */
     rpc createBooking (CreateBookingRequest) returns (CreateBookingResponse);
     rpc updateBookingStatus (UpdateBookingStatusRequest) returns (google.protobuf.Empty);
@@ -115,7 +122,7 @@ service BookingService {
     rpc getCustomerOnGoingBooking (google.protobuf.Empty) returns (Booking);
     rpc checkCustomerHasOnGoingBooking (google.protobuf.Empty) returns (google.protobuf.BoolValue);
     rpc generateBookingQrCode (GenerateBookingQrCodeRequest) returns (GenerateBookingQrCodeResponse);
-    rpc finishBooking (FinishBookingRequest) returns (google.protobuf.Empty); /* send notification to parking-lot and customer */
+    rpc finishBooking (FinishBookingRequest) returns (FinishBookingResponse); /* send notification to parking-lot and customer */
     rpc getAllBooking (GetAllBookingRequest) returns (BookingList);
     rpc countAllBooking (CountAllBookingRequest) returns (google.protobuf.Int64Value);
     rpc getAllBookingOfCustomer (GetAllBookingOfCustomerRequest) returns (BookingList);
