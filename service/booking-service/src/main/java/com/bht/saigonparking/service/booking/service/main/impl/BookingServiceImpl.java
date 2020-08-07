@@ -9,7 +9,6 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.scheduling.annotation.Async;
@@ -17,9 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bht.saigonparking.api.grpc.booking.BookingStatus;
-import com.bht.saigonparking.api.grpc.contact.BookingFinishContent;
-import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
-import com.bht.saigonparking.common.constant.SaigonParkingMessageQueue;
 import com.bht.saigonparking.common.exception.BookingAlreadyFinishedException;
 import com.bht.saigonparking.service.booking.entity.BookingEntity;
 import com.bht.saigonparking.service.booking.entity.BookingHistoryEntity;
@@ -41,8 +37,6 @@ import lombok.RequiredArgsConstructor;
 public class BookingServiceImpl implements BookingService {
 
     private final EnumMapper enumMapper;
-    private final RabbitTemplate rabbitTemplate;
-
     private final BookingRepository bookingRepository;
     private final BookingHistoryRepository bookingHistoryRepository;
 
@@ -67,14 +61,12 @@ public class BookingServiceImpl implements BookingService {
         return Pair.of(newBookingEntity.getUuid().toString(), newBookingEntity.getCreatedAt().toString());
     }
 
-    @Async
     @Override
-    public void saveNewBookingHistory(@NotNull BookingHistoryEntity bookingHistoryEntity, @NotNull String uuidString) {
+    public BookingHistoryEntity saveNewBookingHistory(@NotNull BookingHistoryEntity bookingHistoryEntity, @NotNull String uuidString) {
         BookingEntity bookingEntity = getBookingByUuid(uuidString);
         if (bookingEntity.getIsFinished().equals(Boolean.FALSE)) {
             bookingHistoryEntity.setBookingEntity(bookingEntity);
-            bookingHistoryRepository.saveAndFlush(bookingHistoryEntity);
-            return;
+            return bookingHistoryRepository.saveAndFlush(bookingHistoryEntity);
         }
         throw new BookingAlreadyFinishedException();
     }
@@ -85,41 +77,15 @@ public class BookingServiceImpl implements BookingService {
         bookingRepository.delete(getBookingByUuid(uuidString));
     }
 
-    @Async
     @Override
-    public void finishBooking(@NotEmpty String uuidString) {
+    public Pair<Long, Long> finishBooking(@NotEmpty String uuidString) {
         BookingHistoryEntity bookingHistoryEntity = BookingHistoryEntity.builder()
                 .bookingStatusEntity(enumMapper.toBookingStatusEntity(BookingStatus.FINISHED))
                 .version(1L)
                 .build();
 
-        saveNewBookingHistory(bookingHistoryEntity, uuidString);
-        notifyBookingFinish(uuidString);
-    }
-
-    private void notifyBookingFinish(@NotEmpty String uuidString) {
-        BookingEntity bookingEntity = getBookingByUuid(uuidString);
-        SaigonParkingMessage.Builder saigonParkingMessageBuilder = SaigonParkingMessage.newBuilder()
-                .setType(SaigonParkingMessage.Type.BOOKING_FINISH)
-                .setContent(BookingFinishContent.newBuilder().setBookingId(uuidString).build().toByteString());
-
-        /* notify customer that booking has been finished */
-        String userQueueRoutingKey = SaigonParkingMessageQueue.getUserRoutingKey(bookingEntity.getCustomerId());
-        SaigonParkingMessage toCustomerMessage = saigonParkingMessageBuilder
-                .setSenderId(bookingEntity.getParkingLotId())
-                .setReceiverId(bookingEntity.getCustomerId())
-                .setClassification(SaigonParkingMessage.Classification.PARKING_LOT_MESSAGE)
-                .build();
-        rabbitTemplate.convertAndSend(userQueueRoutingKey, toCustomerMessage);
-
-        /* notify parking-lot (another concurrent account) that booking has been finished */
-        String parkingLotExchangeName = SaigonParkingMessageQueue.getParkingLotExchangeName(bookingEntity.getParkingLotId());
-        SaigonParkingMessage toParkingLotMessage = saigonParkingMessageBuilder
-                .setSenderId(bookingEntity.getCustomerId())
-                .setReceiverId(bookingEntity.getParkingLotId())
-                .setClassification(SaigonParkingMessage.Classification.CUSTOMER_MESSAGE)
-                .build();
-        rabbitTemplate.convertAndSend(parkingLotExchangeName, "", toParkingLotMessage);
+        BookingHistoryEntity savedBookingHistory = saveNewBookingHistory(bookingHistoryEntity, uuidString);
+        return Pair.of(savedBookingHistory.getBookingEntity().getCustomerId(), savedBookingHistory.getBookingEntity().getParkingLotId());
     }
 
     @Override

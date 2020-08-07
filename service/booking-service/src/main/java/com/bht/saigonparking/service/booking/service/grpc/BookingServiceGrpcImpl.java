@@ -20,6 +20,7 @@ import com.bht.saigonparking.api.grpc.booking.CountAllBookingRequest;
 import com.bht.saigonparking.api.grpc.booking.CreateBookingRequest;
 import com.bht.saigonparking.api.grpc.booking.CreateBookingResponse;
 import com.bht.saigonparking.api.grpc.booking.FinishBookingRequest;
+import com.bht.saigonparking.api.grpc.booking.FinishBookingResponse;
 import com.bht.saigonparking.api.grpc.booking.GenerateBookingQrCodeRequest;
 import com.bht.saigonparking.api.grpc.booking.GenerateBookingQrCodeResponse;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingOfCustomerRequest;
@@ -406,14 +407,20 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
     }
 
     @Override
-    public void finishBooking(FinishBookingRequest request, StreamObserver<Empty> responseObserver) {
+    public void finishBooking(FinishBookingRequest request, StreamObserver<FinishBookingResponse> responseObserver) {
         try {
             serverInterceptor.validateUserRole(Arrays.asList("PARKING_LOT_EMPLOYEE", "ADMIN"));
 
             String bookingUuid = request.getBookingId();
-            bookingService.finishBooking(bookingUuid);
+            Pair<Long, Long> customerParkingLotPair = bookingService.finishBooking(bookingUuid);
 
-            responseObserver.onNext(Empty.getDefaultInstance());
+            FinishBookingResponse finishBookingResponse = FinishBookingResponse.newBuilder()
+                    .setBookingId(bookingUuid)
+                    .setCustomerId(customerParkingLotPair.getFirst())
+                    .setParkingLotId(customerParkingLotPair.getSecond())
+                    .build();
+
+            responseObserver.onNext(finishBookingResponse);
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",

@@ -29,11 +29,11 @@ public interface BookingService {
 
     Pair<String, String> saveNewBooking(@NotNull BookingEntity bookingEntity);
 
-    void saveNewBookingHistory(@NotNull BookingHistoryEntity bookingHistoryEntity, @NotEmpty String uuidString);
+    BookingHistoryEntity saveNewBookingHistory(@NotNull BookingHistoryEntity bookingHistoryEntity, @NotEmpty String uuidString);
 
     void deleteBookingByUuid(@NotEmpty String uuidString);
 
-    void finishBooking(@NotEmpty String uuidString);
+    Pair<Long, Long> finishBooking(@NotEmpty String uuidString);
 
     Long countAllBooking();
 
