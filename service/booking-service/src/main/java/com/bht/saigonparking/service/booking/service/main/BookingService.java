@@ -29,7 +29,9 @@ public interface BookingService {
 
     Pair<String, String> saveNewBooking(@NotNull BookingEntity bookingEntity);
 
-    BookingHistoryEntity saveNewBookingHistory(@NotNull BookingHistoryEntity bookingHistoryEntity, @NotEmpty String uuidString);
+    /* update status of one booking */
+    void saveNewBookingHistory(@NotNull BookingHistoryEntity bookingHistoryEntity,
+                               @NotEmpty String uuidString);
 
     void deleteBookingByUuid(@NotEmpty String uuidString);
 

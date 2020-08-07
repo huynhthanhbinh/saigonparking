@@ -1,5 +1,8 @@
 package com.bht.saigonparking.service.booking.service.main.impl;
 
+import static com.bht.saigonparking.api.grpc.booking.BookingStatus.CREATED;
+import static com.bht.saigonparking.api.grpc.booking.BookingStatus.FINISHED;
+
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -15,8 +18,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bht.saigonparking.api.grpc.booking.BookingStatus;
 import com.bht.saigonparking.common.exception.BookingAlreadyFinishedException;
+import com.bht.saigonparking.common.exception.BookingNotYetAcceptedException;
 import com.bht.saigonparking.service.booking.entity.BookingEntity;
 import com.bht.saigonparking.service.booking.entity.BookingHistoryEntity;
 import com.bht.saigonparking.service.booking.entity.BookingStatusEntity;
@@ -62,11 +65,15 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public BookingHistoryEntity saveNewBookingHistory(@NotNull BookingHistoryEntity bookingHistoryEntity, @NotNull String uuidString) {
+    public void saveNewBookingHistory(@NotNull BookingHistoryEntity bookingHistoryEntity, @NotNull String uuidString) {
         BookingEntity bookingEntity = getBookingByUuid(uuidString);
+        saveNewBookingHistory(bookingHistoryEntity, bookingEntity);
+    }
+
+    private void saveNewBookingHistory(@NotNull BookingHistoryEntity bookingHistoryEntity, @NotNull BookingEntity bookingEntity) {
         if (bookingEntity.getIsFinished().equals(Boolean.FALSE)) {
             bookingHistoryEntity.setBookingEntity(bookingEntity);
-            return bookingHistoryRepository.saveAndFlush(bookingHistoryEntity);
+            bookingHistoryRepository.saveAndFlush(bookingHistoryEntity);
         }
         throw new BookingAlreadyFinishedException();
     }
@@ -79,13 +86,19 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Pair<Long, Long> finishBooking(@NotEmpty String uuidString) {
+        BookingEntity bookingEntity = getBookingByUuid(uuidString);
+
+        if (bookingEntity.getBookingStatusEntity().equals(enumMapper.toBookingStatusEntity(CREATED))) {
+            throw new BookingNotYetAcceptedException();
+        }
+
         BookingHistoryEntity bookingHistoryEntity = BookingHistoryEntity.builder()
-                .bookingStatusEntity(enumMapper.toBookingStatusEntity(BookingStatus.FINISHED))
+                .bookingStatusEntity(enumMapper.toBookingStatusEntity(FINISHED))
                 .version(1L)
                 .build();
 
-        BookingHistoryEntity savedBookingHistory = saveNewBookingHistory(bookingHistoryEntity, uuidString);
-        return Pair.of(savedBookingHistory.getBookingEntity().getCustomerId(), savedBookingHistory.getBookingEntity().getParkingLotId());
+        saveNewBookingHistory(bookingHistoryEntity, bookingEntity);
+        return Pair.of(bookingEntity.getCustomerId(), bookingEntity.getParkingLotId());
     }
 
     @Override
