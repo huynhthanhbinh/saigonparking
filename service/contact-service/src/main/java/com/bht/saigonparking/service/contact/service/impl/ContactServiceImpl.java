@@ -1,5 +1,6 @@
 package com.bht.saigonparking.service.contact.service.impl;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.apache.logging.log4j.Level;
@@ -9,6 +10,7 @@ import org.springframework.web.socket.WebSocketSession;
 
 import com.bht.saigonparking.api.grpc.booking.BookingServiceGrpc.BookingServiceStub;
 import com.bht.saigonparking.api.grpc.booking.FinishBookingRequest;
+import com.bht.saigonparking.api.grpc.booking.FinishBookingResponse;
 import com.bht.saigonparking.api.grpc.contact.AvailabilityUpdateContent;
 import com.bht.saigonparking.api.grpc.contact.BookingFinishContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
@@ -17,6 +19,7 @@ import com.bht.saigonparking.api.grpc.parkinglot.UpdateParkingLotAvailabilityReq
 import com.bht.saigonparking.common.util.LoggingUtil;
 import com.bht.saigonparking.service.contact.handler.WebSocketUserSessionManagement;
 import com.bht.saigonparking.service.contact.service.ContactService;
+import com.bht.saigonparking.service.contact.service.MessagingService;
 import com.google.protobuf.Empty;
 import com.google.protobuf.InvalidProtocolBufferException;
 
@@ -32,6 +35,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public final class ContactServiceImpl implements ContactService {
 
+    private final MessagingService messagingService;
     private final BookingServiceStub bookingServiceStub;
     private final ParkingLotServiceStub parkingLotServiceStub;
     private final WebSocketUserSessionManagement webSocketUserSessionManagement;
@@ -106,10 +110,10 @@ public final class ContactServiceImpl implements ContactService {
 
             /* Asynchronously update booking status to FINISHED */
             Context context = Context.current().fork();
-            context.run(() -> bookingServiceStub.finishBooking(request, new StreamObserver<Empty>() {
+            context.run(() -> bookingServiceStub.finishBooking(request, new StreamObserver<FinishBookingResponse>() {
                 @Override
-                public void onNext(Empty empty) {
-                    // ...
+                public void onNext(FinishBookingResponse response) {
+                    notifyBookingFinish(response.getBookingId(), response.getCustomerId(), response.getParkingLotId());
                 }
 
                 @Override
@@ -126,5 +130,21 @@ public final class ContactServiceImpl implements ContactService {
                 }
             }));
         }
+    }
+
+    private void notifyBookingFinish(@NotEmpty String uuidString, @NotNull Long customerId, @NotNull Long parkingLotId) {
+        SaigonParkingMessage.Builder saigonParkingMessageBuilder = SaigonParkingMessage.newBuilder()
+                .setClassification(SaigonParkingMessage.Classification.SYSTEM_MESSAGE)
+                .setType(SaigonParkingMessage.Type.BOOKING_FINISH)
+                .setSenderId(0)
+                .setContent(BookingFinishContent.newBuilder().setBookingId(uuidString).build().toByteString());
+
+        /* notify customer that booking has been finished */
+        SaigonParkingMessage toCustomerMessage = saigonParkingMessageBuilder.setReceiverId(customerId).build();
+        messagingService.forwardMessageToCustomer(toCustomerMessage);
+
+        /* notify parking-lot (another concurrent account) that booking has been finished */
+        SaigonParkingMessage toParkingLotMessage = saigonParkingMessageBuilder.setReceiverId(parkingLotId).build();
+        messagingService.forwardMessageToParkingLot(toParkingLotMessage);
     }
 }
