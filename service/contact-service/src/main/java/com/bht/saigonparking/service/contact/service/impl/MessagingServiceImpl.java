@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import org.apache.logging.log4j.Level;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -27,7 +28,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
-public final class MessagingServiceImpl implements MessagingService {
+public class MessagingServiceImpl implements MessagingService {
 
     private final RabbitTemplate rabbitTemplate;
     private final IntermediateService intermediateService;
@@ -83,6 +84,7 @@ public final class MessagingServiceImpl implements MessagingService {
                 String.format("nSessionOfReceiver: %d", (userSessionSet != null) ? userSessionSet.size() : 0));
     }
 
+    @Async
     @Override
     public void forwardMessageToCustomer(@NotNull SaigonParkingMessage message) {
         try {
@@ -94,6 +96,7 @@ public final class MessagingServiceImpl implements MessagingService {
         }
     }
 
+    @Async
     @Override
     public void forwardMessageToParkingLot(@NotNull SaigonParkingMessage message) {
         try {
@@ -107,7 +110,6 @@ public final class MessagingServiceImpl implements MessagingService {
 
     private void preProcessingMessage(@NotNull SaigonParkingMessage.Builder delegate,
                                       @NotNull WebSocketSession webSocketSession) throws IOException {
-
         switch (delegate.getType()) {
             case BOOKING_REQUEST:
                 intermediateService.handleBookingRequest(delegate, webSocketSession);

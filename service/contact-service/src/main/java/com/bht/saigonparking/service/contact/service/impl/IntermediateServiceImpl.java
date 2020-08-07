@@ -3,7 +3,6 @@ package com.bht.saigonparking.service.contact.service.impl;
 import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Classification.PARKING_LOT_MESSAGE;
 import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Classification.SYSTEM_MESSAGE;
 import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Type.BOOKING_PROCESSING;
-import static com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage.Type.HISTORY_CHANGE;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -131,6 +130,7 @@ public final class IntermediateServiceImpl implements IntermediateService {
     private void updateBookingStatus(@NotNull UpdateBookingStatusRequest request,
                                      @NotNull SaigonParkingMessage.Builder message,
                                      @NotNull MessagingService messagingService) {
+
         Context.current().run(() -> bookingServiceStub
                 .updateBookingStatus(request, updateBookingStatusStreamObserver(request, message, messagingService)));
     }
@@ -144,7 +144,7 @@ public final class IntermediateServiceImpl implements IntermediateService {
                 if (message.getClassification().equals(PARKING_LOT_MESSAGE)) {
                     messagingService.forwardMessageToParkingLot(SaigonParkingMessage.newBuilder()
                             .setClassification(SYSTEM_MESSAGE)
-                            .setType(HISTORY_CHANGE)
+                            .setType(message.getType())
                             .setSenderId(0)
                             .setReceiverId(message.getSenderId())
                             .setContent(message.getContent())
