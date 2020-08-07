@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project Setup Guide
 Author:             Huynh Thanh Binh
-Last updated:       Fri, Aug 7th, 2020
+Last updated:       Sat, Aug 8th, 2020
 ========================================================================================================================
 
 All necessary setup files are provided in Saigon Parking Project's private Google Drive. Please do NOT share anything outside
@@ -108,4 +108,13 @@ Step 09: Understand project components / project structure
        10. service              : contains all microservices' modules
 
 Step 10: Run docker-compose --> for all, who just want to run project without any code modifying, or setting up environment
-    Move into dev folder and edit .env file to best suit your case. Then run $ docker-compose up inside dev folder, too. (Prepare DB first !)
+
+    1. Move into dev folder
+    2. Prepare database by backup from previous version (all .bak files are stored inside database/backup folder) or run scripts inside database/script folder
+        2.1. Backup USER database (user.bak) or (user_schema.sql + user_data.sql)
+        2.2. Backup AUTH database (auth.bak) or (auth_schema.sql + auth_data.sql)
+        2.3. Backup PARKINGLOT database (parkinglot.bak) or (parkinglot_schema.sql + parkinglot_data.sql)
+        2.4. Backup BOOKING database (booking.bak) or (booking_schema.sql + booking_data.sql)
+    3. Edit .env file to best suit your case (database host + database port + database username + database password + timezone)
+    4. Open terminal and run $ docker-compose up to start Saigon Parking project (run inside dev folder)
+    5. Check all services health by running $ docker-compose ps (run inside dev folder, open new terminal tab. If all is "UP" that means healthy/ run successfully)
