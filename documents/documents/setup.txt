@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project Setup Guide
 Author:             Huynh Thanh Binh
-Last updated:       Fri, Jun 12th, 2020
+Last updated:       Fri, Aug 7th, 2020
 ========================================================================================================================
 
 All necessary setup files are provided in Saigon Parking Project's private Google Drive. Please do NOT share anything outside
@@ -12,7 +12,7 @@ Step 00: Download all necessary things: ( dependencies / libraries / tools / plu
                             username: saigonparkingmap
                             password: 0506122076
 
-    2. Clone Saigon Parking project from private repository:
+    2. Clone Saigon Parking project's backend from repository:
 
                             https://github.com/huynhthanhbinh/saigonparking
 
@@ -73,25 +73,24 @@ Step 07: Setup Save Actions plugin:
 Step 08: Open project
 
     0. Right click on saigonparking folder -> Select "Open Folder as IntelliJ IDEA Project"
-    1. Project is now open
-    2. Wait for IDE to index project, install missing dependencies(libraries)
-    3. Select right version of Maven !!! (> 3.5)
-        3.1. Open File -> Settings
-        3.2. Tap "Maven" -> Maven Settings will be shown on the right side
-        3.3. Select Maven Home Directory (for eg. C:/Program Files/Apache/apache-maven-3.6.1)
-        3.4. Click Apply to save these settings then click OK to close
-    4. Project will be shown as modules (folder icon with small square blue marker)
-    5. If modules are not shown in the left panel or any pom has red-underline as errors, please do as followings steps:
-        5.1. Open the parent pom (saigonparking's pom) in the IDE
-        5.2. As the pom has been shown on the editor, please right-click on the editor
-        5.3. Select Maven -> Reimport
-        5.4. Modules will be shown and all red-underline in any pom file must be disappeared ! Otherwise, contact me !
-    6. Finish opening project for the 1st time ! Congrats !
-    7. If IntelliJ IDE throw error on building or project file structure missing .iml file on any module, please do:
-        7.1. Run terminal in ROOT folder (saigonparking folder)
-        7.2. $ mvn idea:idea (for generating IntelliJ IDEA project files)
-        7.3. $ mvn clean install (for cleaning all previous built source)
-        7.4. $ mvn clean package (for rebuilt & package project as new)
+    1. Project is now open --> wait for IDE to index project, install missing dependencies(libraries)
+    2. Select right version of Maven !!! (> 3.5)
+        2.1. Open File -> Settings
+        2.2. Tap "Maven" -> Maven Settings will be shown on the right side
+        2.3. Select Maven Home Directory (for eg. C:/Program Files/Apache/apache-maven-3.6.1)
+        2.4. Click Apply to save these settings then click OK to close
+    3. Project will be shown as modules (folder icon with small square blue marker)
+    4. If modules are not shown in the left panel or any pom has red-underline as errors, please do as followings steps:
+        4.1. Open the parent pom (saigonparking's pom) in the IDE
+        4.2. As the pom has been shown on the editor, please right-click on the editor
+        4.3. Select Maven -> Reimport
+        4.4. Modules will be shown and all red-underline in any pom file must be disappeared ! Otherwise, contact me !
+    5. Finish opening project for the 1st time ! Congrats !
+    6. If IntelliJ IDE throw error on building or project file structure missing .iml file on any module, please do:
+        6.1. Run terminal in ROOT folder (saigonparking folder)
+        6.2. $ mvn idea:idea (for generating IntelliJ IDEA project files)
+        6.3. $ mvn clean install (for cleaning all previous built source)
+        6.4. $ mvn clean package (for rebuilt & package project as new)
     
 Step 09: Understand project components / project structure
 
@@ -100,9 +99,13 @@ Step 09: Understand project components / project structure
         1. api                  : contains all APIs
         2. common               : contains COMMON module, each service needs to import this
         3. dev                  : contains all setup for dev environment
-        4. documents            : contains all documents of backend
-        5. emulator             : contains EMULATOR module
-        6. gateway              : contains GATEWAY module
-        7. proxy                : contains PROXY module
-        8. queue                : contains QUEUE module
-        9. service              : contains all SERVICE
+        4. discovery            : contains DISCOVERY module
+        5. documents            : contains all documents of project
+        6. emulator             : contains EMULATOR module
+        7. gateway              : contains GATEWAY module
+        8. proxy                : contains PROXY module
+        9. queue                : contains QUEUE module
+       10. service              : contains all microservices' modules
+
+Step 10: Run docker-compose --> for all, who just want to run project without any code modifying, or setting up environment
+    Move into dev folder and edit .env file to best suit your case. Then run $ docker-compose up inside dev folder, too. (Prepare DB first !)
