@@ -1,6 +1,5 @@
 package com.bht.saigonparking.service.user.configuration;
 
-import javax.naming.ServiceUnavailableException;
 import javax.persistence.EntityNotFoundException;
 
 import org.lognet.springboot.grpc.GRpcGlobalInterceptor;
@@ -19,6 +18,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.bht.saigonparking.common.annotation.InheritedComponent;
 import com.bht.saigonparking.common.exception.PermissionDeniedException;
+import com.bht.saigonparking.common.exception.ServiceUnavailableException;
 import com.bht.saigonparking.common.exception.UsernameNotMatchException;
 import com.bht.saigonparking.common.interceptor.SaigonParkingClientInterceptor;
 import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;

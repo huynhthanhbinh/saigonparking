@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
-import javax.naming.ServiceUnavailableException;
 import javax.persistence.EntityNotFoundException;
 
 import org.apache.logging.log4j.Level;
@@ -23,6 +22,7 @@ import com.bht.saigonparking.common.auth.SaigonParkingTokenType;
 import com.bht.saigonparking.common.exception.InvalidRefreshTokenException;
 import com.bht.saigonparking.common.exception.MissingTokenException;
 import com.bht.saigonparking.common.exception.PermissionDeniedException;
+import com.bht.saigonparking.common.exception.ServiceUnavailableException;
 import com.bht.saigonparking.common.exception.UserAlreadyActivatedException;
 import com.bht.saigonparking.common.exception.UserNotActivatedException;
 import com.bht.saigonparking.common.exception.UsernameNotMatchException;
