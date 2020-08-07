@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project Error Code
 Author:             Huynh Thanh Binh
-Last updated:       Wed, Aug 1st, 2020
+Last updated:       Fri, Aug 7st, 2020
 ========================================================================================================================
 SPE#00000   | Error which not been assigned error code yet
 SPE#00001   | Token is expired
@@ -23,3 +23,4 @@ SPE#00017   | Service unavailable
 SPE#00018   | EmptyResultDataAccessException, no result found
 SPE#00019   | Booking already finished, throw if anyone want to modify booking
 SPE#00020   | Customer want to create new booking but he/she has on going booking
+SPE#00021   | Parking lot want to finish a booking but it not been accepted before
