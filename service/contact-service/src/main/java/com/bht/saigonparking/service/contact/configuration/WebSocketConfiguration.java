@@ -8,6 +8,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 import com.bht.saigonparking.service.contact.handler.WebSocketBinaryMessageHandler;
 import com.bht.saigonparking.service.contact.handler.WebSocketTextMessageHandler;
 import com.bht.saigonparking.service.contact.interceptor.WebSocketHandshakeInterceptor;
+import com.bht.saigonparking.service.contact.interceptor.WebSocketHandshakeQrScannerInterceptor;
 import com.bht.saigonparking.service.contact.interceptor.WebSocketHandshakeWebInterceptor;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public final class WebSocketConfiguration implements WebSocketConfigurer {
 
     private final WebSocketHandshakeInterceptor webSocketHandshakeInterceptor;
     private final WebSocketHandshakeWebInterceptor webSocketHandshakeWebInterceptor;
+    private final WebSocketHandshakeQrScannerInterceptor webSocketHandshakeQrScannerInterceptor;
 
     @Override
     public void registerWebSocketHandlers(@NonNull WebSocketHandlerRegistry webSocketHandlerRegistry) {
@@ -51,6 +53,16 @@ public final class WebSocketConfiguration implements WebSocketConfigurer {
         webSocketHandlerRegistry
                 .addHandler(webSocketTextMessageHandler, "/text/*") /* correspondent to /contact/text/web?token=... */
                 .addInterceptors(webSocketHandshakeWebInterceptor)
+                .setAllowedOrigins("*");
+
+        webSocketHandlerRegistry
+                .addHandler(webSocketBinaryMessageHandler, "/qrscanner") /* correspondent to /contact/qrscanner */
+                .addInterceptors(webSocketHandshakeQrScannerInterceptor)
+                .setAllowedOrigins("*");
+
+        webSocketHandlerRegistry
+                .addHandler(webSocketBinaryMessageHandler, "/qrscanner/*") /* correspondent to /contact/qrscanner?token=... */
+                .addInterceptors(webSocketHandshakeQrScannerInterceptor)
                 .setAllowedOrigins("*");
     }
 }
