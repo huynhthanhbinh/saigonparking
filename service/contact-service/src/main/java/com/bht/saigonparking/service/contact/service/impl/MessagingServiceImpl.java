@@ -65,10 +65,10 @@ public class MessagingServiceImpl implements MessagingService {
         }
     }
 
+    @Async
     @Override
     public void consumeMessageFromQueue(@NotNull SaigonParkingMessage saigonParkingMessage, @NotNull Long receiverUserId) {
         Set<WebSocketSession> userSessionSet = webSocketUserSessionManagement.getAllSessionOfUser(receiverUserId);
-
         if (userSessionSet != null) {
             userSessionSet.forEach(userSession -> {
                 try {
