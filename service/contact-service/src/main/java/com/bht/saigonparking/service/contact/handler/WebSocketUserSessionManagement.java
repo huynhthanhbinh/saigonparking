@@ -1,6 +1,6 @@
 package com.bht.saigonparking.service.contact.handler;
 
-import static com.bht.saigonparking.service.contact.interceptor.WebSocketInterceptorConstraint.*;
+import static com.bht.saigonparking.service.contact.configuration.WebSocketConfiguration.*;
 
 import java.util.HashMap;
 import java.util.HashSet;
