@@ -28,7 +28,7 @@ public final class SaigonParkingMessageQueue {
     public static final String USER_TOPIC_ROUTING_KEY = "saigonparking.user";
     public static final String PARKING_LOT_ROUTING_KEY = "saigonparking.parkinglot";
 
-    private static final Pattern USER_QUEUE_NAME_PATTERN = Pattern.compile("user_(\\d+)_queue");
+    private static final Pattern USER_QUEUE_NAME_PATTERN = Pattern.compile("user_(\\d+)(_qrscanner)?_queue");
 
     public static String generateUserRoutingKey(@NotNull Long userId) {
         return getUserQueueName(userId) + ".#";
