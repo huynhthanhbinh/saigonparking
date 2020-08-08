@@ -21,7 +21,6 @@ import com.bht.saigonparking.common.annotation.InheritedComponent;
 import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
 import com.bht.saigonparking.common.auth.SaigonParkingAuthenticationImpl;
 import com.bht.saigonparking.common.exception.PermissionDeniedException;
-import com.bht.saigonparking.common.exception.ServiceUnavailableException;
 import com.bht.saigonparking.common.exception.UsernameNotMatchException;
 import com.bht.saigonparking.common.interceptor.SaigonParkingClientInterceptor;
 import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
@@ -89,7 +88,6 @@ public class AppConfiguration {
                 .put(UsernameNotMatchException.class, "SPE#00014")
                 .put(PermissionDeniedException.class, "SPE#00015")
                 .put(ObjectOptimisticLockingFailureException.class, "SPE#00016")
-                .put(ServiceUnavailableException.class, "SPE#00017")
                 .put(EmptyResultDataAccessException.class, "SPE#00018")
                 .build());
     }
