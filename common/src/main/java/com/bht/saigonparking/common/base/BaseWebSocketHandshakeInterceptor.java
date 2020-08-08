@@ -19,30 +19,30 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.io.DecodingException;
 import io.jsonwebtoken.security.SignatureException;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author bht
  */
-@RequiredArgsConstructor
+@NoArgsConstructor
 public abstract class BaseWebSocketHandshakeInterceptor extends HttpSessionHandshakeInterceptor implements BaseBean {
 
-    private final SaigonParkingAuthentication authentication;
+    protected abstract SaigonParkingAuthentication getAuthentication();
 
     protected abstract String getAccessTokenFromHttpRequest(@NonNull ServerHttpRequest httpRequest);
-    
+
     protected abstract void postAuthentication(@NonNull SaigonParkingTokenBody saigonParkingTokenBody,
                                                @NonNull Map<String, Object> webSocketSessionAttributes);
 
     @Override
-    public boolean beforeHandshake(@NonNull ServerHttpRequest httpRequest,
-                                   @NonNull ServerHttpResponse httpResponse,
-                                   @NonNull WebSocketHandler webSocketHandler,
-                                   @NonNull Map<String, Object> attributes) throws Exception {
+    public final boolean beforeHandshake(@NonNull ServerHttpRequest httpRequest,
+                                         @NonNull ServerHttpResponse httpResponse,
+                                         @NonNull WebSocketHandler webSocketHandler,
+                                         @NonNull Map<String, Object> attributes) throws Exception {
         try {
             String accessToken = getAccessTokenFromHttpRequest(httpRequest);
-            SaigonParkingTokenBody saigonParkingTokenBody = authentication.parseJwtToken(accessToken);
+            SaigonParkingTokenBody saigonParkingTokenBody = getAuthentication().parseJwtToken(accessToken);
             postAuthentication(saigonParkingTokenBody, attributes);
 
         } catch (ExpiredJwtException expiredJwtException) {
