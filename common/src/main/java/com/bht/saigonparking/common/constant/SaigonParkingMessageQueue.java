@@ -42,6 +42,10 @@ public final class SaigonParkingMessageQueue {
         return String.format("user_%d_queue", userId);
     }
 
+    public static String getUserQrScannerQueueName(@NotNull Long userId) {
+        return String.format("user_%d_qrscanner_queue", userId);
+    }
+
     public static String getParkingLotExchangeName(@NotNull Long parkingLotId) {
         return String.format("parking_lot_%d_exchange", parkingLotId);
     }
