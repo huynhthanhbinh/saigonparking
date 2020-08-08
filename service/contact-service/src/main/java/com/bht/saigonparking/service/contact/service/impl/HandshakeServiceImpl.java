@@ -30,12 +30,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public final class HandshakeServiceImpl implements HandshakeService {
 
-    private final AbstractMessageListenerContainer messageListenerContainer;
     private final QueueService queueService;
+    private final AbstractMessageListenerContainer messageListenerContainer;
     private final ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
 
     @Override
-    public Map<String, Object> postAuthentication(@NotNull SaigonParkingTokenBody tokenBody) {
+    public Map<String, Object> postAuthentication(@NotNull SaigonParkingTokenBody tokenBody, boolean mustRegisterExchange) {
+
         Long userId = tokenBody.getUserId();
         String userRole = tokenBody.getUserRole();
         Map<String, Object> attributes = new HashMap<>();
@@ -43,17 +44,18 @@ public final class HandshakeServiceImpl implements HandshakeService {
         attributes.put(SAIGON_PARKING_USER_ID_KEY, userId);
         attributes.put(SAIGON_PARKING_USER_ROLE_KEY, userRole);
 
-        Queue userQueue = queueService.registerAutoDeleteQueueForUser(userId);
+        Queue userQueue = queueService.registerAutoDeleteQueueForUser(userId, !mustRegisterExchange);
 
         LoggingUtil.log(Level.INFO, "SERVICE", "Success",
                 String.format("registerAutoDeleteQueueForUser(%d)", userId));
 
-        if ("PARKING_LOT_EMPLOYEE".equals(userRole)) {
+        if ("PARKING_LOT_EMPLOYEE".equals(userRole) && mustRegisterExchange) {
             try {
                 Long parkingLotId = parkingLotServiceBlockingStub
                         .getParkingLotIdByParkingLotEmployeeId(Int64Value.of(userId)).getValue();
 
                 attributes.put(SAIGON_PARKING_PARKING_LOT_ID_KEY, parkingLotId);
+
                 queueService.registerAutoDeleteExchangeForParkingLot(parkingLotId, userQueue);
 
                 LoggingUtil.log(Level.INFO, "SERVICE", "Success",

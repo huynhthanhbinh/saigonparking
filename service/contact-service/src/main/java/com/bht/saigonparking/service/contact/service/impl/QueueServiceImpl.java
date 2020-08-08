@@ -32,9 +32,12 @@ public final class QueueServiceImpl implements QueueService {
     private final AbstractMessageListenerContainer messageListenerContainer;
 
     @Override
-    public Queue registerAutoDeleteQueueForUser(@NotNull Long userId) {
+    public Queue registerAutoDeleteQueueForUser(@NotNull Long userId, boolean isAuxiliaryQueue) {
 
-        String queueName = SaigonParkingMessageQueue.getUserQueueName(userId);
+        String queueName = !isAuxiliaryQueue
+                ? SaigonParkingMessageQueue.getUserQueueName(userId)
+                : SaigonParkingMessageQueue.getUserQrScannerQueueName(userId);
+
         String routingKey = SaigonParkingMessageQueue.generateUserRoutingKey(userId);
         Queue autoDeleteUserQueue = new Queue(queueName, false, false, true);
 

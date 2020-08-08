@@ -12,7 +12,14 @@ import com.bht.saigonparking.common.auth.SaigonParkingTokenBody;
  */
 public interface HandshakeService {
 
-    /* if JWT token is successfully parsed, it means authentication is success */
-    /* after authentication succeeded, this method will be run and return a new attribute map for re-assign purpose */
-    Map<String, Object> postAuthentication(@NotNull SaigonParkingTokenBody tokenBody);
+    /**
+     * if JWT token is successfully parsed, it means authentication is success
+     * after authentication succeeded, this method will be run
+     * and return a new attribute map for re-assign purpose
+     *
+     * @param tokenBody all fields parsed from JWT
+     * @param mustRegisterExchange whether must register an exchange if can, or not
+     * @return Map of session attributes
+     */
+    Map<String, Object> postAuthentication(@NotNull SaigonParkingTokenBody tokenBody, boolean mustRegisterExchange);
 }

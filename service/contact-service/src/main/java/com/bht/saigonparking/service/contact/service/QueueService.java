@@ -11,7 +11,7 @@ import org.springframework.amqp.core.Queue;
  */
 public interface QueueService {
 
-    Queue registerAutoDeleteQueueForUser(@NotNull Long userId);
+    Queue registerAutoDeleteQueueForUser(@NotNull Long userId, boolean isAuxiliaryQueue);
 
     void registerAutoDeleteExchangeForParkingLot(@NotNull Long parkingLotId, @NotNull Queue employeeQueue);
 
