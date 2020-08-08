@@ -20,6 +20,7 @@ import com.bht.saigonparking.service.contact.handler.WebSocketUserSessionManagem
 import com.bht.saigonparking.service.contact.service.IntermediateService;
 import com.bht.saigonparking.service.contact.service.MessagingService;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -70,7 +71,7 @@ public class MessagingServiceImpl implements MessagingService {
     public void consumeMessageFromQueue(@NotNull SaigonParkingMessage saigonParkingMessage, @NotNull Long receiverUserId) {
         Set<WebSocketSession> userSessionSet = webSocketUserSessionManagement.getAllSessionOfUser(receiverUserId);
         if (userSessionSet != null) {
-            userSessionSet.forEach(userSession -> {
+            userSessionSet.stream().filter(this::isSessionConsumeMessageFromQueue).forEach(userSession -> {
                 try {
                     userSession.sendMessage(new BinaryMessage(saigonParkingMessage.toByteArray()));
 
@@ -126,5 +127,9 @@ public class MessagingServiceImpl implements MessagingService {
             default:
                 break;
         }
+    }
+
+    private boolean isSessionConsumeMessageFromQueue(@NonNull WebSocketSession session) {
+        return !webSocketUserSessionManagement.getUserAuxiliaryFromSession(session);
     }
 }

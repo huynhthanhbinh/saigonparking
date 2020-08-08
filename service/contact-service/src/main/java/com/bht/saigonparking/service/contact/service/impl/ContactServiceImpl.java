@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 import org.apache.logging.log4j.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 import com.bht.saigonparking.api.grpc.booking.BookingServiceGrpc.BookingServiceStub;
@@ -26,6 +27,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import io.grpc.Context;
 import io.grpc.stub.StreamObserver;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 
 /**
  *
@@ -99,11 +101,9 @@ public final class ContactServiceImpl implements ContactService {
                                @NotNull WebSocketSession session) throws InvalidProtocolBufferException {
 
         BookingFinishContent bookingFinishContent = BookingFinishContent.parseFrom(message.getContent());
-
         String userRole = webSocketUserSessionManagement.getUserRoleFromSession(session);
 
         if ("PARKING_LOT_EMPLOYEE".equals(userRole)) {
-
             FinishBookingRequest request = FinishBookingRequest.newBuilder()
                     .setBookingId(bookingFinishContent.getBookingId())
                     .build();
@@ -113,7 +113,7 @@ public final class ContactServiceImpl implements ContactService {
             context.run(() -> bookingServiceStub.finishBooking(request, new StreamObserver<FinishBookingResponse>() {
                 @Override
                 public void onNext(FinishBookingResponse response) {
-                    notifyBookingFinish(response.getBookingId(), response.getCustomerId(), response.getParkingLotId());
+                    notifyBookingFinish(session, response.getBookingId(), response.getCustomerId(), response.getParkingLotId());
                 }
 
                 @Override
@@ -132,12 +132,17 @@ public final class ContactServiceImpl implements ContactService {
         }
     }
 
-    private void notifyBookingFinish(@NotEmpty String uuidString, @NotNull Long customerId, @NotNull Long parkingLotId) {
+    @SneakyThrows
+    private void notifyBookingFinish(@NotNull WebSocketSession session,
+                                     @NotEmpty String bookingUuid,
+                                     @NotNull Long customerId,
+                                     @NotNull Long parkingLotId) {
+
         SaigonParkingMessage.Builder saigonParkingMessageBuilder = SaigonParkingMessage.newBuilder()
                 .setClassification(SaigonParkingMessage.Classification.SYSTEM_MESSAGE)
                 .setType(SaigonParkingMessage.Type.BOOKING_FINISH)
                 .setSenderId(0)
-                .setContent(BookingFinishContent.newBuilder().setBookingId(uuidString).build().toByteString());
+                .setContent(BookingFinishContent.newBuilder().setBookingId(bookingUuid).build().toByteString());
 
         /* notify customer that booking has been finished */
         SaigonParkingMessage toCustomerMessage = saigonParkingMessageBuilder.setReceiverId(customerId).build();
@@ -146,5 +151,10 @@ public final class ContactServiceImpl implements ContactService {
         /* notify parking-lot (another concurrent account) that booking has been finished */
         SaigonParkingMessage toParkingLotMessage = saigonParkingMessageBuilder.setReceiverId(parkingLotId).build();
         messagingService.forwardMessageToParkingLot(toParkingLotMessage);
+
+        /* if current session is auxiliary, then notify to current session that task has been done successfully */
+        if (webSocketUserSessionManagement.getUserAuxiliaryFromSession(session)) {
+            session.sendMessage(new BinaryMessage(toParkingLotMessage.toByteArray()));
+        }
     }
 }
