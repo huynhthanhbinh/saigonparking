@@ -20,6 +20,7 @@ import com.bht.saigonparking.service.contact.service.HandshakeService;
 import com.bht.saigonparking.service.contact.service.QueueService;
 import com.google.protobuf.Int64Value;
 
+import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -32,10 +33,10 @@ public final class HandshakeServiceImpl implements HandshakeService {
 
     private final QueueService queueService;
     private final AbstractMessageListenerContainer messageListenerContainer;
-    private final ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
+    private final ParkingLotServiceGrpc.ParkingLotServiceStub parkingLotServiceStub;
 
     @Override
-    public Map<String, Object> postAuthentication(@NotNull SaigonParkingTokenBody tokenBody, boolean mustRegisterExchange) {
+    public Map<String, Object> postAuthentication(@NotNull SaigonParkingTokenBody tokenBody, boolean mustConsumeFromQueue) {
 
         Long userId = tokenBody.getUserId();
         String userRole = tokenBody.getUserRole();
@@ -43,29 +44,55 @@ public final class HandshakeServiceImpl implements HandshakeService {
 
         attributes.put(SAIGON_PARKING_USER_ID_KEY, userId);
         attributes.put(SAIGON_PARKING_USER_ROLE_KEY, userRole);
+        attributes.put(SAIGON_PARKING_USER_AUXILIARY_KEY, !mustConsumeFromQueue);
 
-        Queue userQueue = queueService.registerAutoDeleteQueueForUser(userId, !mustRegisterExchange);
+        if (mustConsumeFromQueue) {
 
-        LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                String.format("registerAutoDeleteQueueForUser(%d)", userId));
+            /* register auto-delete queue for user and start listen to it for consuming incoming message */
+            Queue userQueue = queueService.registerAutoDeleteQueueForUser(userId);
 
-        if ("PARKING_LOT_EMPLOYEE".equals(userRole) && mustRegisterExchange) {
-            try {
-                Long parkingLotId = parkingLotServiceBlockingStub
-                        .getParkingLotIdByParkingLotEmployeeId(Int64Value.of(userId)).getValue();
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("registerAutoDeleteQueueForUser(%d)", userId));
 
-                attributes.put(SAIGON_PARKING_PARKING_LOT_ID_KEY, parkingLotId);
+            if ("PARKING_LOT_EMPLOYEE".equals(userRole)) {
+                try {
+                    parkingLotServiceStub.getParkingLotIdByParkingLotEmployeeId(Int64Value.of(userId), new StreamObserver<Int64Value>() {
 
-                queueService.registerAutoDeleteExchangeForParkingLot(parkingLotId, userQueue);
+                        long parkingLotId;
 
-                LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                        String.format("registerAutoDeleteExchangeForParkingLot(%d)", parkingLotId));
+                        @Override
+                        public void onNext(Int64Value int64Value) {
+                            parkingLotId = int64Value.getValue();
 
-            } catch (Exception exception) {
+                            attributes.put(SAIGON_PARKING_PARKING_LOT_ID_KEY, parkingLotId);
 
-                messageListenerContainer.removeQueues(userQueue);
-                throw new PostAuthenticationException();
+                            /* register auto-delete exchange for parking-lot and bind user auto-delete queue to it */
+                            queueService.registerAutoDeleteExchangeForParkingLot(parkingLotId, userQueue);
+                        }
+
+                        @Override
+                        public void onError(Throwable throwable) {
+                            throw new PostAuthenticationException();
+                        }
+
+                        @Override
+                        public void onCompleted() {
+                            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                                    String.format("registerAutoDeleteExchangeForParkingLot(%d)", parkingLotId));
+                        }
+                    });
+                } catch (Exception exception) {
+
+                    /* if exception occurs, immediately remove listen to queue */
+                    /* as queue has no one listen to it, it will be removed (auto-delete queue) */
+                    /* as exchange has no queue bind to it, it will be removed (auto-delete exchange) */
+                    messageListenerContainer.removeQueues(userQueue);
+                    throw new PostAuthenticationException();
+                }
             }
+        } else {
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("connectedToAuxiliaryDeviceOfUser(%d)", userId)); /* auxiliary device: such as QR Scanner */
         }
         return attributes;
     }

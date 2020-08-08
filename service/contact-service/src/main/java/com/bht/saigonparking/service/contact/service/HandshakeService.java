@@ -18,8 +18,8 @@ public interface HandshakeService {
      * and return a new attribute map for re-assign purpose
      *
      * @param tokenBody all fields parsed from JWT
-     * @param mustRegisterExchange whether must register an exchange if can, or not
+     * @param mustConsumeFromQueue must register a queue and listen to it or not
      * @return Map of session attributes
      */
-    Map<String, Object> postAuthentication(@NotNull SaigonParkingTokenBody tokenBody, boolean mustRegisterExchange);
+    Map<String, Object> postAuthentication(@NotNull SaigonParkingTokenBody tokenBody, boolean mustConsumeFromQueue);
 }

@@ -26,7 +26,7 @@ public final class WebSocketHandshakeWebInterceptor extends BaseWebSocketHandsha
 
     private static final String AUTH_PATH_PREFIX = "web?token=";
     private static final Short AUTH_PATH_PREFIX_LENGTH = 10;
-    
+
     private final SaigonParkingAuthentication authentication;
     private final HandshakeService handshakeService;
 
@@ -51,7 +51,7 @@ public final class WebSocketHandshakeWebInterceptor extends BaseWebSocketHandsha
         webSocketSessionAttributes.putAll(handshakeService.postAuthentication(saigonParkingTokenBody, true));
     }
 
-    private String getAccessTokenFromUri(URI uriWithAccessToken) {
+    private String getAccessTokenFromUri(@NonNull URI uriWithAccessToken) {
         String uriString = uriWithAccessToken.toString();
         return uriString.substring(uriString.lastIndexOf(AUTH_PATH_PREFIX) + AUTH_PATH_PREFIX_LENGTH);
     }

@@ -62,7 +62,7 @@ public final class WebSocketConfiguration implements WebSocketConfigurer {
                 .setAllowedOrigins("*");
 
         webSocketHandlerRegistry
-                .addHandler(webSocketBinaryMessageHandler, "/qrscanner/*") /* correspondent to /contact/qrscanner?token=... */
+                .addHandler(webSocketBinaryMessageHandler, "/qrscanner/*") /* correspondent to /contact/qrscanner/web?token=... */
                 .addInterceptors(webSocketHandshakeQrScannerInterceptor)
                 .setAllowedOrigins("*");
     }
