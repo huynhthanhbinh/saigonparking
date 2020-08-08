@@ -1,6 +1,9 @@
-package com.bht.saigonparking.service.contact.interceptor;
+package com.bht.saigonparking.service.contact.interceptor.auxiliary;
 
-import java.util.List;
+import static com.bht.saigonparking.service.contact.configuration.WebSocketConfiguration.WEB_AUTH_PATH_PREFIX;
+import static com.bht.saigonparking.service.contact.configuration.WebSocketConfiguration.WEB_AUTH_PATH_PREFIX_LENGTH;
+
+import java.net.URI;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +25,9 @@ import lombok.RequiredArgsConstructor;
  */
 @Component
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public final class WebSocketHandshakeQrScannerInterceptor extends BaseWebSocketHandshakeInterceptor {
+public final class WebSocketHandshakeQrScannerWebInterceptor extends BaseWebSocketHandshakeInterceptor {
 
-    private static final String USER_AUTHORIZATION_KEY = "Authorization";
+    private static final boolean MUST_CONSUME_MESSAGE_FROM_QUEUE = false;
 
     private final SaigonParkingAuthentication authentication;
     private final HandshakeService handshakeService;
@@ -36,17 +39,22 @@ public final class WebSocketHandshakeQrScannerInterceptor extends BaseWebSocketH
 
     @Override
     protected String getAccessTokenFromHttpRequest(@NonNull ServerHttpRequest httpRequest) {
-        List<String> authorizationHeaders = httpRequest.getHeaders().get(USER_AUTHORIZATION_KEY);
-        if (authorizationHeaders == null || authorizationHeaders.isEmpty()) {
+        String accessToken = getAccessTokenFromUri(httpRequest.getURI());
+        if (accessToken.isEmpty()) {
             throw new MissingTokenException();
         }
-        return authorizationHeaders.get(0);
+        return accessToken;
     }
 
     @Override
     protected void postAuthentication(@NonNull SaigonParkingTokenBody saigonParkingTokenBody,
                                       @NonNull Map<String, Object> webSocketSessionAttributes) {
 
-        webSocketSessionAttributes.putAll(handshakeService.postAuthentication(saigonParkingTokenBody, false));
+        webSocketSessionAttributes.putAll(handshakeService.postAuthentication(saigonParkingTokenBody, MUST_CONSUME_MESSAGE_FROM_QUEUE));
+    }
+
+    private String getAccessTokenFromUri(@NonNull URI uriWithAccessToken) {
+        String uriString = uriWithAccessToken.toString();
+        return uriString.substring(uriString.lastIndexOf(WEB_AUTH_PATH_PREFIX) + WEB_AUTH_PATH_PREFIX_LENGTH);
     }
 }

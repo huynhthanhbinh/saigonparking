@@ -1,4 +1,4 @@
-package com.bht.saigonparking.service.contact.interceptor;
+package com.bht.saigonparking.service.contact.interceptor.main;
 
 import java.util.List;
 import java.util.Map;
@@ -25,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public final class WebSocketHandshakeInterceptor extends BaseWebSocketHandshakeInterceptor {
 
     private static final String USER_AUTHORIZATION_KEY = "Authorization";
+    private static final boolean MUST_CONSUME_MESSAGE_FROM_QUEUE = true;
 
     private final HandshakeService handshakeService;
     private final SaigonParkingAuthentication saigonParkingAuthentication;
@@ -47,6 +48,6 @@ public final class WebSocketHandshakeInterceptor extends BaseWebSocketHandshakeI
     protected void postAuthentication(@NonNull SaigonParkingTokenBody saigonParkingTokenBody,
                                       @NonNull Map<String, Object> webSocketSessionAttributes) {
 
-        webSocketSessionAttributes.putAll(handshakeService.postAuthentication(saigonParkingTokenBody, true));
+        webSocketSessionAttributes.putAll(handshakeService.postAuthentication(saigonParkingTokenBody, MUST_CONSUME_MESSAGE_FROM_QUEUE));
     }
 }
