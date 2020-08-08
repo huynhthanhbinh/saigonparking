@@ -20,7 +20,6 @@ import com.bht.saigonparking.service.contact.service.HandshakeService;
 import com.bht.saigonparking.service.contact.service.QueueService;
 import com.google.protobuf.Int64Value;
 
-import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -33,7 +32,7 @@ public final class HandshakeServiceImpl implements HandshakeService {
 
     private final QueueService queueService;
     private final AbstractMessageListenerContainer messageListenerContainer;
-    private final ParkingLotServiceGrpc.ParkingLotServiceStub parkingLotServiceStub;
+    private final ParkingLotServiceGrpc.ParkingLotServiceBlockingStub parkingLotServiceBlockingStub;
 
     @Override
     public Map<String, Object> postAuthentication(@NotNull SaigonParkingTokenBody tokenBody, boolean mustConsumeFromQueue) {
@@ -56,33 +55,19 @@ public final class HandshakeServiceImpl implements HandshakeService {
 
             if ("PARKING_LOT_EMPLOYEE".equals(userRole)) {
                 try {
-                    parkingLotServiceStub.getParkingLotIdByParkingLotEmployeeId(Int64Value.of(userId), new StreamObserver<Int64Value>() {
+                    long parkingLotId = parkingLotServiceBlockingStub
+                            .getParkingLotIdByParkingLotEmployeeId(Int64Value.of(userId))
+                            .getValue();
 
-                        long parkingLotId;
+                    attributes.put(SAIGON_PARKING_PARKING_LOT_ID_KEY, parkingLotId);
 
-                        @Override
-                        public void onNext(Int64Value int64Value) {
-                            parkingLotId = int64Value.getValue();
+                    /* register auto-delete exchange for parking-lot and bind user auto-delete queue to it */
+                    queueService.registerAutoDeleteExchangeForParkingLot(parkingLotId, userQueue);
 
-                            attributes.put(SAIGON_PARKING_PARKING_LOT_ID_KEY, parkingLotId);
+                    LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                            String.format("registerAutoDeleteExchangeForParkingLot(%d)", parkingLotId));
 
-                            /* register auto-delete exchange for parking-lot and bind user auto-delete queue to it */
-                            queueService.registerAutoDeleteExchangeForParkingLot(parkingLotId, userQueue);
-                        }
-
-                        @Override
-                        public void onError(Throwable throwable) {
-                            throw new PostAuthenticationException();
-                        }
-
-                        @Override
-                        public void onCompleted() {
-                            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                                    String.format("registerAutoDeleteExchangeForParkingLot(%d)", parkingLotId));
-                        }
-                    });
                 } catch (Exception exception) {
-
                     /* if exception occurs, immediately remove listen to queue */
                     /* as queue has no one listen to it, it will be removed (auto-delete queue) */
                     /* as exchange has no queue bind to it, it will be removed (auto-delete exchange) */
