@@ -14,7 +14,6 @@
         <groupId>com.bht.saigonparking</groupId>
         <version>${revision}</version>
     </parent>
-
     <description>
         This module is common things/classes using among microservices !
         Each of SaigonParking internal service must include this dependencies !
@@ -120,6 +119,17 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>${springboot.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
             <version>${springboot.version}</version>
             <exclusions>
                 <exclusion>
