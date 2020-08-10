@@ -30,11 +30,16 @@
 ![architecture_img](documents/architecture.png)
 
 <br/>
-<h2>4. Project's deployment:</h2>
+<h2>4. Authentication &#38; Authorization:</h2>
+
+![authentication_img](documents/authentication.png)
+
+<br/>
+<h2>5. Project's deployment:</h2>
 
 ![deployment_img](documents/deployment.png)
 
 <br/>
-<h2>5. Project's technology stack:</h2>
+<h2>6. Project's technology stack:</h2>
 
 ![technology_img](documents/technology.png)
