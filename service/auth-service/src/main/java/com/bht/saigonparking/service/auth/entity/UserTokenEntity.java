@@ -6,6 +6,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
 
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.SelectBeforeUpdate;
 import org.hibernate.validator.constraints.Length;
 
@@ -26,6 +28,7 @@ import lombok.ToString;
 @Setter
 @Builder
 @ToString
+@NaturalIdCache
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,6 +40,7 @@ public final class UserTokenEntity {
     @Column(name = "[USER_ID]")
     private Long userId;
 
+    @NaturalId
     @Length(max = 40)
     @Column(name = "[TOKEN_ID]", unique = true, nullable = false)
     private String tokenId;
