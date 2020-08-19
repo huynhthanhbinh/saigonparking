@@ -130,6 +130,7 @@ public final class AuthServiceInterceptor implements ServerInterceptor {
 
         /* Method's full name, eg. com.bht.saigonparking.api.grpc.auth.AuthService/registerUser */
         String fullMethodName = serverCall.getMethodDescriptor().getFullMethodName();
+        LoggingUtil.log(Level.INFO, "ServerInterceptor", "FullMethodName", fullMethodName);
 
         try {
             if (nonProvideTokenMethodSet.contains(fullMethodName)) { /* method skip check token => AuthService */

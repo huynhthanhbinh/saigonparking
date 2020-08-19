@@ -6,6 +6,7 @@ import static com.bht.saigonparking.common.constant.SaigonParkingTransactionalMe
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -21,6 +22,7 @@ import com.bht.saigonparking.common.exception.PermissionDeniedException;
 import com.bht.saigonparking.common.exception.UsernameNotMatchException;
 import com.bht.saigonparking.common.exception.WrongTokenTypeException;
 import com.bht.saigonparking.common.util.LoggingUtil;
+import com.google.common.collect.ImmutableSet;
 
 import io.grpc.Context;
 import io.grpc.Contexts;
@@ -50,6 +52,7 @@ public final class SaigonParkingServerInterceptor implements ServerInterceptor {
 
     private final SaigonParkingAuthentication authentication;
     private final Map<Class<? extends Throwable>, String> errorCodeMap;
+    private final Set<String> nonProvideTokenMethodSet;
 
     @Getter
     private final Context.Key<String> roleContext = Context.key("role");
@@ -67,6 +70,12 @@ public final class SaigonParkingServerInterceptor implements ServerInterceptor {
     public SaigonParkingServerInterceptor(Map<Class<? extends Throwable>, String> errorCodeMap) {
         authentication = new SaigonParkingAuthenticationImpl();
         this.errorCodeMap = errorCodeMap;
+
+        /* not check token forgrpc  health checking api */
+        nonProvideTokenMethodSet = new ImmutableSet.Builder<String>()
+                .add("grpc.health.v1.Health/Check")
+                .add("grpc.health.v1.Health/Watch")
+                .build();
     }
 
 
@@ -75,6 +84,7 @@ public final class SaigonParkingServerInterceptor implements ServerInterceptor {
                                                                  Metadata metadata,
                                                                  ServerCallHandler<ReqT, RespT> serverCallHandler) {
 
+        /* init new call listener */
         ServerCall.Listener<ReqT> newCallListener = new ServerCall.Listener<ReqT>() {
         };
 
@@ -85,8 +95,17 @@ public final class SaigonParkingServerInterceptor implements ServerInterceptor {
         String token = metadata.get(AUTHORIZATION_KEY);
         String internalServiceCodeString = metadata.get(INTERNAL_SERVICE_KEY);
 
+        /* Method's full name, eg. com.bht.saigonparking.api.grpc.auth.AuthService/registerUser */
+        String fullMethodName = serverCall.getMethodDescriptor().getFullMethodName();
+        LoggingUtil.log(Level.INFO, "ServerInterceptor", "FullMethodName", fullMethodName);
+
         try {
-            if (token == null && internalServiceCodeString == null) { /* spam requests */
+            if (nonProvideTokenMethodSet.contains(fullMethodName)) { /* method skip check token => HealthService */
+
+                userId = 0L;
+                userRole = "UNRECOGNIZED";
+
+            } else if (token == null && internalServiceCodeString == null) { /* spam requests */
                 throw new MissingTokenException();
 
             } else if (token != null) { /* external requests */
