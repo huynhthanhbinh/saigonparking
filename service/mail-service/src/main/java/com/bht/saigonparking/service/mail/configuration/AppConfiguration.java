@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableAsync;
 
+import com.bht.saigonparking.common.base.BaseSaigonParkingAppConfiguration;
 import com.bht.saigonparking.common.spring.SpringApplicationContext;
 import com.bht.saigonparking.common.spring.SpringBeanLifeCycle;
 
@@ -17,7 +18,7 @@ import com.bht.saigonparking.common.spring.SpringBeanLifeCycle;
 @Configuration
 @Import({MessageQueueConfiguration.class, MailConfiguration.class})
 @ComponentScan(basePackages = AppConfiguration.BASE_PACKAGE)
-public class AppConfiguration {
+public class AppConfiguration extends BaseSaigonParkingAppConfiguration {
 
     static final String BASE_PACKAGE = "com.bht.saigonparking.service.mail"; // base package of auth module, contains all
 

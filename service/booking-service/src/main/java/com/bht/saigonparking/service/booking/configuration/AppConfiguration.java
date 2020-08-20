@@ -15,6 +15,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.bht.saigonparking.common.annotation.InheritedComponent;
+import com.bht.saigonparking.common.base.BaseSaigonParkingAppConfiguration;
 import com.bht.saigonparking.common.exception.BookingAlreadyFinishedException;
 import com.bht.saigonparking.common.exception.BookingNotYetAcceptedException;
 import com.bht.saigonparking.common.exception.CustomerHasOnGoingBookingException;
@@ -35,7 +36,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 @EnableTransactionManagement
 @Import(ChannelConfiguration.class)
 @ComponentScan(basePackages = AppConfiguration.BASE_PACKAGE, includeFilters = @ComponentScan.Filter(InheritedComponent.class))
-public class AppConfiguration {
+public class AppConfiguration extends BaseSaigonParkingAppConfiguration {
 
     public static final String BASE_PACKAGE = "com.bht.saigonparking.service.booking";
 

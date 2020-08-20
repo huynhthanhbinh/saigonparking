@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.bht.saigonparking.common.annotation.InheritedComponent;
+import com.bht.saigonparking.common.base.BaseSaigonParkingAppConfiguration;
 import com.bht.saigonparking.common.exception.PermissionDeniedException;
 import com.bht.saigonparking.common.exception.UsernameNotMatchException;
 import com.bht.saigonparking.common.interceptor.SaigonParkingClientInterceptor;
@@ -35,7 +36,7 @@ import com.google.common.collect.ImmutableMap;
 @EnableTransactionManagement
 @Import(MessageQueueConfiguration.class)
 @ComponentScan(basePackages = AppConfiguration.BASE_PACKAGE, includeFilters = @ComponentScan.Filter(InheritedComponent.class))
-public class AppConfiguration {
+public class AppConfiguration extends BaseSaigonParkingAppConfiguration {
 
     public static final String BASE_PACKAGE = "com.bht.saigonparking.service.user";
 
