@@ -13,7 +13,6 @@ import com.bht.saigonparking.common.auth.SaigonParkingAuthentication;
 import com.bht.saigonparking.common.auth.SaigonParkingAuthenticationImpl;
 import com.bht.saigonparking.common.base.BaseSaigonParkingAppConfiguration;
 import com.bht.saigonparking.common.interceptor.SaigonParkingClientInterceptor;
-import com.bht.saigonparking.common.spring.SpringApplicationContext;
 import com.bht.saigonparking.common.spring.SpringBeanLifeCycle;
 
 /**
@@ -28,11 +27,6 @@ import com.bht.saigonparking.common.spring.SpringBeanLifeCycle;
 public class AppConfiguration extends BaseSaigonParkingAppConfiguration {
 
     public static final String BASE_PACKAGE = "com.bht.saigonparking.service.auth"; // base package of auth module, contains all
-
-    @Bean
-    public SpringApplicationContext springApplicationContext() {
-        return new SpringApplicationContext();
-    }
 
     @Bean
     public SpringBeanLifeCycle springBeanLifeCycle() {

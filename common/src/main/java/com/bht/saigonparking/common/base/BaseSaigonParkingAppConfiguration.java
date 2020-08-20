@@ -3,24 +3,27 @@ package com.bht.saigonparking.common.base;
 import java.util.concurrent.Executor;
 
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
+import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.bht.saigonparking.common.custom.CustomAsyncExceptionHandler;
-
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import com.bht.saigonparking.common.spring.SpringApplicationContext;
 
 /**
  *
  * @author bht
  */
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public abstract class BaseSaigonParkingAppConfiguration implements AsyncConfigurer {
+
+    @Bean
+    public SpringApplicationContext springApplicationContext() {
+        return new SpringApplicationContext();
+    }
 
     @Override
     public final Executor getAsyncExecutor() {
-        return new ThreadPoolTaskExecutor();
+        return SpringApplicationContext.getBean(ThreadPoolTaskExecutor.class);
     }
 
     @Override

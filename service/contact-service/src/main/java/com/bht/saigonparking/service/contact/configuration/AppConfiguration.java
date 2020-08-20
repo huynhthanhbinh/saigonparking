@@ -25,7 +25,6 @@ import com.bht.saigonparking.common.exception.PermissionDeniedException;
 import com.bht.saigonparking.common.exception.UsernameNotMatchException;
 import com.bht.saigonparking.common.interceptor.SaigonParkingClientInterceptor;
 import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
-import com.bht.saigonparking.common.spring.SpringApplicationContext;
 import com.bht.saigonparking.common.spring.SpringBeanLifeCycle;
 import com.google.common.collect.ImmutableMap;
 import com.google.zxing.qrcode.QRCodeWriter;
@@ -48,11 +47,6 @@ public class AppConfiguration extends BaseSaigonParkingAppConfiguration {
     @Bean
     public QRCodeWriter qrCodeWriter() {
         return new QRCodeWriter();
-    }
-
-    @Bean
-    public SpringApplicationContext springApplicationContext() {
-        return new SpringApplicationContext();
     }
 
     @Bean

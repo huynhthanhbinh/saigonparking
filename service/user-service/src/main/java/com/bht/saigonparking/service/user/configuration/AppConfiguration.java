@@ -22,7 +22,6 @@ import com.bht.saigonparking.common.exception.PermissionDeniedException;
 import com.bht.saigonparking.common.exception.UsernameNotMatchException;
 import com.bht.saigonparking.common.interceptor.SaigonParkingClientInterceptor;
 import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
-import com.bht.saigonparking.common.spring.SpringApplicationContext;
 import com.bht.saigonparking.common.spring.SpringBeanLifeCycle;
 import com.google.common.collect.ImmutableMap;
 
@@ -39,11 +38,6 @@ import com.google.common.collect.ImmutableMap;
 public class AppConfiguration extends BaseSaigonParkingAppConfiguration {
 
     public static final String BASE_PACKAGE = "com.bht.saigonparking.service.user";
-
-    @Bean
-    public SpringApplicationContext springApplicationContext() {
-        return new SpringApplicationContext();
-    }
 
     @Bean
     public SpringBeanLifeCycle springBeanLifeCycle() {
