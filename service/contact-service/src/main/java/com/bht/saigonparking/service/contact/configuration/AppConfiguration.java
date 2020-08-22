@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.converter.protobuf.ProtobufHttpMessageConverter;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -52,11 +51,6 @@ public class AppConfiguration extends BaseSaigonParkingAppConfiguration {
     @Bean
     public SpringBeanLifeCycle springBeanLifeCycle() {
         return new SpringBeanLifeCycle(BASE_PACKAGE);
-    }
-
-    @Bean
-    public ProtobufHttpMessageConverter protobufHttpMessageConverter() {
-        return new ProtobufHttpMessageConverter();
     }
 
     @Bean
