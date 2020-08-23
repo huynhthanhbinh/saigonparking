@@ -1,5 +1,7 @@
 package com.bht.saigonparking.common.auth;
 
+import java.util.UUID;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -17,14 +19,14 @@ public interface SaigonParkingAuthentication {
     SaigonParkingTokenBody parseJwtToken(@NotEmpty String jsonWebToken);
 
     /* 1st: tokenId, 2nd: token */
-    Pair<String, String> generateAccessToken(@NotNull Long userId, @NotEmpty String userRole);
+    Pair<UUID, String> generateAccessToken(@NotNull Long userId, @NotEmpty String userRole);
 
     /* 1st: tokenId, 2nd: token */
-    Pair<String, String> generateRefreshToken(@NotNull Long userId, @NotEmpty String userRole);
+    Pair<UUID, String> generateRefreshToken(@NotNull Long userId, @NotEmpty String userRole);
 
     /* 1st: tokenId, 2nd: token */
-    Pair<String, String> generateActivateAccountToken(@NotNull Long userId, @NotEmpty String userRole);
+    Pair<UUID, String> generateActivateAccountToken(@NotNull Long userId, @NotEmpty String userRole);
 
     /* 1st: tokenId, 2nd: token */
-    Pair<String, String> generateResetPasswordToken(@NotNull Long userId, @NotEmpty String userRole);
+    Pair<UUID, String> generateResetPasswordToken(@NotNull Long userId, @NotEmpty String userRole);
 }

@@ -34,6 +34,7 @@ public final class AuthServiceGrpcImpl extends AuthServiceGrpc.AuthServiceImplBa
 
     private final AuthService authService;
     private final AuthServiceInterceptor authServiceInterceptor;
+
     private final UserServiceGrpc.UserServiceBlockingStub userServiceBlockingStub;
 
     @Override
@@ -132,8 +133,7 @@ public final class AuthServiceGrpcImpl extends AuthServiceGrpc.AuthServiceImplBa
     @Override
     public void sendResetPasswordEmail(StringValue request, StreamObserver<StringValue> responseObserver) {
         try {
-            StringValue email = StringValue.of(authService
-                    .sendResetPasswordEmail(request.getValue()));
+            StringValue email = StringValue.of(authService.sendResetPasswordEmail(request.getValue()));
 
             responseObserver.onNext(email);
             responseObserver.onCompleted();
@@ -154,8 +154,7 @@ public final class AuthServiceGrpcImpl extends AuthServiceGrpc.AuthServiceImplBa
     @Override
     public void sendActivateAccountEmail(StringValue request, StreamObserver<StringValue> responseObserver) {
         try {
-            StringValue email = StringValue.of(authService
-                    .sendActivateAccountEmail(request.getValue()));
+            StringValue email = StringValue.of(authService.sendActivateAccountEmail(request.getValue()));
 
             responseObserver.onNext(email);
             responseObserver.onCompleted();

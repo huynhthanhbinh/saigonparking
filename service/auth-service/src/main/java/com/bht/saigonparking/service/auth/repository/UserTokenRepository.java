@@ -1,6 +1,7 @@
 package com.bht.saigonparking.service.auth.repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -18,7 +19,6 @@ import com.bht.saigonparking.service.auth.entity.UserTokenEntity;
 public interface UserTokenRepository extends JpaRepository<UserTokenEntity, Long> {
 
     /**
-     *
      * self-implement findByTokenId method
      * in order to prevent N+1 problem
      * using optional to catch null return
@@ -26,5 +26,5 @@ public interface UserTokenRepository extends JpaRepository<UserTokenEntity, Long
     @Query("SELECT UT " +
             "FROM UserTokenEntity UT " +
             "WHERE UT.tokenId = ?1")
-    Optional<UserTokenEntity> findByTokenId(@NotEmpty String tokenId);
+    Optional<UserTokenEntity> findByTokenId(@NotEmpty UUID tokenId);
 }

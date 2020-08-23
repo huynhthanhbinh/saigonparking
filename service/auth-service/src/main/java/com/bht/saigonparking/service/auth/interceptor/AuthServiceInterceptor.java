@@ -6,6 +6,7 @@ import static com.bht.saigonparking.common.constant.SaigonParkingTransactionalMe
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -72,7 +73,7 @@ public final class AuthServiceInterceptor implements ServerInterceptor {
     @Getter
     private final Context.Key<String> userRoleContext = Context.key("userRole");
     @Getter
-    private final Context.Key<String> tokenIdContext = Context.key("tokenId");
+    private final Context.Key<UUID> tokenIdContext = Context.key("tokenId");
     @Getter
     private final Context.Key<SaigonParkingTokenType> tokenTypeContext = Context.key("tokenType");
     @Getter
@@ -137,12 +138,11 @@ public final class AuthServiceInterceptor implements ServerInterceptor {
 
                 userId = 0L;
                 userRole = "UNRECOGNIZED";
-                tokenId = "";
+                tokenId = null;
                 tokenType = null;
                 exp = new Date();
 
             } else if (token == null && internalServiceCodeString == null) { /* spam requests */
-
                 throw new MissingTokenException();
 
             } else if (token != null) { /* external requests */
@@ -159,7 +159,7 @@ public final class AuthServiceInterceptor implements ServerInterceptor {
 
                 userId = 1L;
                 userRole = "ADMIN";
-                tokenId = "";
+                tokenId = null;
                 tokenType = null;
                 exp = new Date();
             }
@@ -200,7 +200,7 @@ public final class AuthServiceInterceptor implements ServerInterceptor {
         return Contexts.interceptCall(Context.current()
                         .withValue(userIdContext, userId)
                         .withValue(userRoleContext, userRole)
-                        .withValue(tokenIdContext, tokenId)
+                        .withValue(tokenIdContext, (tokenId != null) ? UUID.fromString(tokenId) : null)
                         .withValue(tokenTypeContext, tokenType)
                         .withValue(expContext, exp),
                 wrappedServerCall,

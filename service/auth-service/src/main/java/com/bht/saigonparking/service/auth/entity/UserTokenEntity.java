@@ -1,5 +1,7 @@
 package com.bht.saigonparking.service.auth.entity;
 
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,7 +11,7 @@ import javax.persistence.Version;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.SelectBeforeUpdate;
-import org.hibernate.validator.constraints.Length;
+import org.hibernate.annotations.Type;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,10 +42,10 @@ public final class UserTokenEntity {
     @Column(name = "[USER_ID]")
     private Long userId;
 
-    @Length(max = 40)
+    @Type(type = "uuid-char")
     @NaturalId(mutable = true)
-    @Column(name = "[TOKEN_ID]", unique = true, nullable = false)
-    private String tokenId;
+    @Column(name = "[TOKEN_ID]", unique = true, nullable = false, columnDefinition = "UNIQUEIDENTIFIER")
+    private UUID tokenId;
 
     @Version
     @EqualsAndHashCode.Exclude

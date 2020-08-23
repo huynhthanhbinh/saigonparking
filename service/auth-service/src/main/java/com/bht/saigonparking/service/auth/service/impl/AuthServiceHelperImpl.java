@@ -3,6 +3,8 @@ package com.bht.saigonparking.service.auth.service.impl;
 import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.MAIL_TOPIC_ROUTING_KEY;
 import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.USER_TOPIC_ROUTING_KEY;
 
+import java.util.UUID;
+
 import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -79,7 +81,7 @@ public class AuthServiceHelperImpl {
                 .build());
     }
 
-    public void saveUserRefreshToken(@NotNull Long userId, @NotEmpty String tokenId) {
+    public void saveUserRefreshToken(@NotNull Long userId, @NotEmpty UUID tokenId) {
         try {
             /* update refresh token id to database if already existed */
             UserTokenEntity userTokenEntity = userTokenRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
@@ -87,14 +89,12 @@ public class AuthServiceHelperImpl {
             userTokenRepository.saveAndFlush(userTokenEntity);
 
         } catch (EntityNotFoundException entityNotFoundException) {
-
             /* save new refresh token id to database if not existed before */
             UserTokenEntity userTokenEntity = UserTokenEntity.builder().userId(userId).tokenId(tokenId).build();
             userTokenRepository.saveAndFlush(userTokenEntity);
 
         } finally {
-            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("saveUserRefreshToken(%d, %s)", userId, tokenId));
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success", String.format("saveUserRefreshToken(%d, %s)", userId, tokenId));
         }
     }
 }

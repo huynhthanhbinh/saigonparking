@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -84,17 +85,17 @@ public final class SaigonParkingAuthenticationImpl implements SaigonParkingAuthe
                         .getBytes(StandardCharsets.UTF_8));
     }
 
-    private Pair<String, String> generateJwtToken(@NotNull SaigonParkingTokenType type,
-                                                  @NotNull Long userId,
-                                                  @NotEmpty String userRole,
-                                                  @NotNull Integer timeAmount,
-                                                  @NotNull ChronoUnit timeUnit) {
+    private Pair<UUID, String> generateJwtToken(@NotNull SaigonParkingTokenType type,
+                                                @NotNull Long userId,
+                                                @NotEmpty String userRole,
+                                                @NotNull Integer timeAmount,
+                                                @NotNull ChronoUnit timeUnit) {
         Instant now = Instant.now();
         Integer factor = new Random().nextInt(MAX_RANDOM_EXCLUSIVE);
-        String tokenId = UUID_GENERATOR.generate().toString();
+        UUID tokenUuid = UUID_GENERATOR.generate();
 
-        return Pair.of(tokenId, Jwts.builder()
-                .setId(tokenId)
+        return Pair.of(tokenUuid, Jwts.builder()
+                .setId(tokenUuid.toString())
                 .setIssuer(SAIGON_PARKING_ISSUER)
                 .claim(USER_ROLE_KEY_NAME, userRole)
                 .claim(FACTOR_KEY_NAME, factor)
@@ -123,22 +124,22 @@ public final class SaigonParkingAuthenticationImpl implements SaigonParkingAuthe
     }
 
     @Override
-    public Pair<String, String> generateAccessToken(@NotNull Long userId, @NotEmpty String userRole) {
+    public Pair<UUID, String> generateAccessToken(@NotNull Long userId, @NotEmpty String userRole) {
         return generateJwtToken(ACCESS_TOKEN, userId, userRole, 30, ChronoUnit.MINUTES);
     }
 
     @Override
-    public Pair<String, String> generateRefreshToken(@NotNull Long userId, @NotEmpty String userRole) {
+    public Pair<UUID, String> generateRefreshToken(@NotNull Long userId, @NotEmpty String userRole) {
         return generateJwtToken(REFRESH_TOKEN, userId, userRole, 30, ChronoUnit.DAYS);
     }
 
     @Override
-    public Pair<String, String> generateActivateAccountToken(@NotNull Long userId, @NotEmpty String userRole) {
+    public Pair<UUID, String> generateActivateAccountToken(@NotNull Long userId, @NotEmpty String userRole) {
         return generateJwtToken(ACTIVATE_TOKEN, userId, userRole, 5, ChronoUnit.MINUTES);
     }
 
     @Override
-    public Pair<String, String> generateResetPasswordToken(@NotNull Long userId, @NotEmpty String userRole) {
+    public Pair<UUID, String> generateResetPasswordToken(@NotNull Long userId, @NotEmpty String userRole) {
         return generateJwtToken(RESET_PW_TOKEN, userId, userRole, 5, ChronoUnit.MINUTES);
     }
 }

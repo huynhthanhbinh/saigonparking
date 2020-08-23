@@ -4,6 +4,7 @@ import static com.bht.saigonparking.api.grpc.mail.MailRequestType.ACTIVATE_ACCOU
 import static com.bht.saigonparking.api.grpc.mail.MailRequestType.RESET_PASSWORD;
 
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotEmpty;
@@ -65,8 +66,8 @@ public class AuthServiceImpl implements AuthService {
                     context.run(() -> authServiceImplHelper.updateUserLastSignIn(user.getId()));
 
                     /* Generate new access token, new refresh token for user with Id, Role */
-                    Pair<String, String> generatedAccessToken = authentication.generateAccessToken(user.getId(), user.getRole().toString());
-                    Pair<String, String> generatedRefreshToken = authentication.generateRefreshToken(user.getId(), user.getRole().toString());
+                    Pair<UUID, String> generatedAccessToken = authentication.generateAccessToken(user.getId(), user.getRole().toString());
+                    Pair<UUID, String> generatedRefreshToken = authentication.generateRefreshToken(user.getId(), user.getRole().toString());
 
                     /* Asynchronously save user token to the database */
                     authServiceImplHelper.saveUserRefreshToken(user.getId(), generatedRefreshToken.getFirst());
@@ -136,7 +137,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public Triple<String, String, String> generateNewToken(@NotNull Long userId,
                                                            @NotNull Date currentExp,
-                                                           @NotEmpty String currentTokenId,
+                                                           @NotEmpty UUID currentTokenId,
                                                            boolean currentIsRefreshToken) {
 
         User user = userServiceBlockingStub.getUserById(Int64Value.of(userId));
@@ -147,7 +148,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public Triple<String, String, String> activateNewAccount(@NotNull Long userId,
                                                              @NotNull Date currentExp,
-                                                             @NotEmpty String currentTokenId,
+                                                             @NotEmpty UUID currentTokenId,
                                                              boolean currentIsRefreshToken) {
 
         User user = userServiceBlockingStub.getUserById(Int64Value.of(userId));
@@ -162,7 +163,7 @@ public class AuthServiceImpl implements AuthService {
     @SuppressWarnings("java:S2201")
     private Triple<String, String, String> generateNewToken(@NotNull User user,
                                                             @NotNull Date currentExp,
-                                                            @NotEmpty String currentTokenId,
+                                                            @NotEmpty UUID currentTokenId,
                                                             boolean currentIsRefreshToken) {
         try {
             if (currentIsRefreshToken) {
@@ -173,7 +174,7 @@ public class AuthServiceImpl implements AuthService {
             throw new InvalidRefreshTokenException();
         }
 
-        Pair<String, String> generatedAccessToken = authentication.generateAccessToken(user.getId(), user.getRole().toString());
+        Pair<UUID, String> generatedAccessToken = authentication.generateAccessToken(user.getId(), user.getRole().toString());
 
         if (((currentExp.getTime() - new Date().getTime()) / 86400000) > 7) { /* Token not nearly expire */
             return Triple.of(user.getUsername(), generatedAccessToken.getSecond(), "");
@@ -181,7 +182,7 @@ public class AuthServiceImpl implements AuthService {
         } else { /* Token nearly expire */
 
             /* Generate new refresh token for user with Id, Role */
-            Pair<String, String> generatedRefreshToken = authentication.generateRefreshToken(user.getId(), user.getRole().toString());
+            Pair<UUID, String> generatedRefreshToken = authentication.generateRefreshToken(user.getId(), user.getRole().toString());
             authServiceImplHelper.saveUserRefreshToken(user.getId(), generatedRefreshToken.getFirst());
 
             return Triple.of(user.getUsername(), generatedAccessToken.getSecond(), generatedRefreshToken.getSecond());
