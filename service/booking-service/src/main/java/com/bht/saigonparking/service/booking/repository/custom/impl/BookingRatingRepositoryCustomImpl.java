@@ -1,4 +1,4 @@
-package com.bht.saigonparking.service.parkinglot.repository.custom.impl;
+package com.bht.saigonparking.service.booking.repository.custom.impl;
 
 import java.util.List;
 import java.util.Map;
@@ -12,14 +12,14 @@ import org.hibernate.validator.constraints.Range;
 import org.springframework.stereotype.Repository;
 
 import com.bht.saigonparking.common.base.BaseRepositoryCustom;
-import com.bht.saigonparking.service.parkinglot.repository.custom.ParkingLotRatingRepositoryCustom;
+import com.bht.saigonparking.service.booking.repository.custom.BookingRatingRepositoryCustom;
 
 /**
  *
  * @author bht
  */
 @Repository
-public class ParkingLotRatingRepositoryCustomImpl extends BaseRepositoryCustom implements ParkingLotRatingRepositoryCustom {
+public class BookingRatingRepositoryCustomImpl extends BaseRepositoryCustom implements BookingRatingRepositoryCustom {
 
     @Override
     public Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId) {

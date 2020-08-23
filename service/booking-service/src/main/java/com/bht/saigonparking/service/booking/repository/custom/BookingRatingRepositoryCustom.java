@@ -1,4 +1,4 @@
-package com.bht.saigonparking.service.parkinglot.repository.custom;
+package com.bht.saigonparking.service.booking.repository.custom;
 
 import java.util.List;
 import java.util.Map;
@@ -13,7 +13,7 @@ import org.hibernate.validator.constraints.Range;
  *
  * @author bht
  */
-public interface ParkingLotRatingRepositoryCustom {
+public interface BookingRatingRepositoryCustom {
 
     Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId);
 
