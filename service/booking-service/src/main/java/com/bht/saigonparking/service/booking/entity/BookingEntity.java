@@ -20,8 +20,8 @@ import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.SelectBeforeUpdate;
 import org.hibernate.annotations.Type;
 
+import com.bht.saigonparking.common.annotation.LicensePlateValidation;
 import com.bht.saigonparking.common.base.BaseEntity;
-import com.bht.saigonparking.service.booking.annotation.LicensePlateValidation;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

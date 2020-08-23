@@ -1,4 +1,4 @@
-package com.bht.saigonparking.service.user.annotation;
+package com.bht.saigonparking.common.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

@@ -1,4 +1,4 @@
-package com.bht.saigonparking.service.booking.annotation;
+package com.bht.saigonparking.common.annotation;
 
 import static java.lang.annotation.ElementType.*;
 
@@ -9,6 +9,8 @@ import java.lang.annotation.Target;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
+
+import com.bht.saigonparking.common.validator.LicensePlateValidator;
 
 /**
  *

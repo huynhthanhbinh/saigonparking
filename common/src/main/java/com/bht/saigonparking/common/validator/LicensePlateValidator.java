@@ -1,7 +1,9 @@
-package com.bht.saigonparking.service.booking.annotation;
+package com.bht.saigonparking.common.validator;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+
+import com.bht.saigonparking.common.annotation.LicensePlateValidation;
 
 /**
  *

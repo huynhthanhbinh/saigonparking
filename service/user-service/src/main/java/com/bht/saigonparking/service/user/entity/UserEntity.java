@@ -15,8 +15,8 @@ import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
+import com.bht.saigonparking.common.annotation.EmailValidation;
 import com.bht.saigonparking.common.base.BaseEntity;
-import com.bht.saigonparking.service.user.annotation.EmailValidation;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
