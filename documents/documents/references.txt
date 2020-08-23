@@ -2,6 +2,7 @@ Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
 Last updated:       Sun, Aug 23rd, 2020
 ========================================================================================================================
+
 001. gRPC error handling:
         https://grpc.io/docs/guides/error/
 
@@ -407,6 +408,13 @@ Last updated:       Sun, Aug 23rd, 2020
      ==> a blocking/synchronous stub: the RPC call blocks current thread and waits until the server respond
      ==> a non-blocking/asynchronous stub: the RPC non-blocking current thread, make call to the server where the response is returned asynchronously.
 
- 31. Unable to update NaturalId field value: An immutable natural identifier of entity {Model} was altered from ABC to XYZ
+131. Unable to update NaturalId field value: An immutable natural identifier of entity {Model} was altered from ABC to XYZ
         https://stackoverflow.com/questions/56882858/unable-to-update-naturalid-field-value-an-immutable-natural-identifier-of-entit
-    ==> Be able to update NaturalId Field by setting @NaturalId(mutable = true), it is false by default ! that means it cannot be update !
+    ==> Be able to update NaturalId Field by setting @NaturalId(mutable = true) !
+    ==> By default, @NaturalId(mutable = false), that means it cannot be update !
+
+132. Constraint composition
+        https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/?v=5.4#section-constraint-composition
+
+133. Spring combine two validation annotations in one
+        https://stackoverflow.com/questions/33483830/spring-combine-two-validation-annotations-in-one
