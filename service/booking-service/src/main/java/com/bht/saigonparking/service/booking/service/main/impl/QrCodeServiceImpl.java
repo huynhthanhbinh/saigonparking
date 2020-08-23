@@ -3,12 +3,11 @@ package com.bht.saigonparking.service.booking.service.main.impl;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import javax.validation.constraints.NotNull;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.bht.saigonparking.common.annotation.UuidStringValidation;
 import com.bht.saigonparking.service.booking.service.main.QrCodeService;
 import com.google.protobuf.Internal;
 import com.google.zxing.BarcodeFormat;
@@ -36,7 +35,7 @@ public final class QrCodeServiceImpl implements QrCodeService {
     private Integer qrCodeHeight;
 
     @Override
-    public byte[] encodeContents(@NotNull String contents) throws WriterException, IOException {
+    public byte[] encodeContents(@UuidStringValidation String contents) throws WriterException, IOException {
         if (!contents.isEmpty()) {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             BitMatrix bitMatrix = qrCodeWriter.encode(contents, BarcodeFormat.QR_CODE, qrCodeWidth, qrCodeHeight);

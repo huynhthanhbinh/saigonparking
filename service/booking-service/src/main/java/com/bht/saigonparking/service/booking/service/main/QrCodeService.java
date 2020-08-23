@@ -2,8 +2,7 @@ package com.bht.saigonparking.service.booking.service.main;
 
 import java.io.IOException;
 
-import javax.validation.constraints.NotNull;
-
+import com.bht.saigonparking.common.annotation.UuidStringValidation;
 import com.google.zxing.WriterException;
 
 /**
@@ -12,5 +11,5 @@ import com.google.zxing.WriterException;
  */
 public interface QrCodeService {
 
-    byte[] encodeContents(@NotNull String contents) throws WriterException, IOException;
+    byte[] encodeContents(@UuidStringValidation String contents) throws WriterException, IOException;
 }
