@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Thu, Aug 6th, 2020
+Last updated:       Sun, Aug 23rd, 2020
 ========================================================================================================================
 001. gRPC error handling:
         https://grpc.io/docs/guides/error/
@@ -406,3 +406,7 @@ Last updated:       Thu, Aug 6th, 2020
         https://grpc.io/docs/languages/java/basics/#instantiating-a-stub
      ==> a blocking/synchronous stub: the RPC call blocks current thread and waits until the server respond
      ==> a non-blocking/asynchronous stub: the RPC non-blocking current thread, make call to the server where the response is returned asynchronously.
+
+ 31. Unable to update NaturalId field value: An immutable natural identifier of entity {Model} was altered from ABC to XYZ
+        https://stackoverflow.com/questions/56882858/unable-to-update-naturalid-field-value-an-immutable-natural-identifier-of-entit
+    ==> Be able to update NaturalId Field by setting @NaturalId(mutable = true), it is false by default ! that means it cannot be update !

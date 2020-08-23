@@ -21,13 +21,12 @@ import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import com.bht.saigonparking.api.grpc.auth.AuthServiceGrpc;
+import com.bht.saigonparking.api.grpc.auth.ValidateRequest;
 import com.bht.saigonparking.api.grpc.contact.BookingRequestContent;
 import com.bht.saigonparking.api.grpc.contact.SaigonParkingMessage;
 import com.bht.saigonparking.api.grpc.contact.TextMessageContent;
-import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
-import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotInformation;
-import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc;
-import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotType;
+import com.bht.saigonparking.api.grpc.user.UserRole;
 import com.bht.saigonparking.emulator.configuration.SpringApplicationContext;
 import com.bht.saigonparking.emulator.handler.WebSocketHandler;
 import com.neovisionaries.ws.client.WebSocket;
@@ -101,22 +100,29 @@ public class Emulator extends SpringBootServletInitializer {
 //                        .setLicensePlate("59H1-762.17")
 //                        .build()));
 
-        SpringApplicationContext.getBean(ParkingLotServiceGrpc.ParkingLotServiceBlockingStub.class)
-                .createNewParkingLot(ParkingLot.newBuilder()
-                        .setType(ParkingLotType.BUILDING)
-                        .setLatitude(10.762622)
-                        .setLongitude(106.660172)
-                        .setOpeningHour("00:00:00")
-                        .setClosingHour("20:00:00")
-                        .setAvailableSlot(100)
-                        .setTotalSlot(100)
-                        .setInformation(ParkingLotInformation.newBuilder()
-                                .setName("BX Test")
-                                .setAddress("227 Nguyen Van Cu")
-                                .setPhone("0123456789")
-                                .build())
-                        .build())
-                .getValue();
+//        SpringApplicationContext.getBean(ParkingLotServiceGrpc.ParkingLotServiceBlockingStub.class)
+//                .createNewParkingLot(ParkingLot.newBuilder()
+//                        .setType(ParkingLotType.BUILDING)
+//                        .setLatitude(10.762622)
+//                        .setLongitude(106.660172)
+//                        .setOpeningHour("00:00:00")
+//                        .setClosingHour("20:00:00")
+//                        .setAvailableSlot(100)
+//                        .setTotalSlot(100)
+//                        .setInformation(ParkingLotInformation.newBuilder()
+//                                .setName("BX Test")
+//                                .setAddress("227 Nguyen Van Cu")
+//                                .setPhone("0123456789")
+//                                .build())
+//                        .build())
+//                .getValue();
+
+        System.out.println(SpringApplicationContext.getBean(AuthServiceGrpc.AuthServiceBlockingStub.class)
+                .validateUser(ValidateRequest.newBuilder()
+                        .setUsername("htbinh")
+                        .setPassword("htbinh789")
+                        .setRole(UserRole.CUSTOMER)
+                        .build()));
     }
 
     private static void testAuthWithWebSocketUri() throws ExecutionException, InterruptedException, IOException {

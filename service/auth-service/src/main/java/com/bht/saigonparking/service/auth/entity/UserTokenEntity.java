@@ -40,8 +40,8 @@ public final class UserTokenEntity {
     @Column(name = "[USER_ID]")
     private Long userId;
 
-    @NaturalId
     @Length(max = 40)
+    @NaturalId(mutable = true)
     @Column(name = "[TOKEN_ID]", unique = true, nullable = false)
     private String tokenId;
 
