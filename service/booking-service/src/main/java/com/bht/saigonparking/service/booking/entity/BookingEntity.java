@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -65,8 +66,11 @@ public final class BookingEntity extends BaseEntity {
     @Column(name = "[CUSTOMER_LICENSE_PLATE]", nullable = false)
     private String customerLicensePlate;
 
-    @Column(name = "[IS_FINISHED]", nullable = false)
+    @Column(name = "[IS_FINISHED]", updatable = false)
     private Boolean isFinished;
+
+    @Column(name = "[IS_RATED]", updatable = false)
+    private Boolean isRated;
 
     @CreationTimestamp
     @EqualsAndHashCode.Exclude
@@ -76,6 +80,9 @@ public final class BookingEntity extends BaseEntity {
     @ManyToOne(optional = false)
     @JoinColumn(name = "[LATEST_STATUS_ID]", referencedColumnName = "[ID]", nullable = false, updatable = false)
     private BookingStatusEntity bookingStatusEntity;
+
+    @OneToOne(mappedBy = "bookingEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private BookingRatingEntity bookingRatingEntity;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

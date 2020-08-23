@@ -7,7 +7,6 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SelectBeforeUpdate;
 
 import com.bht.saigonparking.common.base.BaseEntity;
@@ -44,14 +43,6 @@ public final class ParkingLotInformationEntity extends BaseEntity {
 
     @Column(name = "[PHONE]")
     private String phone;
-
-    @ColumnDefault("0")
-    @Column(name = "[RATING_AVERAGE]", insertable = false, updatable = false)
-    private Double ratingAverage;
-
-    @ColumnDefault("0")
-    @Column(name = "[NUMBER_OF_RATING]", insertable = false, updatable = false)
-    private Short nRating;
 
     @MapsId
     @ToString.Exclude
