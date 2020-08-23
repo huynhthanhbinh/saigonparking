@@ -20,6 +20,8 @@ import org.apache.logging.log4j.Level;
 import org.springframework.data.util.Pair;
 
 import com.bht.saigonparking.common.util.LoggingUtil;
+import com.fasterxml.uuid.Generators;
+import com.fasterxml.uuid.impl.TimeBasedGenerator;
 import com.google.common.io.ByteStreams;
 
 import io.jsonwebtoken.Claims;
@@ -34,6 +36,7 @@ public final class SaigonParkingAuthenticationImpl implements SaigonParkingAuthe
 
     private static final String SAIGON_PARKING_ISSUER = "www.saigonparking.wtf";
     private static final short MAX_RANDOM_EXCLUSIVE = 1000;
+    private static final TimeBasedGenerator UUID_GENERATOR = Generators.timeBasedGenerator();
 
     private static final String USER_ROLE_KEY_NAME = "role";
     private static final String FACTOR_KEY_NAME = "fac";
@@ -88,8 +91,7 @@ public final class SaigonParkingAuthenticationImpl implements SaigonParkingAuthe
                                                   @NotNull ChronoUnit timeUnit) {
         Instant now = Instant.now();
         Integer factor = new Random().nextInt(MAX_RANDOM_EXCLUSIVE);
-        Long encryptedUserId = encryptUserId(userId, factor);
-        String tokenId = String.format("%d@%d", encryptedUserId, now.toEpochMilli());
+        String tokenId = UUID_GENERATOR.generate().toString();
 
         return Pair.of(tokenId, Jwts.builder()
                 .setId(tokenId)
@@ -97,7 +99,7 @@ public final class SaigonParkingAuthenticationImpl implements SaigonParkingAuthe
                 .claim(USER_ROLE_KEY_NAME, userRole)
                 .claim(FACTOR_KEY_NAME, factor)
                 .claim(TOKEN_TYPE_KEY_NAME, type)
-                .setSubject(encryptedUserId.toString())
+                .setSubject(encryptUserId(userId, factor).toString())
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(now.plus(timeAmount, timeUnit)))
                 .signWith(secretKey)
