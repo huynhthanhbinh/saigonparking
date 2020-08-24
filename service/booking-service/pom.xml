@@ -32,6 +32,11 @@
             <version>${revision}</version>
         </dependency>
         <dependency>
+            <groupId>com.bht.saigonparking</groupId>
+            <artifactId>user-api</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
             <version>${zxing.version}</version>
