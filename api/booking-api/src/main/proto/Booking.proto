@@ -110,6 +110,54 @@ message GenerateBookingQrCodeResponse {
     bytes qrCode = 1; /* representation of booking UUID as image */
 }
 
+message BookingRating {
+    int64 ratingId = 1;
+    string username = 2;
+    int32 rating = 3;
+    string comment = 4;
+    string lastUpdated = 5;
+}
+
+message CreateBookingRatingRequest {
+    string bookingId = 1; /* will be an UUID string */
+    int32 rating = 2; /* min = 1, max = 5 */
+    string comment = 3; /* can be empty or not */
+    /* customerId will be get from JWT (Authorization Header) */
+}
+
+message UpdateBookingRatingRequest {
+    string bookingId = 1; /* will be an UUID string */
+    int32 rating = 2; /* min = 1, max = 5 */
+    string comment = 3; /* can be empty or not */
+    /* customerId will be get from JWT (Authorization Header) */
+}
+
+message DeleteBookingRatingRequest {
+    string bookingId = 1; /* will be an UUID string */
+    /* customerId will be get from JWT (Authorization Header) */
+}
+
+message CountAllRatingsOfParkingLotRequest {
+    int64 parkingLotId = 1; /* compulsory field, you need to provide an exact parking-lot id */
+    int32 rating = 2; /* optional, ignore this field if you want to get all ratings of parking lot only */
+}
+
+message GetAllRatingsOfParkingLotRequest {
+    int64 parkingLotId = 1; /* compulsory field, you need to provide an exact parking-lot id */
+    int32 rating = 2; /* optional, ignore this field if you want to get all ratings of parking lot only */
+    bool sortLastUpdatedAsc = 3; /* if true, ratings will be sorted ascending by their timestamp, otherwise: descending */
+    int32 nRow = 4; /* number of rows you want to get per page */
+    int32 pageNumber = 5; /* page number you want to get */
+}
+
+message GetAllRatingsOfParkingLotResponse {
+    repeated BookingRating rating = 1; /* is a parking-lot's booking-rating list */
+}
+
+message ParkingLotRatingCountGroupByRating {
+    map<int32, int64> ratingCount = 1; /* is a map of <rating, count> with rating is key & count is value */
+}
+
 service BookingService {
 
     /* PRIVATE: ADMIN & INTERNAL service use-only */
@@ -134,4 +182,59 @@ service BookingService {
     rpc countAllOnGoingBookingOfParkingLot (google.protobuf.Int64Value) returns (google.protobuf.Int64Value);
     rpc getBookingDetailByBookingId (google.protobuf.StringValue) returns (BookingDetail);
     rpc countAllBookingOfParkingLotGroupByStatus (google.protobuf.Int64Value) returns (CountAllBookingGroupByStatusResponse);
+
+    /** PUBLIC - for customer only
+     * use-case: customer add new rating of a finished booking to parking lot
+     *  + request: CreateBookingRatingRequest, you need to provide 3 arguments:
+     *      ++ bookingId: uuid of booking
+     *      ++ rating: rating star (min = 1, max = 5)
+     *      ++ comment: can be an empty string or a comment string
+     *  + response: Empty value if succeed, otherwise, throw exception */
+    rpc createBookingRating (CreateBookingRatingRequest) returns (google.protobuf.Empty);
+
+    /** PUBLIC - for customer only
+     * use-case: customer update existed rating of a finished booking to parking lot
+     *  + request: UpdateBookingRatingRequest, you need to provide 3 arguments:
+     *      ++ bookingId: uuid of booking
+     *      ++ rating: rating star (min = 1, max = 5)
+     *      ++ comment: can be an empty string or a comment string
+     *  + response: Empty value if succeed, otherwise, throw exception */
+    rpc updateBookingRating (UpdateBookingRatingRequest) returns (google.protobuf.Empty);
+
+    /** PUBLIC - for customer only
+     * use-case: customer delete existed rating of a finished booking to parking lot
+     *  + request: DeleteBookingRatingRequest, you need to provide 1 arguments:
+     *      ++ bookingId: uuid of booking
+     *  + response: Empty value if succeed, otherwise, throw exception */
+    rpc deleteBookingRating (DeleteBookingRatingRequest) returns (google.protobuf.Empty);
+
+    /** PUBLIC
+     * use-case: get all ratings of a specific parking-lot
+     *  + request: CountAllParkingLotRequest, you need to provide 3 params
+     *      ++ parkingLotId: compulsory field, you need to provide an exact parking-lot id
+     *      ++ rating: target rating, optional, ignore this field if you want to get all ratings of parking lot only
+     *  + response: number of ratings belongs to this parking-lot currently in the DBs, satisfied the conditions */
+    rpc countAllRatingsOfParkingLot (CountAllRatingsOfParkingLotRequest) returns (google.protobuf.Int64Value);
+
+    /** PUBLIC
+     * use-case: get all ratings of a specific parking-lot
+     *  + request: GetAllParkingLotRequest: you need to provide 5 params:
+     *      ++ parkingLotId: compulsory field, you need to provide an exact parking-lot id
+     *      ++ rating: target rating, optional, ignore this field if you want to get all ratings of parking lot only
+     *      ++ sortLastUpdatedAsc: if true, ratings will be sorted ascending by their timestamp, otherwise: descending
+     *      ++ nRow: number of rows you want to show per page (max: 20)
+     *      ++ pageNumber: page you want to get
+     *  + response: GetAllRatingsOfParkingLotResponse: it will be a list of ratings, satisfied the conditions (with nRow result max) */
+    rpc getAllRatingsOfParkingLot (GetAllRatingsOfParkingLotRequest) returns (GetAllRatingsOfParkingLotResponse);
+
+    /** PUBLIC
+     * use-case: show parking lot rating count group by rating.
+     * For example: a map such as { 2=9, 3=12, 4=27 } will be shown as:
+     *      9  * *
+     *      12 * * *
+     *      27 * * * *
+     *      Total: 48 ratings, rating-average = 3.375
+     *  + request:  parking lot ID
+     *  + response: a map (or a dictionary) of <rating, count> with rating is key & count is value */
+    rpc getParkingLotRatingCountGroupByRating (google.protobuf.Int64Value) returns (ParkingLotRatingCountGroupByRating);
 }

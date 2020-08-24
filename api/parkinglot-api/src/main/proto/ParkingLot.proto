@@ -28,8 +28,6 @@ message ParkingLotInformation {
     string name = 1;
     string address = 2;
     string phone = 3;
-    double ratingAverage = 4;
-    int32 numberOfRating = 5;
     bytes imageData = 6;
     int64 version = 7;
 }
@@ -107,59 +105,6 @@ message DeleteMultiParkingLotByIdRequest {
     repeated int64 parkingLotId = 1; /* parking-lot id list which you want to delete */
 }
 
-message ParkingLotRatingsDetail {
-    int64 parkingLotId = 1;
-    string parkingLotName = 2;
-    int32 nRating = 3;
-    double ratingAverage = 4;
-}
-
-message ParkingLotRating {
-    int64 ratingId = 1;
-    string username = 2;
-    int32 rating = 3;
-    string comment = 4;
-    string lastUpdated = 5;
-}
-
-message CountAllParkingLotHasRatingsRequest {
-    int32 lowerBoundRating = 1; /* optional, ignore this field if you want to get all has Ratings */
-    int32 upperBoundRating = 2; /* optional, ignore this field if you want to get all has Ratings */
-}
-
-message CountAllRatingsOfParkingLotRequest {
-    int64 parkingLotId = 1; /* compulsory field, you need to provide an exact parking-lot id */
-    int32 rating = 2; /* optional, ignore this field if you want to get all ratings of parking lot only */
-}
-
-message GetAllParkingLotHasRatingsRequest {
-    int32 lowerBoundRating = 1; /* optional, ignore this field if you want to get all has Ratings */
-    int32 upperBoundRating = 2; /* optional, ignore this field if you want to get all has Ratings */
-    bool sortRatingAsc = 3; /* if true, parking-lots will be sorted ascending by their rating, otherwise: descending */
-    int32 nRow = 4; /* number of rows you want to get per page */
-    int32 pageNumber = 5; /* page number you want to get */
-}
-
-message GetAllParkingLotHasRatingsResponse {
-    repeated ParkingLotRatingsDetail detail = 1; /* is a parking-lot rating detail list */
-}
-
-message GetAllRatingsOfParkingLotRequest {
-    int64 parkingLotId = 1; /* compulsory field, you need to provide an exact parking-lot id */
-    int32 rating = 2; /* optional, ignore this field if you want to get all ratings of parking lot only */
-    bool sortLastUpdatedAsc = 3; /* if true, ratings will be sorted ascending by their timestamp, otherwise: descending */
-    int32 nRow = 4; /* number of rows you want to get per page */
-    int32 pageNumber = 5; /* page number you want to get */
-}
-
-message GetAllRatingsOfParkingLotResponse {
-    repeated ParkingLotRating rating = 1; /* is a parking-lot rating list */
-}
-
-message ParkingLotRatingCountGroupByRating {
-    map<int32, int64> ratingCount = 1; /* is a map of <rating, count> with rating is key & count is value */
-}
-
 message UpdateParkingLotAvailabilityRequest {
     int64 parkingLotId = 1;
     int32 newAvailability = 2;
@@ -175,13 +120,6 @@ message MapToParkingLotNameMapResponse {
 
 message CountAllParkingLotGroupByTypeResponse {
     map<int64, int64> typeCount = 1; /* is a map of <parking_lot_type_long_value, count_parking_lot_type> */
-}
-
-message CreateNewRatingRequest {
-    int64 parkingLotId = 1;
-    int32 rating = 2;
-    string comment = 3;
-    /* customerId will be get from JWT (Authorization Header) */
 }
 
 message AddEmployeeOfParkingLotRequest {
@@ -297,55 +235,6 @@ service ParkingLotService {
      * note that: delete parking-lot also delete correspondent parking-lot-employee */
     rpc deleteMultiParkingLotById (DeleteMultiParkingLotByIdRequest) returns (google.protobuf.Empty);
 
-    /** PUBLIC - ADMIN ONLY
-     * use-case: get all parking-lots has ratings
-     *  + request: CountAllParkingLotHasRatingsRequest, you need to provide 2 params
-     *      ++ lowerBoundRating: the upper bound of rating you want to get - ignore this field if you want to get all has Ratings
-     *      ++ upperBoundRating: the lower bound of rating you want to get - ignore this field if you want to get all has Ratings
-     *  + response: number of parking-lot currently in the DBs has ratings, satisfied the conditions */
-    rpc countAllParkingLotHasRatings (CountAllParkingLotHasRatingsRequest) returns (google.protobuf.Int64Value);
-
-    /** PUBLIC - ADMIN ONLY
-     * use-case: get all parking-lots has ratings
-     *  + request: GetAllParkingLotHasRatingsRequest, you need to provide 5 params
-     *      ++ lowerBoundRating: the upper bound of rating you want to get - ignore this field if you want to get all has Ratings
-     *      ++ upperBoundRating: the lower bound of rating you want to get - ignore this field if you want to get all has Ratings
-     *      ++ sortRatingAsc:  if true, parking-lots will be sorted ascending by their rating, otherwise: descending
-     *      ++ nRow: number of rows you want to show per page (max: 20)
-     *      ++ pageNumber: page you want to get
-     *  + response: GetAllParkingLotHasRatingsResponse: it will be a parking-lot ratings detail list, satisfied the conditions (with nRow result max) */
-    rpc getAllParkingLotHasRatings (GetAllParkingLotHasRatingsRequest) returns (GetAllParkingLotHasRatingsResponse);
-
-    /** PUBLIC
-     * use-case: get all ratings of a specific parking-lot
-     *  + request: CountAllParkingLotRequest, you need to provide 3 params
-     *      ++ parkingLotId: compulsory field, you need to provide an exact parking-lot id
-     *      ++ rating: target rating, optional, ignore this field if you want to get all ratings of parking lot only
-     *  + response: number of ratings belongs to this parking-lot currently in the DBs, satisfied the conditions */
-    rpc countAllRatingsOfParkingLot (CountAllRatingsOfParkingLotRequest) returns (google.protobuf.Int64Value);
-
-    /** PUBLIC
-     * use-case: get all ratings of a specific parking-lot
-     *  + request: GetAllParkingLotRequest: you need to provide 5 params:
-     *      ++ parkingLotId: compulsory field, you need to provide an exact parking-lot id
-     *      ++ rating: target rating, optional, ignore this field if you want to get all ratings of parking lot only
-     *      ++ sortLastUpdatedAsc: if true, ratings will be sorted ascending by their timestamp, otherwise: descending
-     *      ++ nRow: number of rows you want to show per page (max: 20)
-     *      ++ pageNumber: page you want to get
-     *  + response: GetAllRatingsOfParkingLotResponse: it will be a list of ratings, satisfied the conditions (with nRow result max) */
-    rpc getAllRatingsOfParkingLot (GetAllRatingsOfParkingLotRequest) returns (GetAllRatingsOfParkingLotResponse);
-
-    /** PUBLIC
-     * use-case: show parking lot rating count group by rating.
-     * For example: a map such as { 2=9, 3=12, 4=27 } will be shown as:
-     *      9  * *
-     *      12 * * *
-     *      27 * * * *
-     *      Total: 48 ratings, rating-average = 3.375
-     *  + request:  parking lot ID
-     *  + response: a map (or a dictionary) of <rating, count> with rating is key & count is value */
-    rpc getParkingLotRatingCountGroupByRating (google.protobuf.Int64Value) returns (ParkingLotRatingCountGroupByRating);
-
     /** PUBLIC - for admin & parkingLot only
      * use-case: update current available slots of parking slot
      *  + request: UpdateParkingLotAvailabilityRequest, you need to provide 2 arguments:
@@ -365,15 +254,6 @@ service ParkingLotService {
      *  + request: parking-lot id
      *  + response: parking-lot name, if succeed, otherwise, throw exception */
     rpc getParkingLotNameByParkingLotId (google.protobuf.Int64Value) returns (google.protobuf.StringValue);
-
-    /** PUBLIC - for customer only
-     * use-case: customer add new rating of a specific parking lot
-     *  + request: CreateNewRatingRequest, you need to provide 3 arguments:
-     *      ++ parkingLotId: id of parking-lot
-     *      ++ rating: rating star (min = 1, max = 5)
-     *      ++ comment: can be an empty string or a comment string
-     *  + response: Empty value if succeed, otherwise, throw exception */
-    rpc createNewRating (CreateNewRatingRequest) returns (google.protobuf.Empty);
 
     /** PUBLIC - admin only
      * use-case: createNewParkingLot
