@@ -158,6 +158,13 @@ message ParkingLotRatingCountGroupByRating {
     map<int32, int64> ratingCount = 1; /* is a map of <rating, count> with rating is key & count is value */
 }
 
+message ParkingLotBookingAndRatingStatistic {
+    int64 parkingLotId = 1; /* id of parking-lot */
+    int64 nBooking = 2; /* number of booking */
+    int64 nRating = 3; /* number of rating */
+    double ratingAverage = 4; /* rating average */
+}
+
 service BookingService {
 
     /* PRIVATE: ADMIN & INTERNAL service use-only */
@@ -228,8 +235,7 @@ service BookingService {
     rpc getAllRatingsOfParkingLot (GetAllRatingsOfParkingLotRequest) returns (GetAllRatingsOfParkingLotResponse);
 
     /** PUBLIC
-     * use-case: show parking lot rating count group by rating.
-     * For example: a map such as { 2=9, 3=12, 4=27 } will be shown as:
+     * use-case: show parking lot rating count group by rating. For example: a map such as { 2=9, 3=12, 4=27 } will be shown as:
      *      9  * *
      *      12 * * *
      *      27 * * * *
@@ -237,4 +243,10 @@ service BookingService {
      *  + request:  parking lot ID
      *  + response: a map (or a dictionary) of <rating, count> with rating is key & count is value */
     rpc getParkingLotRatingCountGroupByRating (google.protobuf.Int64Value) returns (ParkingLotRatingCountGroupByRating);
+
+    /** PUBLIC
+     * use-case: get all ratings of a specific parking-lot
+     *  + request: parking lot ID
+     *  + response: ParkingLotBookingAndRatingStatistic */
+    rpc getParkingLotBookingAndRatingStatistic (google.protobuf.Int64Value) returns (ParkingLotBookingAndRatingStatistic);
 }
