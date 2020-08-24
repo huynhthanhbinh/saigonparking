@@ -22,6 +22,7 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long>, B
     @Query("SELECT B " +
             "FROM BookingEntity B " +
             "JOIN FETCH B.bookingStatusEntity " +
+            "LEFT JOIN B.bookingRatingEntity " +
             "WHERE B.uuid = ?1")
     Optional<BookingEntity> getBookingByUuid(@NotNull UUID uuid);
 
@@ -29,6 +30,7 @@ public interface BookingRepository extends JpaRepository<BookingEntity, Long>, B
             "FROM BookingEntity B " +
             "JOIN FETCH B.bookingHistoryEntitySet H " +
             "JOIN FETCH H.bookingStatusEntity " +
+            "LEFT JOIN B.bookingRatingEntity " +
             "WHERE B.uuid = ?1")
     Optional<BookingEntity> getBookingDetailByUuid(@NotNull UUID uuid);
 

@@ -21,13 +21,19 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bht.saigonparking.api.grpc.user.MapToUsernameMapRequest;
+import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
 import com.bht.saigonparking.common.exception.BookingAlreadyFinishedException;
+import com.bht.saigonparking.common.exception.BookingAlreadyRatedException;
 import com.bht.saigonparking.common.exception.BookingNotYetAcceptedException;
+import com.bht.saigonparking.common.exception.BookingNotYetRatedException;
 import com.bht.saigonparking.service.booking.entity.BookingEntity;
 import com.bht.saigonparking.service.booking.entity.BookingHistoryEntity;
+import com.bht.saigonparking.service.booking.entity.BookingRatingEntity;
 import com.bht.saigonparking.service.booking.entity.BookingStatusEntity;
 import com.bht.saigonparking.service.booking.mapper.EnumMapper;
 import com.bht.saigonparking.service.booking.repository.core.BookingHistoryRepository;
+import com.bht.saigonparking.service.booking.repository.core.BookingRatingRepository;
 import com.bht.saigonparking.service.booking.repository.core.BookingRepository;
 import com.bht.saigonparking.service.booking.service.main.BookingService;
 
@@ -44,7 +50,9 @@ public class BookingServiceImpl implements BookingService {
 
     private final EnumMapper enumMapper;
     private final BookingRepository bookingRepository;
+    private final BookingRatingRepository bookingRatingRepository;
     private final BookingHistoryRepository bookingHistoryRepository;
+    private final UserServiceGrpc.UserServiceBlockingStub userServiceBlockingStub;
 
     @Override
     public BookingEntity getOnGoingBookingOfCustomer(@NotNull Long customerId) {
@@ -199,7 +207,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId) {
-        return parkingLotRatingRepository.countAllRatingsOfParkingLot(parkingLotId);
+        return bookingRatingRepository.countAllRatingsOfParkingLot(parkingLotId);
     }
 
     @Override
@@ -209,7 +217,7 @@ public class BookingServiceImpl implements BookingService {
         if (rating.equals(0)) {
             return countAllRatingsOfParkingLot(parkingLotId);
         }
-        return parkingLotRatingRepository.countAllRatingsOfParkingLot(parkingLotId, rating);
+        return bookingRatingRepository.countAllRatingsOfParkingLot(parkingLotId, rating);
     }
 
     @Override
@@ -217,7 +225,8 @@ public class BookingServiceImpl implements BookingService {
                                                         boolean sortLastUpdatedAsc,
                                                         @NotNull @Max(20L) Integer nRow,
                                                         @NotNull Integer pageNumber) {
-        List<Tuple> parkingLotRatingTupleList = parkingLotRatingRepository
+
+        List<Tuple> parkingLotRatingTupleList = bookingRatingRepository
                 .getAllRatingsOfParkingLot(parkingLotId, sortLastUpdatedAsc, nRow, pageNumber);
 
         Map<Long, String> usernameMap = userServiceBlockingStub.mapToUsernameMap(MapToUsernameMapRequest.newBuilder()
@@ -238,7 +247,7 @@ public class BookingServiceImpl implements BookingService {
                                                         @NotNull @Max(20L) Integer nRow,
                                                         @NotNull Integer pageNumber) {
         if (!rating.equals(0)) {
-            List<Tuple> parkingLotRatingTupleList = parkingLotRatingRepository
+            List<Tuple> parkingLotRatingTupleList = bookingRatingRepository
                     .getAllRatingsOfParkingLot(parkingLotId, rating, sortLastUpdatedAsc, nRow, pageNumber);
 
             Map<Long, String> usernameMap = userServiceBlockingStub.mapToUsernameMap(MapToUsernameMapRequest.newBuilder()
@@ -256,21 +265,56 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public Map<Integer, Long> getParkingLotRatingCountGroupByRating(@NotNull Long parkingLotId) {
-        return parkingLotRatingRepository.getParkingLotRatingCountGroupByRating(parkingLotId);
+        return bookingRatingRepository.getParkingLotRatingCountGroupByRating(parkingLotId);
     }
 
+    @Async
     @Override
-    public void createNewRating(@NotNull Long parkingLotId, @NotNull Long customerId,
-                                @NotNull Integer rating, @NotEmpty String comment) {
+    public void createBookingRating(@NotNull String bookingUuidString, @NotNull Integer rating, @NotEmpty String comment) {
 
-        ParkingLotEntity parkingLotEntity = getParkingLotById(parkingLotId);
-        ParkingLotRatingEntity parkingLotRatingEntity = ParkingLotRatingEntity.builder()
-                .parkingLotEntity(parkingLotEntity)
-                .customerId(customerId)
-                .rating(rating.shortValue())
-                .comment(comment)
-                .build();
+        BookingEntity bookingEntity = getBookingByUuid(bookingUuidString);
+        BookingRatingEntity currentBookingRating = bookingEntity.getBookingRatingEntity();
 
-        parkingLotRatingRepository.saveAndFlush(parkingLotRatingEntity);
+        if (currentBookingRating == null) {
+            BookingRatingEntity bookingRatingEntity = BookingRatingEntity.builder()
+                    .bookingEntity(bookingEntity)
+                    .rating(rating.shortValue())
+                    .comment(comment)
+                    .build();
+
+            bookingRatingRepository.saveAndFlush(bookingRatingEntity);
+            return;
+        }
+        throw new BookingAlreadyRatedException();
+    }
+
+    @Async
+    @Override
+    public void updateBookingRating(@NotNull String bookingUuidString, @NotNull Integer rating, @NotEmpty String comment) {
+
+        BookingEntity bookingEntity = getBookingByUuid(bookingUuidString);
+        BookingRatingEntity currentBookingRating = bookingEntity.getBookingRatingEntity();
+
+        if (currentBookingRating != null) {
+            currentBookingRating.setRating(rating.shortValue());
+            currentBookingRating.setComment(comment);
+            bookingRatingRepository.saveAndFlush(currentBookingRating);
+            return;
+        }
+        throw new BookingNotYetRatedException();
+    }
+
+    @Async
+    @Override
+    public void deleteBookingRating(@NotEmpty String bookingUuidString) {
+
+        BookingEntity bookingEntity = getBookingByUuid(bookingUuidString);
+        BookingRatingEntity currentBookingRating = bookingEntity.getBookingRatingEntity();
+
+        if (currentBookingRating != null) {
+            bookingRatingRepository.delete(currentBookingRating);
+            return;
+        }
+        throw new BookingNotYetRatedException();
     }
 }

@@ -81,9 +81,6 @@ public interface BookingService {
 
     boolean checkCustomerHasOnGoingBooking(@NotNull Long customerId);
 
-    void createNewRating(@NotNull Long parkingLotId, @NotNull Long customerId,
-                         @NotNull Integer rating, @NotEmpty String comment);
-
     Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId);
 
     Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId, @NotNull @Range(max = 5L) Integer rating);
@@ -100,4 +97,10 @@ public interface BookingService {
                                                  @NotNull Integer pageNumber);
 
     Map<Integer, Long> getParkingLotRatingCountGroupByRating(@NotNull Long parkingLotId);
+
+    void createBookingRating(@NotEmpty String bookingUuidString, @NotNull Integer rating, @NotEmpty String comment);
+
+    void updateBookingRating(@NotEmpty String bookingUuidString, @NotNull Integer rating, @NotEmpty String comment);
+
+    void deleteBookingRating(@NotEmpty String bookingUuidString);
 }

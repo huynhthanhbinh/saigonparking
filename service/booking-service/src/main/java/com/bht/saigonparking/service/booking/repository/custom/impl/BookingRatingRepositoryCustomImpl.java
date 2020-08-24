@@ -24,9 +24,9 @@ public class BookingRatingRepositoryCustomImpl extends BaseRepositoryCustom impl
     @Override
     public Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId) {
 
-        String countAllQuery = "SELECT COUNT(PR.id) " +
-                "FROM ParkingLotRatingEntity PR " +
-                "WHERE PR.parkingLotEntity.id = :parkingLotId ";
+        String countAllQuery = "SELECT COUNT(R.id) " +
+                "FROM BookingRatingEntity R JOIN R.bookingEntity B " +
+                "WHERE B.parkingLotId = :parkingLotId ";
 
         return entityManager.createQuery(countAllQuery, Long.class)
                 .setParameter("parkingLotId", parkingLotId)
@@ -34,13 +34,11 @@ public class BookingRatingRepositoryCustomImpl extends BaseRepositoryCustom impl
     }
 
     @Override
-    public Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId,
-                                            @NotNull @Range(min = 1L, max = 5L) Integer rating) {
+    public Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId, @NotNull @Range(min = 1L, max = 5L) Integer rating) {
 
-        String countAllQuery = "SELECT COUNT(PR.id) " +
-                "FROM ParkingLotRatingEntity PR " +
-                "WHERE PR.parkingLotEntity.id = :parkingLotId " +
-                "AND PR.rating = :rating ";
+        String countAllQuery = "SELECT COUNT(R.id) " +
+                "FROM BookingRatingEntity R JOIN R.bookingEntity B " +
+                "WHERE B.parkingLotId = :parkingLotId AND R.rating = :rating ";
 
         return entityManager.createQuery(countAllQuery, Long.class)
                 .setParameter("parkingLotId", parkingLotId)
@@ -54,10 +52,10 @@ public class BookingRatingRepositoryCustomImpl extends BaseRepositoryCustom impl
                                                  @NotNull @Max(20L) Integer nRow,
                                                  @NotNull Integer pageNumber) {
 
-        String getAllQuery = "SELECT PR.id, PR.parkingLotEntity.id, PR.customerId, PR.rating, PR.comment, PR.lastUpdated " +
-                "FROM ParkingLotRatingEntity PR " +
-                "WHERE PR.parkingLotEntity.id = :parkingLotId " +
-                "ORDER BY PR.lastUpdated " + (sortLastUpdatedAsc ? " ASC " : " DESC ");
+        String getAllQuery = "SELECT R.id, B.parkingLotId, B.customerId, R.rating, R.comment, R.lastUpdated " +
+                "FROM BookingRatingEntity R JOIN FETCH R.bookingEntity B " +
+                "WHERE B.parkingLotId = :parkingLotId " +
+                "ORDER BY R.lastUpdated " + (sortLastUpdatedAsc ? " ASC " : " DESC ");
 
         return entityManager.createQuery(getAllQuery, Tuple.class)
                 .setParameter("parkingLotId", parkingLotId)
@@ -73,11 +71,10 @@ public class BookingRatingRepositoryCustomImpl extends BaseRepositoryCustom impl
                                                  @NotNull @Max(20L) Integer nRow,
                                                  @NotNull Integer pageNumber) {
 
-        String getAllQuery = "SELECT PR.id, PR.parkingLotEntity.id, PR.customerId, PR.rating, PR.comment, PR.lastUpdated " +
-                "FROM ParkingLotRatingEntity PR " +
-                "WHERE PR.parkingLotEntity.id = :parkingLotId " +
-                "AND PR.rating = :rating " +
-                "ORDER BY PR.lastUpdated " + (sortLastUpdatedAsc ? " ASC " : " DESC ");
+        String getAllQuery = "SELECT R.id, B.parkingLotId, B.customerId, R.rating, R.comment, R.lastUpdated " +
+                "FROM BookingRatingEntity R JOIN FETCH R.bookingEntity B " +
+                "WHERE B.parkingLotId = :parkingLotId AND R.rating = :rating " +
+                "ORDER BY R.lastUpdated " + (sortLastUpdatedAsc ? " ASC " : " DESC ");
 
         return entityManager.createQuery(getAllQuery, Tuple.class)
                 .setParameter("parkingLotId", parkingLotId)
@@ -90,15 +87,14 @@ public class BookingRatingRepositoryCustomImpl extends BaseRepositoryCustom impl
     @Override
     public Map<Integer, Long> getParkingLotRatingCountGroupByRating(@NotNull Long parkingLotId) {
 
-        String getCountGroupByQuery = "SELECT PR.rating, COUNT(PR.id) " +
-                "FROM ParkingLotRatingEntity PR " +
-                "WHERE PR.parkingLotEntity.id = :parkingLotId " +
-                "GROUP BY PR.rating ";
+        String getCountGroupByQuery = "SELECT R.rating, COUNT(R.id) " +
+                "FROM BookingRatingEntity R JOIN R.bookingEntity B " +
+                "WHERE B.parkingLotId = :parkingLotId " +
+                "GROUP BY R.rating ";
 
         return entityManager.createQuery(getCountGroupByQuery, Tuple.class)
                 .setParameter("parkingLotId", parkingLotId)
                 .getResultList().stream()
-                .collect(Collectors
-                        .toMap(record -> record.get(0, Short.class).intValue(), record -> record.get(1, Long.class)));
+                .collect(Collectors.toMap(record -> record.get(0, Short.class).intValue(), record -> record.get(1, Long.class)));
     }
 }
