@@ -9,9 +9,12 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.Tuple;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.scheduling.annotation.Async;
@@ -192,5 +195,82 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public boolean checkCustomerHasOnGoingBooking(@NotNull Long customerId) {
         return bookingRepository.countAllUnfinishedBookingByCustomerId(customerId) != 0;
+    }
+
+    @Override
+    public Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId) {
+        return parkingLotRatingRepository.countAllRatingsOfParkingLot(parkingLotId);
+    }
+
+    @Override
+    public Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId,
+                                            @NotNull @Range(max = 5L) Integer rating) {
+
+        if (rating.equals(0)) {
+            return countAllRatingsOfParkingLot(parkingLotId);
+        }
+        return parkingLotRatingRepository.countAllRatingsOfParkingLot(parkingLotId, rating);
+    }
+
+    @Override
+    public Map<Tuple, String> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
+                                                        boolean sortLastUpdatedAsc,
+                                                        @NotNull @Max(20L) Integer nRow,
+                                                        @NotNull Integer pageNumber) {
+        List<Tuple> parkingLotRatingTupleList = parkingLotRatingRepository
+                .getAllRatingsOfParkingLot(parkingLotId, sortLastUpdatedAsc, nRow, pageNumber);
+
+        Map<Long, String> usernameMap = userServiceBlockingStub.mapToUsernameMap(MapToUsernameMapRequest.newBuilder()
+                .addAllUserId(parkingLotRatingTupleList.stream()
+                        .map(tuple -> tuple.get(2, Long.class)).collect(Collectors.toSet()))
+                .build())
+                .getUsernameMap();
+
+        return parkingLotRatingTupleList.stream().collect(Collectors
+                .toMap(parkingLotRatingTuple -> parkingLotRatingTuple,
+                        parkingLotRatingTuple -> usernameMap.get(parkingLotRatingTuple.get(2, Long.class))));
+    }
+
+    @Override
+    public Map<Tuple, String> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
+                                                        @NotNull @Range(max = 5L) Integer rating,
+                                                        boolean sortLastUpdatedAsc,
+                                                        @NotNull @Max(20L) Integer nRow,
+                                                        @NotNull Integer pageNumber) {
+        if (!rating.equals(0)) {
+            List<Tuple> parkingLotRatingTupleList = parkingLotRatingRepository
+                    .getAllRatingsOfParkingLot(parkingLotId, rating, sortLastUpdatedAsc, nRow, pageNumber);
+
+            Map<Long, String> usernameMap = userServiceBlockingStub.mapToUsernameMap(MapToUsernameMapRequest.newBuilder()
+                    .addAllUserId(parkingLotRatingTupleList.stream()
+                            .map(tuple -> tuple.get(2, Long.class)).collect(Collectors.toSet()))
+                    .build())
+                    .getUsernameMap();
+
+            return parkingLotRatingTupleList.stream().collect(Collectors
+                    .toMap(parkingLotRatingTuple -> parkingLotRatingTuple,
+                            parkingLotRatingTuple -> usernameMap.get(parkingLotRatingTuple.get(2, Long.class))));
+        }
+        return getAllRatingsOfParkingLot(parkingLotId, sortLastUpdatedAsc, nRow, pageNumber);
+    }
+
+    @Override
+    public Map<Integer, Long> getParkingLotRatingCountGroupByRating(@NotNull Long parkingLotId) {
+        return parkingLotRatingRepository.getParkingLotRatingCountGroupByRating(parkingLotId);
+    }
+
+    @Override
+    public void createNewRating(@NotNull Long parkingLotId, @NotNull Long customerId,
+                                @NotNull Integer rating, @NotEmpty String comment) {
+
+        ParkingLotEntity parkingLotEntity = getParkingLotById(parkingLotId);
+        ParkingLotRatingEntity parkingLotRatingEntity = ParkingLotRatingEntity.builder()
+                .parkingLotEntity(parkingLotEntity)
+                .customerId(customerId)
+                .rating(rating.shortValue())
+                .comment(comment)
+                .build();
+
+        parkingLotRatingRepository.saveAndFlush(parkingLotRatingEntity);
     }
 }

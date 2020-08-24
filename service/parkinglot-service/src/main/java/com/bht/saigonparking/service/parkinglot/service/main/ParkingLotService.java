@@ -9,8 +9,6 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.Range;
-
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotInformationEntity;
 import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
@@ -26,16 +24,8 @@ public interface ParkingLotService {
 
     Long countAll(@NotEmpty String keyword, boolean isAvailableOnly);
 
-    Long countAll(@NotEmpty String keyword, boolean isAvailableOnly, @NotNull ParkingLotTypeEntity parkingLotTypeEntity);
-
-    Long countAllHasRatings();
-
-    Long countAllHasRatings(@NotNull @Range(max = 5L) Integer lowerBound,
-                            @NotNull @Range(max = 5L) Integer upperBound);
-
-    Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId);
-
-    Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId, @NotNull @Range(max = 5L) Integer rating);
+    Long countAll(@NotEmpty String keyword, boolean isAvailableOnly,
+                  @NotNull ParkingLotTypeEntity parkingLotTypeEntity);
 
     List<ParkingLotEntity> getAll(@NotNull Set<Long> parkingLotIdSet);
 
@@ -49,29 +39,6 @@ public interface ParkingLotService {
                                   @NotEmpty String keyword,
                                   boolean isAvailableOnly,
                                   @NotNull ParkingLotTypeEntity parkingLotTypeEntity);
-
-    List<Tuple> getAllHasRatings(boolean sortRatingAsc,
-                                 @NotNull @Max(20L) Integer nRow,
-                                 @NotNull Integer pageNumber);
-
-    List<Tuple> getAllHasRatings(@NotNull @Range(max = 5L) Integer lowerBound,
-                                 @NotNull @Range(max = 5L) Integer upperBound,
-                                 boolean sortRatingAsc,
-                                 @NotNull @Max(20L) Integer nRow,
-                                 @NotNull Integer pageNumber);
-
-    Map<Tuple, String> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
-                                                 boolean sortLastUpdatedAsc,
-                                                 @NotNull @Max(20L) Integer nRow,
-                                                 @NotNull Integer pageNumber);
-
-    Map<Tuple, String> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
-                                                 @NotNull @Range(max = 5L) Integer rating,
-                                                 boolean sortLastUpdatedAsc,
-                                                 @NotNull @Max(20L) Integer nRow,
-                                                 @NotNull Integer pageNumber);
-
-    Map<Integer, Long> getParkingLotRatingCountGroupByRating(@NotNull Long parkingLotId);
 
     ParkingLotEntity getParkingLotById(@NotNull Long id);
 
@@ -108,9 +75,6 @@ public interface ParkingLotService {
     Long createNewParkingLot(@NotNull ParkingLotEntity parkingLotEntity,
                              @NotNull ParkingLotLimitEntity parkingLotLimitEntity,
                              @NotNull ParkingLotInformationEntity parkingLotInformationEntity);
-
-    void createNewRating(@NotNull Long parkingLotId, @NotNull Long customerId,
-                         @NotNull Integer rating, @NotEmpty String comment);
 
     boolean checkEmployeeAlreadyManageParkingLot(@NotNull Long employeeId);
 

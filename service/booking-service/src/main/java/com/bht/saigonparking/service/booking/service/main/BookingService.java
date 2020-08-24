@@ -3,9 +3,12 @@ package com.bht.saigonparking.service.booking.service.main;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.Tuple;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.Range;
 import org.springframework.data.util.Pair;
 
 import com.bht.saigonparking.service.booking.entity.BookingEntity;
@@ -77,4 +80,24 @@ public interface BookingService {
     Map<Long, Long> countAllBookingOfParkingLotGroupByStatus(@NotNull Long parkingLotId);
 
     boolean checkCustomerHasOnGoingBooking(@NotNull Long customerId);
+
+    void createNewRating(@NotNull Long parkingLotId, @NotNull Long customerId,
+                         @NotNull Integer rating, @NotEmpty String comment);
+
+    Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId);
+
+    Long countAllRatingsOfParkingLot(@NotNull Long parkingLotId, @NotNull @Range(max = 5L) Integer rating);
+
+    Map<Tuple, String> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
+                                                 boolean sortLastUpdatedAsc,
+                                                 @NotNull @Max(20L) Integer nRow,
+                                                 @NotNull Integer pageNumber);
+
+    Map<Tuple, String> getAllRatingsOfParkingLot(@NotNull Long parkingLotId,
+                                                 @NotNull @Range(max = 5L) Integer rating,
+                                                 boolean sortLastUpdatedAsc,
+                                                 @NotNull @Max(20L) Integer nRow,
+                                                 @NotNull Integer pageNumber);
+
+    Map<Integer, Long> getParkingLotRatingCountGroupByRating(@NotNull Long parkingLotId);
 }
