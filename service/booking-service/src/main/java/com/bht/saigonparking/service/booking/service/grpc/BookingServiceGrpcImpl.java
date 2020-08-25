@@ -17,8 +17,11 @@ import com.bht.saigonparking.api.grpc.booking.BookingStatus;
 import com.bht.saigonparking.api.grpc.booking.CountAllBookingGroupByStatusResponse;
 import com.bht.saigonparking.api.grpc.booking.CountAllBookingOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.booking.CountAllBookingRequest;
+import com.bht.saigonparking.api.grpc.booking.CountAllRatingsOfParkingLotRequest;
+import com.bht.saigonparking.api.grpc.booking.CreateBookingRatingRequest;
 import com.bht.saigonparking.api.grpc.booking.CreateBookingRequest;
 import com.bht.saigonparking.api.grpc.booking.CreateBookingResponse;
+import com.bht.saigonparking.api.grpc.booking.DeleteBookingRatingRequest;
 import com.bht.saigonparking.api.grpc.booking.FinishBookingRequest;
 import com.bht.saigonparking.api.grpc.booking.FinishBookingResponse;
 import com.bht.saigonparking.api.grpc.booking.GenerateBookingQrCodeRequest;
@@ -26,6 +29,11 @@ import com.bht.saigonparking.api.grpc.booking.GenerateBookingQrCodeResponse;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingOfCustomerRequest;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingRequest;
+import com.bht.saigonparking.api.grpc.booking.GetAllRatingsOfParkingLotRequest;
+import com.bht.saigonparking.api.grpc.booking.GetAllRatingsOfParkingLotResponse;
+import com.bht.saigonparking.api.grpc.booking.ParkingLotBookingAndRatingStatistic;
+import com.bht.saigonparking.api.grpc.booking.ParkingLotRatingCountGroupByRating;
+import com.bht.saigonparking.api.grpc.booking.UpdateBookingRatingRequest;
 import com.bht.saigonparking.api.grpc.booking.UpdateBookingStatusRequest;
 import com.bht.saigonparking.common.exception.CustomerHasOnGoingBookingException;
 import com.bht.saigonparking.common.interceptor.SaigonParkingServerInterceptor;
@@ -529,5 +537,40 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("getCustomerOnGoingBooking(%d)", customerId));
         }
+    }
+
+    @Override
+    public void createBookingRating(CreateBookingRatingRequest request, StreamObserver<Empty> responseObserver) {
+        super.createBookingRating(request, responseObserver);
+    }
+
+    @Override
+    public void updateBookingRating(UpdateBookingRatingRequest request, StreamObserver<Empty> responseObserver) {
+        super.updateBookingRating(request, responseObserver);
+    }
+
+    @Override
+    public void deleteBookingRating(DeleteBookingRatingRequest request, StreamObserver<Empty> responseObserver) {
+        super.deleteBookingRating(request, responseObserver);
+    }
+
+    @Override
+    public void countAllRatingsOfParkingLot(CountAllRatingsOfParkingLotRequest request, StreamObserver<Int64Value> responseObserver) {
+        super.countAllRatingsOfParkingLot(request, responseObserver);
+    }
+
+    @Override
+    public void getAllRatingsOfParkingLot(GetAllRatingsOfParkingLotRequest request, StreamObserver<GetAllRatingsOfParkingLotResponse> responseObserver) {
+        super.getAllRatingsOfParkingLot(request, responseObserver);
+    }
+
+    @Override
+    public void getParkingLotRatingCountGroupByRating(Int64Value request, StreamObserver<ParkingLotRatingCountGroupByRating> responseObserver) {
+        super.getParkingLotRatingCountGroupByRating(request, responseObserver);
+    }
+
+    @Override
+    public void getParkingLotBookingAndRatingStatistic(Int64Value request, StreamObserver<ParkingLotBookingAndRatingStatistic> responseObserver) {
+        super.getParkingLotBookingAndRatingStatistic(request, responseObserver);
     }
 }
