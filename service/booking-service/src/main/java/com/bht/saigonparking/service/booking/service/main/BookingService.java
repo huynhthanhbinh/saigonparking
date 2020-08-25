@@ -15,6 +15,7 @@ import org.springframework.data.util.Pair;
 import com.bht.saigonparking.service.booking.entity.BookingEntity;
 import com.bht.saigonparking.service.booking.entity.BookingHistoryEntity;
 import com.bht.saigonparking.service.booking.entity.BookingRatingEntity;
+import com.bht.saigonparking.service.booking.entity.BookingStatisticEntity;
 import com.bht.saigonparking.service.booking.entity.BookingStatusEntity;
 
 /**
@@ -117,4 +118,6 @@ public interface BookingService {
     void createOneOrManyParkingLotStatistic(@NotNull Set<Long> parkingLotIdSet);
 
     void deleteOneOrManyParkingLotStatistic(@NotNull Set<Long> parkingLotIdSet);
+
+    BookingStatisticEntity getParkingLotBookingAndRatingStatistic(@NotNull Long parkingLotId);
 }

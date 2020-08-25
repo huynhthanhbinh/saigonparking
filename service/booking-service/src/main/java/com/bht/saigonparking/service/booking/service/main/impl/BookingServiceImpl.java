@@ -351,7 +351,7 @@ public class BookingServiceImpl implements BookingService {
         String customerUsername = userServiceBlockingStub
                 .mapUserIdToUsername(Int64Value.of(ratingEntity.getBookingEntity().getCustomerId()))
                 .getValue();
-        
+
         return Pair.of(ratingEntity, customerUsername);
     }
 
@@ -386,5 +386,10 @@ public class BookingServiceImpl implements BookingService {
 
     private void deleteParkingLotStatistic(@NotNull Long parkingLotId) {
         bookingStatisticRepository.getByParkingLotId(parkingLotId).ifPresent(bookingStatisticRepository::delete);
+    }
+
+    @Override
+    public BookingStatisticEntity getParkingLotBookingAndRatingStatistic(@NotNull Long parkingLotId) {
+        return bookingStatisticRepository.getByParkingLotId(parkingLotId).orElseThrow(EntityNotFoundException::new);
     }
 }

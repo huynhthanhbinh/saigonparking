@@ -712,6 +712,24 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
 
     @Override
     public void getParkingLotBookingAndRatingStatistic(Int64Value request, StreamObserver<ParkingLotBookingAndRatingStatistic> responseObserver) {
-        super.getParkingLotBookingAndRatingStatistic(request, responseObserver);
+        try {
+            ParkingLotBookingAndRatingStatistic statistic = bookingMapper
+                    .toParkingLotBookingAndRatingStatistic(bookingService
+                            .getParkingLotBookingAndRatingStatistic(request.getValue()));
+
+            responseObserver.onNext(statistic);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getParkingLotBookingAndRatingStatistic(%d)", request.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getParkingLotBookingAndRatingStatistic(%d)", request.getValue()));
+        }
     }
 }
