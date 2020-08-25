@@ -12,7 +12,6 @@ import com.bht.saigonparking.api.grpc.parkinglot.AddEmployeeOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.CountAllParkingLotGroupByTypeResponse;
 import com.bht.saigonparking.api.grpc.parkinglot.CountAllParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.CountAllRatingsOfParkingLotRequest;
-import com.bht.saigonparking.api.grpc.parkinglot.CreateNewRatingRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.DeleteMultiParkingLotByIdRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.GetAllParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.GetAllParkingLotResponse;
@@ -544,31 +543,6 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
 
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL", "countAllParkingLotGroupByType()");
-        }
-    }
-
-    @Override
-    public void createNewRating(CreateNewRatingRequest request, StreamObserver<Empty> responseObserver) {
-        Long customerId = serverInterceptor.getUserIdContext().get();
-        try {
-            serverInterceptor.validateUserRole("CUSTOMER");
-            parkingLotService.createNewRating(request.getParkingLotId(), customerId, request.getRating(), request.getComment());
-
-            responseObserver.onNext(Empty.getDefaultInstance());
-            responseObserver.onCompleted();
-
-            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("createNewRating(%d, %d, %d, %s)",
-                            request.getParkingLotId(), customerId, request.getRating(), request.getComment()));
-
-        } catch (Exception exception) {
-
-            responseObserver.onError(exception);
-
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
-            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                    String.format("createNewRating(%d, %d, %d, %s)",
-                            request.getParkingLotId(), customerId, request.getRating(), request.getComment()));
         }
     }
 

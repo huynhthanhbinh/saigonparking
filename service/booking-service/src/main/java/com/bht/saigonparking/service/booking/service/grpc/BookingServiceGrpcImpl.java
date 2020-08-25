@@ -541,17 +541,75 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
 
     @Override
     public void createBookingRating(CreateBookingRatingRequest request, StreamObserver<Empty> responseObserver) {
-        super.createBookingRating(request, responseObserver);
+        Long customerId = serverInterceptor.getUserIdContext().get();
+        try {
+            serverInterceptor.validateUserRole("CUSTOMER");
+            bookingService.createBookingRating(customerId, request.getBookingId(), request.getRating(), request.getComment());
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("createBookingRating(%s, %d, %s)",
+                            request.getBookingId(), request.getRating(), request.getComment()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("createBookingRating(%s, %d, %s)",
+                            request.getBookingId(), request.getRating(), request.getComment()));
+        }
     }
 
     @Override
     public void updateBookingRating(UpdateBookingRatingRequest request, StreamObserver<Empty> responseObserver) {
-        super.updateBookingRating(request, responseObserver);
+        Long customerId = serverInterceptor.getUserIdContext().get();
+        try {
+            serverInterceptor.validateUserRole("CUSTOMER");
+            bookingService.updateBookingRating(customerId, request.getBookingId(), request.getRating(), request.getComment());
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("updateBookingRating(%s, %d, %s)",
+                            request.getBookingId(), request.getRating(), request.getComment()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("updateBookingRating(%s, %d, %s)",
+                            request.getBookingId(), request.getRating(), request.getComment()));
+        }
     }
 
     @Override
     public void deleteBookingRating(DeleteBookingRatingRequest request, StreamObserver<Empty> responseObserver) {
-        super.deleteBookingRating(request, responseObserver);
+        Long customerId = serverInterceptor.getUserIdContext().get();
+        try {
+            serverInterceptor.validateUserRole("CUSTOMER");
+            bookingService.deleteBookingRating(customerId, request.getBookingId());
+
+            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("deleteBookingRating(%s)", request.getBookingId()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("deleteBookingRating(%s)", request.getBookingId()));
+        }
     }
 
     @Override
