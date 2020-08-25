@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.bht.saigonparking.api.grpc.parkinglot.AddEmployeeOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.CountAllParkingLotGroupByTypeResponse;
 import com.bht.saigonparking.api.grpc.parkinglot.CountAllParkingLotRequest;
-import com.bht.saigonparking.api.grpc.parkinglot.CountAllRatingsOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.DeleteMultiParkingLotByIdRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.GetAllParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.GetAllParkingLotResponse;
@@ -376,27 +375,6 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("deleteMultiParkingLotById(%s)", request.getParkingLotIdList()));
-        }
-    }
-
-    @Override
-    public void countAllRatingsOfParkingLot(CountAllRatingsOfParkingLotRequest request, StreamObserver<Int64Value> responseObserver) {
-        try {
-            Long count = parkingLotService.countAllRatingsOfParkingLot(request.getParkingLotId(), request.getRating());
-
-            responseObserver.onNext(Int64Value.of(count));
-            responseObserver.onCompleted();
-
-            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("countAllRatingsOfParkingLot(%d, %d): %d", request.getParkingLotId(), request.getRating(), count));
-
-        } catch (Exception exception) {
-
-            responseObserver.onError(exception);
-
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
-            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                    String.format("countAllRatingsOfParkingLot(%d, %d)", request.getParkingLotId(), request.getRating()));
         }
     }
 
