@@ -624,7 +624,25 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
 
     @Override
     public void getParkingLotRatingCountGroupByRating(Int64Value request, StreamObserver<ParkingLotRatingCountGroupByRating> responseObserver) {
-        super.getParkingLotRatingCountGroupByRating(request, responseObserver);
+        try {
+            ParkingLotRatingCountGroupByRating ratingCountGroupByRating = ParkingLotRatingCountGroupByRating.newBuilder()
+                    .putAllRatingCount(bookingService.getParkingLotRatingCountGroupByRating(request.getValue()))
+                    .build();
+
+            responseObserver.onNext(ratingCountGroupByRating);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getParkingLotRatingCountGroupByRating(%d)", request.getValue()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getParkingLotRatingCountGroupByRating(%d)", request.getValue()));
+        }
     }
 
     @Override
