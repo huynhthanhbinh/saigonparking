@@ -55,6 +55,7 @@ public interface BookingMapper {
     @Mapping(target = "licensePlate", source = "customerLicensePlate", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "createdAt", source = "createdAt", qualifiedByName = "toTimestampString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "isFinished", source = "isFinished", defaultExpression = "java(customizedMapper.DEFAULT_BOOL_VALUE)")
+    @Mapping(target = "isRated", source = "isRated", defaultExpression = "java(customizedMapper.DEFAULT_BOOL_VALUE)")
     @Mapping(target = "latestStatus", source = "bookingStatusEntity", qualifiedByName = "toBookingStatus")
     Booking toBooking(@NotNull BookingEntity bookingEntity);
 
@@ -64,6 +65,7 @@ public interface BookingMapper {
     @Mapping(target = "customerLicensePlate", source = "licensePlate", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "bookingStatusEntity", expression = "java(enumMapper.getDefaultBookingStatusEntity())")
     @Mapping(target = "isFinished", constant = "false")
+    @Mapping(target = "isRated", constant = "false")
     @Mapping(target = "version", constant = "1L")
     @Mapping(target = "uuid", expression = "java(customizedMapper.generateUUID())")
     @Mapping(target = "id", ignore = true)
