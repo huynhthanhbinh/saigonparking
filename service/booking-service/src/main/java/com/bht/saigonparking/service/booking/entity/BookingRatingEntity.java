@@ -10,7 +10,6 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SelectBeforeUpdate;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Range;
@@ -41,7 +40,8 @@ import lombok.experimental.SuperBuilder;
 @Table(name = "[PARKING_LOT_RATING]")
 public final class BookingRatingEntity extends BaseEntity {
 
-    public static final Comparator<BookingRatingEntity> SORT_BY_LAST_UPDATED_THEN_BY_ID = new SortByLastUpdated().thenComparing(new SortById());
+    public static final Comparator<BookingRatingEntity> SORT_BY_LAST_UPDATED_THEN_BY_ID =
+            new SortByLastUpdated().thenComparing(new SortById());
 
     @Range(min = 1, max = 5)
     @Column(name = "[RATING]", nullable = false)
@@ -50,7 +50,6 @@ public final class BookingRatingEntity extends BaseEntity {
     @Column(name = "[COMMENT]")
     private String comment;
 
-    @CreationTimestamp
     @UpdateTimestamp
     @EqualsAndHashCode.Exclude
     @Column(name = "[LAST_UPDATED]")
