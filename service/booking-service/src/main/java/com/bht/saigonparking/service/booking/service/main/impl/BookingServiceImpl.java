@@ -267,7 +267,7 @@ public class BookingServiceImpl implements BookingService {
                     .toMap(parkingLotRatingTuple -> parkingLotRatingTuple,
                             parkingLotRatingTuple -> usernameMap.get(parkingLotRatingTuple.get(2, Long.class))));
         }
-        
+
         return getAllRatingsOfParkingLot(parkingLotId, sortLastUpdatedAsc, nRow, pageNumber);
     }
 
@@ -339,7 +339,7 @@ public class BookingServiceImpl implements BookingService {
                     .parkingLotId(parkingLotId)
                     .nBooking(0L)
                     .nRating(0L)
-                    .ratingAverage(0.0)
+                    .ratingAverage((double) 0)
                     .build());
         }
     }
