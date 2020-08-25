@@ -165,6 +165,16 @@ message ParkingLotBookingAndRatingStatistic {
     double ratingAverage = 4; /* rating average */
 }
 
+enum BookingStatisticRequestType {
+    CREATE = 0; /* create new Booking Statistic */
+    DELETE = 1; /* delete existed Booking Statistic */
+}
+
+message BookingStatisticRequest { /* will be used as message format to exchange in Booking Queue */
+                                  BookingStatisticRequestType type = 1; /* CREATE by default */
+                                  int64 parkingLotId = 2; /* id of parking lot */
+}
+
 service BookingService {
 
     /* PRIVATE: ADMIN & INTERNAL service use-only */

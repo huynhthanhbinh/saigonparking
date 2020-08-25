@@ -19,11 +19,14 @@ import lombok.NoArgsConstructor;
 public final class SaigonParkingMessageQueue {
 
     public static final String CONTACT_EXCHANGE_NAME = "saigonparking-contact.exchange";
+    public static final String INTERNAL_EXCHANGE_NAME = "saigonparking-internal.exchange";
 
+    public static final String BOOKING_QUEUE_NAME = "saigonparking.booking";
     public static final String MAIL_QUEUE_NAME = "saigonparking.mail";
     public static final String USER_QUEUE_NAME = "saigonparking.user";
     public static final String PARKING_LOT_QUEUE_NAME = "saigonparking.parkinglot";
 
+    public static final String BOOKING_TOPIC_ROUTING_KEY = "saigonparking.booking";
     public static final String MAIL_TOPIC_ROUTING_KEY = "saigonparking.mail";
     public static final String USER_TOPIC_ROUTING_KEY = "saigonparking.user";
     public static final String PARKING_LOT_ROUTING_KEY = "saigonparking.parkinglot";
@@ -49,7 +52,8 @@ public final class SaigonParkingMessageQueue {
     public static Long getUserIdFromUserQueueName(@NotEmpty String userQueueName) {
         Matcher matcher = USER_QUEUE_NAME_PATTERN.matcher(userQueueName);
         if (matcher.find()) {
-            return Long.valueOf(matcher.group(1));
+            String userId = matcher.group(1);
+            return Long.valueOf(userId);
         }
         throw new IncorrectQueueNameException();
     }
