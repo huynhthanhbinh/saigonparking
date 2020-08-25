@@ -170,13 +170,13 @@ enum BookingStatisticRequestType {
     DELETE = 1; /* delete existed Booking Statistic */
 }
 
-message BookingStatisticRequest { /* will be used as message format to exchange in Booking Queue */
-                                  BookingStatisticRequestType type = 1; /* CREATE by default */
-                                  int64 parkingLotId = 2; /* id of parking lot */
+/* will be used as message format to exchange in Booking Queue */
+message BookingStatisticRequest {
+    BookingStatisticRequestType type = 1; /* CREATE by default */
+    repeated int64 parkingLotId = 2; /* list id of parking lot */
 }
 
 service BookingService {
-
     /* PRIVATE: ADMIN & INTERNAL service use-only */
     rpc createBooking (CreateBookingRequest) returns (CreateBookingResponse);
     rpc updateBookingStatus (UpdateBookingStatusRequest) returns (google.protobuf.Empty);

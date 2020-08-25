@@ -6,6 +6,7 @@ import static com.bht.saigonparking.api.grpc.booking.BookingStatus.FINISHED;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -251,6 +252,7 @@ public class BookingServiceImpl implements BookingService {
                                                         boolean sortLastUpdatedAsc,
                                                         @NotNull @Max(20L) Integer nRow,
                                                         @NotNull Integer pageNumber) {
+
         if (!rating.equals(0)) {
             List<Tuple> parkingLotRatingTupleList = bookingRatingRepository
                     .getAllRatingsOfParkingLot(parkingLotId, rating, sortLastUpdatedAsc, nRow, pageNumber);
@@ -265,6 +267,7 @@ public class BookingServiceImpl implements BookingService {
                     .toMap(parkingLotRatingTuple -> parkingLotRatingTuple,
                             parkingLotRatingTuple -> usernameMap.get(parkingLotRatingTuple.get(2, Long.class))));
         }
+        
         return getAllRatingsOfParkingLot(parkingLotId, sortLastUpdatedAsc, nRow, pageNumber);
     }
 
@@ -325,7 +328,11 @@ public class BookingServiceImpl implements BookingService {
 
     @Async
     @Override
-    public void createParkingLotStatistic(@NotNull Long parkingLotId) {
+    public void createOneOrManyParkingLotStatistic(@NotNull Set<Long> parkingLotIdSet) {
+        parkingLotIdSet.forEach(this::createParkingLotStatistic);
+    }
+
+    private void createParkingLotStatistic(@NotNull Long parkingLotId) {
         Optional<BookingStatisticEntity> currentStatistic = bookingStatisticRepository.getByParkingLotId(parkingLotId);
         if (!currentStatistic.isPresent()) {
             bookingStatisticRepository.saveAndFlush(BookingStatisticEntity.builder()
@@ -339,12 +346,12 @@ public class BookingServiceImpl implements BookingService {
 
     @Async
     @Override
-    public void deleteParkingLotStatistic(@NotNull Long parkingLotId) {
+    public void deleteOneOrManyParkingLotStatistic(@NotNull Set<Long> parkingLotIdSet) {
+        parkingLotIdSet.forEach(this::deleteParkingLotStatistic);
+    }
+
+    private void deleteParkingLotStatistic(@NotNull Long parkingLotId) {
         Optional<BookingStatisticEntity> currentStatistic = bookingStatisticRepository.getByParkingLotId(parkingLotId);
-        if (currentStatistic.isPresent()) {
-            bookingStatisticRepository.delete(currentStatistic.get());
-            return;
-        }
-        throw new EntityNotFoundException();
+        currentStatistic.ifPresent(bookingStatisticRepository::delete);
     }
 }

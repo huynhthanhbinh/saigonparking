@@ -2,6 +2,7 @@ package com.bht.saigonparking.service.booking.service.main;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.Tuple;
 import javax.validation.constraints.Max;
@@ -104,7 +105,7 @@ public interface BookingService {
 
     void deleteBookingRating(@NotEmpty String bookingUuidString);
 
-    void createParkingLotStatistic(@NotNull Long parkingLotId);
-    
-    void deleteParkingLotStatistic(@NotNull Long parkingLotId);
+    void createOneOrManyParkingLotStatistic(@NotNull Set<Long> parkingLotIdSet);
+
+    void deleteOneOrManyParkingLotStatistic(@NotNull Set<Long> parkingLotIdSet);
 }
