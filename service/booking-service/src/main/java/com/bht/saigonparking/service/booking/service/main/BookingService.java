@@ -103,4 +103,8 @@ public interface BookingService {
     void updateBookingRating(@NotEmpty String bookingUuidString, @NotNull Integer rating, @NotEmpty String comment);
 
     void deleteBookingRating(@NotEmpty String bookingUuidString);
+
+    void createParkingLotStatistic(@NotNull Long parkingLotId);
+    
+    void deleteParkingLotStatistic(@NotNull Long parkingLotId);
 }

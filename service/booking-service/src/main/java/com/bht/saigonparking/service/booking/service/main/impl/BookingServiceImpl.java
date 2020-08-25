@@ -5,6 +5,7 @@ import static com.bht.saigonparking.api.grpc.booking.BookingStatus.FINISHED;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -30,11 +31,13 @@ import com.bht.saigonparking.common.exception.BookingNotYetRatedException;
 import com.bht.saigonparking.service.booking.entity.BookingEntity;
 import com.bht.saigonparking.service.booking.entity.BookingHistoryEntity;
 import com.bht.saigonparking.service.booking.entity.BookingRatingEntity;
+import com.bht.saigonparking.service.booking.entity.BookingStatisticEntity;
 import com.bht.saigonparking.service.booking.entity.BookingStatusEntity;
 import com.bht.saigonparking.service.booking.mapper.EnumMapper;
 import com.bht.saigonparking.service.booking.repository.core.BookingHistoryRepository;
 import com.bht.saigonparking.service.booking.repository.core.BookingRatingRepository;
 import com.bht.saigonparking.service.booking.repository.core.BookingRepository;
+import com.bht.saigonparking.service.booking.repository.core.BookingStatisticRepository;
 import com.bht.saigonparking.service.booking.service.main.BookingService;
 
 import lombok.RequiredArgsConstructor;
@@ -49,10 +52,12 @@ import lombok.RequiredArgsConstructor;
 public class BookingServiceImpl implements BookingService {
 
     private final EnumMapper enumMapper;
+    private final UserServiceGrpc.UserServiceBlockingStub userServiceBlockingStub;
+
     private final BookingRepository bookingRepository;
     private final BookingRatingRepository bookingRatingRepository;
     private final BookingHistoryRepository bookingHistoryRepository;
-    private final UserServiceGrpc.UserServiceBlockingStub userServiceBlockingStub;
+    private final BookingStatisticRepository bookingStatisticRepository;
 
     @Override
     public BookingEntity getOnGoingBookingOfCustomer(@NotNull Long customerId) {
@@ -316,5 +321,30 @@ public class BookingServiceImpl implements BookingService {
             return;
         }
         throw new BookingNotYetRatedException();
+    }
+
+    @Async
+    @Override
+    public void createParkingLotStatistic(@NotNull Long parkingLotId) {
+        Optional<BookingStatisticEntity> currentStatistic = bookingStatisticRepository.getByParkingLotId(parkingLotId);
+        if (!currentStatistic.isPresent()) {
+            bookingStatisticRepository.saveAndFlush(BookingStatisticEntity.builder()
+                    .parkingLotId(parkingLotId)
+                    .nBooking(0L)
+                    .nRating(0L)
+                    .ratingAverage(0.0)
+                    .build());
+        }
+    }
+
+    @Async
+    @Override
+    public void deleteParkingLotStatistic(@NotNull Long parkingLotId) {
+        Optional<BookingStatisticEntity> currentStatistic = bookingStatisticRepository.getByParkingLotId(parkingLotId);
+        if (currentStatistic.isPresent()) {
+            bookingStatisticRepository.delete(currentStatistic.get());
+            return;
+        }
+        throw new EntityNotFoundException();
     }
 }
