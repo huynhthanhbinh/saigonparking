@@ -3,9 +3,9 @@ package com.bht.saigonparking.service.booking.mapper;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
+import javax.persistence.Tuple;
 import javax.validation.constraints.NotNull;
 
 import org.mapstruct.Mapper;
@@ -17,11 +17,15 @@ import org.springframework.stereotype.Component;
 import com.bht.saigonparking.api.grpc.booking.Booking;
 import com.bht.saigonparking.api.grpc.booking.BookingDetail;
 import com.bht.saigonparking.api.grpc.booking.BookingHistory;
+import com.bht.saigonparking.api.grpc.booking.BookingRating;
 import com.bht.saigonparking.api.grpc.booking.CreateBookingRequest;
+import com.bht.saigonparking.api.grpc.booking.ParkingLotBookingAndRatingStatistic;
 import com.bht.saigonparking.api.grpc.booking.UpdateBookingStatusRequest;
 import com.bht.saigonparking.service.booking.configuration.AppConfiguration;
 import com.bht.saigonparking.service.booking.entity.BookingEntity;
 import com.bht.saigonparking.service.booking.entity.BookingHistoryEntity;
+import com.bht.saigonparking.service.booking.entity.BookingRatingEntity;
+import com.bht.saigonparking.service.booking.entity.BookingStatisticEntity;
 
 /**
  * implements all necessary mappers for BookingService
@@ -33,7 +37,7 @@ import com.bht.saigonparking.service.booking.entity.BookingHistoryEntity;
 @Mapper(componentModel = "spring",
         implementationPackage = AppConfiguration.BASE_PACKAGE + ".mapper.impl",
         nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT,
-        uses = {EnumMapper.class, CustomizedMapper.class, UUID.class})
+        uses = {EnumMapper.class, CustomizedMapper.class})
 public interface BookingMapper {
 
     @Named("toBookingFromMapEntry")
@@ -110,5 +114,37 @@ public interface BookingMapper {
                 .sorted(BookingHistoryEntity.SORT_BY_LAST_UPDATED_THEN_BY_ID)
                 .map(this::toBookingHistory)
                 .collect(Collectors.toList());
+    }
+
+    @Named("toParkingLotBookingAndRatingStatistic")
+    @Mapping(target = "parkingLotId", source = "parkingLotId", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
+    @Mapping(target = "NBooking", source = "NBooking", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
+    @Mapping(target = "NRating", source = "NRating", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
+    @Mapping(target = "ratingAverage", source = "ratingAverage", defaultExpression = "java(customizedMapper.DEFAULT_DOUBLE_VALUE)")
+    ParkingLotBookingAndRatingStatistic toParkingLotBookingAndRatingStatistic(@NotNull BookingStatisticEntity bookingStatisticEntity);
+
+    @Named("toBookingRatingFromTupleEntry")
+    @Mapping(target = "bookingId", expression = "java(bookingRatingTupleEntry.getKey().get(0, String.class))")
+    @Mapping(target = "username", source = "value", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    @Mapping(target = "rating", expression = "java(bookingRatingTupleEntry.getKey().get(3, Short.class).intValue())")
+    @Mapping(target = "comment", expression = "java(bookingRatingTupleEntry.getKey().get(4, String.class))")
+    @Mapping(target = "lastUpdated", expression = "java(customizedMapper.toTimestampString(bookingRatingTupleEntry.getKey().get(5, java.sql.Timestamp.class)))")
+    BookingRating toBookingRating(@NotNull Map.Entry<Tuple, String> bookingRatingTupleEntry);
+
+    @Named("toBookingRating")
+    @Mapping(target = "bookingId", source = "bookingEntity.uuid", qualifiedByName = "toUUIDString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    @Mapping(target = "rating", source = "rating", defaultExpression = "java(customizedMapper.DEFAULT_SHORT_VALUE)")
+    @Mapping(target = "comment", source = "comment", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    @Mapping(target = "lastUpdated", source = "lastUpdated", qualifiedByName = "toTimestampString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    BookingRating toBookingRating(@NotNull BookingRatingEntity bookingRatingEntity);
+
+    @Named("toParkingLotBookingAndRatingStatisticList")
+    default List<ParkingLotBookingAndRatingStatistic> toParkingLotBookingAndRatingStatisticList(@NotNull List<BookingStatisticEntity> bookingStatisticEntityList) {
+        return bookingStatisticEntityList.stream().map(this::toParkingLotBookingAndRatingStatistic).collect(Collectors.toList());
+    }
+
+    @Named("toParkingLotRatingListFromTupleMap")
+    default List<BookingRating> toBookingRatingList(@NotNull Map<Tuple, String> bookingRatingTupleUsernameMap) {
+        return bookingRatingTupleUsernameMap.entrySet().stream().map(this::toBookingRating).collect(Collectors.toList());
     }
 }

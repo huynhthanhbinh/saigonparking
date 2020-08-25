@@ -52,7 +52,7 @@ public class BookingRatingRepositoryCustomImpl extends BaseRepositoryCustom impl
                                                  @NotNull @Max(20L) Integer nRow,
                                                  @NotNull Integer pageNumber) {
 
-        String getAllQuery = "SELECT R.id, B.parkingLotId, B.customerId, R.rating, R.comment, R.lastUpdated " +
+        String getAllQuery = "SELECT B.uuid, B.parkingLotId, B.customerId, R.rating, R.comment, R.lastUpdated " +
                 "FROM BookingRatingEntity R JOIN FETCH R.bookingEntity B " +
                 "WHERE B.parkingLotId = :parkingLotId " +
                 "ORDER BY R.lastUpdated " + (sortLastUpdatedAsc ? " ASC " : " DESC ");
@@ -71,7 +71,7 @@ public class BookingRatingRepositoryCustomImpl extends BaseRepositoryCustom impl
                                                  @NotNull @Max(20L) Integer nRow,
                                                  @NotNull Integer pageNumber) {
 
-        String getAllQuery = "SELECT R.id, B.parkingLotId, B.customerId, R.rating, R.comment, R.lastUpdated " +
+        String getAllQuery = "SELECT B.uuid, B.parkingLotId, B.customerId, R.rating, R.comment, R.lastUpdated " +
                 "FROM BookingRatingEntity R JOIN FETCH R.bookingEntity B " +
                 "WHERE B.parkingLotId = :parkingLotId AND R.rating = :rating " +
                 "ORDER BY R.lastUpdated " + (sortLastUpdatedAsc ? " ASC " : " DESC ");
