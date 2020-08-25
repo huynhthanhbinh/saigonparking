@@ -112,7 +112,7 @@ message GenerateBookingQrCodeResponse {
 }
 
 message BookingRating {
-    int64 ratingId = 1;
+    string bookingId = 1; /* will be an UUID string */
     string username = 2;
     int32 rating = 3;
     string comment = 4;
