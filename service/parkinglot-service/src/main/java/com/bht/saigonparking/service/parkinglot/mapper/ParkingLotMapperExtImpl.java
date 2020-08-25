@@ -37,6 +37,7 @@ public final class ParkingLotMapperExtImpl implements ParkingLotMapperExt {
         ParkingLotInformationEntity parkingLotInformationEntity;
 
         if (!isAboutToCreate) {
+
             /* case: update parkingLotEntity */
             parkingLotEntity = parkingLotRepository.getById(parkingLot.getId()).orElseThrow(EntityNotFoundException::new);
             parkingLotLimitEntity = parkingLotEntity.getParkingLotLimitEntity();
@@ -47,17 +48,16 @@ public final class ParkingLotMapperExtImpl implements ParkingLotMapperExt {
             parkingLotLimitEntity.setAvailableSlot((short) parkingLot.getAvailableSlot());
 
             ParkingLotInformation parkingLotInformation = parkingLot.getInformation();
-
             parkingLotInformationEntity.setName(parkingLotInformation.getName());
             parkingLotInformationEntity.setAddress(parkingLotInformation.getAddress());
             parkingLotInformationEntity.setPhone(parkingLotInformation.getPhone().isEmpty() ? "" : parkingLotInformation.getPhone());
 
         } else {
+
             /* case: create parkingLotEntity */
             parkingLotEntity = new ParkingLotEntity();
             parkingLotEntity.setVersion(1L);
             parkingLotEntity.setParkingLotUnitEntitySet(Collections.emptySet());
-            parkingLotEntity.setParkingLotRatingEntitySet(Collections.emptySet());
             parkingLotEntity.setParkingLotEmployeeEntitySet(Collections.emptySet());
             parkingLotEntity.setParkingLotTypeEntity(enumMapper.toParkingLotTypeEntity(parkingLot.getType()));
         }
