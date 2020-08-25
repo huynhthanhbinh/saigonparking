@@ -245,6 +245,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String getUsernameOfUser(@NotNull Long userId) {
-        return userRepository.getUsernameOfUser(userId).orElseThrow(EntityNotFoundException::new);
+        return userRepository.getUsernameOfUser(userId).orElse("unknown");
     }
 }

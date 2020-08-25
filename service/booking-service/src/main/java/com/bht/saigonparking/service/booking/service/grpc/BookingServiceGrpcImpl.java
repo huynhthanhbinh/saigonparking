@@ -32,6 +32,7 @@ import com.bht.saigonparking.api.grpc.booking.GetAllBookingOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.booking.GetAllBookingRequest;
 import com.bht.saigonparking.api.grpc.booking.GetAllRatingsOfParkingLotRequest;
 import com.bht.saigonparking.api.grpc.booking.GetAllRatingsOfParkingLotResponse;
+import com.bht.saigonparking.api.grpc.booking.GetBookingRatingRequest;
 import com.bht.saigonparking.api.grpc.booking.ParkingLotBookingAndRatingStatistic;
 import com.bht.saigonparking.api.grpc.booking.ParkingLotRatingCountGroupByRating;
 import com.bht.saigonparking.api.grpc.booking.UpdateBookingRatingRequest;
@@ -562,6 +563,28 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("createBookingRating(%s, %d, %s)",
                             request.getBookingId(), request.getRating(), request.getComment()));
+        }
+    }
+
+    @Override
+    public void getBookingRating(GetBookingRatingRequest request, StreamObserver<BookingRating> responseObserver) {
+        try {
+            BookingRating bookingRating = bookingMapper.toBookingRating(bookingService
+                    .getBookingRatingWithCustomerUsernameByBookingUuid(request.getBookingId()));
+
+            responseObserver.onNext(bookingRating);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getBookingRating(%s)", request.getBookingId()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getBookingRating(%s)", request.getBookingId()));
         }
     }
 

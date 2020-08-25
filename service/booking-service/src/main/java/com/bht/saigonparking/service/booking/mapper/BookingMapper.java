@@ -12,6 +12,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.NullValueMappingStrategy;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
 import com.bht.saigonparking.api.grpc.booking.Booking;
@@ -28,14 +29,12 @@ import com.bht.saigonparking.service.booking.entity.BookingRatingEntity;
 import com.bht.saigonparking.service.booking.entity.BookingStatisticEntity;
 
 /**
- * implements all necessary mappers for BookingService
  *
  * @author bht
  */
 @Component
 @SuppressWarnings("UnmappedTargetProperties")
-@Mapper(componentModel = "spring",
-        implementationPackage = AppConfiguration.BASE_PACKAGE + ".mapper.impl",
+@Mapper(componentModel = "spring", implementationPackage = AppConfiguration.BASE_PACKAGE + ".mapper.impl",
         nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT,
         uses = {EnumMapper.class, CustomizedMapper.class})
 public interface BookingMapper {
@@ -132,11 +131,12 @@ public interface BookingMapper {
     BookingRating toBookingRating(@NotNull Map.Entry<Tuple, String> bookingRatingTupleEntry);
 
     @Named("toBookingRating")
-    @Mapping(target = "bookingId", source = "bookingEntity.uuid", qualifiedByName = "toUUIDString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
-    @Mapping(target = "rating", source = "rating", defaultExpression = "java(customizedMapper.DEFAULT_SHORT_VALUE)")
-    @Mapping(target = "comment", source = "comment", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
-    @Mapping(target = "lastUpdated", source = "lastUpdated", qualifiedByName = "toTimestampString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
-    BookingRating toBookingRating(@NotNull BookingRatingEntity bookingRatingEntity);
+    @Mapping(target = "bookingId", source = "first.bookingEntity.uuid", qualifiedByName = "toUUIDString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    @Mapping(target = "rating", source = "first.rating", defaultExpression = "java(customizedMapper.DEFAULT_SHORT_VALUE)")
+    @Mapping(target = "comment", source = "first.comment", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    @Mapping(target = "lastUpdated", source = "first.lastUpdated", qualifiedByName = "toTimestampString", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    @Mapping(target = "username", source = "second", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
+    BookingRating toBookingRating(@NotNull Pair<BookingRatingEntity, String> bookingRatingEntityUsernamePair);
 
     @Named("toParkingLotBookingAndRatingStatisticList")
     default List<ParkingLotBookingAndRatingStatistic> toParkingLotBookingAndRatingStatisticList(@NotNull List<BookingStatisticEntity> bookingStatisticEntityList) {

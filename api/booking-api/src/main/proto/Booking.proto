@@ -126,6 +126,10 @@ message CreateBookingRatingRequest {
     /* customerId will be get from JWT (Authorization Header) */
 }
 
+message GetBookingRatingRequest {
+    string bookingId = 1; /* will be an UUID string */
+}
+
 message UpdateBookingRatingRequest {
     string bookingId = 1; /* will be an UUID string */
     int32 rating = 2; /* min = 1, max = 5 */
@@ -210,6 +214,17 @@ service BookingService {
      *      ++ comment: can be an empty string or a comment string
      *  + response: Empty value if succeed, otherwise, throw exception */
     rpc createBookingRating (CreateBookingRatingRequest) returns (google.protobuf.Empty);
+
+    /** PUBLIC - for customer only
+     * use-case: customer get existed rating of a finished booking to parking lot
+     *  + request: GetBookingRatingRequest, you need to provide 1 arguments: bookingId (uuid of booking)
+     *  + response: BookingRating value if succeed, otherwise, throw exception. Response will be a combination of 5 fields:
+     *      ++ bookingId: uuid of booking
+     *      ++ rating: rating star (min = 1, max = 5)
+     *      ++ comment: can be an empty string or a comment string
+     *      ++ username: username of customer
+     *      ++ lastUpdated: timestamp when the rating is lastUpdated */
+    rpc getBookingRating (GetBookingRatingRequest) returns (BookingRating);
 
     /** PUBLIC - for customer only
      * use-case: customer update existed rating of a finished booking to parking lot

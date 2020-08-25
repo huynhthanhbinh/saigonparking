@@ -14,6 +14,7 @@ import org.springframework.data.util.Pair;
 
 import com.bht.saigonparking.service.booking.entity.BookingEntity;
 import com.bht.saigonparking.service.booking.entity.BookingHistoryEntity;
+import com.bht.saigonparking.service.booking.entity.BookingRatingEntity;
 import com.bht.saigonparking.service.booking.entity.BookingStatusEntity;
 
 /**
@@ -99,11 +100,19 @@ public interface BookingService {
 
     Map<Integer, Long> getParkingLotRatingCountGroupByRating(@NotNull Long parkingLotId);
 
-    void createBookingRating(@NotNull Long customerId, @NotEmpty String bookingUuidString, @NotNull Integer rating, @NotEmpty String comment);
+    void createBookingRating(@NotNull Long customerId,
+                             @NotEmpty String bookingUuidString,
+                             @NotNull Integer rating,
+                             @NotEmpty String comment);
 
-    void updateBookingRating(@NotNull Long customerId, @NotEmpty String bookingUuidString, @NotNull Integer rating, @NotEmpty String comment);
+    void updateBookingRating(@NotNull Long customerId,
+                             @NotEmpty String bookingUuidString,
+                             @NotNull Integer rating,
+                             @NotEmpty String comment);
 
     void deleteBookingRating(@NotNull Long customerId, @NotEmpty String bookingUuidString);
+
+    Pair<BookingRatingEntity, String> getBookingRatingWithCustomerUsernameByBookingUuid(@NotEmpty String bookingUuidString);
 
     void createOneOrManyParkingLotStatistic(@NotNull Set<Long> parkingLotIdSet);
 

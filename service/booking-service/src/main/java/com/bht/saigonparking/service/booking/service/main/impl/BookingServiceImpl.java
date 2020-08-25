@@ -42,6 +42,7 @@ import com.bht.saigonparking.service.booking.repository.core.BookingRatingReposi
 import com.bht.saigonparking.service.booking.repository.core.BookingRepository;
 import com.bht.saigonparking.service.booking.repository.core.BookingStatisticRepository;
 import com.bht.saigonparking.service.booking.service.main.BookingService;
+import com.google.protobuf.Int64Value;
 
 import lombok.RequiredArgsConstructor;
 
@@ -118,6 +119,7 @@ public class BookingServiceImpl implements BookingService {
                 .build();
 
         saveNewBookingHistory(bookingHistoryEntity, bookingEntity);
+
         return Pair.of(bookingEntity.getCustomerId(), bookingEntity.getParkingLotId());
     }
 
@@ -343,6 +345,20 @@ public class BookingServiceImpl implements BookingService {
         throw new PermissionDeniedException();
     }
 
+    @Override
+    public Pair<BookingRatingEntity, String> getBookingRatingWithCustomerUsernameByBookingUuid(@NotEmpty String bookingUuidString) {
+        BookingRatingEntity ratingEntity = getBookingRatingByBookingUuid(bookingUuidString);
+        String customerUsername = userServiceBlockingStub
+                .mapUserIdToUsername(Int64Value.of(ratingEntity.getBookingEntity().getCustomerId()))
+                .getValue();
+        
+        return Pair.of(ratingEntity, customerUsername);
+    }
+
+    private BookingRatingEntity getBookingRatingByBookingUuid(@NotEmpty String bookingUuidString) {
+        return bookingRatingRepository.getByBookingUuid(UUID.fromString(bookingUuidString)).orElseThrow(EntityNotFoundException::new);
+    }
+
     @Async
     @Override
     public void createOneOrManyParkingLotStatistic(@NotNull Set<Long> parkingLotIdSet) {
@@ -357,6 +373,7 @@ public class BookingServiceImpl implements BookingService {
 
     private void createParkingLotStatistic(@NotNull Long parkingLotId) {
         Optional<BookingStatisticEntity> currentStatistic = bookingStatisticRepository.getByParkingLotId(parkingLotId);
+
         if (!currentStatistic.isPresent()) {
             bookingStatisticRepository.saveAndFlush(BookingStatisticEntity.builder()
                     .parkingLotId(parkingLotId)
