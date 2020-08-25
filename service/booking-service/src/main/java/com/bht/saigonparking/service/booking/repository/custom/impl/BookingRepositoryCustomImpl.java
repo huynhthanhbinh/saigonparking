@@ -124,6 +124,8 @@ public class BookingRepositoryCustomImpl extends BaseRepositoryCustom implements
 
         String getAllQuery = "SELECT B " +
                 "FROM BookingEntity B " +
+                "JOIN FETCH B.bookingStatusEntity " +
+                "LEFT JOIN FETCH B.bookingRatingEntity " +
                 "ORDER BY B.id DESC ";
 
         return entityManager.createQuery(getAllQuery, BookingEntity.class)
@@ -139,6 +141,8 @@ public class BookingRepositoryCustomImpl extends BaseRepositoryCustom implements
 
         String getAllQuery = "SELECT B " +
                 "FROM BookingEntity B " +
+                "JOIN FETCH B.bookingStatusEntity " +
+                "LEFT JOIN FETCH B.bookingRatingEntity " +
                 "WHERE B.bookingStatusEntity = :bookingStatusEntity " +
                 "ORDER BY B.id DESC ";
 
@@ -156,6 +160,8 @@ public class BookingRepositoryCustomImpl extends BaseRepositoryCustom implements
 
         String getAllQuery = "SELECT B " +
                 "FROM BookingEntity B " +
+                "JOIN FETCH B.bookingStatusEntity " +
+                "LEFT JOIN FETCH B.bookingRatingEntity " +
                 "WHERE B.customerId = :customerId " +
                 "ORDER BY B.id DESC ";
 
@@ -173,6 +179,8 @@ public class BookingRepositoryCustomImpl extends BaseRepositoryCustom implements
 
         String getAllQuery = "SELECT B " +
                 "FROM BookingEntity B " +
+                "JOIN FETCH B.bookingStatusEntity " +
+                "LEFT JOIN FETCH B.bookingRatingEntity " +
                 "WHERE B.parkingLotId = :parkingLotId " +
                 "ORDER BY B.id DESC ";
 
@@ -191,6 +199,8 @@ public class BookingRepositoryCustomImpl extends BaseRepositoryCustom implements
 
         String getAllQuery = "SELECT B " +
                 "FROM BookingEntity B " +
+                "JOIN FETCH B.bookingStatusEntity " +
+                "LEFT JOIN FETCH B.bookingRatingEntity " +
                 "WHERE B.parkingLotId = :parkingLotId " +
                 "AND B.bookingStatusEntity = :bookingStatusEntity " +
                 "ORDER BY B.id DESC ";
@@ -208,6 +218,8 @@ public class BookingRepositoryCustomImpl extends BaseRepositoryCustom implements
 
         String getAllQuery = "SELECT B " +
                 "FROM BookingEntity B " +
+                "JOIN FETCH B.bookingStatusEntity " +
+                "LEFT JOIN FETCH B.bookingRatingEntity " +
                 "WHERE B.parkingLotId = :parkingLotId " +
                 "AND B.isFinished = FALSE " +
                 "ORDER BY B.id DESC ";
@@ -218,12 +230,15 @@ public class BookingRepositoryCustomImpl extends BaseRepositoryCustom implements
     }
 
     @Override
-    public Optional<BookingEntity> getFirstByCustomerIdAndIsFinished(@NotNull Long customerId, @NotNull Boolean isFinished) {
+    public Optional<BookingEntity> getFirstByCustomerIdAndIsFinished(@NotNull Long customerId,
+                                                                     @NotNull Boolean isFinished) {
 
         String query = "SELECT B " +
                 "FROM BookingEntity B " +
                 "JOIN FETCH B.bookingStatusEntity " +
-                "WHERE B.customerId = :customerId AND B.isFinished = :isFinished";
+                "LEFT JOIN FETCH B.bookingRatingEntity " +
+                "WHERE B.customerId = :customerId " +
+                "AND B.isFinished = :isFinished ";
 
         return Optional.ofNullable(entityManager
                 .createQuery(query, BookingEntity.class)
