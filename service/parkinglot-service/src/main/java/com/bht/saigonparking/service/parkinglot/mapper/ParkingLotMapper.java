@@ -30,8 +30,7 @@ import com.bht.saigonparking.service.parkinglot.entity.ParkingLotLimitEntity;
  */
 @Component
 @SuppressWarnings("UnmappedTargetProperties")
-@Mapper(componentModel = "spring",
-        implementationPackage = AppConfiguration.BASE_PACKAGE + ".mapper.impl",
+@Mapper(componentModel = "spring", implementationPackage = AppConfiguration.BASE_PACKAGE + ".mapper.impl",
         nullValueMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT,
         uses = {EnumMapper.class, CustomizedMapper.class})
 public interface ParkingLotMapper {
@@ -109,8 +108,6 @@ public interface ParkingLotMapper {
     @Mapping(target = "parkingLotEntity", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "version", ignore = true)
-    @Mapping(target = "ratingAverage", ignore = true)
-    @Mapping(target = "nRating", ignore = true)
     @Mapping(target = "name", source = "information.name", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "phone", source = "information.phone", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "address", source = "information.address", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
@@ -118,22 +115,16 @@ public interface ParkingLotMapper {
 
     @Named("toParkingLotResultListWithoutName")
     default List<ParkingLotResult> toParkingLotResultListWithoutName(@NotNull List<Tuple> parkingLotWithoutNameTupleList) {
-        return parkingLotWithoutNameTupleList.stream()
-                .map(this::toParkingLotResultWithoutName)
-                .collect(Collectors.toList());
+        return parkingLotWithoutNameTupleList.stream().map(this::toParkingLotResultWithoutName).collect(Collectors.toList());
     }
 
     @Named("toParkingLotResultListWithName")
     default List<ParkingLotResult> toParkingLotResultListWithName(@NotNull List<Tuple> parkingLotWithNameTupleList) {
-        return parkingLotWithNameTupleList.stream()
-                .map(this::toParkingLotResultWithName)
-                .collect(Collectors.toList());
+        return parkingLotWithNameTupleList.stream().map(this::toParkingLotResultWithName).collect(Collectors.toList());
     }
 
     @Named("toParkingLotList")
     default List<ParkingLot> toParkingLotList(@NotNull List<ParkingLotEntity> parkingLotEntityList) {
-        return parkingLotEntityList.stream()
-                .map(this::toParkingLotIgnoreImage)
-                .collect(Collectors.toList());
+        return parkingLotEntityList.stream().map(this::toParkingLotIgnoreImage).collect(Collectors.toList());
     }
 }
