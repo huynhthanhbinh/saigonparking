@@ -99,11 +99,11 @@ public interface BookingService {
 
     Map<Integer, Long> getParkingLotRatingCountGroupByRating(@NotNull Long parkingLotId);
 
-    void createBookingRating(@NotEmpty String bookingUuidString, @NotNull Integer rating, @NotEmpty String comment);
+    void createBookingRating(@NotNull Long customerId, @NotEmpty String bookingUuidString, @NotNull Integer rating, @NotEmpty String comment);
 
-    void updateBookingRating(@NotEmpty String bookingUuidString, @NotNull Integer rating, @NotEmpty String comment);
+    void updateBookingRating(@NotNull Long customerId, @NotEmpty String bookingUuidString, @NotNull Integer rating, @NotEmpty String comment);
 
-    void deleteBookingRating(@NotEmpty String bookingUuidString);
+    void deleteBookingRating(@NotNull Long customerId, @NotEmpty String bookingUuidString);
 
     void createOneOrManyParkingLotStatistic(@NotNull Set<Long> parkingLotIdSet);
 
