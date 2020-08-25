@@ -24,6 +24,7 @@ message Booking {
     string createdAt = 6;
     BookingStatus latestStatus = 7;
     bool isFinished = 8;
+    bool isRated = 9;
 }
 
 message BookingHistory {
@@ -177,6 +178,7 @@ message BookingStatisticRequest {
 }
 
 service BookingService {
+
     /* PRIVATE: ADMIN & INTERNAL service use-only */
     rpc createBooking (CreateBookingRequest) returns (CreateBookingResponse);
     rpc updateBookingStatus (UpdateBookingStatusRequest) returns (google.protobuf.Empty);
@@ -245,7 +247,8 @@ service BookingService {
     rpc getAllRatingsOfParkingLot (GetAllRatingsOfParkingLotRequest) returns (GetAllRatingsOfParkingLotResponse);
 
     /** PUBLIC
-     * use-case: show parking lot rating count group by rating. For example: a map such as { 2=9, 3=12, 4=27 } will be shown as:
+     * use-case: show parking lot rating count group by rating.
+     * For example: a map such as { 2=9, 3=12, 4=27 } will be shown as:
      *      9  * *
      *      12 * * *
      *      27 * * * *
