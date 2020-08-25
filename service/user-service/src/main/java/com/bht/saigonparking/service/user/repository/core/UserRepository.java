@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -64,4 +65,16 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>, UserRep
             "JOIN FETCH U.userRoleEntity UR " +
             "WHERE U.id IN ?1")
     List<UserEntity> getAll(@NotEmpty Set<Long> userIdSet);
+
+
+    /**
+     *
+     * self-implement getUsernameByUserId method
+     * in order to prevent get all fields of User
+     * use-case: booking-rating with customer username
+     */
+    @Query("SELECT U.username " +
+            "FROM UserEntity U " +
+            "WHERE U.id = ?1")
+    Optional<String> getUsernameOfUser(@NotNull Long id);
 }

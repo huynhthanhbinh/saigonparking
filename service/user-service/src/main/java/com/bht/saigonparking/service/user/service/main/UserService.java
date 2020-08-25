@@ -68,4 +68,6 @@ public interface UserService {
     boolean checkUsernameAlreadyExist(@NotEmpty String username);
 
     boolean checkEmailAlreadyExist(@NotEmpty String email);
+
+    String getUsernameOfUser(@NotNull Long userId);
 }

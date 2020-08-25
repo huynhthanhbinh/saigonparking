@@ -153,6 +153,12 @@ service UserService {
      *  + response: <userId, username> map, if succeed, otherwise, throw exception */
     rpc mapToUsernameMap (MapToUsernameMapRequest) returns (MapToUsernameMapResponse);
 
+    /** PRIVATE
+     * use-case: map user id to user's username
+     *  + request: userId
+     *  + response: user's username, if succeed, otherwise, throw exception */
+    rpc mapUserIdToUsername (google.protobuf.Int64Value) returns (google.protobuf.StringValue);
+
     /** PUBLIC - ADMIN ONLY, if you are not admin, please call via AuthService
      * use-case: create new user or customer
      *  + request: username

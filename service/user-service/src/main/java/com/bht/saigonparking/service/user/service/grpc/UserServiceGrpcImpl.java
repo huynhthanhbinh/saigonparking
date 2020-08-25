@@ -238,6 +238,28 @@ public final class UserServiceGrpcImpl extends UserServiceImplBase {
     }
 
     @Override
+    public void mapUserIdToUsername(Int64Value request, StreamObserver<StringValue> responseObserver) {
+        try {
+            serverInterceptor.validateAdmin();
+            String username = userService.getUsernameOfUser(request.getValue());
+
+            responseObserver.onNext(StringValue.of(username));
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("mapUserIdToUsername(%d): %s", request.getValue(), username));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("mapUserIdToUsername(%d)", request.getValue()));
+        }
+    }
+
+    @Override
     public void createUser(User request, StreamObserver<Int64Value> responseObserver) {
         try {
             serverInterceptor.validateAdmin();

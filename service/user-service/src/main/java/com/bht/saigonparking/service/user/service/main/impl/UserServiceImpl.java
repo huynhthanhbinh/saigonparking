@@ -242,4 +242,9 @@ public class UserServiceImpl implements UserService {
     public boolean checkEmailAlreadyExist(@NotEmpty String email) {
         return userRepository.countByEmail(email) != 0;
     }
+
+    @Override
+    public String getUsernameOfUser(@NotNull Long userId) {
+        return userRepository.getUsernameOfUser(userId).orElseThrow(EntityNotFoundException::new);
+    }
 }
