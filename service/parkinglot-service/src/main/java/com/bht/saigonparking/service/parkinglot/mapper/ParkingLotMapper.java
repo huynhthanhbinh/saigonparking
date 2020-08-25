@@ -59,8 +59,6 @@ public interface ParkingLotMapper {
     @Mapping(target = "name", source = "name", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "address", source = "address", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "phone", source = "phone", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
-    @Mapping(target = "ratingAverage", source = "ratingAverage", defaultExpression = "java(customizedMapper.DEFAULT_DOUBLE_VALUE)")
-    @Mapping(target = "numberOfRating", source = "NRating", defaultExpression = "java(customizedMapper.DEFAULT_SHORT_VALUE)")
     @Mapping(target = "imageData", source = "id", qualifiedByName = "toEncodedParkingLotImage", defaultExpression = "java(customizedMapper.DEFAULT_BYTE_STRING_VALUE)")
     @Mapping(target = "version", source = "version", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
     ParkingLotInformation toParkingLotInformation(@NotNull ParkingLotInformationEntity parkingLotInformationEntity);
@@ -69,8 +67,6 @@ public interface ParkingLotMapper {
     @Mapping(target = "name", source = "name", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "address", source = "address", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "phone", source = "phone", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
-    @Mapping(target = "ratingAverage", source = "ratingAverage", defaultExpression = "java(customizedMapper.DEFAULT_DOUBLE_VALUE)")
-    @Mapping(target = "numberOfRating", source = "NRating", defaultExpression = "java(customizedMapper.DEFAULT_SHORT_VALUE)")
     @Mapping(target = "imageData", expression = "java(customizedMapper.DEFAULT_BYTE_STRING_VALUE)")
     @Mapping(target = "version", source = "version", defaultExpression = "java(customizedMapper.DEFAULT_LONG_VALUE)")
     ParkingLotInformation toParkingLotInformationIgnoreImage(@NotNull ParkingLotInformationEntity parkingLotInformationEntity);
@@ -123,18 +119,21 @@ public interface ParkingLotMapper {
     @Named("toParkingLotResultListWithoutName")
     default List<ParkingLotResult> toParkingLotResultListWithoutName(@NotNull List<Tuple> parkingLotWithoutNameTupleList) {
         return parkingLotWithoutNameTupleList.stream()
-                .map(this::toParkingLotResultWithoutName).collect(Collectors.toList());
+                .map(this::toParkingLotResultWithoutName)
+                .collect(Collectors.toList());
     }
 
     @Named("toParkingLotResultListWithName")
     default List<ParkingLotResult> toParkingLotResultListWithName(@NotNull List<Tuple> parkingLotWithNameTupleList) {
         return parkingLotWithNameTupleList.stream()
-                .map(this::toParkingLotResultWithName).collect(Collectors.toList());
+                .map(this::toParkingLotResultWithName)
+                .collect(Collectors.toList());
     }
 
     @Named("toParkingLotList")
     default List<ParkingLot> toParkingLotList(@NotNull List<ParkingLotEntity> parkingLotEntityList) {
         return parkingLotEntityList.stream()
-                .map(this::toParkingLotIgnoreImage).collect(Collectors.toList());
+                .map(this::toParkingLotIgnoreImage)
+                .collect(Collectors.toList());
     }
 }
