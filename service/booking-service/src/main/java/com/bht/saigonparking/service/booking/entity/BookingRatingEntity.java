@@ -37,7 +37,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
-@Table(name = "[PARKING_LOT_RATING]")
+@Table(name = "[BOOKING_RATING]")
 public final class BookingRatingEntity extends BaseEntity {
 
     public static final Comparator<BookingRatingEntity> SORT_BY_LAST_UPDATED_THEN_BY_ID =
