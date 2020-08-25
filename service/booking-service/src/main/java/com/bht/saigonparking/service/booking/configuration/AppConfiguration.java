@@ -16,7 +16,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.bht.saigonparking.common.annotation.InheritedComponent;
 import com.bht.saigonparking.common.base.BaseSaigonParkingAppConfiguration;
 import com.bht.saigonparking.common.exception.BookingAlreadyFinishedException;
+import com.bht.saigonparking.common.exception.BookingAlreadyRatedException;
 import com.bht.saigonparking.common.exception.BookingNotYetAcceptedException;
+import com.bht.saigonparking.common.exception.BookingNotYetRatedException;
 import com.bht.saigonparking.common.exception.CustomerHasOnGoingBookingException;
 import com.bht.saigonparking.common.exception.PermissionDeniedException;
 import com.bht.saigonparking.common.interceptor.SaigonParkingClientInterceptor;
@@ -56,15 +58,18 @@ public class AppConfiguration extends BaseSaigonParkingAppConfiguration {
     @Bean
     @GRpcGlobalInterceptor
     public SaigonParkingServerInterceptor saigonParkingServerInterceptor() {
-        return new SaigonParkingServerInterceptor(new ImmutableMap.Builder<Class<? extends Throwable>, String>()
-                .put(EntityNotFoundException.class, "SPE#00008")
-                .put(DataIntegrityViolationException.class, "SPE#00009")
-                .put(PermissionDeniedException.class, "SPE#00015")
-                .put(ObjectOptimisticLockingFailureException.class, "SPE#00016")
-                .put(EmptyResultDataAccessException.class, "SPE#00018")
-                .put(BookingAlreadyFinishedException.class, "SPE#00019")
-                .put(CustomerHasOnGoingBookingException.class, "SPE#00020")
-                .put(BookingNotYetAcceptedException.class, "SPE#00021")
-                .build());
+        return new SaigonParkingServerInterceptor(
+                new ImmutableMap.Builder<Class<? extends Throwable>, String>()
+                        .put(EntityNotFoundException.class, "SPE#00008")
+                        .put(DataIntegrityViolationException.class, "SPE#00009")
+                        .put(PermissionDeniedException.class, "SPE#00015")
+                        .put(ObjectOptimisticLockingFailureException.class, "SPE#00016")
+                        .put(EmptyResultDataAccessException.class, "SPE#00018")
+                        .put(BookingAlreadyFinishedException.class, "SPE#00019")
+                        .put(CustomerHasOnGoingBookingException.class, "SPE#00020")
+                        .put(BookingNotYetAcceptedException.class, "SPE#00021")
+                        .put(BookingAlreadyRatedException.class, "SPE#00022")
+                        .put(BookingNotYetRatedException.class, "SPE#00023")
+                        .build());
     }
 }
