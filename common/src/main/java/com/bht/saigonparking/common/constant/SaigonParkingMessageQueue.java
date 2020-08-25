@@ -29,7 +29,7 @@ public final class SaigonParkingMessageQueue {
     public static final String BOOKING_TOPIC_ROUTING_KEY = "saigonparking.booking";
     public static final String MAIL_TOPIC_ROUTING_KEY = "saigonparking.mail";
     public static final String USER_TOPIC_ROUTING_KEY = "saigonparking.user";
-    public static final String PARKING_LOT_ROUTING_KEY = "saigonparking.parkinglot";
+    public static final String PARKING_LOT_TOPIC_ROUTING_KEY = "saigonparking.parkinglot";
 
     private static final Pattern USER_QUEUE_NAME_PATTERN = Pattern.compile("user_(\\d+)_queue");
 

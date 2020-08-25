@@ -14,7 +14,6 @@
         <groupId>com.bht.saigonparking</groupId>
         <version>${revision}</version>
     </parent>
-
     <properties>
         <basePackage>com.bht.saigonparking.service.parkinglot</basePackage>
         <start-class>com.bht.saigonparking.service.parkinglot.ParkingLotService</start-class>
@@ -29,6 +28,11 @@
         <dependency>
             <groupId>com.bht.saigonparking</groupId>
             <artifactId>parkinglot-api</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bht.saigonparking</groupId>
+            <artifactId>booking-api</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>

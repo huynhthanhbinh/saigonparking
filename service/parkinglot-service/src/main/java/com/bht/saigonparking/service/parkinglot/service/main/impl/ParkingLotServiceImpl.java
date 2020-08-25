@@ -1,8 +1,8 @@
 package com.bht.saigonparking.service.parkinglot.service.main.impl;
 
-import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.PARKING_LOT_ROUTING_KEY;
+import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.BOOKING_TOPIC_ROUTING_KEY;
+import static com.bht.saigonparking.common.constant.SaigonParkingMessageQueue.PARKING_LOT_TOPIC_ROUTING_KEY;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +22,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bht.saigonparking.api.grpc.booking.BookingStatisticRequest;
+import com.bht.saigonparking.api.grpc.booking.BookingStatisticRequestType;
 import com.bht.saigonparking.api.grpc.parkinglot.DeleteParkingLotNotification;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotEmployeeInfo;
 import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
@@ -205,20 +207,25 @@ public class ParkingLotServiceImpl implements ParkingLotService {
     }
 
     @Override
-    public void deleteParkingLotById(@NotNull Long id) {
-        ParkingLotEntity parkingLotEntity = getParkingLotById(id);
-        List<Long> employeeIdList = parkingLotEntity.getParkingLotEmployeeEntitySet().stream()
+    public void deleteParkingLotById(@NotNull Long parkingLotId) {
+        ParkingLotEntity parkingLotEntity = getParkingLotById(parkingLotId);
+        Set<Long> employeeIdSet = parkingLotEntity.getParkingLotEmployeeEntitySet().stream()
                 .map(ParkingLotEmployeeEntity::getUserId)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
         parkingLotRepository.delete(parkingLotEntity);
 
-        rabbitTemplate.convertAndSend(PARKING_LOT_ROUTING_KEY, DeleteParkingLotNotification.newBuilder()
+        rabbitTemplate.convertAndSend(PARKING_LOT_TOPIC_ROUTING_KEY, DeleteParkingLotNotification.newBuilder()
                 .addAllInfo(Collections
-                        .singletonList(ParkingLotEmployeeInfo.newBuilder()
-                                .setParkingLotId(id)
-                                .addAllEmployeeId(employeeIdList)
+                        .singleton(ParkingLotEmployeeInfo.newBuilder()
+                                .setParkingLotId(parkingLotId)
+                                .addAllEmployeeId(employeeIdSet)
                                 .build()))
+                .build());
+
+        rabbitTemplate.convertAndSend(BOOKING_TOPIC_ROUTING_KEY, BookingStatisticRequest.newBuilder()
+                .setType(BookingStatisticRequestType.DELETE)
+                .addAllParkingLotId(Collections.singleton(parkingLotId))
                 .build());
     }
 
@@ -228,20 +235,24 @@ public class ParkingLotServiceImpl implements ParkingLotService {
             List<ParkingLotEntity> parkingLotEntityList = getAll(parkingLotIdSet);
             if (!parkingLotEntityList.isEmpty()) {
 
-                List<ParkingLotEmployeeInfo> parkingLotEmployeeInfoList = new ArrayList<>();
-
-                parkingLotEntityList.forEach(parkingLotEntity -> parkingLotEmployeeInfoList
-                        .add(ParkingLotEmployeeInfo.newBuilder()
+                Set<ParkingLotEmployeeInfo> parkingLotEmployeeInfoSet = parkingLotEntityList.stream()
+                        .map(parkingLotEntity -> ParkingLotEmployeeInfo.newBuilder()
                                 .setParkingLotId(parkingLotEntity.getId())
                                 .addAllEmployeeId(parkingLotEntity.getParkingLotEmployeeEntitySet().stream()
                                         .map(ParkingLotEmployeeEntity::getUserId)
-                                        .collect(Collectors.toList()))
-                                .build()));
+                                        .collect(Collectors.toSet()))
+                                .build())
+                        .collect(Collectors.toSet());
 
                 parkingLotRepository.deleteAll(parkingLotEntityList);
 
-                rabbitTemplate.convertAndSend(PARKING_LOT_ROUTING_KEY, DeleteParkingLotNotification.newBuilder()
-                        .addAllInfo(parkingLotEmployeeInfoList)
+                rabbitTemplate.convertAndSend(PARKING_LOT_TOPIC_ROUTING_KEY, DeleteParkingLotNotification.newBuilder()
+                        .addAllInfo(parkingLotEmployeeInfoSet)
+                        .build());
+
+                rabbitTemplate.convertAndSend(BOOKING_TOPIC_ROUTING_KEY, BookingStatisticRequest.newBuilder()
+                        .setType(BookingStatisticRequestType.DELETE)
+                        .addAllParkingLotId(parkingLotIdSet)
                         .build());
             }
         }
@@ -282,6 +293,11 @@ public class ParkingLotServiceImpl implements ParkingLotService {
 
         parkingLotInformationEntity.setParkingLotEntity(result);
         parkingLotInformationRepository.saveAndFlush(parkingLotInformationEntity);
+
+        rabbitTemplate.convertAndSend(BOOKING_TOPIC_ROUTING_KEY, BookingStatisticRequest.newBuilder()
+                .setType(BookingStatisticRequestType.CREATE)
+                .addAllParkingLotId(Collections.singleton(result.getId()))
+                .build());
 
         return result.getId();
     }
