@@ -2,6 +2,7 @@ Document's name:    Saigon Parking Project Error Code
 Author:             Huynh Thanh Binh
 Last updated:       Tue, Aug 25th, 2020
 ========================================================================================================================
+
 SPE#00000   | Error which not been assigned error code yet
 SPE#00001   | Token is expired
 SPE#00002   | Token signature is wrong
@@ -26,3 +27,4 @@ SPE#00020   | Customer want to create new booking but he/she has on going bookin
 SPE#00021   | Parking lot want to finish a booking but it not been accepted before
 SPE#00022   | Customer want to create new rating for booking, but it is already rated, just be able to modify not to recreate
 SPE#00023   | Customer want to modify or delete booking rating, but it is not rated, just be able to create new booking rating
+SPE#00024   | Customer want to create new rating for booking, but it booking is not finished yet.

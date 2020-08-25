@@ -18,6 +18,7 @@ import com.bht.saigonparking.common.base.BaseSaigonParkingAppConfiguration;
 import com.bht.saigonparking.common.exception.BookingAlreadyFinishedException;
 import com.bht.saigonparking.common.exception.BookingAlreadyRatedException;
 import com.bht.saigonparking.common.exception.BookingNotYetAcceptedException;
+import com.bht.saigonparking.common.exception.BookingNotYetFinishedException;
 import com.bht.saigonparking.common.exception.BookingNotYetRatedException;
 import com.bht.saigonparking.common.exception.CustomerHasOnGoingBookingException;
 import com.bht.saigonparking.common.exception.PermissionDeniedException;
@@ -70,6 +71,7 @@ public class AppConfiguration extends BaseSaigonParkingAppConfiguration {
                         .put(BookingNotYetAcceptedException.class, "SPE#00021")
                         .put(BookingAlreadyRatedException.class, "SPE#00022")
                         .put(BookingNotYetRatedException.class, "SPE#00023")
+                        .put(BookingNotYetFinishedException.class, "SPE#00024")
                         .build());
     }
 }
