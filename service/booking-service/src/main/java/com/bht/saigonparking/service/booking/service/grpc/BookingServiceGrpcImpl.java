@@ -12,6 +12,7 @@ import org.springframework.data.util.Pair;
 import com.bht.saigonparking.api.grpc.booking.Booking;
 import com.bht.saigonparking.api.grpc.booking.BookingDetail;
 import com.bht.saigonparking.api.grpc.booking.BookingList;
+import com.bht.saigonparking.api.grpc.booking.BookingRating;
 import com.bht.saigonparking.api.grpc.booking.BookingServiceGrpc;
 import com.bht.saigonparking.api.grpc.booking.BookingStatus;
 import com.bht.saigonparking.api.grpc.booking.CountAllBookingGroupByStatusResponse;
@@ -635,7 +636,32 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
 
     @Override
     public void getAllRatingsOfParkingLot(GetAllRatingsOfParkingLotRequest request, StreamObserver<GetAllRatingsOfParkingLotResponse> responseObserver) {
-        super.getAllRatingsOfParkingLot(request, responseObserver);
+        try {
+            List<BookingRating> bookingRatingList = bookingMapper
+                    .toBookingRatingList(bookingService
+                            .getAllRatingsOfParkingLot(request.getParkingLotId(), request.getRating(),
+                                    request.getSortLastUpdatedAsc(), request.getNRow(), request.getPageNumber()));
+
+            GetAllRatingsOfParkingLotResponse getAllRatingsOfParkingLotResponse = GetAllRatingsOfParkingLotResponse.newBuilder()
+                    .addAllRating(bookingRatingList)
+                    .build();
+
+            responseObserver.onNext(getAllRatingsOfParkingLotResponse);
+            responseObserver.onCompleted();
+
+            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
+                    String.format("getAllRatingsOfParkingLot(%d, %d, %b, %d, %d)", request.getParkingLotId(), request.getRating(),
+                            request.getSortLastUpdatedAsc(), request.getNRow(), request.getPageNumber()));
+
+        } catch (Exception exception) {
+
+            responseObserver.onError(exception);
+
+            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
+            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
+                    String.format("getAllRatingsOfParkingLot(%d, %d, %b, %d, %d)", request.getParkingLotId(), request.getRating(),
+                            request.getSortLastUpdatedAsc(), request.getNRow(), request.getPageNumber()));
+        }
     }
 
     @Override

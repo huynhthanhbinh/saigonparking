@@ -14,15 +14,12 @@ import com.bht.saigonparking.api.grpc.parkinglot.CountAllParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.DeleteMultiParkingLotByIdRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.GetAllParkingLotRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.GetAllParkingLotResponse;
-import com.bht.saigonparking.api.grpc.parkinglot.GetAllRatingsOfParkingLotRequest;
-import com.bht.saigonparking.api.grpc.parkinglot.GetAllRatingsOfParkingLotResponse;
 import com.bht.saigonparking.api.grpc.parkinglot.GetEmployeeManageParkingLotIdListResponse;
 import com.bht.saigonparking.api.grpc.parkinglot.MapToParkingLotNameMapRequest;
 import com.bht.saigonparking.api.grpc.parkinglot.MapToParkingLotNameMapResponse;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLot;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotIdList;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotLimit;
-import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotRating;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResult;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotResultList;
 import com.bht.saigonparking.api.grpc.parkinglot.ParkingLotServiceGrpc.ParkingLotServiceImplBase;
@@ -375,36 +372,6 @@ public final class ParkingLotServiceGrpcImpl extends ParkingLotServiceImplBase {
             LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
             LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
                     String.format("deleteMultiParkingLotById(%s)", request.getParkingLotIdList()));
-        }
-    }
-
-    @Override
-    public void getAllRatingsOfParkingLot(GetAllRatingsOfParkingLotRequest request, StreamObserver<GetAllRatingsOfParkingLotResponse> responseObserver) {
-        try {
-            List<ParkingLotRating> parkingLotRatingList = parkingLotMapper
-                    .toParkingLotRatingList(parkingLotService
-                            .getAllRatingsOfParkingLot(request.getParkingLotId(), request.getRating(),
-                                    request.getSortLastUpdatedAsc(), request.getNRow(), request.getPageNumber()));
-
-            GetAllRatingsOfParkingLotResponse getAllRatingsOfParkingLotResponse = GetAllRatingsOfParkingLotResponse.newBuilder()
-                    .addAllRating(parkingLotRatingList)
-                    .build();
-
-            responseObserver.onNext(getAllRatingsOfParkingLotResponse);
-            responseObserver.onCompleted();
-
-            LoggingUtil.log(Level.INFO, "SERVICE", "Success",
-                    String.format("getAllRatingsOfParkingLot(%d, %d, %b, %d, %d)", request.getParkingLotId(), request.getRating(),
-                            request.getSortLastUpdatedAsc(), request.getNRow(), request.getPageNumber()));
-
-        } catch (Exception exception) {
-
-            responseObserver.onError(exception);
-
-            LoggingUtil.log(Level.ERROR, "SERVICE", "Exception", exception.getClass().getSimpleName());
-            LoggingUtil.log(Level.WARN, "SERVICE", "Session FAIL",
-                    String.format("getAllRatingsOfParkingLot(%d, %d, %b, %d, %d)", request.getParkingLotId(), request.getRating(),
-                            request.getSortLastUpdatedAsc(), request.getNRow(), request.getPageNumber()));
         }
     }
 
