@@ -28,6 +28,7 @@ import com.bht.saigonparking.api.grpc.user.UserServiceGrpc;
 import com.bht.saigonparking.common.exception.BookingAlreadyFinishedException;
 import com.bht.saigonparking.common.exception.BookingAlreadyRatedException;
 import com.bht.saigonparking.common.exception.BookingNotYetAcceptedException;
+import com.bht.saigonparking.common.exception.BookingNotYetFinishedException;
 import com.bht.saigonparking.common.exception.BookingNotYetRatedException;
 import com.bht.saigonparking.common.exception.PermissionDeniedException;
 import com.bht.saigonparking.service.booking.entity.BookingEntity;
@@ -284,21 +285,23 @@ public class BookingServiceImpl implements BookingService {
                                     @NotEmpty String comment) {
 
         BookingEntity bookingEntity = getBookingByUuid(bookingUuidString);
+        if (customerId.equals(bookingEntity.getCustomerId())) {
+            if (Boolean.TRUE.equals(bookingEntity.getIsFinished())) {
+                BookingRatingEntity currentBookingRating = bookingEntity.getBookingRatingEntity();
 
-        if (bookingEntity.getCustomerId().equals(customerId)) {
-            BookingRatingEntity currentBookingRating = bookingEntity.getBookingRatingEntity();
+                if (currentBookingRating == null) {
+                    BookingRatingEntity bookingRatingEntity = BookingRatingEntity.builder()
+                            .bookingEntity(bookingEntity)
+                            .rating(rating.shortValue())
+                            .comment(comment)
+                            .build();
 
-            if (currentBookingRating == null) {
-                BookingRatingEntity bookingRatingEntity = BookingRatingEntity.builder()
-                        .bookingEntity(bookingEntity)
-                        .rating(rating.shortValue())
-                        .comment(comment)
-                        .build();
-
-                bookingRatingRepository.saveAndFlush(bookingRatingEntity);
-                return;
+                    bookingRatingRepository.saveAndFlush(bookingRatingEntity);
+                    return;
+                }
+                throw new BookingAlreadyRatedException();
             }
-            throw new BookingAlreadyRatedException();
+            throw new BookingNotYetFinishedException();
         }
         throw new PermissionDeniedException();
     }
@@ -310,8 +313,7 @@ public class BookingServiceImpl implements BookingService {
                                     @NotEmpty String comment) {
 
         BookingEntity bookingEntity = getBookingByUuid(bookingUuidString);
-
-        if (bookingEntity.getCustomerId().equals(customerId)) {
+        if (customerId.equals(bookingEntity.getCustomerId())) {
             BookingRatingEntity currentBookingRating = bookingEntity.getBookingRatingEntity();
 
             if (currentBookingRating != null) {
@@ -329,8 +331,7 @@ public class BookingServiceImpl implements BookingService {
     public void deleteBookingRating(@NotNull Long customerId, @NotEmpty String bookingUuidString) {
 
         BookingEntity bookingEntity = getBookingByUuid(bookingUuidString);
-
-        if (bookingEntity.getCustomerId().equals(customerId)) {
+        if (customerId.equals(bookingEntity.getCustomerId())) {
             BookingRatingEntity currentBookingRating = bookingEntity.getBookingRatingEntity();
 
             if (currentBookingRating != null) {
@@ -367,7 +368,6 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private void deleteParkingLotStatistic(@NotNull Long parkingLotId) {
-        Optional<BookingStatisticEntity> currentStatistic = bookingStatisticRepository.getByParkingLotId(parkingLotId);
-        currentStatistic.ifPresent(bookingStatisticRepository::delete);
+        bookingStatisticRepository.getByParkingLotId(parkingLotId).ifPresent(bookingStatisticRepository::delete);
     }
 }
