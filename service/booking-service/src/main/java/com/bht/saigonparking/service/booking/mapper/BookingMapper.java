@@ -123,7 +123,7 @@ public interface BookingMapper {
     ParkingLotBookingAndRatingStatistic toParkingLotBookingAndRatingStatistic(@NotNull BookingStatisticEntity bookingStatisticEntity);
 
     @Named("toBookingRatingFromTupleEntry")
-    @Mapping(target = "bookingId", expression = "java(bookingRatingTupleEntry.getKey().get(0, String.class))")
+    @Mapping(target = "bookingId", expression = "java(bookingRatingTupleEntry.getKey().get(0, java.util.UUID.class).toString())")
     @Mapping(target = "username", source = "value", defaultExpression = "java(customizedMapper.DEFAULT_STRING_VALUE)")
     @Mapping(target = "rating", expression = "java(bookingRatingTupleEntry.getKey().get(3, Short.class).intValue())")
     @Mapping(target = "comment", expression = "java(bookingRatingTupleEntry.getKey().get(4, String.class))")
