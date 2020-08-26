@@ -183,27 +183,119 @@ message BookingStatisticRequest {
 
 service BookingService {
 
-    /* PRIVATE: ADMIN & INTERNAL service use-only */
+    /** PRIVATE - internal service use-only
+     * use-case: Contact Service call Booking Service to create new booking
+     *  + request: CreateBookingRequest
+     *  + response: CreateBookingResponse if succeed, otherwise, throw exception */
     rpc createBooking (CreateBookingRequest) returns (CreateBookingResponse);
+
+    /** PRIVATE - internal service use-only
+     * use-case: Contact Service call Booking Service to update booking status
+     *  + request: UpdateBookingStatusRequest
+     *  + response: Empty if succeed, otherwise, throw exception */
     rpc updateBookingStatus (UpdateBookingStatusRequest) returns (google.protobuf.Empty);
+
+    /** PUBLIC - for admin only
+     * use-case: delete details about a specific booking
+     *  + request: booking's uuid
+     *  + response: Empty if succeed, otherwise, throw exception */
     rpc deleteBookingById (google.protobuf.StringValue) returns (google.protobuf.Empty);
+
+    /** PUBLIC - for admin only
+     * use-case: booking statistic
+     *  + request: Empty
+     *  + response: CountAllBookingGroupByStatusResponse if succeed, otherwise, throw exception */
     rpc countAllBookingGroupByStatus (google.protobuf.Empty) returns (CountAllBookingGroupByStatusResponse);
 
-    /* PUBLIC: EXTERNAL client can call (remember to provide token for auth purposes) */
+    /** PUBLIC - for customer only
+     * use-case: get customer ongoing booking for eg. onStartApp from another device...
+     *  + request: Empty (customer's user ID will be parsed from JWT)
+     *  + response: Booking if succeed, otherwise, throw exception */
     rpc getCustomerOnGoingBooking (google.protobuf.Empty) returns (Booking);
+
+    /** PUBLIC - for customer only
+     * use-case: check if customer has ongoing booking or not for eg. onStartApp from another device...
+     *  + request: Empty (customer's user ID will be parsed from JWT)
+     *  + response: BoolValue if succeed, otherwise, throw exception */
     rpc checkCustomerHasOnGoingBooking (google.protobuf.Empty) returns (google.protobuf.BoolValue);
+
+    /** PUBLIC - for customer only
+     * use-case: generate QR code from booking's uuid for eg. onStartApp from another device...
+     *  + request: GenerateBookingQrCodeRequest (customer's user ID will be parsed from JWT)
+     *  + response: GenerateBookingQrCodeResponse if succeed, otherwise, throw exception */
     rpc generateBookingQrCode (GenerateBookingQrCodeRequest) returns (GenerateBookingQrCodeResponse);
-    rpc finishBooking (FinishBookingRequest) returns (FinishBookingResponse); /* send notification to parking-lot and customer */
+
+    /** PUBLIC - for parking-lot and internal service only
+     * use-case: finish an on-going booking, for eg. when customer reach parking-lot
+     *  + request: FinishBookingRequest (user role will be parsed from JWT)
+     *  + response: FinishBookingResponse if succeed, otherwise, throw exception
+     * as soon as the response send back, the system also push notification to parking-lot and customer */
+    rpc finishBooking (FinishBookingRequest) returns (FinishBookingResponse);
+
+    /** PUBLIC - for admin only
+     * use-case: booking statistic
+     *  + request: GetAllBookingRequest
+     *  + response: BookingList if succeed, otherwise, throw exception */
     rpc getAllBooking (GetAllBookingRequest) returns (BookingList);
+
+    /** PUBLIC - for admin only
+     * use-case: booking statistic
+     *  + request: CountAllBookingRequest
+     *  + response: number of booking satisfied the condition if succeed, otherwise, throw exception */
     rpc countAllBooking (CountAllBookingRequest) returns (google.protobuf.Int64Value);
+
+    /** PUBLIC - for customer and admin only
+     * use-case: customer booking history
+     *  + request: GetAllBookingOfCustomerRequest (if customer call this service, customer ID will be auto-get from JWT)
+     *  + response: BookingList if succeed, otherwise, throw exception */
     rpc getAllBookingOfCustomer (GetAllBookingOfCustomerRequest) returns (BookingList);
+
+    /** PUBLIC - for admin only
+     * use-case: customer booking history statistic
+     *  + request: customer's user ID
+     *  + response: number of booking if succeed, otherwise, throw exception */
     rpc countAllBookingOfCustomerByCustomerId (google.protobuf.Int64Value) returns (google.protobuf.Int64Value);
-    rpc countAllBookingOfCustomerByAuthorizationHeader (google.protobuf.Empty) returns (google.protobuf.Int64Value); /* get customerId from JWT */
+
+    /** PUBLIC - for customer only
+     * use-case: customer booking history statistic
+     *  + request: Empty (customer's user ID will be parsed from JWT)
+     *  + response: number of booking if succeed, otherwise, throw exception */
+    rpc countAllBookingOfCustomerByAuthorizationHeader (google.protobuf.Empty) returns (google.protobuf.Int64Value);
+
+    /** PUBLIC - for parking-lot and admin only
+     * use-case: booking statistic
+     *  + request: GetAllBookingOfParkingLotRequest
+     *  + response: BookingList if succeed, otherwise, throw exception */
     rpc getAllBookingOfParkingLot (GetAllBookingOfParkingLotRequest) returns (BookingList);
+
+    /** PUBLIC - for parking-lot and admin only
+     * use-case: booking statistic
+     *  + request: CountAllBookingOfParkingLotRequest
+     *  + response: number of booking satisfied the condition if succeed, otherwise, throw exception */
     rpc countAllBookingOfParkingLot (CountAllBookingOfParkingLotRequest) returns (google.protobuf.Int64Value);
+
+    /** PUBLIC - for parking-lot and admin only
+     * use-case: booking statistic
+     *  + request: parking-lot id
+     *  + response: BookingList if succeed, otherwise, throw exception */
     rpc getAllOnGoingBookingOfParkingLot (google.protobuf.Int64Value) returns (BookingList);
+
+    /** PUBLIC - for parking-lot and admin only
+     * use-case: booking statistic
+     *  + request: parking-lot id
+     *  + response: number of booking if succeed, otherwise, throw exception */
     rpc countAllOnGoingBookingOfParkingLot (google.protobuf.Int64Value) returns (google.protobuf.Int64Value);
+
+    /** PUBLIC
+     * use-case: booking statistic
+     *  + request: booking's uuid
+     *  + response: BookingDetail if succeed, otherwise, throw exception */
     rpc getBookingDetailByBookingId (google.protobuf.StringValue) returns (BookingDetail);
+
+    /** PUBLIC - for parking-lot and admin only
+     * use-case: booking statistic
+     *  + request: parking-lot id
+     *  + response: CountAllBookingGroupByStatusResponse if succeed, otherwise, throw exception */
     rpc countAllBookingOfParkingLotGroupByStatus (google.protobuf.Int64Value) returns (CountAllBookingGroupByStatusResponse);
 
     /** PUBLIC - for customer only
@@ -218,7 +310,8 @@ service BookingService {
     /** PUBLIC - for customer only
      * use-case: customer get existed rating of a finished booking to parking lot
      *  + request: GetBookingRatingRequest, you need to provide 1 arguments: bookingId (uuid of booking)
-     *  + response: BookingRating value if succeed, otherwise, throw exception. Response will be a combination of 5 fields:
+     *  + response: BookingRating value if succeed, otherwise, throw exception.
+     *  Response will be a combination of 5 fields:
      *      ++ bookingId: uuid of booking
      *      ++ rating: rating star (min = 1, max = 5)
      *      ++ comment: can be an empty string or a comment string

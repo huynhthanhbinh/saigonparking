@@ -291,8 +291,13 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
 
     @Override
     public void getAllBookingOfCustomer(GetAllBookingOfCustomerRequest request, StreamObserver<BookingList> responseObserver) {
-        Long customerId = request.getCustomerId() != 0 ? request.getCustomerId() : serverInterceptor.getUserIdContext().get();
+        Long customerId = serverInterceptor.getRoleContext().get().equals("CUSTOMER")
+                ? serverInterceptor.getUserIdContext().get()
+                : request.getCustomerId();
         try {
+            if (customerId <= 0) {
+                throw new IllegalArgumentException();
+            }
             List<BookingEntity> bookingEntityList = bookingService
                     .getAllBookingOfCustomer(customerId, request.getNRow(), request.getPageNumber());
 
