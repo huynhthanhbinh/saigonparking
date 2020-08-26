@@ -33,7 +33,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SelectBeforeUpdate
-@Table(name = "[PARKING_LOT_INFORMATION]")
+@Table(name = "[BOOKING_STATISTIC]")
 public final class BookingStatisticEntity extends BaseEntity {
 
     @NaturalId
