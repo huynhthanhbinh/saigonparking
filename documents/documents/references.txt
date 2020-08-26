@@ -1,6 +1,6 @@
 Document's name:    Saigon Parking Project References
 Author:             Huynh Thanh Binh
-Last updated:       Sun, Aug 23rd, 2020
+Last updated:       Wed, Aug 26th, 2020
 ========================================================================================================================
 
 001. gRPC error handling:
@@ -418,3 +418,6 @@ Last updated:       Sun, Aug 23rd, 2020
 
 133. Spring combine two validation annotations in one
         https://stackoverflow.com/questions/33483830/spring-combine-two-validation-annotations-in-one
+
+134. Delete child entity in bidirectional OneToOne relationship - Hibernate
+        https://stackoverflow.com/questions/33030120/delete-child-entity-in-bidirectional-onetoone-relationship

@@ -335,8 +335,8 @@ public class BookingServiceImpl implements BookingService {
         BookingEntity bookingEntity = getBookingByUuid(bookingUuidString);
         if (customerId.equals(bookingEntity.getCustomerId())) {
             BookingRatingEntity currentBookingRating = bookingEntity.getBookingRatingEntity();
-
             if (currentBookingRating != null) {
+                bookingEntity.setBookingRatingEntity(null);
                 bookingRatingRepository.delete(currentBookingRating);
                 return;
             }
