@@ -89,11 +89,11 @@
 
         <javax.version>4.0.1</javax.version>
         <java-jwt.version>0.11.2</java-jwt.version>
-        <hibernate.version>5.4.19.Final</hibernate.version>
-        <mssql-jdbc.version>8.2.2.jre8</mssql-jdbc.version>
+        <hibernate.version>5.4.20.Final</hibernate.version>
+        <mssql-jdbc.version>8.4.0.jre8</mssql-jdbc.version>
 
         <grpc.version>1.30.2</grpc.version>
-        <protobuf.version>3.12.2</protobuf.version>
+        <protobuf.version>3.13.0</protobuf.version>
         <grpc-spring-boot-starter.version>3.5.6</grpc-spring-boot-starter.version>
         <netty-tcnative-boringssl.version>2.0.30.Final</netty-tcnative-boringssl.version>
 
