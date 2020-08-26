@@ -12,12 +12,68 @@
 
 [![saigonparking-master action-status](https://github.com/huynhthanhbinh/saigonparking/workflows/saigonparking-master/badge.svg)](https://github.com/huynhthanhbinh/saigonparking/actions)
 
+<h2>0. Project's modules:</h2>
+<table>
+<tbody>
+  <tr>
+    <td>1</td>
+    <td>saigonparking-backend</td>
+    <td>https://github.com/huynhthanhbinh/saigonparking</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>saigonparking-webserver</td>
+    <td>https://github.com/huynhthanhbinh/saigonparking-web</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>saigonparking-android</td>
+    <td>https://github.com/huynhthanhbinh/saigonparking-android</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>saigonparking-qrscanner</td>
+    <td>https://github.com/huynhthanhbinh/saigonparking-qrscanner</td>
+  </tr>
+</tbody>
+</table>
+
+<br/>
 <h2>1. Project's members:</h2>
-<h6>1. 1653005 - Vu Tuong Bach - 1653005@student.hcmus.edu.vn</h6>
-<h6>2. 1653006 - Huynh Thanh Binh - 1653006@student.hcmus.edu.vn</h6>
-<h6>3. 1653012 - Pham Viet Minh Dao - 1653012@student.hcmus.edu.vn</h6>
-<h6>4. 1653020 - Vu Hai - 1653020@student.hcmus.edu.vn</h6>
-<h6>5. 1653076 - Dang Duc Tai - 1653076@student.hcmus.edu.vn</h6>
+<table>
+<tbody>
+  <tr>
+    <td>1</td>
+    <td>1653005</td>
+    <td>Vu Tuong Bach</td>
+    <td>1653005@student.hcmus.edu.vn</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>1653006</td>
+    <td>Huynh Thanh Binh</td>
+    <td>1653006@student.hcmus.edu.vn</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>1653012</td>
+    <td>Pham Viet Minh Dao</td>
+    <td>1653012@student.hcmus.edu.vn</td>
+  </tr>
+  <tr>
+    <td>4</td>
+    <td>1653020</td>
+    <td>Vu Hai</td>
+    <td>1653020@student.hcmus.edu.vn</td>
+  </tr>
+  <tr>
+    <td>5</td>
+    <td>1653076</td>
+    <td>Dang Duc Tai</td>
+    <td>1653076@student.hcmus.edu.vn</td>
+  </tr>
+</tbody>
+</table>
 
 <br/>
 <h2>2. Project's workflow:</h2>
