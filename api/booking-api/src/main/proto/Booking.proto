@@ -304,8 +304,8 @@ service BookingService {
      *      ++ bookingId: uuid of booking
      *      ++ rating: rating star (min = 1, max = 5)
      *      ++ comment: can be an empty string or a comment string
-     *  + response: Empty value if succeed, otherwise, throw exception */
-    rpc createBookingRating (CreateBookingRatingRequest) returns (google.protobuf.Empty);
+     *  + response: new booking rating's ID if succeed, otherwise, throw exception */
+    rpc createBookingRating (CreateBookingRatingRequest) returns (google.protobuf.Int64Value);
 
     /** PUBLIC - for customer only
      * use-case: customer get existed rating of a finished booking to parking lot

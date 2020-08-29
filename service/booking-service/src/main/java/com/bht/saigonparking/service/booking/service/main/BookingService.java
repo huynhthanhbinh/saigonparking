@@ -101,7 +101,7 @@ public interface BookingService {
 
     Map<Integer, Long> getParkingLotRatingCountGroupByRating(@NotNull Long parkingLotId);
 
-    void createBookingRating(@NotNull Long customerId,
+    Long createBookingRating(@NotNull Long customerId,
                              @NotEmpty String bookingUuidString,
                              @NotNull Integer rating,
                              @NotEmpty String comment);

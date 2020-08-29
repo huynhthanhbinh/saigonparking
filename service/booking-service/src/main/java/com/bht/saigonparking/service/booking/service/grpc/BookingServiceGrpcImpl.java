@@ -547,13 +547,13 @@ public final class BookingServiceGrpcImpl extends BookingServiceGrpc.BookingServ
     }
 
     @Override
-    public void createBookingRating(CreateBookingRatingRequest request, StreamObserver<Empty> responseObserver) {
+    public void createBookingRating(CreateBookingRatingRequest request, StreamObserver<Int64Value> responseObserver) {
         Long customerId = serverInterceptor.getUserIdContext().get();
         try {
             serverInterceptor.validateUserRole("CUSTOMER");
-            bookingService.createBookingRating(customerId, request.getBookingId(), request.getRating(), request.getComment());
+            Long newRatingId = bookingService.createBookingRating(customerId, request.getBookingId(), request.getRating(), request.getComment());
 
-            responseObserver.onNext(Empty.getDefaultInstance());
+            responseObserver.onNext(Int64Value.of(newRatingId));
             responseObserver.onCompleted();
 
             LoggingUtil.log(Level.INFO, "SERVICE", "Success",

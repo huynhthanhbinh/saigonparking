@@ -281,7 +281,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void createBookingRating(@NotNull Long customerId,
+    public Long createBookingRating(@NotNull Long customerId,
                                     @NotNull String bookingUuidString,
                                     @NotNull Integer rating,
                                     @NotEmpty String comment) {
@@ -297,9 +297,7 @@ public class BookingServiceImpl implements BookingService {
                             .rating(rating.shortValue())
                             .comment(comment)
                             .build();
-
-                    bookingRatingRepository.saveAndFlush(bookingRatingEntity);
-                    return;
+                    return bookingRatingRepository.saveAndFlush(bookingRatingEntity).getId();
                 }
                 throw new BookingAlreadyRatedException();
             }
