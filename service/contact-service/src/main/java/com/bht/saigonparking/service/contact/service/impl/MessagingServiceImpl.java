@@ -81,7 +81,7 @@ public class MessagingServiceImpl implements MessagingService {
                 }
             });
         }
-        LoggingUtil.log(Level.ERROR, "SERVICE", String.format("forwardMessageToReceiver(%d)", receiverUserId),
+        LoggingUtil.log(Level.INFO, "SERVICE", String.format("forwardMessageToReceiver(%d)", receiverUserId),
                 String.format("nSessionOfReceiver: %d", (userSessionSet != null) ? userSessionSet.size() : 0));
     }
 
