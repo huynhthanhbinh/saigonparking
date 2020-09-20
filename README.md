@@ -7,12 +7,12 @@
 /\__/ /| (_| || || (_| || (_) || | | |  | |   | (_| || |   |   < | || | | || (_| |   |_/ \_________/ \___|
 \____/  \__,_||_| \__, | \___/ |_| |_|  \_|    \__,_||_|   |_|\_\|_||_| |_| \__, | ____\_/_________\_/_____
                    __/ |                                                     __/ |
-                  |___/                                                     |___/   v2.5.1 - ©Copyright 2020
+                  |___/                                                     |___/   v2.5.2 - ©Copyright 2020
 </pre>
 
 [![saigonparking-master action-status](https://github.com/huynhthanhbinh/saigonparking/workflows/saigonparking-master/badge.svg)](https://github.com/huynhthanhbinh/saigonparking/actions)
 
-<h2>0. Project's modules:</h2>
+<h2>1. Project's modules:</h2>
 <table>
 <tbody>
   <tr>
@@ -39,7 +39,7 @@
 </table>
 
 <br/>
-<h2>1. Project's members:</h2>
+<h2>2. Project's members:</h2>
 <table>
 <tbody>
   <tr>
@@ -76,26 +76,53 @@
 </table>
 
 <br/>
-<h2>2. Project's workflow:</h2>
+<h2>3. Project's workflow:</h2>
 
 ![workflow_img](documents/workflow.png)
 
 <br/>
-<h2>3. Project's architecture:</h2>
+<h2>4. Project's architecture:</h2>
 
 ![architecture_img](documents/architecture.png)
 
 <br/>
-<h2>4. Authentication &#38; Authorization:</h2>
+<h2>5. Authentication &#38; Authorization:</h2>
 
 ![authentication_img](documents/authentication.png)
 
 <br/>
-<h2>5. Project's deployment:</h2>
+<h2>6. Project's deployment:</h2>
 
 ![deployment_img](documents/deployment.png)
 
 <br/>
-<h2>6. Project's technology stack:</h2>
+<h2>7. Project's technology stack:</h2>
 
 ![technology_img](documents/technology.png)
+
+<br/>
+<h2>8. Project's registered domains</h2>
+<table>
+<tbody>
+  <tr>
+    <td>1</td>
+    <td>Official Website</td>
+    <td>https://www.saigonparking.wtf</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>Administrator's Website</td>
+    <td>http://admin.saigonparking.wtf</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td>Parking-lot's Website</td>
+    <td>http://parkinglot.saigonparking.wtf</td>
+  </tr>
+</tbody>
+</table>
+
+<br/>
+<h2>9. Demo</h2>
+Available on YouTube at: 
+<a href="https://www.youtube.com/playlist?list=PLVRbjVojJrqCCQQcYG_h4df_M0nUXVGdV">Saigon Parking Demo Final</a>
